@@ -1,0 +1,43 @@
+
+
+
+-----
+
+InteractionHandler
+
+Az object RectTransform tartományán érzékeli a megnyomást illetve elengedést. OnTouch és OnRelease eventekbe tudunk
+behuzgálni objekteket és onnan egybõl viselkedéseket hozzárendelni.
+
+Továbbá sugározza hogy ez az esemény megtörtént ami be tudunk fogni.
+
+
+
+BehaviourButton
+
+Absztrakt osztály, csak származtatással tudunk ilyen típúsú objektet létrehozni.
+
+Bele van irva hogy befogja az InteractionHandler eseményeket. Ha egy ilyen osztályt hozzárendelünk egy objekthez
+automatikusan hozzáad egy InteractionHandler-t is.
+
+Két felülirható funckiója van, az OnTouch és az OnRelease.
+
+-----
+
+Nem kell semminek RaycastTarget-nek lennie, ez a két osztály elvégzi e feladatokat.
+
+
+
+
+
+
+-----
+Ha gombot akarsz csinálni:
+
+Akarsz custom viselkedést csinálni ? Azaz olyan kódot akarsz e végrehajtani amit nem tudsz vagy csak jóval bonyolultabb módon
+tudnál az editorban behúzgálva megcsinálni az InteractionHandler használatával ?
+
+Ha igen, írj egy SomethingButton.cs scriptet és származzon a BehaviourButton-ból, írd felül az OnTouch és OnRelease funckiókat
+(protected override void) és abba ird a custom viselkedést.
+
+Ha nem, elég egy InteractionHandler.
+-----
