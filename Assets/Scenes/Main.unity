@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 52069004}
   - component: {fileID: 52069006}
   - component: {fileID: 52069005}
+  - component: {fileID: 52069007}
   m_Layer: 5
   m_Name: PremiumText
   m_TagString: Untagged
@@ -207,7 +208,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.4
+  m_fontSize: 35.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -257,6 +258,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 52069003}
   m_CullTransparentMesh: 0
+--- !u!114 &52069007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52069003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Premium
+  - "Pr\xE9mium"
+  - "Pr\xE4mie"
 --- !u!1 &78395002
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +285,7 @@ GameObject:
   - component: {fileID: 78395003}
   - component: {fileID: 78395005}
   - component: {fileID: 78395004}
+  - component: {fileID: 78395006}
   m_Layer: 5
   m_Name: PatreonButton
   m_TagString: Untagged
@@ -341,7 +359,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 41.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -391,6 +409,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78395002}
   m_CullTransparentMesh: 0
+--- !u!114 &78395006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78395002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Patreon
+  - Patreon
+  - Patreon
 --- !u!1 &115391734
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,6 +436,7 @@ GameObject:
   - component: {fileID: 115391735}
   - component: {fileID: 115391737}
   - component: {fileID: 115391736}
+  - component: {fileID: 115391738}
   m_Layer: 5
   m_Name: PremiumButton
   m_TagString: Untagged
@@ -467,6 +502,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115391734}
   m_CullTransparentMesh: 0
+--- !u!114 &115391738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115391734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136111a029911b640925db9162a83297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleaseEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &334702644
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,6 +664,7 @@ GameObject:
   - component: {fileID: 432916992}
   - component: {fileID: 432916994}
   - component: {fileID: 432916993}
+  - component: {fileID: 432916995}
   m_Layer: 5
   m_Name: PatreonButton
   m_TagString: Untagged
@@ -676,6 +730,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432916991}
   m_CullTransparentMesh: 0
+--- !u!114 &432916995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 432916991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136111a029911b640925db9162a83297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleaseEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,6 +1460,7 @@ GameObject:
   - component: {fileID: 872584565}
   - component: {fileID: 872584567}
   - component: {fileID: 872584566}
+  - component: {fileID: 872584568}
   m_Layer: 5
   m_Name: StatsText
   m_TagString: Untagged
@@ -1511,6 +1584,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 872584564}
   m_CullTransparentMesh: 0
+--- !u!114 &872584568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872584564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Stats
+  - "Statisztik\xE1k"
+  - Statistiken
 --- !u!1 &892195643
 GameObject:
   m_ObjectHideFlags: 0
@@ -1569,6 +1658,7 @@ GameObject:
   - component: {fileID: 939954058}
   - component: {fileID: 939954060}
   - component: {fileID: 939954059}
+  - component: {fileID: 939954061}
   m_Layer: 5
   m_Name: GoalsText
   m_TagString: Untagged
@@ -1692,6 +1782,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 939954057}
   m_CullTransparentMesh: 0
+--- !u!114 &939954061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939954057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Goals
+  - "C\xE9lok"
+  - Tore
 --- !u!1 &986694131
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,6 +2311,7 @@ GameObject:
   - component: {fileID: 1307081571}
   - component: {fileID: 1307081573}
   - component: {fileID: 1307081572}
+  - component: {fileID: 1307081574}
   m_Layer: 5
   m_Name: GoalsButton
   m_TagString: Untagged
@@ -2270,6 +2377,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1307081570}
   m_CullTransparentMesh: 0
+--- !u!114 &1307081574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1307081570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136111a029911b640925db9162a83297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleaseEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1313284199
 GameObject:
   m_ObjectHideFlags: 0
@@ -2417,6 +2542,7 @@ GameObject:
   - component: {fileID: 1414980935}
   - component: {fileID: 1414980937}
   - component: {fileID: 1414980936}
+  - component: {fileID: 1414980938}
   m_Layer: 5
   m_Name: TipsButton
   m_TagString: Untagged
@@ -2482,6 +2608,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1414980934}
   m_CullTransparentMesh: 0
+--- !u!114 &1414980938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414980934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136111a029911b640925db9162a83297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleaseEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1458857958
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,6 +3190,7 @@ GameObject:
   - component: {fileID: 1849870702}
   - component: {fileID: 1849870704}
   - component: {fileID: 1849870703}
+  - component: {fileID: 1849870705}
   m_Layer: 5
   m_Name: StatsButton
   m_TagString: Untagged
@@ -3111,6 +3256,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849870701}
   m_CullTransparentMesh: 0
+--- !u!114 &1849870705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849870701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 136111a029911b640925db9162a83297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTouchEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReleaseEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1863652333
 GameObject:
   m_ObjectHideFlags: 0
@@ -3379,6 +3542,7 @@ GameObject:
   - component: {fileID: 2000899695}
   - component: {fileID: 2000899697}
   - component: {fileID: 2000899696}
+  - component: {fileID: 2000899698}
   m_Layer: 5
   m_Name: TipsText
   m_TagString: Untagged
@@ -3502,6 +3666,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000899694}
   m_CullTransparentMesh: 0
+--- !u!114 &2000899698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000899694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Tips
+  - Tippek
+  - Tipps
 --- !u!1 &2026545635
 GameObject:
   m_ObjectHideFlags: 0
