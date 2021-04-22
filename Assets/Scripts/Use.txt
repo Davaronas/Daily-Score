@@ -23,7 +23,7 @@ Két felülirható funckiója van, az OnTouch és az OnRelease.
 
 -----
 
-Nem kell semminek RaycastTarget-nek lennie, ez a két osztály elvégzi e feladatokat.
+RaycastTarget csak oda kell amivel akarunk interaktálni
 
 
 

@@ -9,13 +9,14 @@ public class QuitIntroductionButton : BehaviourButton
    
     protected override void OnTouch()
     {
-        
+        print("Down2");
     }
 
     protected override void OnRelease()
     {
-       // Go to main menu
+        print("Up2");
+        // Go to main menu
 
-       // Save: first started the application
+        // Save: first started the application
     }
 }

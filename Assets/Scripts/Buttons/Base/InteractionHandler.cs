@@ -17,12 +17,14 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        print("Down");
         OnTouchEvent?.Invoke();
         OnTouchAction?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        print("Up");
         OnReleaseEvent?.Invoke();
         OnReleaseAction?.Invoke();
     }
