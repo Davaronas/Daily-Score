@@ -8,7 +8,7 @@ InteractionHandler
 Az object RectTransform tartományán érzékeli a megnyomást illetve elengedést. OnTouch és OnRelease eventekbe tudunk
 behuzgálni objekteket és onnan egybõl viselkedéseket hozzárendelni.
 
-Továbbá sugározza hogy ez az esemény megtörtént ami be tudunk fogni.
+Továbbá sugározza hogy ezek az események megtörténtek, amiket be tudunk fogni.
 
 
 
@@ -40,4 +40,17 @@ Ha igen, írj egy SomethingButton.cs scriptet és származzon a BehaviourButton-ból
 (protected override void) és abba ird a custom viselkedést.
 
 Ha nem, elég egy InteractionHandler.
+-----
+
+
+
+
+
+-----
+MultiLanguageText
+
+Fogja a nyelvváltás eventet, ekkor átvált a szöveg a megfelelõ stringre. Ahogy az AppManager.Languages fel van sorolva úgy egyezik
+meg az elemek nyelve is. Azaz Element 0 Angolt jelent, Element 1 Magyart stb.
+
+Automatikusan hozzáad egy TMP_Text komponenst is.
 -----

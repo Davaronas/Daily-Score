@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class LanguageButton : BehaviourButton
 {
+    [SerializeField] private AppManager.Languages language;
+
     protected override void OnTouch()
     {
         
@@ -12,7 +14,7 @@ public class LanguageButton : BehaviourButton
 
     protected override void OnRelease()
     {
-        // Save language, set every text to that language
+        AppManager.SetLanguage(language);
 
         // Go to introduction screen
     }
