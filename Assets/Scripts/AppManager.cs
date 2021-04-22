@@ -31,11 +31,7 @@ public class AppManager : MonoBehaviour
             return;
         }
 
-
         OnLanguageChanged?.Invoke(_language);
-
-
-        Debug.Log($"Language set to {_language}");
     }
 
 }

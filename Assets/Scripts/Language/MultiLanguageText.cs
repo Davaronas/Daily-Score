@@ -9,21 +9,22 @@ public class MultiLanguageText : MonoBehaviour
 {
     
 
-     [SerializeField]
+    [SerializeField]
     private string[] languages = new string[(int)AppManager.Languages.ENUM_END];
 
     private TMP_Text text = null;
 
+    private string textToDisplay = "";
 
+   public MultiLanguageText()
+    {
+        AppManager.OnLanguageChanged += LanguageChanged;
+    }
 
- 
-   
-  
-    void Awake()
+    private void Awake()
     {
         text = GetComponent<TMP_Text>();
-
-        AppManager.OnLanguageChanged += LanguageChanged;
+        text.text = textToDisplay;
     }
 
     private void OnDestroy()
@@ -31,15 +32,16 @@ public class MultiLanguageText : MonoBehaviour
         AppManager.OnLanguageChanged -= LanguageChanged;
     }
 
-
-    void Update()
-    {
-        
-    }
-
     private void LanguageChanged(AppManager.Languages _language)
     {
-        text.text = languages[(int)_language];
+        textToDisplay = languages[(int)_language];
+
+
+        // ha az Awake hamarabb futna le mint LanguageChanged
+        if(text != null)
+        {
+            text.text = textToDisplay;
+        }
     }
 
 

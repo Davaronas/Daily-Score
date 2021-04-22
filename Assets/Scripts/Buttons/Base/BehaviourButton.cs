@@ -15,6 +15,9 @@ public abstract class BehaviourButton : MonoBehaviour
 
         interactionHandler.OnTouchAction += OnTouch;
         interactionHandler.OnReleaseAction += OnRelease;
+        interactionHandler.OnDragAction += OnDrag;
+        interactionHandler.OnPointerEnterAction += OnPointerEnter;
+        interactionHandler.OnPointerExitAction += OnPointerExit;
 
     }
 
@@ -24,6 +27,9 @@ public abstract class BehaviourButton : MonoBehaviour
 
         interactionHandler.OnTouchAction -= OnTouch;
         interactionHandler.OnReleaseAction -= OnRelease;
+        interactionHandler.OnDragAction -= OnDrag;
+        interactionHandler.OnPointerEnterAction -= OnPointerEnter;
+        interactionHandler.OnPointerExitAction -= OnPointerExit;
     }
 
 
@@ -33,6 +39,21 @@ public abstract class BehaviourButton : MonoBehaviour
     }
 
     virtual protected void OnRelease()
+    {
+
+    }
+
+    virtual protected void OnDrag()
+    {
+
+    }
+
+    virtual protected void OnPointerEnter()
+    {
+
+    }
+
+    virtual protected void OnPointerExit()
     {
 
     }

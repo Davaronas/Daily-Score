@@ -5,7 +5,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System;
 
-public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler,
+                                                   IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private UnityEvent OnTouchEvent;
     [SerializeField] private UnityEvent OnReleaseEvent;
@@ -13,25 +14,37 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     [HideInInspector] public Action OnTouchAction;
     [HideInInspector] public Action OnReleaseAction;
+    [HideInInspector] public Action OnDragAction;
+    [HideInInspector] public Action OnPointerEnterAction;
+    [HideInInspector] public Action OnPointerExitAction;
+
 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        print("Down");
         OnTouchEvent?.Invoke();
         OnTouchAction?.Invoke();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        print("Up");
         OnReleaseEvent?.Invoke();
         OnReleaseAction?.Invoke();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        // OnDrag?.Invoke();
+         OnDragAction?.Invoke();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        OnPointerEnterAction?.Invoke();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        OnPointerExitAction?.Invoke();
     }
 }
     
