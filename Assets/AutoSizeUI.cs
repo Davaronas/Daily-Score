@@ -6,8 +6,12 @@ using UnityEngine;
 public class AutoSizeUI : MonoBehaviour
 {
     [SerializeField] private RectTransform ui = null;
-    [SerializeField] private SubmenuScroll smScroll = null;
     [SerializeField] private int numberOfMenus = 5;
+
+    public int GetNumberOfMenus()
+    {
+        return numberOfMenus;
+    }
 
     // Start is called before the first frame update
     void Awake()
@@ -15,7 +19,8 @@ public class AutoSizeUI : MonoBehaviour
         Vector2 _uiSize = ui.sizeDelta;
         _uiSize.x = Screen.width * numberOfMenus;
         ui.sizeDelta = _uiSize;
-        smScroll.Initialize();
+
+        
     }
 
     // Update is called once per frame

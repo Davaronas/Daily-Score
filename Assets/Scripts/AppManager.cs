@@ -11,8 +11,12 @@ public class AppManager : MonoBehaviour
 
     public enum Languages { English, Magyar, Deutsch, ENUM_END };
 
+    // all static events should be here
 
-    public static Action<Languages> OnLanguageChanged;
+    public static event Action<Languages> OnLanguageChanged;
+
+    public static event Action<int> OnSubmenuButtonPressed;
+
 
     private void Start()
     {
@@ -31,7 +35,12 @@ public class AppManager : MonoBehaviour
             return;
         }
 
+        if(OnLanguageChanged != null)
         OnLanguageChanged?.Invoke(_language);
     }
 
+    public static void SubmenuButtonPressed(int _buttonId)
+    {
+        OnSubmenuButtonPressed?.Invoke(_buttonId);
+    }
 }
