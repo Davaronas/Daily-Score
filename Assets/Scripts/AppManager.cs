@@ -16,6 +16,7 @@ public class AppManager : MonoBehaviour
     public static event Action<Languages> OnLanguageChanged;
 
     public static event Action<int> OnSubmenuButtonPressed;
+    public static event Action<int> OnSubmenuChangedViaScrolling;
 
 
     private void Start()
@@ -42,5 +43,10 @@ public class AppManager : MonoBehaviour
     public static void SubmenuButtonPressed(int _buttonId)
     {
         OnSubmenuButtonPressed?.Invoke(_buttonId);
+    }
+
+    public static void SubmenuChangedViaScrolling(int _buttonId)
+    {
+        OnSubmenuChangedViaScrolling?.Invoke(_buttonId);
     }
 }

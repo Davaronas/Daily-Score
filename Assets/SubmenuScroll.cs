@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 [RequireComponent(typeof(ScrollRect))]
 
 public class SubmenuScroll : BehaviourButton
 {
     [SerializeField]private RectTransform submenusRectTransform = null;
+    float oneSubmenuPercentage = 0f;
 
     private RectTransform rectTransform = null;
     private ScrollRect scrollRect = null;
@@ -16,13 +18,30 @@ public class SubmenuScroll : BehaviourButton
 
     private Dictionary<SubmenuButton, Vector2> submenuPositions = new Dictionary<SubmenuButton, Vector2>();
 
-    public void Start()
+    
+
+
+
+    protected override void OnRelease()
     {
+        AppManager.SubmenuChangedViaScrolling(WarpToPosition());
+    }
+
+
+
+    protected override void Start()
+    {
+        base.Start();
+
         rectTransform = GetComponent<RectTransform>();
         scrollRect = GetComponent<ScrollRect>();
         uiSizer = FindObjectOfType<AutoSizeUI>();
 
+        oneSubmenuPercentage = 1f / (uiSizer.GetNumberOfMenus() - 1);
+
+
         SubmenuButton[] _smButtons = FindObjectsOfType<SubmenuButton>();
+
 
         for (int i = 0; i < submenusRectTransform.transform.childCount; i++)
         {
@@ -42,24 +61,28 @@ public class SubmenuScroll : BehaviourButton
                 Debug.LogError($"No matching button to a submenu: {i}");
             }
 
-            print(submenusRectTransform.GetChild(i).position);
-            submenuPositions.Add(_attachButton, submenusRectTransform.GetChild(i).position);
+            Transform _child = submenusRectTransform.GetChild(i);
+            SubmenuPosition _positioner = _child.GetComponentInChildren<SubmenuPosition>();
+
+            if (_positioner == null)
+            {
+                Debug.LogError($"No submenu positioner on {gameObject.name}");
+            }
+
+            _positioner.transform.SetParent(transform.root, true);
+
+            submenuPositions.Add(_attachButton, _positioner
+                .GetComponent<RectTransform>().anchoredPosition);
+
+            Destroy(_positioner.gameObject);
         }
 
-
-        StartCoroutine(Initialize());
-        
+        AppManager.SubmenuChangedViaScrolling(WarpToPosition(0));
     }
 
-    IEnumerator Initialize()
-    {
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
+   
 
-        
-    }
-
-    public void WarpToPosition(int _submenuId = -1)
+    public int WarpToPosition(int _submenuId = -1)
     {
         if(_submenuId == -1)
         {
@@ -73,38 +96,40 @@ public class SubmenuScroll : BehaviourButton
             if (_keyValuePair.Key.GetId() == _submenuId)
             {
                 StartCoroutine(Warp(_keyValuePair.Key.GetId()));
-                return;
+                return _submenuId;
                 
             }
         }
-        Debug.LogError($"The Submenu ID to warp to does not appear in the {nameof(submenuPositions)} list");
+        Debug.LogError($"The Submenu ID to warp to does not appear in the {nameof(submenuPositions)} list: {_submenuId}");
 
 
-
+        return -1;
     }
 
     private int CalculateWarpPosition()
     {
-        print("CalculateWarpPosition");
-        return -1;
+        int _closest = 1;
+        float _distance = Mathf.Infinity;
+        for (int i = 0; i < uiSizer.GetNumberOfMenus(); i++)
+        {
+
+            if (Mathf.Abs(scrollRect.horizontalNormalizedPosition - (i * oneSubmenuPercentage)) < _distance)
+            {
+                //    print("Closest: " + _closest);
+                _distance = Mathf.Abs(scrollRect.horizontalNormalizedPosition - (i * oneSubmenuPercentage));
+                _closest = i;
+            }
+        }
+
+        return _closest;
     }
 
     IEnumerator Warp(int _id)
     {
-        // print("Warp to: " + _pos);
+        
 
-        // rectTransform.position = _pos;
-        // Could use rect transform
+        scrollRect.horizontalNormalizedPosition = _id * oneSubmenuPercentage;
 
-        //  while((Vector2)transform.position != _pos)
-
-        float _scrollToPointPercentage = 1 / (float)uiSizer.GetNumberOfMenus() * _id;
-        if (_id > Mathf.CeilToInt((float)uiSizer.GetNumberOfMenus() / 2))
-        {
-           // _scrollToPointPercentage += 
-        }
-
-        scrollRect.horizontalNormalizedPosition = 1 / (float)uiSizer.GetNumberOfMenus() * _id;
         yield return new WaitForEndOfFrame();
 
     }

@@ -16,7 +16,9 @@ public class SubmenuButton : BehaviourButton
 
     public SubmenuButton()
     {
-       // AppManager.OnSubmenuButtonPressed += SubmenuChanged; Nullreferenciát ad az egész gameobjectre. ?????
+        // AppManager.OnSubmenuButtonPressed += SubmenuChanged; Nullreferenciát ad az egész gameobjectre. ?????
+
+        
     }
 
     
@@ -24,6 +26,7 @@ public class SubmenuButton : BehaviourButton
     private void OnDestroy()
     {
         AppManager.OnSubmenuButtonPressed -= SubmenuChanged;
+        AppManager.OnSubmenuChangedViaScrolling -= SubmenuChanged;
     }
 
   
@@ -38,13 +41,14 @@ public class SubmenuButton : BehaviourButton
         image = GetComponent<Image>();
         submenuScroll = FindObjectOfType<SubmenuScroll>();
         AppManager.OnSubmenuButtonPressed += SubmenuChanged; // Míért csak itt mûködik ?
+        AppManager.OnSubmenuChangedViaScrolling += SubmenuChanged;
 
         // print(image + " " + submenuScroll);
     }
 
     protected override void OnTouch()
     {
-        Selected();
+        SubmenuChanged(buttonId);
         submenuScroll.WarpToPosition(buttonId);
         AppManager.SubmenuButtonPressed(buttonId);
     }
@@ -56,7 +60,17 @@ public class SubmenuButton : BehaviourButton
 
     public void Deselected()
     {
-        /*
+
+        image.color = Color.white;
+    }
+
+    private void SubmenuChanged(int _id)
+    {
+
+
+
+
+        // this means awake was not called first, this should never run, but just in case
         if (image == null || submenuScroll == null)
         {
             print(buttonId);
@@ -66,33 +80,20 @@ public class SubmenuButton : BehaviourButton
             Debug.LogWarning(submenuScroll == null);
             return;
         }
-        */
-
-
-
-
-        image.color = Color.white;
-    }
-
-    private void SubmenuChanged(int _id)
-    {
-        
-
-       
-
-        // this means awake was not called first, this should never run, but just in case
-        
 
 
 
         if (_id == buttonId) 
         {
-            return; 
+            Selected();
+        }
+        else
+        {
+            Deselected();
         }
 
 
 
-
-        Deselected();
+        
     }
 }

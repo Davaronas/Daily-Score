@@ -6,9 +6,9 @@ using UnityEngine;
 
 public abstract class BehaviourButton : MonoBehaviour
 {
-    private InteractionHandler interactionHandler = null;
+    [SerializeField]private InteractionHandler interactionHandler = null;
 
-    void Start()
+    virtual protected void Start()
     {
         interactionHandler = GetComponent<InteractionHandler>();
         if (interactionHandler == null) { Debug.LogError($"InteractioHandler is null on {gameObject.name}"); return; }
@@ -35,12 +35,12 @@ public abstract class BehaviourButton : MonoBehaviour
 
     virtual protected void OnTouch()
     {
-
+        
     }
 
     virtual protected void OnRelease()
     {
-
+        
     }
 
     virtual protected void OnDrag()

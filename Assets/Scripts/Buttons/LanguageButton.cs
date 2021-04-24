@@ -14,6 +14,7 @@ public class LanguageButton : BehaviourButton
 
     protected override void OnRelease()
     {
+
         AppManager.SetLanguage(language);
 
         // Go to introduction screen

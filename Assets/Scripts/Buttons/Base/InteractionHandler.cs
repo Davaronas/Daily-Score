@@ -12,11 +12,11 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
     [SerializeField] private UnityEvent OnReleaseEvent;
     //  [SerializeField] private UnityEvent OnDragEvent;
 
-    [HideInInspector] public event Action OnTouchAction;
-    [HideInInspector] public event Action OnReleaseAction;
-    [HideInInspector] public event Action OnDragAction;
-    [HideInInspector] public event Action OnPointerEnterAction;
-    [HideInInspector] public event Action OnPointerExitAction;
+    [HideInInspector] public Action OnTouchAction;
+    [HideInInspector] public Action OnReleaseAction;
+    [HideInInspector] public Action OnDragAction;
+    [HideInInspector] public Action OnPointerEnterAction;
+    [HideInInspector] public Action OnPointerExitAction;
 
 
 
@@ -28,6 +28,7 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     public void OnPointerUp(PointerEventData eventData)
     {
+       
         OnReleaseEvent?.Invoke();
         OnReleaseAction?.Invoke();
     }
