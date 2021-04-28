@@ -14,17 +14,15 @@ public class SubmenuButton : BehaviourButton
 
     
 
-    public SubmenuButton()
+   
+
+
+
+    protected override void OnDestroy()
     {
-        // AppManager.OnSubmenuButtonPressed += SubmenuChanged; Nullreferenciát ad az egész gameobjectre. ?????
-
-        
-    }
-
+        base.OnDestroy();
     
-
-    private void OnDestroy()
-    {
+    
         AppManager.OnSubmenuButtonPressed -= SubmenuChanged;
         AppManager.OnSubmenuChangedViaScrolling -= SubmenuChanged;
     }
@@ -40,7 +38,9 @@ public class SubmenuButton : BehaviourButton
     {
         image = GetComponent<Image>();
         submenuScroll = FindObjectOfType<SubmenuScroll>();
-        AppManager.OnSubmenuButtonPressed += SubmenuChanged; // Míért csak itt mûködik ?
+
+
+        AppManager.OnSubmenuButtonPressed += SubmenuChanged;
         AppManager.OnSubmenuChangedViaScrolling += SubmenuChanged;
 
         // print(image + " " + submenuScroll);
@@ -76,8 +76,6 @@ public class SubmenuButton : BehaviourButton
             print(buttonId);
             Debug.LogError($"This event was not supposed to be called" +
                $" before the Awake of the main menu: {nameof(SubmenuChanged)} ");
-            Debug.LogWarning(image == null);
-            Debug.LogWarning(submenuScroll == null);
             return;
         }
 

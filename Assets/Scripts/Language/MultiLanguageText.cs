@@ -16,15 +16,12 @@ public class MultiLanguageText : MonoBehaviour
 
     private string textToDisplay = "";
 
-   public MultiLanguageText()
-    {
-        AppManager.OnLanguageChanged += LanguageChanged;
-    }
 
     private void Awake()
     {
         text = GetComponent<TMP_Text>();
         text.text = textToDisplay;
+        AppManager.OnLanguageChanged += LanguageChanged;
     }
 
     private void OnDestroy()

@@ -33,7 +33,5 @@ public class AutoSizeUI : MonoBehaviour
         Vector2 _uiSize = ui.sizeDelta;
         _uiSize.x = measureSizeFrom.rect.width * numberOfMenus * multiplier;
         ui.sizeDelta = _uiSize;
-
-        print(Screen.dpi / Screen.width);
     }
 }

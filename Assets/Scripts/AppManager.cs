@@ -17,10 +17,19 @@ public class AppManager : MonoBehaviour
 
     public static event Action<int> OnSubmenuButtonPressed;
     public static event Action<int> OnSubmenuChangedViaScrolling;
+    public static event Action OnNewGoalAdded;
+
+
 
 
     private void Start()
     {
+        // awakebe vannak a feliratkozások, ezért csak a startban kapcsoljunk ki mindent
+
+        introductionPanel.SetActive(false);
+        mainMenuPanel.SetActive(false);
+
+
         // set language if already saved one
 
         // decide starting page
@@ -29,7 +38,6 @@ public class AppManager : MonoBehaviour
     public static void SetLanguage(Languages _language)
     {
         // save language if not saved
-        // set all texts to the selected language
         if(_language == Languages.ENUM_END)
         {
             Debug.LogError($"Invalid language: {_language}");
@@ -48,5 +56,15 @@ public class AppManager : MonoBehaviour
     public static void SubmenuChangedViaScrolling(int _buttonId)
     {
         OnSubmenuChangedViaScrolling?.Invoke(_buttonId);
+    }
+
+    public static void NewGoalAdded()
+    {
+        OnNewGoalAdded?.Invoke();
+    }
+
+    public static Action GetAction()
+    {
+        return OnNewGoalAdded;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class BehaviourButton : MonoBehaviour
 {
-    [SerializeField]private InteractionHandler interactionHandler = null;
+    private InteractionHandler interactionHandler = null;
 
     virtual protected void Start()
     {
@@ -21,7 +21,7 @@ public abstract class BehaviourButton : MonoBehaviour
 
     }
 
-    private void OnDestroy()
+    virtual protected void OnDestroy()
     {
         if (interactionHandler == null) { Debug.LogError($"InteractioHandler is null on {gameObject.name}"); return; }
 
