@@ -16,6 +16,7 @@ public class GoalManager : MonoBehaviour
     [SerializeField] private Image goalMenuSymbolImage = null;
     [SerializeField] private Image goalMenuPanel = null;
     [SerializeField] private RectTransform goalMenuScrollRectTransform = null;
+    [SerializeField][Range(0f,1f)] private float goalMenuPanel_whiteStrengthOnGoalColor = 0.5f;
 
     private string enteredName = "";
     private Color32 selectedColor = new Color32();
@@ -59,6 +60,16 @@ public class GoalManager : MonoBehaviour
     {
         goalMenuNameField.text = _goal.goalName;
         goalMenuSymbolImage.sprite = AppManager.GetSpriteFromId(_goal.symbolId);
+
+
+        byte[] _rgb = new byte[3];
+        _rgb[0] = (byte)Mathf.RoundToInt((_goal.goalColor.r * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2) ;
+        _rgb[1] = (byte)Mathf.RoundToInt((_goal.goalColor.g * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
+        _rgb[2] = (byte)Mathf.RoundToInt((_goal.goalColor.b * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
+        
+        goalMenuPanel.color = new Color32(_rgb[0], _rgb[1], _rgb[2], 255);
+
+
 
         AppManager.GoalOpened(_goal);
     }

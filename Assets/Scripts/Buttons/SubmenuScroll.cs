@@ -109,7 +109,7 @@ public class SubmenuScroll : BehaviourButton
         return -1;
     }
 
-    private int CalculateWarpPosition()
+    public int CalculateWarpPosition()
     {
         int _closest = 1;
         float _distance = Mathf.Infinity;
