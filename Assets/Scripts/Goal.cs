@@ -14,9 +14,9 @@ public class Goal : MonoBehaviour
 
     private List<Task> tasks = new List<Task>();
 
-    private string goalName = "Default name";
-    private Color32 goalColor = new Color32(0, 0, 0, defaultTransparency);
-    private int symbolId = -1;
+    public string goalName { get; private set; } = "Default name";
+    public Color32 goalColor { get; private set; } = new Color32(0, 0, 0, defaultTransparency);
+    public int symbolId { get; private set; } = -1;
 
 
     public void SetData(string _name, Color32 _color, int _symbolId = -1)
@@ -41,7 +41,10 @@ public class Goal : MonoBehaviour
         imageToApplyColorTo.color = goalColor;
 
         // set up sprites
-      
+    }
 
+    public Task[] GetTasks()
+    {
+        return tasks.ToArray();
     }
 }

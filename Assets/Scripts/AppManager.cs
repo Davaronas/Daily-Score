@@ -9,6 +9,7 @@ public class AppManager : MonoBehaviour
     [SerializeField] private GameObject languagePanel;
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject createGoalPanel;
+    [SerializeField] private GameObject goalPanel;
     [Space]
     [Space]
     [SerializeField] private Sprite[] symbols_e;
@@ -24,21 +25,31 @@ public class AppManager : MonoBehaviour
     public static event Action<int> OnSubmenuChangedViaScrolling;
     public static event Action OnNewGoalAdded; // might not be needed
 
+    public static event Action<Goal> OnGoalOpened;
+
     /* Layer app index
      * 0 - Language screen
      * 1 - Intro screen
      * 2 - Main menu
-     * 21 - Create goal screen
+     *  211 - Create goal screen
+     *  212 - Goal screen
+     *      2121 - Create task screen
      * 3 - Settings
-     * 
      */
 
 
     private void Awake()
     {
         OnNewGoalAdded += NewGoalAddedCallback;
+        OnGoalOpened += OnGoalOpenedCallback;
 
         symbols = symbols_e;
+    }
+
+    private void OnDestroy()
+    {
+        OnNewGoalAdded -= NewGoalAddedCallback;
+        OnGoalOpened -= OnGoalOpenedCallback;
     }
 
     private int GetAppLayer()
@@ -60,9 +71,15 @@ public class AppManager : MonoBehaviour
 
         if(createGoalPanel.activeSelf)
         {
-            return 21;
+            return 211;
         }
 
+        if(goalPanel.activeSelf)
+        {
+            return 212;
+        }
+
+        Debug.LogError($"There is no such layer index");
         return -1;
     }
 
@@ -72,24 +89,41 @@ public class AppManager : MonoBehaviour
         {
             introductionPanel.SetActive(false);
             languagePanel.SetActive(true);
+
+            return;
         }
 
         if(_layer == 1)
         {
             // do nothing, this is the intro screen you shouldn't come back here
+
+            return;
         }
 
         if(_layer == 2)
         {
             introductionPanel.SetActive(false);
             createGoalPanel.SetActive(false);
+            goalPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
+
+            return;
         }
 
-        if(_layer == 21)
+        if(_layer == 211)
         {
             mainMenuPanel.SetActive(false);
             createGoalPanel.SetActive(true);
+
+            return;
+        }
+
+        if(_layer == 212)
+        {
+            mainMenuPanel.SetActive(false);
+            goalPanel.SetActive(true);
+
+            return;
         }
 
         Debug.LogError($"There is no such layer index: {_layer}");
@@ -104,6 +138,7 @@ public class AppManager : MonoBehaviour
         introductionPanel.SetActive(false);
         mainMenuPanel.SetActive(false);
         createGoalPanel.SetActive(false);
+        goalPanel.SetActive(false);
 
 
         // set language if already saved one
@@ -113,8 +148,18 @@ public class AppManager : MonoBehaviour
 
     private void Update()
     {
-        if(!Input.GetKeyDown(KeyCode.Escape)) { return; }
-        
+        if(Input.GetKeyDown(KeyCode.Return)) { print("A"); }
+
+        if (!Application.isEditor)
+        {
+            if (!Input.GetKeyDown(KeyCode.Escape) && !Input.GetKeyDown(KeyCode.Return)) { return; }
+        }
+        else // debug in editor
+        { 
+            if (!Input.GetButtonDown("Jump")) { return; }
+        }
+
+        print(GetAppLayer());
         switch(GetAppLayer())
         {
             case 0:
@@ -126,15 +171,14 @@ public class AppManager : MonoBehaviour
             case 2:
                 Application.Quit();
                 break;
-            case 21:
+            case 211:
+                SetAppLayer(2);
+                break;
+            case 212:
                 SetAppLayer(2);
                 break;
         }
 
-      
-
-        
-        
     }
 
     public static void SetLanguage(Languages _language)
@@ -160,10 +204,7 @@ public class AppManager : MonoBehaviour
         OnSubmenuChangedViaScrolling?.Invoke(_buttonId);
     }
 
-    public static void NewGoalAdded()
-    {
-        OnNewGoalAdded?.Invoke();
-    }
+  
 
 
 
@@ -174,7 +215,7 @@ public class AppManager : MonoBehaviour
 
     public static Sprite GetSpriteFromId(int _id)
     {
-        if(_id > 0 && _id < symbols.Length - 1)
+        if(_id >= 0 && _id < symbols.Length)
         {
             return symbols[_id];
         }
@@ -183,11 +224,26 @@ public class AppManager : MonoBehaviour
         return null;
     }
 
-    
+
+
+    public static void NewGoalAdded()
+    {
+        OnNewGoalAdded?.Invoke();
+    }
 
     private void NewGoalAddedCallback()
     {
-        createGoalPanel.SetActive(false);
-        mainMenuPanel.SetActive(true);
+        SetAppLayer(2);
+    }
+
+
+    public static void GoalOpened(Goal _goal)
+    {
+        OnGoalOpened?.Invoke(_goal);
+    }
+
+    private void OnGoalOpenedCallback(Goal _goal)
+    {
+        SetAppLayer(212);
     }
 }

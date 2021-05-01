@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class GoalButton : BehaviourButton
 {
-    private RectTransform rectTransform;
+    private RectTransform rectTransform = null;
+    private Goal goal = null;
+
+    private GoalManager goalManager = null;
 
     private Vector2 lastPosition = Vector2.zero;
 
@@ -13,6 +16,8 @@ public class GoalButton : BehaviourButton
         base.Start();
 
         rectTransform = GetComponent<RectTransform>();
+        goal = GetComponent<Goal>();
+        goalManager = FindObjectOfType<GoalManager>();
     }
 
     protected override void OnTouch()
@@ -22,7 +27,10 @@ public class GoalButton : BehaviourButton
 
     protected override void OnRelease()
     {
-       // hasonlítsd össze az elõzõvel, és döntsd el melyik akciót akarta a felhasználó csinálni
+        // hasonlítsd össze az elõzõvel, és döntsd el melyik akciót akarta a felhasználó csinálni:
+        // következõ menüpont, felfele/lefele görgetés, kinyitás
+
+        goalManager.SetGoalPanelData(goal);
     }
 
 }

@@ -7,10 +7,15 @@ using TMPro;
 public class GoalManager : MonoBehaviour
 {
     [SerializeField] private RectTransform goalsScrollContentRectTransform = null;
-
-    [SerializeField] private  TMP_InputField goalNameInputField = null;
-
+    [SerializeField] private  TMP_InputField createGoal_goalNameInputField = null;
+    [Space]
     [SerializeField] private GameObject goalPrefab = null;
+    [Space]
+    [Space]
+    [SerializeField] private TMP_Text goalMenuNameField = null;
+    [SerializeField] private Image goalMenuSymbolImage = null;
+    [SerializeField] private Image goalMenuPanel = null;
+    [SerializeField] private RectTransform goalMenuScrollRectTransform = null;
 
     private string enteredName = "";
     private Color32 selectedColor = new Color32();
@@ -31,7 +36,7 @@ public class GoalManager : MonoBehaviour
     private void OnDisable()
     {
         enteredName = "";
-        goalNameInputField.text = "";
+        createGoal_goalNameInputField.text = "";
         isColorSelected = false;
         isSpriteSelected = false;
     }
@@ -50,13 +55,21 @@ public class GoalManager : MonoBehaviour
     }
 
 
+    public void SetGoalPanelData(Goal _goal)
+    {
+        goalMenuNameField.text = _goal.goalName;
+        goalMenuSymbolImage.sprite = AppManager.GetSpriteFromId(_goal.symbolId);
+
+        AppManager.GoalOpened(_goal);
+    }
+
 
 
 
 
     public void RemoteCall_SetSelectedName()
     {
-        enteredName = goalNameInputField.text;
+        enteredName = createGoal_goalNameInputField.text;
     }
 
     

@@ -19,7 +19,7 @@ public class SubmenuScroll : BehaviourButton
     private Dictionary<SubmenuButton, Vector2> submenuPositions = new Dictionary<SubmenuButton, Vector2>();
 
     
-
+    
 
 
     protected override void OnRelease()
@@ -27,7 +27,10 @@ public class SubmenuScroll : BehaviourButton
         AppManager.SubmenuChangedViaScrolling(WarpToPosition());
     }
 
-
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
 
     protected override void Start()
     {
