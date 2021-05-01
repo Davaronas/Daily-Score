@@ -316,7 +316,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 35.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -467,7 +467,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 41.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -782,6 +782,7 @@ GameObject:
   - component: {fileID: 153439163}
   - component: {fileID: 153439165}
   - component: {fileID: 153439164}
+  - component: {fileID: 153439166}
   m_Layer: 5
   m_Name: Today'sScoreText
   m_TagString: Untagged
@@ -905,6 +906,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153439162}
   m_CullTransparentMesh: 1
+--- !u!114 &153439166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153439162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - 'Today''s Score:'
+  - "Mai Eredm\xE9nyed:"
+  - Die heutige Punktzahl
 --- !u!1 &305950589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1185,6 +1202,7 @@ GameObject:
   - component: {fileID: 339563795}
   - component: {fileID: 339563797}
   - component: {fileID: 339563796}
+  - component: {fileID: 339563798}
   m_Layer: 5
   m_Name: ChooseColorText
   m_TagString: Untagged
@@ -1308,6 +1326,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 339563794}
   m_CullTransparentMesh: 1
+--- !u!114 &339563798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339563794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Choose Color
+  - "V\xE1lassz Sz\xEDnt "
+  - "w\xE4hle eine Farbe"
 --- !u!1 &407788542
 GameObject:
   m_ObjectHideFlags: 0
@@ -1319,6 +1353,7 @@ GameObject:
   - component: {fileID: 407788543}
   - component: {fileID: 407788545}
   - component: {fileID: 407788544}
+  - component: {fileID: 407788546}
   m_Layer: 5
   m_Name: CreateNewGoalText
   m_TagString: Untagged
@@ -1442,6 +1477,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 407788542}
   m_CullTransparentMesh: 1
+--- !u!114 &407788546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407788542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - New Goal
+  - "\xDAj C\xE9l"
+  - Neues Ziel
 --- !u!1 &432916991
 GameObject:
   m_ObjectHideFlags: 0
@@ -2051,6 +2102,7 @@ GameObject:
   - component: {fileID: 600745436}
   - component: {fileID: 600745438}
   - component: {fileID: 600745437}
+  - component: {fileID: 600745439}
   m_Layer: 5
   m_Name: PointsText
   m_TagString: Untagged
@@ -2176,6 +2228,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600745435}
   m_CullTransparentMesh: 1
+--- !u!114 &600745439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600745435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Points
+  - Pontok
+  - Punkte
 --- !u!1 &649696105
 GameObject:
   m_ObjectHideFlags: 0
@@ -2589,6 +2657,7 @@ GameObject:
   - component: {fileID: 692577326}
   - component: {fileID: 692577328}
   - component: {fileID: 692577327}
+  - component: {fileID: 692577329}
   m_Layer: 5
   m_Name: WeeklyAvgText
   m_TagString: Untagged
@@ -2713,6 +2782,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 692577325}
   m_CullTransparentMesh: 1
+--- !u!114 &692577329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692577325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - 'Weekly avg:'
+  - "Heti \xC1tlag:"
+  - "W\xF6chentlicher Durchschnitt:"
 --- !u!1 &712122572
 GameObject:
   m_ObjectHideFlags: 0
@@ -3107,7 +3192,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 77.85
+  m_fontSize: 75.25
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3241,6 +3326,7 @@ GameObject:
   - component: {fileID: 781454855}
   - component: {fileID: 781454857}
   - component: {fileID: 781454856}
+  - component: {fileID: 781454858}
   m_Layer: 5
   m_Name: PremiumText
   m_TagString: Untagged
@@ -3364,6 +3450,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 781454854}
   m_CullTransparentMesh: 1
+--- !u!114 &781454858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781454854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Premium
+  - "Pr\xE9mium"
+  - "Pr\xE4mie"
 --- !u!1 &806764256
 GameObject:
   m_ObjectHideFlags: 0
@@ -4206,6 +4308,7 @@ GameObject:
   - component: {fileID: 942816928}
   - component: {fileID: 942816930}
   - component: {fileID: 942816929}
+  - component: {fileID: 942816931}
   m_Layer: 5
   m_Name: StatsText
   m_TagString: Untagged
@@ -4329,6 +4432,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 942816927}
   m_CullTransparentMesh: 1
+--- !u!114 &942816931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 942816927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Stats
+  - "Statisztik\xE1k"
+  - Statistiken
 --- !u!1 &955691699
 GameObject:
   m_ObjectHideFlags: 0
@@ -4974,6 +5093,7 @@ GameObject:
   - component: {fileID: 1125845590}
   - component: {fileID: 1125845592}
   - component: {fileID: 1125845591}
+  - component: {fileID: 1125845593}
   m_Layer: 5
   m_Name: AddGoalText
   m_TagString: Untagged
@@ -5097,6 +5217,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1125845589}
   m_CullTransparentMesh: 1
+--- !u!114 &1125845593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1125845589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Add Goal
+  - "C\xE9l Hozz\xE1ad\xE1sa"
+  - "Ziel hinzuf\xFCgen"
 --- !u!1 &1174815221
 GameObject:
   m_ObjectHideFlags: 0
@@ -5709,7 +5845,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 130
+  m_fontSize: 126.7
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5967,7 +6103,7 @@ GameObject:
   - component: {fileID: 1422048305}
   - component: {fileID: 1422048304}
   m_Layer: 5
-  m_Name: PatreonText
+  m_Name: PatreonText_S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6130,7 +6266,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.00012207, y: 0}
-  m_SizeDelta: {x: 15810.885, y: 1542}
+  m_SizeDelta: {x: 4140, y: 1542}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1461250121
 CanvasRenderer:
@@ -6914,6 +7050,7 @@ GameObject:
   - component: {fileID: 1706355288}
   - component: {fileID: 1706355290}
   - component: {fileID: 1706355289}
+  - component: {fileID: 1706355291}
   m_Layer: 5
   m_Name: TipsText
   m_TagString: Untagged
@@ -7037,6 +7174,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1706355287}
   m_CullTransparentMesh: 1
+--- !u!114 &1706355291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706355287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Tips
+  - Tippek
+  - Tipps
 --- !u!1 &1720278535
 GameObject:
   m_ObjectHideFlags: 0
@@ -8452,6 +8605,7 @@ GameObject:
   - component: {fileID: 1952637119}
   - component: {fileID: 1952637121}
   - component: {fileID: 1952637120}
+  - component: {fileID: 1952637122}
   m_Layer: 5
   m_Name: HighScoreText
   m_TagString: Untagged
@@ -8576,6 +8730,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1952637118}
   m_CullTransparentMesh: 1
+--- !u!114 &1952637122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952637118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - 'High Score:'
+  - 'Rekord:'
+  - 'Highscore:'
 --- !u!1 &1959101572
 GameObject:
   m_ObjectHideFlags: 0
@@ -9181,6 +9351,7 @@ GameObject:
   - component: {fileID: 2082387902}
   - component: {fileID: 2082387904}
   - component: {fileID: 2082387903}
+  - component: {fileID: 2082387905}
   m_Layer: 5
   m_Name: ChooseSymbolText
   m_TagString: Untagged
@@ -9304,6 +9475,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082387901}
   m_CullTransparentMesh: 1
+--- !u!114 &2082387905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082387901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Choose Symbol
+  - "V\xE1lassz Szimb\xF3lumot"
+  - "Symbol ausw\xE4hlen"
 --- !u!1 &2104917809
 GameObject:
   m_ObjectHideFlags: 0
@@ -9315,6 +9502,7 @@ GameObject:
   - component: {fileID: 2104917810}
   - component: {fileID: 2104917812}
   - component: {fileID: 2104917811}
+  - component: {fileID: 2104917813}
   m_Layer: 5
   m_Name: GoalsText
   m_TagString: Untagged
@@ -9439,6 +9627,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2104917809}
   m_CullTransparentMesh: 1
+--- !u!114 &2104917813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104917809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c04c70913bf0a4ba81b7e2df00704e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  languages:
+  - Goals
+  - "C\xE9lok"
+  - Tore
 --- !u!1 &2132394938
 GameObject:
   m_ObjectHideFlags: 0
