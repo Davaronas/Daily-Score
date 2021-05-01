@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System;
 
+[DisallowMultipleComponent]
 public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler,
                                                    IPointerEnterHandler, IPointerExitHandler
 {

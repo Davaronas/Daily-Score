@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class AppManager : MonoBehaviour
 {
@@ -79,7 +80,7 @@ public class AppManager : MonoBehaviour
             return 212;
         }
 
-        Debug.LogError($"There is no such layer index");
+        Debug.LogError($"App layer couldn't be determined, all panels could be disabled ?");
         return -1;
     }
 
@@ -207,7 +208,7 @@ public class AppManager : MonoBehaviour
   
 
 
-
+   
 
 
 

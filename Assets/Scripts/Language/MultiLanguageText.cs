@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(TMP_Text))]
-
+[DisallowMultipleComponent]
 public class MultiLanguageText : MonoBehaviour
 {
     
