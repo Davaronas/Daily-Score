@@ -28,6 +28,8 @@ public class AppManager : MonoBehaviour
 
     public static event Action<Goal> OnGoalOpened;
 
+    public static event Action OnAppLayerChangedToMainMenu;
+
     /* Layer app index
      * 0 - Language screen
      * 1 - Intro screen
@@ -108,6 +110,8 @@ public class AppManager : MonoBehaviour
             goalPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
 
+
+            AppLayerChangedToMainMenu();
             return;
         }
 
@@ -246,5 +250,11 @@ public class AppManager : MonoBehaviour
     private void OnGoalOpenedCallback(Goal _goal)
     {
         SetAppLayer(212);
+    }
+
+
+    public static void AppLayerChangedToMainMenu()
+    {
+        OnAppLayerChangedToMainMenu?.Invoke();
     }
 }

@@ -15,39 +15,42 @@ public class DetectRotate : UIBehaviour
     {
         base.Awake();
 
+
+        AppManager.OnAppLayerChangedToMainMenu += UpdateScreenSubmenuPosition;
         submenuScroll = FindObjectOfType<SubmenuScroll>();
+    }
+
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        AppManager.OnAppLayerChangedToMainMenu -= UpdateScreenSubmenuPosition;
     }
 
     protected override void Start()
     {
         base.Start();
 
-        StartCoroutine(WaitForFrameEnd());
+        StartCoroutine(EnableDetectionAfterStart());
     }
 
 
 
-    IEnumerator WaitForFrameEnd()
+    IEnumerator EnableDetectionAfterStart()
     {
         yield return new WaitForEndOfFrame();
         startHappened = true;
     }
+
+
 
     protected override void OnRectTransformDimensionsChange()
     {
         print($"Dimension change on {gameObject.name}");
 
 
-
-        if(submenuScroll == null ) { Debug.Log("null"); return; }
-
-        if(!submenuScroll.gameObject.activeInHierarchy  ) { Debug.Log("Not active"); return; }
-
-        if(!startHappened) { Debug.Log("Start not happened"); return; }
-
-        warpPos = submenuScroll.CalculateWarpPosition();
-
-        StartCoroutine(WaitForFrameEnd2());
+        UpdateScreenSubmenuPosition();
 
 
         /*
@@ -68,7 +71,20 @@ public class DetectRotate : UIBehaviour
         */
     }
 
-    IEnumerator WaitForFrameEnd2()
+    private void UpdateScreenSubmenuPosition()
+    {
+        if (submenuScroll == null) { return; }
+
+        if (!submenuScroll.gameObject.activeInHierarchy) { return; }
+
+        if (!startHappened) { return; }
+
+        warpPos = submenuScroll.GetCurrentPosition();
+
+        StartCoroutine(SubmenuScrollWarpAfterFrame());
+    }
+
+    IEnumerator SubmenuScrollWarpAfterFrame()
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
