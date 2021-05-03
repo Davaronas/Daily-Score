@@ -4,23 +4,37 @@ using UnityEngine;
 
 public class TipDictionary : MonoBehaviour
 {
-    public int darab;
-    public string tips;
+    IDictionary<int, string> Tips = new Dictionary<int, string>();
 
-    IDictionary<string, int> Tips = new Dictionary<string, int>();
-
-    public void tipLoad(int darab, string tips)
+    public void TipLoad(string[] _tips)
     {
-        for (int i = 0; i < darab.Length; i++)
+        for (int i = 0; i < _tips.Length; i++)
         {
-            Tips.Add(tips[i],i);
+            Tips.Add(i,_tips[i]);
         }
     }
 
-    public void findTip(int darab)
+   
+
+    public string FindTip(int _key)
     {
-        int find = Random.range(0, darab);
-        return (Tips[find]);
+        if (Tips.ContainsKey(_key))
+        {
+            return Tips[_key];
+        }
+
+        Debug.LogError($"Key not found in {Tips} dictionary: {_key}");
+        return null;
+    }
+
+
+
+    public string GetRandomTip()
+    {
+        if(Tips.Count < 1) { Debug.LogWarning($"Dictionary is empty: {Tips}"); return null; }
+
+        int _key = Random.Range(0, Tips.Count);
+        return Tips[_key];
     }
 
 }
