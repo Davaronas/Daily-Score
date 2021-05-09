@@ -1,11 +1,11 @@
 
 
 
-
+? - need testing
 
 
 Submenu switch with draggin on Goal scroll rect
 
 Create tasks 
 
-Scale submenus on phone rotation
+Scale submenus on phone rotation?

@@ -18,6 +18,7 @@ public class GoalManager : MonoBehaviour
     [SerializeField] private RectTransform goalMenuScrollRectTransform = null;
     [SerializeField][Range(0f,1f)] private float goalMenuPanel_whiteStrengthOnGoalColor = 0.5f;
 
+    private List<Goal> goals;
     private string enteredName = "";
     private Color32 selectedColor = new Color32();
     private bool isColorSelected = false;
@@ -88,15 +89,24 @@ public class GoalManager : MonoBehaviour
     {
         if(enteredName == "" || !isColorSelected || !isSpriteSelected) { return; }
 
+
         Goal _newGoal =
         Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
         _newGoal.SetData(enteredName, selectedColor, spriteId);
 
         // resize goalsScrollContentRectTransform to fit the content
 
+        goals.Add(_newGoal);
         AppManager.NewGoalAdded();
     }
 
+    public List<Goal> GetGoals()
+    {
+        return goals;
+    }
 
-
+    private void OnApplicationQuit()
+    {
+        GetGoals();
+    }
 }

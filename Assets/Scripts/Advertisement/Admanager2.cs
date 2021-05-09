@@ -25,7 +25,7 @@ public class Admanager2 : MonoBehaviour, IUnityAdsListener
         {
             //Ide kell az ajándék
         }
-        else if(showResult ==showResult.Failed)
+        else if(showResult == ShowResult.Failed)
         {
             //Oh no! Üzenet
         }
@@ -42,4 +42,8 @@ public class Admanager2 : MonoBehaviour, IUnityAdsListener
     {
     }
 
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -15,6 +15,8 @@ public class SubmenuScroll : BehaviourButton
     private ScrollRect scrollRect = null;
     private AutoSizeUI uiSizer = null;
 
+    private int currentPos = -1;
+
 
     private Dictionary<SubmenuButton, Vector2> submenuPositions = new Dictionary<SubmenuButton, Vector2>();
 
@@ -129,11 +131,16 @@ public class SubmenuScroll : BehaviourButton
 
     IEnumerator Warp(int _id)
     {
-        
+        currentPos = _id;
 
         scrollRect.horizontalNormalizedPosition = _id * oneSubmenuPercentage;
 
         yield return new WaitForEndOfFrame();
 
+    }
+
+    public int GetCurrentPosition()
+    {
+        return currentPos;
     }
 }
