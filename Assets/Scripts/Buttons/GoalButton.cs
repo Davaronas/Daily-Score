@@ -56,6 +56,7 @@ public class GoalButton : BehaviourButton
                 if (lastPosition.x < Input.GetTouch(0).position.x - 100)
                 {
                     submenuScroll.WarpToPosition(1);
+                    AppManager.SubmenuChangedViaScrolling(1);
                 }
                 else
                 {
@@ -68,6 +69,7 @@ public class GoalButton : BehaviourButton
             if(lastPosition.x < Input.mousePosition.x - 100 )
             {
                 submenuScroll.WarpToPosition(1);
+                AppManager.SubmenuChangedViaScrolling(1);
             }
             else
             {
@@ -76,9 +78,11 @@ public class GoalButton : BehaviourButton
         }
     }
 
+    /*
     protected override void OnDrag()
     {
         submenuScrollRect.OnDrag(new PointerEventData(EventSystem.current));
     }
+    */
 
 }

@@ -10,26 +10,34 @@ public class Goal : MonoBehaviour
     [SerializeField] private TMP_Text scoreText = null;
     [SerializeField] private Image imageToApplyColorTo = null;
 
+    public bool isPrefab = false;
+
     private const byte defaultTransparency = 255;
 
-    private List<Task> tasks = new List<Task>();
 
     public string goalName { get; private set; } = "Default name";
     public Color32 goalColor { get; private set; } = new Color32(0, 0, 0, defaultTransparency);
     public int symbolId { get; private set; } = -1;
 
+    private GoalData goalData = new GoalData();
 
-    public void SetData(string _name, Color32 _color, int _symbolId = -1)
+
+    
+    public void SetData(GoalData _goalData)
     {
-        if(nameText == null || scoreText == null || imageToApplyColorTo == null)
+
+        if (nameText == null || scoreText == null || imageToApplyColorTo == null)
         {
             Debug.LogError("Goal not setup properly, please ensure you set all components from the editor");
             return;
         }
 
-        goalName = _name;
-        goalColor = _color;
-        symbolId = _symbolId;
+        goalData = _goalData;
+
+        goalName = _goalData.name;
+        goalColor = (Color32)_goalData.color;
+        symbolId = _goalData.spriteId;
+     //   tasks = _goalData.tasks;
 
         Initialize();
     }
@@ -43,8 +51,34 @@ public class Goal : MonoBehaviour
         // set up sprites
     }
 
-    public Task[] GetTasks()
+    public void AddTask(TaskData _task)
     {
-        return tasks.ToArray();
+        print("Add Task " + _task.name);
+        
+
+        goalData.tasks.Add(_task);
+
+        foreach (TaskData _d in goalData.tasks)
+        {
+            print(_d.name);
+        }
+    }
+
+    public void UpdateTask(TaskData _taskToUpdate)
+    {
+
+    }
+
+
+    public TaskData[] GetTasks()
+    {
+        
+
+        return goalData.tasks.ToArray();
+    }
+
+    public GoalData GetGoalData()
+    {
+        return goalData;
     }
 }

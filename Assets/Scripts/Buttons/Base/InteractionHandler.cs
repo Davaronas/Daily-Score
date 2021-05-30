@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using System;
 
 [DisallowMultipleComponent]
-public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler,
+public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,// IDragHandler,
                                                    IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private  UnityEvent OnTouchEvent;
@@ -34,10 +34,12 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
         OnReleaseAction?.Invoke();
     }
 
+    /*
     public void OnDrag(PointerEventData eventData)
     {
          OnDragAction?.Invoke();
     }
+    */
 
     public void OnPointerEnter(PointerEventData eventData)
     {

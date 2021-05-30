@@ -3,6 +3,84 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.EventSystems;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+
+[System.Serializable]
+public struct GoalColor
+{
+    public GoalColor(Color32 _c32)
+    {
+        r = _c32.r;
+        g = _c32.g;
+        b = _c32.b;
+        a = _c32.a;
+    }
+
+    public GoalColor(int _r, int _g, int _b, int _a)
+    {
+        r = _r;
+        g = _g;
+        b = _b;
+        a = _a;
+    }
+
+    public int r;
+    public int g;
+    public int b;
+    public int a;
+
+    public static explicit operator Color32(GoalColor _gc) => new Color32((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
+        
+}
+
+[System.Serializable]
+public struct GoalData
+{
+
+    
+    public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
+    {
+        name = _name;
+
+        color.r = _color.r;
+        color.g = _color.g;
+        color.b = _color.b;
+        color.a = _color.a;
+
+        spriteId = _spriteId;
+        max = _max;
+        current = _current;
+        tasks = new List<TaskData>();
+    }
+
+    public string name;
+    public GoalColor color;
+    public int spriteId;
+    public int max;
+    public int current;
+    public  List<TaskData> tasks;
+}
+
+
+[System.Serializable]
+public struct TaskData
+{
+    public TaskData(string _name, int _type, int _max, int _current = 0)
+    {
+        name = _name;
+        type = _type;
+        max = _max;
+        current = _current;
+    }
+
+    public string name;
+    public int type;
+    public int max;
+    public int current;
+}
+
 
 public class AppManager : MonoBehaviour
 {
@@ -11,12 +89,21 @@ public class AppManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject createGoalPanel;
     [SerializeField] private GameObject goalPanel;
+    [SerializeField] private GameObject createTaskPanel;
+    [SerializeField] private GameObject settingsPanel;
     [Space]
     [Space]
     [SerializeField] private Sprite[] symbols_e;
      private static Sprite[] symbols;
 
+
+
+
+    private GoalManager goalManager = null;
+    private TaskManager taskManager = null;
+
     public enum Languages { English, Magyar, Deutsch, ENUM_END };
+    public enum TaskType { Maximum, Minimum, Optimum, Boolean, ENUM_END};
 
     // all static events should be here
 
@@ -25,10 +112,17 @@ public class AppManager : MonoBehaviour
     public static event Action<int> OnSubmenuButtonPressed;
     public static event Action<int> OnSubmenuChangedViaScrolling;
     public static event Action OnNewGoalAdded; // might not be needed
+    public static event Action OnNewTaskAdded;
 
     public static event Action<Goal> OnGoalOpened;
 
     public static event Action OnAppLayerChangedToMainMenu;
+
+
+
+   
+
+
 
     /* Layer app index
      * 0 - Language screen
@@ -44,7 +138,13 @@ public class AppManager : MonoBehaviour
     private void Awake()
     {
         OnNewGoalAdded += NewGoalAddedCallback;
+        OnNewTaskAdded += NewTaskAddedCallback;
         OnGoalOpened += OnGoalOpenedCallback;
+
+        goalManager = FindObjectOfType<GoalManager>();
+        taskManager = FindObjectOfType<TaskManager>();
+
+       
 
         symbols = symbols_e;
     }
@@ -52,7 +152,9 @@ public class AppManager : MonoBehaviour
     private void OnDestroy()
     {
         OnNewGoalAdded -= NewGoalAddedCallback;
+        OnNewTaskAdded -= NewTaskAddedCallback;
         OnGoalOpened -= OnGoalOpenedCallback;
+
     }
 
     private int GetAppLayer()
@@ -82,6 +184,16 @@ public class AppManager : MonoBehaviour
             return 212;
         }
 
+        if(createTaskPanel.activeSelf)
+        {
+            return 2121;
+        }
+
+        if(settingsPanel.activeSelf)
+        {
+            return 3;
+        }
+
         Debug.LogError($"App layer couldn't be determined, all panels could be disabled ?");
         return -1;
     }
@@ -108,8 +220,9 @@ public class AppManager : MonoBehaviour
             introductionPanel.SetActive(false);
             createGoalPanel.SetActive(false);
             goalPanel.SetActive(false);
+            settingsPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
-
+            
 
             AppLayerChangedToMainMenu();
             return;
@@ -125,8 +238,29 @@ public class AppManager : MonoBehaviour
 
         if(_layer == 212)
         {
+           taskManager.DisplayTasks(goalManager.GetCurrentlySelectedGoal().GetTasks());
+
             mainMenuPanel.SetActive(false);
+            createTaskPanel.SetActive(false);
             goalPanel.SetActive(true);
+
+            return;
+        }
+
+        if(_layer == 2121)
+        {
+            
+
+            goalPanel.SetActive(false);
+            createTaskPanel.SetActive(true);
+
+            return;
+        }
+
+        if(_layer == 3)
+        {
+            mainMenuPanel.SetActive(false);
+            settingsPanel.SetActive(true);
 
             return;
         }
@@ -140,10 +274,36 @@ public class AppManager : MonoBehaviour
     {
         // awakebe vannak a feliratkozások, ezért csak a startban kapcsoljunk ki mindent
 
+
+        
+    
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            fileInfo.IsReadOnly = false;
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
+            stream.Close();
+            fileInfo.IsReadOnly = true;
+
+            goalManager.LoadGoals(_savedGoals);
+        }
+        else
+        {
+            Debug.Log("No save file");
+        }
+    
+    
+
+
         introductionPanel.SetActive(false);
         mainMenuPanel.SetActive(false);
         createGoalPanel.SetActive(false);
         goalPanel.SetActive(false);
+        createTaskPanel.SetActive(false);
+        settingsPanel.SetActive(false);
 
 
         // set language if already saved one
@@ -153,19 +313,24 @@ public class AppManager : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return)) { print("A"); }
+        if (Input.GetKeyDown(KeyCode.Return)) { print("A"); }
 
         if (!Application.isEditor)
         {
             if (!Input.GetKeyDown(KeyCode.Escape) && !Input.GetKeyDown(KeyCode.Return)) { return; }
         }
         else // debug in editor
-        { 
+        {
             if (!Input.GetButtonDown("Jump")) { return; }
         }
 
-        print(GetAppLayer());
-        switch(GetAppLayer())
+        HandleBack();
+
+    }
+
+    private void HandleBack()
+    {
+        switch (GetAppLayer())
         {
             case 0:
                 Application.Quit();
@@ -182,8 +347,13 @@ public class AppManager : MonoBehaviour
             case 212:
                 SetAppLayer(2);
                 break;
+            case 2121:
+                SetAppLayer(212);
+                break;
+            case 3:
+                SetAppLayer(2);
+                break;
         }
-
     }
 
     public static void SetLanguage(Languages _language)
@@ -242,6 +412,17 @@ public class AppManager : MonoBehaviour
     }
 
 
+    public static void NewTaskAdded()
+    {
+        OnNewTaskAdded?.Invoke();
+    }
+
+    private void NewTaskAddedCallback()
+    {
+        SetAppLayer(212);
+    }
+
+
     public static void GoalOpened(Goal _goal)
     {
         OnGoalOpened?.Invoke(_goal);
@@ -257,4 +438,86 @@ public class AppManager : MonoBehaviour
     {
         OnAppLayerChangedToMainMenu?.Invoke();
     }
+
+    
+
+
+   
+
+
+
+
+
+    public void RemoteCall_GoToCreateGoalMenu()
+    {
+        SetAppLayer(211);
+    }
+
+    public void RemoteCall_GoToGoalMenu()
+    {
+        SetAppLayer(212);
+    }
+
+    public void RemoteCall_GoToCreateTaskMenu()
+    { 
+        SetAppLayer(2121);
+    }
+
+    public void RemoteCall_GoToMainMenu()
+    {
+        SetAppLayer(2);
+    }
+
+    public void RemoteCall_GoToSettingsMenu()
+    {
+        SetAppLayer(3);
+
+       
+    }
+
+   
+
+
+
+    public void DEBUG_RemoteCall_SaveGoals()
+    {
+        print("Save");
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfoIfAlreadyExists = new FileInfo(path);
+            fileInfoIfAlreadyExists.IsReadOnly = false;
+        }
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream = new FileStream(path, FileMode.Create);
+        GoalData[] _goalDatas = goalManager.GetGoals();
+        formatter.Serialize(stream, _goalDatas);
+        stream.Close();
+        FileInfo fileInfo = new FileInfo(path);
+        fileInfo.IsReadOnly = true;
+    }
+
+    public void DEBUG_RemoteCall_DeleteGoals()
+    {
+        print("delete");
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfoIfAlreadyExists = new FileInfo(path);
+            fileInfoIfAlreadyExists.IsReadOnly = false;
+            File.Delete(path);
+        }
+    }
+
+
+
+    private void OnApplicationQuit()
+    {
+       
+
+        
+    }
+
+    
 }

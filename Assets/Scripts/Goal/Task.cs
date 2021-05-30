@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Task : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]private TMP_Text nameText = null;
+    [SerializeField] private TMP_Text scoreText = null;
+
+    public bool isPrefab = false;
+
+    private TaskData taskData = new TaskData();
+
+    public void FeedData(TaskData _data)
     {
-        
+        taskData = _data;
+        nameText.text = taskData.name;
+        scoreText.text = _data.current + " / " + _data.max;
     }
 
-    // Update is called once per frame
-    void Update()
+    public TaskData GetTaskData()
     {
-        
+        return taskData;
     }
 }

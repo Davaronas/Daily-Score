@@ -18,14 +18,6 @@ public class SubmenuButton : BehaviourButton
 
 
 
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-    
-    
-        AppManager.OnSubmenuButtonPressed -= SubmenuChanged;
-        AppManager.OnSubmenuChangedViaScrolling -= SubmenuChanged;
-    }
 
   
 
@@ -44,6 +36,14 @@ public class SubmenuButton : BehaviourButton
         AppManager.OnSubmenuChangedViaScrolling += SubmenuChanged;
 
         // print(image + " " + submenuScroll);
+    }
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    
+    
+        AppManager.OnSubmenuButtonPressed -= SubmenuChanged;
+        AppManager.OnSubmenuChangedViaScrolling -= SubmenuChanged;
     }
 
     protected override void OnTouch()

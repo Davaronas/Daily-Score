@@ -6,6 +6,9 @@
 
 Submenu switch with draggin on Goal scroll rect
 
+Scrolling goals content through goals as well
+
 Create tasks 
 
-Scale submenus on phone rotation?
+Scale goal scroll and task scroll depending on how many goals/tasks are there
+
