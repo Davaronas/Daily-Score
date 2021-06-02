@@ -1,0 +1,280 @@
+{
+  "info": {
+    "version": "0.9.8",
+    "dependency": []
+  },
+  "root": {
+    "type": "Group",
+    "name": "Loading screen",
+    "elements": [
+      {
+        "type": "Group",
+        "name": "Group 68",
+        "elements": [
+          {
+            "type": "Text",
+            "name": "Logo",
+            "text": {
+              "text": "Logo",
+              "textType": "point",
+              "font": "Engravers MT",
+              "style": "Regular",
+              "size": 50,
+              "color": "#1f78b4",
+              "align": "centermiddle",
+              "opacity": 100
+            },
+            "guid": "9b66dfbc-b855-4c95-a2ec-4fed16b718c7",
+            "active": true,
+            "global_draw_bounds": {
+              "x": 151,
+              "y": 254,
+              "width": 112,
+              "height": 67,
+              "ex": 263,
+              "ey": 321,
+              "text": {
+                "fontSize": 50
+              }
+            },
+            "rect_transform": {
+              "fix": {
+                "left": 0.23943661971830985,
+                "right": 0.2347417840375587,
+                "top": 0.3333333333333333,
+                "bottom": 0.35648148148148145,
+                "width": true,
+                "height": true
+              },
+              "pivot": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "anchor_min": {
+                "x": 0.5023474178403755,
+                "y": 0.5115740740740741
+              },
+              "anchor_max": {
+                "x": 0.5023474178403755,
+                "y": 0.5115740740740741
+              },
+              "offset_min": {
+                "x": -56,
+                "y": -33.5
+              },
+              "offset_max": {
+                "x": 56,
+                "y": 33.5
+              }
+            },
+            "layer": "UI",
+            "parsed_names": [
+              "Logo"
+            ]
+          },
+          {
+            "type": "Image",
+            "name": "Ellipse 8",
+            "guid": "532f4ab3-5c6e-4559-912e-8b90aeebbff9",
+            "active": true,
+            "global_draw_bounds": {
+              "x": 100,
+              "y": 182,
+              "width": 213,
+              "height": 216,
+              "ex": 313,
+              "ey": 398
+            },
+            "rect_transform": {
+              "fix": {
+                "left": true,
+                "right": true,
+                "top": true,
+                "bottom": true,
+                "width": false,
+                "height": false
+              },
+              "pivot": {
+                "x": 0.5,
+                "y": 0.5
+              },
+              "anchor_min": {
+                "x": 0,
+                "y": 0
+              },
+              "anchor_max": {
+                "x": 1,
+                "y": 1
+              },
+              "offset_min": {
+                "x": 0,
+                "y": 0
+              },
+              "offset_max": {
+                "x": 0,
+                "y": 0
+              }
+            },
+            "layer": "UI",
+            "parsed_names": [
+              "Ellipse_8"
+            ],
+            "opacity": 100,
+            "image": {
+              "source_image": "Ellipse 8+532f4"
+            }
+          }
+        ],
+        "guid": "63e42fbd-dda1-4efd-8244-a53dcd179b5d",
+        "active": true,
+        "global_draw_bounds": {
+          "x": 100,
+          "y": 182,
+          "width": 213,
+          "height": 216,
+          "ex": 313,
+          "ey": 398
+        },
+        "rect_transform": {
+          "fix": {
+            "left": null,
+            "right": null,
+            "top": null,
+            "bottom": null,
+            "width": null,
+            "height": null
+          },
+          "pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "anchor_min": {
+            "x": 0.5,
+            "y": 0.6933497536945813
+          },
+          "anchor_max": {
+            "x": 0.5,
+            "y": 0.6933497536945813
+          },
+          "offset_min": {
+            "x": -106.5,
+            "y": -108
+          },
+          "offset_max": {
+            "x": 106.5,
+            "y": 108
+          }
+        },
+        "layer": "UI",
+        "parsed_names": [
+          "Group_68"
+        ]
+      },
+      {
+        "type": "Text",
+        "name": "Loading 99%",
+        "text": {
+          "text": "Loading 99%",
+          "textType": "point",
+          "font": "Segoe UI",
+          "style": "Regular",
+          "size": 20,
+          "color": "#ffffff",
+          "align": "leftmiddle",
+          "opacity": 100
+        },
+        "guid": "9c7cca7f-977a-4484-a794-bd44088706b7",
+        "active": true,
+        "global_draw_bounds": {
+          "x": 140,
+          "y": 753,
+          "width": 135,
+          "height": 47,
+          "ex": 275,
+          "ey": 800,
+          "text": {
+            "fontSize": 20
+          }
+        },
+        "rect_transform": {
+          "fix": {
+            "left": null,
+            "right": null,
+            "top": null,
+            "bottom": null,
+            "width": null,
+            "height": null
+          },
+          "pivot": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "anchor_min": {
+            "x": 0.5026666666666667,
+            "y": 0.09421182266009853
+          },
+          "anchor_max": {
+            "x": 0.5026666666666667,
+            "y": 0.09421182266009853
+          },
+          "offset_min": {
+            "x": -67.5,
+            "y": -23.5
+          },
+          "offset_max": {
+            "x": 67.5,
+            "y": 23.5
+          }
+        },
+        "layer": "UI",
+        "parsed_names": [
+          "Loading_99_"
+        ]
+      }
+    ],
+    "guid": "f1876497-361b-4814-bc39-7ab63349a2e4",
+    "active": true,
+    "global_draw_bounds": {
+      "x": 19,
+      "y": 41,
+      "width": 375,
+      "height": 812,
+      "ex": 394,
+      "ey": 853
+    },
+    "rect_transform": {
+      "fix": {
+        "left": null,
+        "right": null,
+        "top": null,
+        "bottom": null,
+        "width": null,
+        "height": null
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchor_min": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "anchor_max": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "offset_min": {
+        "x": -187.5,
+        "y": -406
+      },
+      "offset_max": {
+        "x": 187.5,
+        "y": 406
+      }
+    },
+    "layer": "UI",
+    "parsed_names": [
+      "Loading_screen"
+    ]
+  }
+}
