@@ -13,6 +13,8 @@ public class GoalButton : BehaviourButton
     private SubmenuScroll submenuScroll = null;
     private ScrollRect submenuScrollRect = null;
 
+    [SerializeField]private ScrollDragBroadcast goalsScrollRectBroadcaster = null;
+
     private Vector2 lastPosition = Vector2.zero;
 
 
@@ -25,6 +27,11 @@ public class GoalButton : BehaviourButton
         goalManager = FindObjectOfType<GoalManager>();
         submenuScroll = FindObjectOfType<SubmenuScroll>();
         submenuScrollRect = submenuScroll.GetComponent<ScrollRect>();
+
+        if(goalsScrollRectBroadcaster == null)
+        {
+            Debug.LogError("Drag broadcaster not setup on goal prefab");
+        }
     }
 
     protected override void OnTouch()
@@ -44,6 +51,12 @@ public class GoalButton : BehaviourButton
 
     protected override void OnRelease()
     {
+        if (!goalsScrollRectBroadcaster.isBeingDragged)
+        {
+            goalManager.OpenGoalPanel(goal);
+        }
+
+        /*
         // hasonlítsd össze az elõzõvel, és döntsd el melyik akciót akarta a felhasználó csinálni:
         // következõ menüpont, felfele/lefele görgetés, kinyitás
 
@@ -75,14 +88,11 @@ public class GoalButton : BehaviourButton
             {
                 goalManager.SetGoalPanelData(goal);
             }
+        
         }
+        */
     }
 
-    /*
-    protected override void OnDrag()
-    {
-        submenuScrollRect.OnDrag(new PointerEventData(EventSystem.current));
-    }
-    */
+    
 
 }

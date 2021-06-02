@@ -76,7 +76,7 @@ public class GoalManager : MonoBehaviour
     }
 
 
-    public void SetGoalPanelData(Goal _goal)
+    public void OpenGoalPanel(Goal _goal)
     {
         goalMenuNameField.text = _goal.goalName;
         goalMenuSymbolImage.sprite = AppManager.GetSpriteFromId(_goal.symbolId);

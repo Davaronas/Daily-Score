@@ -7,6 +7,8 @@ public class TaskManager : MonoBehaviour
 {
     [SerializeField] private RectTransform tasksScrollContentRectTransform = null;
     [SerializeField] private GameObject taskPrefab = null;
+    [Space]
+    [SerializeField] private TMP_Dropdown valueMetricDropdown = null;
 
     private string enteredName = "default";
     private AppManager.TaskType taskType = 0;
@@ -21,6 +23,16 @@ public class TaskManager : MonoBehaviour
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
+
+        List<string> _metrics = new List<string>();
+        for(int i = 0; i < (int)AppManager.TaskMetricType.ENUM_END ;i++)
+        {
+            _metrics.Add(RuntimeTranslator.TranslateTaskMetricType((AppManager.TaskMetricType)i));
+        }
+        valueMetricDropdown.AddOptions(_metrics);
+
+        AppManager.OnLanguageChanged += LanguageChangedCallback;
+
     }
 
     private void OnDisable()
@@ -29,6 +41,11 @@ public class TaskManager : MonoBehaviour
         taskNameField.text = "";
         DestroyTasks();
         currentTasks.Clear();
+    }
+
+    private void OnDestroy()
+    {
+        AppManager.OnLanguageChanged -= LanguageChangedCallback;
     }
 
     public void DisplayTasks(TaskData[] _tasks)
@@ -53,9 +70,30 @@ public class TaskManager : MonoBehaviour
         {
             if (!currentTasks[i].isPrefab)
             {
-                print(i);
                 Destroy(currentTasks[i].gameObject);
             }
+        }
+    }
+
+    public void DisplayTaskTypeText(AppManager.TaskType _taskType)
+    {
+        switch(_taskType)
+        {
+            case AppManager.TaskType.Maximum:
+
+                break;
+            case AppManager.TaskType.Minimum:
+
+                break;
+            case AppManager.TaskType.Boolean:
+
+                break;
+            case AppManager.TaskType.Optimum:
+
+                break;
+            case AppManager.TaskType.Interval:
+
+                break;
         }
     }
 
@@ -82,5 +120,18 @@ public class TaskManager : MonoBehaviour
         enteredName = taskNameField.text;
     }
 
+
+
+    private void LanguageChangedCallback(AppManager.Languages _lang)
+    {
+        valueMetricDropdown.ClearOptions();
+
+        List<string> _metrics = new List<string>();
+        for (int i = 0; i < (int)AppManager.TaskMetricType.ENUM_END; i++)
+        {
+            _metrics.Add(RuntimeTranslator.TranslateTaskMetricType((AppManager.TaskMetricType)i));
+        }
+        valueMetricDropdown.AddOptions(_metrics);
+    }
 
 }

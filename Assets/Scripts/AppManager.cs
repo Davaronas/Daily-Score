@@ -7,6 +7,9 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
+
+
+
 [System.Serializable]
 public struct GoalColor
 {
@@ -26,6 +29,14 @@ public struct GoalColor
         a = _a;
     }
 
+    public GoalColor(GoalColor _gc)
+    {
+        r = _gc.r;
+        g = _gc.g;
+        b = _gc.b;
+        a = _gc.a;
+    }
+
     public int r;
     public int g;
     public int b;
@@ -39,6 +50,7 @@ public struct GoalColor
 public struct GoalData
 {
 
+    
     
     public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
     {
@@ -94,7 +106,7 @@ public class AppManager : MonoBehaviour
     [Space]
     [Space]
     [SerializeField] private Sprite[] symbols_e;
-     private static Sprite[] symbols;
+    private static Sprite[] symbols;
 
 
 
@@ -103,7 +115,10 @@ public class AppManager : MonoBehaviour
     private TaskManager taskManager = null;
 
     public enum Languages { English, Magyar, Deutsch, ENUM_END };
-    public enum TaskType { Maximum, Minimum, Optimum, Boolean, ENUM_END};
+    public static Languages currentLanguage { get; private set; } = 0;
+    public enum TaskType { Maximum, Minimum, Boolean, Optimum, Interval, ENUM_END };
+
+    public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Other, ENUM_END };
 
     // all static events should be here
 
@@ -309,11 +324,11 @@ public class AppManager : MonoBehaviour
         // set language if already saved one
 
         // decide starting page
+
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) { print("A"); }
 
         if (!Application.isEditor)
         {
@@ -365,7 +380,10 @@ public class AppManager : MonoBehaviour
             return;
         }
 
-        if(OnLanguageChanged != null)
+
+
+       
+        currentLanguage = _language;
         OnLanguageChanged?.Invoke(_language);
     }
 

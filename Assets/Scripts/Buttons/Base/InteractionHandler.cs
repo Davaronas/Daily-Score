@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 using System;
 
 [DisallowMultipleComponent]
-public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,// IDragHandler,
-                                                   IPointerEnterHandler, IPointerExitHandler
+public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, // IDragHandler,
+                                                   IPointerEnterHandler, IPointerExitHandler //IBeginDragHandler, IEndDragHandler
 {
     [SerializeField] private  UnityEvent OnTouchEvent;
     [SerializeField] private UnityEvent OnReleaseEvent;
@@ -15,6 +15,8 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
 
     [HideInInspector] public Action OnTouchAction;
     [HideInInspector] public Action OnReleaseAction;
+    [HideInInspector] public Action OnBeginDragAction;
+    [HideInInspector] public Action OnEndDragAction;
     [HideInInspector] public Action OnDragAction;
     [HideInInspector] public Action OnPointerEnterAction;
     [HideInInspector] public Action OnPointerExitAction;
@@ -34,13 +36,7 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
         OnReleaseAction?.Invoke();
     }
 
-    /*
-    public void OnDrag(PointerEventData eventData)
-    {
-         OnDragAction?.Invoke();
-    }
-    */
-
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
         OnPointerEnterAction?.Invoke();
@@ -50,5 +46,28 @@ public class InteractionHandler : MonoBehaviour, IPointerDownHandler, IPointerUp
     {
         OnPointerExitAction?.Invoke();
     }
+
+    /*
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        OnBeginDragAction?.Invoke();
+    }
+    */
+
+    /*
+    public void OnDrag(PointerEventData eventData)
+    {
+        OnDragAction?.Invoke();
+    }
+    */
+
+    /*
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        OnEndDragAction?.Invoke();
+    }
+    */
+
+   
 }
     
