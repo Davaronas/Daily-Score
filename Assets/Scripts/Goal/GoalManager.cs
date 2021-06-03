@@ -22,7 +22,8 @@ public class GoalManager : MonoBehaviour
 
     private List<Goal> goals = new List<Goal>();
     private string enteredName = "";
-    private Color32 selectedColor = new Color32();
+    private GoalColor[] selectedColors;
+    private ColorType colorType;
     private bool isColorSelected = false;
     private int spriteId = -1;
     private bool isSpriteSelected = false;
@@ -56,6 +57,7 @@ public class GoalManager : MonoBehaviour
         {
             Goal _newGoal =
             Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
+            _newGoal.isPrefab = false;
             _newGoal.SetData(_goals[i]);
             goals.Add(_newGoal);
         }
@@ -71,8 +73,26 @@ public class GoalManager : MonoBehaviour
 
     public void SetSelectedColor(Color32 _color)
     {
-        selectedColor = _color;
+        colorType = ColorType.Simple;
+        selectedColors = new GoalColor[1];
+        selectedColors[0] = _color;
         isColorSelected = true;
+    }
+
+    public void SetSelectedColor(Color32[] _colors)
+    {
+        if (_colors.Length == 2)
+        {
+            colorType = ColorType.Gradient;
+            selectedColors = new GoalColor[2];
+            selectedColors[0] = _colors[0];
+            selectedColors[1] = _colors[1];
+            isColorSelected = true;
+        }
+        else if(_colors.Length == 4)
+        {
+            Debug.Log("Four corner gradient not set up yet");
+        }
     }
 
 
@@ -81,15 +101,16 @@ public class GoalManager : MonoBehaviour
         goalMenuNameField.text = _goal.goalName;
         goalMenuSymbolImage.sprite = AppManager.GetSpriteFromId(_goal.symbolId);
 
+        GoalData _goaldata = _goal.GetGoalData();
 
         byte[] _rgb = new byte[3];
-        _rgb[0] = (byte)Mathf.RoundToInt((_goal.goalColor.r * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
-        _rgb[1] = (byte)Mathf.RoundToInt((_goal.goalColor.g * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
-        _rgb[2] = (byte)Mathf.RoundToInt((_goal.goalColor.b * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
+        _rgb[0] = (byte)Mathf.RoundToInt((_goaldata.color[0].r * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
+        _rgb[1] = (byte)Mathf.RoundToInt((_goaldata.color[0].g * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
+        _rgb[2] = (byte)Mathf.RoundToInt((_goaldata.color[0].b * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
 
         goalMenuPanel.color = new Color32(_rgb[0], _rgb[1], _rgb[2], 255);
 
-        
+        // gradient!
 
         currentlySelectedGoal = _goal;
         AppManager.GoalOpened(_goal);
@@ -113,7 +134,8 @@ public class GoalManager : MonoBehaviour
 
         Goal _newGoal =
         Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
-        GoalData _gd = new GoalData(enteredName, selectedColor,spriteId);
+        GoalData _gd = new GoalData(enteredName, selectedColors,spriteId);
+        _newGoal.isPrefab = false;
         _newGoal.SetData(_gd);
 
         // resize goalsScrollContentRectTransform to fit the content

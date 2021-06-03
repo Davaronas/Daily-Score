@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class SingleColorPicker : BehaviourButton
 {
-    public bool setColorRuntime = false;
-    public Color32 col = new Color32();
+    
 
     private GoalManager goalManager = null;
+    private Color32[] col;
 
+    private Image image;
+    private UIGradient gradient;
 
    
 
@@ -22,18 +24,42 @@ public class SingleColorPicker : BehaviourButton
             Debug.LogError("GoalManager doesn't exist, can't send color");
         }
 
-        if (setColorRuntime)
+        // four corner gradient?
+
+        TryGetComponent<UIGradient>(out gradient);
+        if(gradient != null)
         {
-            if(TryGetComponent<Image>(out Image _image))
+            print("Gradient: "+ gameObject.name);
+            col = new Color32[2];
+            col[0] = gradient.m_color1;
+            col[1] = gradient.m_color2;
+        }
+        else
+        {
+            print("SImple: "+ gameObject.name);
+            TryGetComponent<Image>(out image);
+            if(image != null)
             {
-                col = _image.color;
+                col = new Color32[1];
+                col[0] = image.color;
             }
         }
+
+       
     }
 
     protected override void OnTouch()
     {
-        goalManager.SetSelectedColor(col);
+        if(col.Length == 1)
+        {
+            goalManager.SetSelectedColor(col[0]);
+        }
+        else
+        {
+            goalManager.SetSelectedColor(col);
+        }
+
+        
     }
 
 

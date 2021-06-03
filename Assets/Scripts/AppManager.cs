@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 
-
+public enum ColorType { Simple, Gradient, FourCornerGradient, ENUM_END };
 
 [System.Serializable]
 public struct GoalColor
@@ -43,7 +43,11 @@ public struct GoalColor
     public int a;
 
     public static explicit operator Color32(GoalColor _gc) => new Color32((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
-        
+    public static implicit operator GoalColor(Color32 _c32) => new GoalColor(_c32.r,_c32.g,_c32.b,_c32.a);
+    public static implicit operator Color(GoalColor _gc) => new Color((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
+
+
+
 }
 
 [System.Serializable]
@@ -54,103 +58,154 @@ public struct GoalData
     
     public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
     {
+       
+        colorType = ColorType.Simple;
+        color = new GoalColor[1];
+
+        color[0] = _color;
+
+
+
         name = _name;
-
-        color.r = _color.r;
-        color.g = _color.g;
-        color.b = _color.b;
-        color.a = _color.a;
-
         spriteId = _spriteId;
         max = _max;
         current = _current;
         tasks = new List<TaskData>();
     }
 
-    public string name;
-    public GoalColor color;
-    public int spriteId;
-    public int max;
-    public int current;
-    public  List<TaskData> tasks;
+    public GoalData(string _name, GoalColor[] _colors, int _spriteId, int _max = 0, int _current = 0)
+    {
+
+
+        if(_colors.Length == 2)
+        {
+            colorType = ColorType.Gradient;
+            color = new GoalColor[2];
+
+            color[0] = _colors[0];
+            color[1] = _colors[1];
+            
+          
+       }
+       else if(_colors.Length == 4)
+       {
+
+           colorType = ColorType.FourCornerGradient;
+           color = new GoalColor[4];
+
+            color[0] = _colors[0];
+            color[1] = _colors[1];
+            color[2] = _colors[2];
+            color[3] = _colors[3];
+        }
+       else
+       {
+           colorType = ColorType.Simple;
+           color = new GoalColor[1];
+
+           color[0] = _colors[0];
+
+           Debug.LogWarning("The color array argument does not contain neither 2 nor 4 colors, only the first color will be used");
+       }
+
+
+
+       name = _name;
+       spriteId = _spriteId;
+       max = _max;
+       current = _current;
+       tasks = new List<TaskData>();
+   }
+
+
+
+   public string name;
+   public GoalColor[] color;
+   public ColorType colorType;
+   public int spriteId;
+   public int max;
+   public int current;
+   public  List<TaskData> tasks;
 }
 
 
 [System.Serializable]
 public struct TaskData
 {
-    public TaskData(string _name, int _type, int _max, int _current = 0)
-    {
-        name = _name;
-        type = _type;
-        max = _max;
-        current = _current;
-    }
+   public TaskData(string _name, int _type, int _max, int _current = 0)
+   {
+       name = _name;
+       type = _type;
+       max = _max;
+       current = _current;
+   }
 
-    public string name;
-    public int type;
-    public int max;
-    public int current;
+   public string name;
+   public int type;
+   public int max;
+   public int current;
 }
 
 
 public class AppManager : MonoBehaviour
 {
-    [SerializeField] private GameObject introductionPanel;
-    [SerializeField] private GameObject languagePanel;
-    [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject createGoalPanel;
-    [SerializeField] private GameObject goalPanel;
-    [SerializeField] private GameObject createTaskPanel;
-    [SerializeField] private GameObject settingsPanel;
-    [Space]
-    [Space]
-    [SerializeField] private Sprite[] symbols_e;
-    private static Sprite[] symbols;
+   [SerializeField] private GameObject introductionPanel;
+   [SerializeField] private GameObject languagePanel;
+   [SerializeField] private GameObject mainMenuPanel;
+   [SerializeField] private GameObject createGoalPanel;
+   [SerializeField] private GameObject goalPanel;
+   [SerializeField] private GameObject createTaskPanel;
+   [SerializeField] private GameObject settingsPanel;
+   [Space]
+   [Space]
+   [SerializeField] private Sprite[] symbols_e;
+   private static Sprite[] symbols;
 
 
 
 
-    private GoalManager goalManager = null;
-    private TaskManager taskManager = null;
+   private GoalManager goalManager = null;
+   private TaskManager taskManager = null;
 
-    public enum Languages { English, Magyar, Deutsch, ENUM_END };
-    public static Languages currentLanguage { get; private set; } = 0;
-    public enum TaskType { Maximum, Minimum, Boolean, Optimum, Interval, ENUM_END };
-
-    public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Other, ENUM_END };
-
-    // all static events should be here
-
-    public static event Action<Languages> OnLanguageChanged;
-
-    public static event Action<int> OnSubmenuButtonPressed;
-    public static event Action<int> OnSubmenuChangedViaScrolling;
-    public static event Action OnNewGoalAdded; // might not be needed
-    public static event Action OnNewTaskAdded;
-
-    public static event Action<Goal> OnGoalOpened;
-
-    public static event Action OnAppLayerChangedToMainMenu;
+   public enum Languages { English, Magyar, Deutsch, ENUM_END };
+   public static Languages currentLanguage { get; private set; } = 0;
+   public enum TaskType { Maximum, Minimum, Boolean, Optimum, Interval, ENUM_END };
 
 
 
-   
+   public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Other, ENUM_END };
+
+   // all static events should be here
+
+   public static event Action<Languages> OnLanguageChanged;
+
+   public static event Action<int> OnSubmenuButtonPressed;
+   public static event Action<int> OnSubmenuChangedViaScrolling;
+   public static event Action OnNewGoalAdded; // might not be needed
+   public static event Action OnNewTaskAdded;
+
+   public static event Action<Goal> OnGoalOpened;
+
+   public static event Action OnAppLayerChangedToMainMenu;
 
 
 
-    /* Layer app index
-     * 0 - Language screen
-     * 1 - Intro screen
-     * 2 - Main menu
-     *  211 - Create goal screen
-     *  212 - Goal screen
-     *      2121 - Create task screen
-     * 3 - Settings
-     */
 
 
-    private void Awake()
+
+
+   /* Layer app index
+    * 0 - Language screen
+    * 1 - Intro screen
+    * 2 - Main menu
+    *  211 - Create goal screen
+    *  212 - Goal screen
+    *      2121 - Create task screen
+    * 3 - Settings
+    */
+
+
+            private void Awake()
     {
         OnNewGoalAdded += NewGoalAddedCallback;
         OnNewTaskAdded += NewTaskAddedCallback;

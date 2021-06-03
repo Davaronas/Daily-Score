@@ -10,13 +10,15 @@ public class Goal : MonoBehaviour
     [SerializeField] private TMP_Text scoreText = null;
     [SerializeField] private Image imageToApplyColorTo = null;
 
+    private UIGradient gradient = null;
+
     public bool isPrefab = false;
 
     private const byte defaultTransparency = 255;
 
 
     public string goalName { get; private set; } = "Default name";
-    public Color32 goalColor { get; private set; } = new Color32(0, 0, 0, defaultTransparency);
+  
     public int symbolId { get; private set; } = -1;
 
     private GoalData goalData = new GoalData();
@@ -25,6 +27,7 @@ public class Goal : MonoBehaviour
     
     public void SetData(GoalData _goalData)
     {
+        if (isPrefab) { return; }
 
         if (nameText == null || scoreText == null || imageToApplyColorTo == null)
         {
@@ -34,10 +37,10 @@ public class Goal : MonoBehaviour
 
         goalData = _goalData;
 
+        
+
         goalName = _goalData.name;
-        goalColor = (Color32)_goalData.color;
         symbolId = _goalData.spriteId;
-     //   tasks = _goalData.tasks;
 
         Initialize();
     }
@@ -46,7 +49,26 @@ public class Goal : MonoBehaviour
     {
         nameText.text = goalName;
         scoreText.text = "0" + " Points";
-        imageToApplyColorTo.color = goalColor;
+
+        switch(goalData.colorType)
+        {
+            case ColorType.Simple:
+                imageToApplyColorTo.color = goalData.color[0];
+                break;
+            case ColorType.Gradient:
+                imageToApplyColorTo.color = Color.white;
+                gradient = (UIGradient)imageToApplyColorTo.gameObject.AddComponent(typeof(UIGradient));
+                gradient.SetProperties(goalData.color[0], goalData.color[1]);
+                break;
+            case ColorType.FourCornerGradient:
+                // this might not be needed
+                break;
+            default:
+                Debug.LogError("ColorType enum doesn't contain this element: " + goalData.colorType);
+                break;
+        }
+
+       
 
         // set up sprites
     }
