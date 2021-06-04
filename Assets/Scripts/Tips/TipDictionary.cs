@@ -5,9 +5,16 @@ using System.IO;
 
 public class TipDictionary : BehaviourButton
 {
-
+    [System.Serializable]
+    public struct TipData{
+        public string data;
+        public string LastDate;
+    }
+    List<string> dates = new List<string>();
+    List<string> datas = new List<string>();
     IDictionary<int, string> Tips = new Dictionary<int, string>();
-
+    public bool first_run = true;
+    public int i = 0;
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
@@ -33,10 +40,10 @@ public class TipDictionary : BehaviourButton
         {
             Tips.Add(i,_tips[i]);
         }
-        for (int i = 0; i < Tips.Count; i++)
-        {
-            print(Tips[i]);
-        }
+		//for (int i = 0; i < Tips.Count; i++)
+		//{
+		//	print(Tips[i]);
+		//}
     }  
 
     public string FindTip(int _key)
@@ -56,18 +63,29 @@ public class TipDictionary : BehaviourButton
 
 
     public string GetRandomTip()
-    {
-        if(Tips.Count < 1) { Debug.LogWarning($"Dictionary is empty: {Tips}"); return null; }
-
+    {       
+        if(Tips.Count < 1) { Debug.LogWarning($"Dictionary is empty: {Tips}"); return null; }      
         int _key = Random.Range(0, Tips.Count);
         print(Tips[_key]);
-
+        string load = Tips[_key]; 
+        TipData lastTip;
+        lastTip.data = load;           
+        lastTip.LastDate = System.DateTime.Now.ToString();
+        datas.Add(lastTip.data);
+        dates.Add(lastTip.LastDate);
+        print(dates[i] + " " + datas[i]);
+        i++;
         return Tips[_key];
     }
 
     protected override void OnTouch()
     {
-        TipLoad();
+        if (first_run == true)
+        {
+            TipLoad();
+            first_run = false;
+        }
         GetRandomTip();
+        
     }
 }
