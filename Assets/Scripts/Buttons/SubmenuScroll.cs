@@ -216,7 +216,6 @@ public class SubmenuScroll : BehaviourButton
         while (true)
         {
             horizontalPos_ = scrollRect.horizontalNormalizedPosition;
-            print(horizontalPos_ + " " + warpPercentage_);
             scrollRect.horizontalNormalizedPosition =
                  Mathf.Lerp(horizontalPos_, warpPercentage_, warpSpeed);
 

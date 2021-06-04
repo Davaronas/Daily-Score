@@ -42,11 +42,22 @@ public struct GoalColor
     public int b;
     public int a;
 
-    public static explicit operator Color32(GoalColor _gc) => new Color32((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
+    public static implicit operator Color32(GoalColor _gc) => new Color32((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
     public static implicit operator GoalColor(Color32 _c32) => new GoalColor(_c32.r,_c32.g,_c32.b,_c32.a);
-    public static implicit operator Color(GoalColor _gc) => new Color((byte)_gc.r, (byte)_gc.g, (byte)_gc.b, (byte)_gc.a);
+    public static implicit operator Color(GoalColor _gc) => new Color(_gc.r, _gc.g, _gc.b,_gc.a);
 
+    public static GoalColor operator +(GoalColor _gc1 , GoalColor _gc2)
+    {
+        return new GoalColor(Mathf.RoundToInt(((float)_gc1.r + _gc2.r) / 2),
+            Mathf.RoundToInt(((float)_gc1.g + _gc2.g) / 2),
+            Mathf.RoundToInt(((float)_gc1.b + _gc2.b) / 2),
+            Mathf.RoundToInt(((float)_gc1.a + _gc2.a) / 2));
+    }
 
+    public override string ToString()
+    {
+        return "RGBA(" + r + ", " + g + ", " + b + ", " + a + ")";
+    }
 
 }
 
@@ -362,7 +373,7 @@ public class AppManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("No save file");
+
         }
     
     

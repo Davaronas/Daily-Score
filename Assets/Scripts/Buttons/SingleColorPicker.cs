@@ -12,12 +12,13 @@ public class SingleColorPicker : BehaviourButton
     private Color32[] col;
 
     private Image image;
-    private UIGradient gradient;
+    private ImageColoring gradient;
 
    
 
     private void Awake()
     {
+
         goalManager = FindObjectOfType<GoalManager>();
         if (goalManager == null)
         {
@@ -26,17 +27,15 @@ public class SingleColorPicker : BehaviourButton
 
         // four corner gradient?
 
-        TryGetComponent<UIGradient>(out gradient);
+        TryGetComponent<ImageColoring>(out gradient);
         if(gradient != null)
         {
-            print("Gradient: "+ gameObject.name);
             col = new Color32[2];
-            col[0] = gradient.m_color1;
-            col[1] = gradient.m_color2;
+            col[0] = gradient.color1;
+            col[1] = gradient.color2;
         }
         else
         {
-            print("SImple: "+ gameObject.name);
             TryGetComponent<Image>(out image);
             if(image != null)
             {

@@ -10,7 +10,7 @@ public class Goal : MonoBehaviour
     [SerializeField] private TMP_Text scoreText = null;
     [SerializeField] private Image imageToApplyColorTo = null;
 
-    private UIGradient gradient = null;
+    private ImageColoring gradient = null;
 
     public bool isPrefab = false;
 
@@ -37,7 +37,7 @@ public class Goal : MonoBehaviour
 
         goalData = _goalData;
 
-        
+        print(_goalData.color.Length);
 
         goalName = _goalData.name;
         symbolId = _goalData.spriteId;
@@ -57,8 +57,9 @@ public class Goal : MonoBehaviour
                 break;
             case ColorType.Gradient:
                 imageToApplyColorTo.color = Color.white;
-                gradient = (UIGradient)imageToApplyColorTo.gameObject.AddComponent(typeof(UIGradient));
-                gradient.SetProperties(goalData.color[0], goalData.color[1]);
+
+                gradient = (ImageColoring)imageToApplyColorTo.gameObject.AddComponent(typeof(ImageColoring));
+                gradient.SetColor(goalData.color[0], goalData.color[1]);
                 break;
             case ColorType.FourCornerGradient:
                 // this might not be needed
