@@ -37,8 +37,6 @@ public class Goal : MonoBehaviour
 
         goalData = _goalData;
 
-        print(_goalData.color.Length);
-
         goalName = _goalData.name;
         symbolId = _goalData.spriteId;
 

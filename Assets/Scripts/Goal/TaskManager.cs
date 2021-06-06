@@ -107,7 +107,7 @@ public class TaskManager : MonoBehaviour
 
         if (enteredName == "") { return; }
 
-       TaskData _data = new TaskData(enteredName, (int)taskType, 0, 0);
+       TaskData _data = new TaskData(enteredName, taskType);
         goalManager.AssignTaskToCurrentGoal(_data);
        
 

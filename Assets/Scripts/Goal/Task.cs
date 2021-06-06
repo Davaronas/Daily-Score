@@ -10,13 +10,14 @@ public class Task : MonoBehaviour
 
     public bool isPrefab = false;
 
-    private TaskData taskData = new TaskData();
+    private TaskData taskData;
 
     public void FeedData(TaskData _data)
     {
+
         taskData = _data;
         nameText.text = taskData.name;
-        scoreText.text = _data.current + " / " + _data.max;
+        scoreText.text = "0 / 0";
     }
 
     public TaskData GetTaskData()

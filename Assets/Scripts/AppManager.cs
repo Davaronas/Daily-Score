@@ -141,21 +141,39 @@ public struct GoalData
 
 
 [System.Serializable]
-public struct TaskData
+public class TaskData
 {
-   public TaskData(string _name, int _type, int _max, int _current = 0)
+   public TaskData(string _name, AppManager.TaskType _type)
    {
        name = _name;
        type = _type;
-       max = _max;
-       current = _current;
    }
 
    public string name;
-   public int type;
-   public int max;
-   public int current;
+   public AppManager.TaskType type;
 }
+
+public class MaximumTaskData : TaskData
+{
+    public MaximumTaskData(string _name, AppManager.TaskType _type, int _max, int _pointsGainedPerOne, int _overachievePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0) : base(_name, _type)
+    {
+        max = _max;
+        current = _current;
+        pointsGainedPerOne = _pointsGainedPerOne;
+        overachievePercentBonus = _overachievePercentBonus;
+        streakStartsAfterDays = _streakStartsAfterDays;
+    }
+
+    public int max;
+    public int current;
+    public int pointsGainedPerOne;
+    public int overachievePercentBonus;
+    public int streakStartsAfterDays;
+}
+
+
+
+
 
 
 public class AppManager : MonoBehaviour
@@ -180,7 +198,12 @@ public class AppManager : MonoBehaviour
 
    public enum Languages { English, Magyar, Deutsch, ENUM_END };
    public static Languages currentLanguage { get; private set; } = 0;
+
+    
    public enum TaskType { Maximum, Minimum, Boolean, Optimum, Interval, ENUM_END };
+
+
+    public static bool isNightModeOn = false;
 
 
 
