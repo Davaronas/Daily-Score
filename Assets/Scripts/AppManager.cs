@@ -155,10 +155,11 @@ public class TaskData
 
 public class MaximumTaskData : TaskData
 {
-    public MaximumTaskData(string _name, AppManager.TaskType _type, int _max, int _pointsGainedPerOne, int _overachievePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0) : base(_name, _type)
+    public MaximumTaskData(string _name, AppManager.TaskType _type, AppManager.TaskMetricType _metric, int _max, int _pointsGainedPerOne, int _overachievePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0) : base(_name, _type)
     {
         max = _max;
         current = _current;
+        metric = _metric;
         pointsGainedPerOne = _pointsGainedPerOne;
         overachievePercentBonus = _overachievePercentBonus;
         streakStartsAfterDays = _streakStartsAfterDays;
@@ -166,6 +167,7 @@ public class MaximumTaskData : TaskData
 
     public int max;
     public int current;
+    public AppManager.TaskMetricType metric;
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
     public int streakStartsAfterDays;
