@@ -13,7 +13,7 @@ public class GoalButton : BehaviourButton
     private SubmenuScroll submenuScroll = null;
     private ScrollRect submenuScrollRect = null;
 
-    [SerializeField]private ScrollDragBroadcast goalsScrollRectBroadcaster = null;
+    [SerializeField]private SubmenuBroadcaster goalsScrollRectBroadcaster = null;
 
     private Vector2 lastPosition = Vector2.zero;
 
@@ -34,21 +34,7 @@ public class GoalButton : BehaviourButton
         }
     }
 
-    protected override void OnTouch()
-    {
-        if (!Application.isEditor)
-        {
-            if (Input.touchCount > 0)
-            {
-                lastPosition = Input.GetTouch(0).position;
-            }
-        }
-        else
-        {
-            lastPosition = Input.mousePosition;
-        }
-    }
-
+   
     protected override void OnRelease()
     {
         if (!goalsScrollRectBroadcaster.isBeingDragged)

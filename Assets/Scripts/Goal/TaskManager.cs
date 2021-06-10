@@ -9,6 +9,13 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject taskPrefab = null;
     [Space]
     [SerializeField] private TMP_Dropdown valueMetricDropdown = null;
+    [Space]
+    [Tooltip("Type texts")]
+    [SerializeField] private GameObject targetValueTexts = null;
+    [SerializeField] private GameObject maximumTexts = null;
+    [SerializeField] private GameObject minimumTexts = null;
+    [SerializeField] private GameObject booleanTexts = null;
+    [SerializeField] private GameObject optimumTexts = null;
 
     private string enteredName = "default";
     private AppManager.TaskType taskType = 0;
@@ -19,10 +26,12 @@ public class TaskManager : MonoBehaviour
 
 
     private GoalManager goalManager = null;
+    private TaskTypeComponents taskTypeComponents = null;
 
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
+        taskTypeComponents = FindObjectOfType<TaskTypeComponents>();
 
         List<string> _metrics = new List<string>();
         for(int i = 0; i < (int)AppManager.TaskMetricType.ENUM_END ;i++)
@@ -33,6 +42,8 @@ public class TaskManager : MonoBehaviour
 
         AppManager.OnLanguageChanged += LanguageChangedCallback;
 
+        if(maximumTexts == null || minimumTexts == null || booleanTexts == null || optimumTexts == null) { Debug.LogError("Task texts not set up in the inspector"); return; }
+
     }
 
     private void OnDisable()
@@ -41,6 +52,7 @@ public class TaskManager : MonoBehaviour
         taskNameField.text = "";
         DestroyTasks();
         currentTasks.Clear();
+        DisableTypeTexts();
     }
 
     private void OnDestroy()
@@ -75,21 +87,38 @@ public class TaskManager : MonoBehaviour
         }
     }
 
+    private void DisableTypeTexts()
+    {
+        targetValueTexts.SetActive(false);
+
+        maximumTexts.SetActive(false);
+        minimumTexts.SetActive(false);
+        booleanTexts.SetActive(false);
+        optimumTexts.SetActive(false);
+    }
+
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
     {
+        taskType = _taskType;
+        DisableTypeTexts();
+
         switch(_taskType)
         {
             case AppManager.TaskType.Maximum:
-
+                maximumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
                 break;
             case AppManager.TaskType.Minimum:
-
+                minimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
                 break;
             case AppManager.TaskType.Boolean:
-
+                booleanTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
                 break;
             case AppManager.TaskType.Optimum:
-
+                optimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
                 break;
             case AppManager.TaskType.Interval:
 
@@ -107,7 +136,14 @@ public class TaskManager : MonoBehaviour
 
         if (enteredName == "") { return; }
 
-       TaskData _data = new TaskData(enteredName, taskType);
+
+
+       TaskData _data = taskTypeComponents.GetData(taskType);
+        if(_data == null) { return; }
+
+
+
+        _data.name = enteredName;
         goalManager.AssignTaskToCurrentGoal(_data);
        
 

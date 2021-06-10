@@ -7,8 +7,8 @@
 Scrolling goals content through goals as well*
 Create tasks*
 Submenu switch with draggin on Goal scroll rect*
-
-
+Switching submenu with goal scroll not changing button*
+UIGradient -> ImageColoring*
 
 
 
@@ -23,5 +23,7 @@ Multi color image
 
 Goal menu panel keep gradient component for all color types
 
-UIGradient -> ImageColoring
+
+
+Create task -> check if int.Parse texts are valid
 

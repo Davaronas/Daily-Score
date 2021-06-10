@@ -143,21 +143,26 @@ public struct GoalData
 [System.Serializable]
 public class TaskData
 {
-   public TaskData(string _name, AppManager.TaskType _type)
+   public TaskData(string _name)
    {
        name = _name;
-       type = _type;
    }
 
    public string name;
    public AppManager.TaskType type;
 }
 
+
+
+[System.Serializable]
 public class MaximumTaskData : TaskData
 {
-    public MaximumTaskData(string _name, AppManager.TaskType _type, AppManager.TaskMetricType _metric, int _max, int _pointsGainedPerOne, int _overachievePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0) : base(_name, _type)
+    public MaximumTaskData(string _name, AppManager.TaskMetricType _metric,
+        int _targetValue, int _pointsGainedPerOne, int _overachievePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0) 
+        : base(_name)
     {
-        max = _max;
+        targetValue = _targetValue;
+        type = AppManager.TaskType.Maximum;
         current = _current;
         metric = _metric;
         pointsGainedPerOne = _pointsGainedPerOne;
@@ -165,7 +170,7 @@ public class MaximumTaskData : TaskData
         streakStartsAfterDays = _streakStartsAfterDays;
     }
 
-    public int max;
+    public int targetValue;
     public int current;
     public AppManager.TaskMetricType metric;
     public int pointsGainedPerOne;
@@ -173,6 +178,68 @@ public class MaximumTaskData : TaskData
     public int streakStartsAfterDays;
 }
 
+[System.Serializable]
+public class MinimumTaskData : TaskData
+{
+    public MinimumTaskData(string _name, AppManager.TaskMetricType _metric,
+       int _targetValue ,int _pointsForStayingUnderTargetValue, int _pointsLostPerOne, int _underTargetValuePercentBonus = 0, int _streakStartsAfterDays = 0, int _current = 0)
+        : base(_name)
+    {
+        targetValue = _targetValue;
+        type = AppManager.TaskType.Minimum;
+        pointsForStayingUnderTargetValue = _pointsForStayingUnderTargetValue;
+        metric = _metric;
+        pointsLostPerOne = _pointsLostPerOne;
+        underTargetValuePercentBonus = _underTargetValuePercentBonus;
+        streakStartsAfterDays = _streakStartsAfterDays;
+        current = _current;
+    }
+
+    public AppManager.TaskMetricType metric;
+    public int targetValue;
+    public int pointsForStayingUnderTargetValue;
+    public int pointsLostPerOne;
+    public int underTargetValuePercentBonus;
+    public int streakStartsAfterDays;
+    public int current;
+}
+
+
+[System.Serializable]
+public class BooleanTaskData : TaskData
+{
+    public BooleanTaskData(string _name, int _pointsGained, int _streakStartsAfrerDays = 0) : base(_name)
+    {
+        type = AppManager.TaskType.Boolean;
+        pointsGained = _pointsGained;
+        streakStartsAfterDays = _streakStartsAfrerDays;
+
+    }
+
+    public int pointsGained;
+    public int streakStartsAfterDays;
+}
+
+
+[System.Serializable]
+public class OptimumTaskData : TaskData
+{
+    public OptimumTaskData(string _name, int _targetValue,int _pointsForOptimum, int _pointsLostPerOneDifference, int _streakStartsAfterDays = 0, int _current = 0) : base(_name)
+    {
+        type = AppManager.TaskType.Optimum;
+        targetValue = _targetValue;
+        pointsForOptimum = _pointsForOptimum;
+        pointsLostPerOneDifference = _pointsLostPerOneDifference;
+        streakStartsAfterDays = _streakStartsAfterDays;
+        current = _current;
+    }
+
+    public int targetValue;
+    public int pointsForOptimum;
+    public int pointsLostPerOneDifference;
+    public int streakStartsAfterDays;
+    public int current;
+}
 
 
 
@@ -416,6 +483,9 @@ public class AppManager : MonoBehaviour
 
         // decide starting page
 
+
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
     }
 
     private void Update()
