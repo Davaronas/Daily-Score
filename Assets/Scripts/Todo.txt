@@ -9,21 +9,20 @@ Create tasks*
 Submenu switch with draggin on Goal scroll rect*
 Switching submenu with goal scroll not changing button*
 UIGradient -> ImageColoring*
+Scale goal scroll and task scroll depending on how many goals/tasks are there*
+Create task -> check if int.Parse texts are valid*
 
 
 
 
 Detailed task datas
 
-Scale goal scroll and task scroll depending on how many goals/tasks are there
 
 Setting up sprites
 
 Multi color image
 
-Goal menu panel keep gradient component for all color types
 
 
 
-Create task -> check if int.Parse texts are valid
 

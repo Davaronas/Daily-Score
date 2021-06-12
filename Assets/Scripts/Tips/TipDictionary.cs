@@ -18,7 +18,7 @@ public class TipDictionary : BehaviourButton
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
-        StreamReader sr = new StreamReader("tips.txt");
+        StreamReader sr = new StreamReader(Path.Combine(Application.persistentDataPath , "tips.txt"));
         try
         {
             

@@ -45,6 +45,6 @@ public class TaskTypeSelectButton : BehaviourButton
     private void OnDisable()
     {
         // TEMPORARY
-        GetComponent<Image>().color = Color.red;
+        GetComponent<Image>().color = Color.white;
     }
 }

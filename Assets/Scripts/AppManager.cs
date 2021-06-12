@@ -82,6 +82,7 @@ public struct GoalData
         max = _max;
         current = _current;
         tasks = new List<TaskData>();
+        lastChange = new LastChange(0,DateTime.Now.ToString());
     }
 
     public GoalData(string _name, GoalColor[] _colors, int _spriteId, int _max = 0, int _current = 0)
@@ -126,9 +127,13 @@ public struct GoalData
        max = _max;
        current = _current;
        tasks = new List<TaskData>();
-   }
+       lastChange = new LastChange(0, DateTime.Now.ToString());
+    }
 
-
+    public DateTime GetLastModificationTime()
+    {
+        return Convert.ToDateTime(lastChange.time);
+    }
 
    public string name;
    public GoalColor[] color;
@@ -137,6 +142,22 @@ public struct GoalData
    public int max;
    public int current;
    public  List<TaskData> tasks;
+   public LastChange lastChange;
+}
+
+[System.Serializable]
+public struct LastChange
+{
+    public LastChange(int _amount, string _time)
+    {
+        amount = _amount;
+        time = _time;
+    }
+
+
+    public int amount;
+    public string time;
+    
 }
 
 
