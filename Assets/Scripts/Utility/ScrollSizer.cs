@@ -39,4 +39,14 @@ public static class ScrollSizer
         
 
     }
+
+    public static void AddSize(RectTransform _scroll, float _amount)
+    {
+
+    }
+
+    public static void RemoveSize(RectTransform _scroll, float _amount)
+    {
+
+    }
 }
