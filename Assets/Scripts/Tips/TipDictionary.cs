@@ -4,8 +4,7 @@ using UnityEngine;
 using System.IO;
 
 public class TipDictionary : BehaviourButton
-{
-    
+{   
     [System.Serializable]
     public struct RolledTips
     {
@@ -18,14 +17,13 @@ public class TipDictionary : BehaviourButton
     List<string> maindata = new List<string>();
     IDictionary<int, string> Tips = new Dictionary<int, string>();
     public bool first_run = true;
+    public bool first_run_roll = true;
     public int c = 0;
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
-
-        StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\tips.txt");
-
-        
+        //StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\tips.txt");
+        StreamReader sr = new StreamReader(Path.Combine(Application.persistentDataPath, "tips.txt"));
         try
         {         
             string sor;
@@ -58,7 +56,35 @@ public class TipDictionary : BehaviourButton
         //{
         //	print(Tips[i]);
         //}
-    }  
+    }
+    List<int> Saved_ID = new List<int>();
+    public void LoadSaved()
+    {
+        List<string> saved_tips = new List<string>();
+        StreamReader sr = new StreamReader(Path.Combine(Application.persistentDataPath, "SavedTips.txt"));
+        try
+        {
+            string sor;
+            do
+            {
+                sor = sr.ReadLine();
+                if (sor == null) break;
+                saved_tips.Add(sor);
+
+            } while (sor != null);
+        }
+        catch (IOException)
+        {
+            Debug.LogError($"Error loading in the tips!");
+            throw;
+        }       
+        string[] cut = new string[2];
+        for (int i = 0; i < saved_tips.Count; i++)
+        {
+            cut = saved_tips[i].Split(' ');
+            Saved_ID.Add(int.Parse(cut[0]));
+        }
+    }
 
     public string FindTip(int _key)
     {
@@ -75,18 +101,26 @@ public class TipDictionary : BehaviourButton
         }    
     }
 
+    public RolledTips FirstTipRoll()
+    {
+        RolledTips rolledtip;
+        int go = 0;
+        rolledtip.data = maindata[go];
+        rolledtip.name = name[go];
+        rolledtip.lastdate = System.DateTime.Now.ToString();
+        datas.Add(go + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
+        go++;
+        return rolledtip;
+    }
+
     public RolledTips GetRandomTip()
     {
         RolledTips rolledtip;
-        int a = 0;
-        int _key = Random.Range(0, Tips.Count);
-        //print(mainlist.data[_key]);            
+        int _key = Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
         rolledtip.data = maindata[_key];
         rolledtip.name = name[_key];
         rolledtip.lastdate = System.DateTime.Now.ToString();
-        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
-        //print(datas[a]);
-        a++;
+        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);      
         return rolledtip;
     }
 
@@ -112,9 +146,18 @@ public class TipDictionary : BehaviourButton
         if (first_run == true)
         {
             TipLoad();
+            LoadSaved();
             first_run = false;
         }
-        GetRandomTip();
+        if (first_run_roll == true)
+        {
+            do
+            {
+                FirstTipRoll();
+                first_run_roll = false;
+            } while (Saved_ID.Count != Tips.Count);
+        }
+        else GetRandomTip();
         SavedTips();
     }
 }
