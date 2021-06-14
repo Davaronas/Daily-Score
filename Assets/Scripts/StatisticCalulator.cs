@@ -7,11 +7,12 @@ using System;
 public class StatisticCalculator : MonoBehaviour
 {
      public GoalManager goalManager = FindObjectOfType<GoalManager>();
+    public GoalData[] goalDatas = goalManager.GetGoals();
     // Start is called before the first frame update
     void Start()
     {
         
-        GoalData[] goalDatas = goalManager.GetGoals();
+       
         
     }
 
