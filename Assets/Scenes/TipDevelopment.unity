@@ -1606,7 +1606,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   first_run: 1
-  i: 0
+  first_run_roll: 1
+  c: 0
 --- !u!114 &557992191
 MonoBehaviour:
   m_ObjectHideFlags: 0
