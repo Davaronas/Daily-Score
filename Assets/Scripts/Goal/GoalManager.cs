@@ -32,10 +32,20 @@ public class GoalManager : MonoBehaviour
 
     private TaskManager taskManager = null;
 
+
+    private VerticalLayoutGroup goalsContentLayoutGroup = null;
+
+    // aid variables
+    private float goalPrefab_Y_Size_;
+
+
     private void Awake()
     {
         //  AppManager.OnNewGoalAdded += NewGoalAdded;
         taskManager = FindObjectOfType<TaskManager>();
+        goalsContentLayoutGroup = goalsScrollContentRectTransform.GetComponent<VerticalLayoutGroup>();
+        goalPrefab_Y_Size_ = goalPrefab.GetComponent<RectTransform>().sizeDelta.y;
+        
     }
 
     private void OnDestroy()
@@ -61,7 +71,10 @@ public class GoalManager : MonoBehaviour
             _newGoal.SetData(_goals[i]);
             goals.Add(_newGoal);
         }
-        
+
+
+        ResizeGoalsContent();
+
     }
 
     public void SetSpriteId(int _spriteId)
@@ -110,7 +123,7 @@ public class GoalManager : MonoBehaviour
 
         goalMenuPanel.color = new Color32(_rgb[0], _rgb[1], _rgb[2], 255);
 
-        // gradient!
+        // gradient?
 
         currentlySelectedGoal = _goal;
         AppManager.GoalOpened(_goal);
@@ -138,9 +151,10 @@ public class GoalManager : MonoBehaviour
         _newGoal.isPrefab = false;
         _newGoal.SetData(_gd);
 
-        // resize goalsScrollContentRectTransform to fit the content
-
         goals.Add(_newGoal);
+
+        ResizeGoalsContent();
+
         AppManager.NewGoalAdded();
     }
 
@@ -149,6 +163,10 @@ public class GoalManager : MonoBehaviour
         currentlySelectedGoal.AddTask(_data);
     }
 
+    private void ResizeGoalsContent()
+    {
+        ScrollSizer.Resize(goalsScrollContentRectTransform, goalPrefab_Y_Size_ + (goalsContentLayoutGroup.spacing * 2), goals.Count);
+    }
 
     public GoalData[] GetGoals()
     {

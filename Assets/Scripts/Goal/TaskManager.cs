@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class TaskManager : MonoBehaviour
 {
@@ -28,10 +29,19 @@ public class TaskManager : MonoBehaviour
     private GoalManager goalManager = null;
     private TaskTypeComponents taskTypeComponents = null;
 
+
+
+    private VerticalLayoutGroup tasksContentLayoutGroup = null;
+
+    // aid variables
+    private float taskPrefab_Y_Size_;
+
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
         taskTypeComponents = FindObjectOfType<TaskTypeComponents>();
+        taskPrefab_Y_Size_ = taskPrefab.GetComponent<RectTransform>().sizeDelta.y;
+        tasksContentLayoutGroup = tasksScrollContentRectTransform.GetComponent<VerticalLayoutGroup>();
 
         List<string> _metrics = new List<string>();
         for(int i = 0; i < (int)AppManager.TaskMetricType.ENUM_END ;i++)
@@ -42,8 +52,19 @@ public class TaskManager : MonoBehaviour
 
         AppManager.OnLanguageChanged += LanguageChangedCallback;
 
+
+
         if(maximumTexts == null || minimumTexts == null || booleanTexts == null || optimumTexts == null) { Debug.LogError("Task texts not set up in the inspector"); return; }
 
+    }
+
+    private void Start()
+    {
+        targetValueTexts.SetActive(false);
+        maximumTexts.SetActive(false);
+        minimumTexts.SetActive(false);
+        booleanTexts.SetActive(false);
+        optimumTexts.SetActive(false);
     }
 
     private void OnDisable()
@@ -72,6 +93,7 @@ public class TaskManager : MonoBehaviour
         }
 
         // resize task scroll to fit tasks
+        ScrollSizer.Resize(tasksScrollContentRectTransform, taskPrefab_Y_Size_ + (tasksContentLayoutGroup.spacing * 2),currentTasks.Count);
     }
 
     public void DestroyTasks()

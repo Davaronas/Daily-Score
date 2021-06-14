@@ -22,7 +22,10 @@ public class TipDictionary : BehaviourButton
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
+
         StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\tips.txt");
+
+        
         try
         {         
             string sor;
