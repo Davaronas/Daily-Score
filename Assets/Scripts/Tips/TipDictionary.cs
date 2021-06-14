@@ -12,9 +12,9 @@ public class TipDictionary : BehaviourButton
         public string data;
         public string lastdate;
     }
-    List<string> datas = new List<string>();
-    List<string> name = new List<string>();
-    List<string> maindata = new List<string>();
+    public List<string> datas = new List<string>();
+    public List<string> name = new List<string>();
+    public List<string> maindata = new List<string>();
     IDictionary<int, string> Tips = new Dictionary<int, string>();
     public bool first_run = true;
     public bool first_run_roll = true;
@@ -22,8 +22,7 @@ public class TipDictionary : BehaviourButton
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
-        //StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\tips.txt");
-        StreamReader sr = new StreamReader(Path.Combine(Application.persistentDataPath, "tips.txt"));
+        StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\tips.txt");
         try
         {         
             string sor;
@@ -112,11 +111,11 @@ public class TipDictionary : BehaviourButton
         go++;
         return rolledtip;
     }
-
+    public int _key = 0;
     public RolledTips GetRandomTip()
     {
         RolledTips rolledtip;
-        int _key = Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
+        _key = Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
         rolledtip.data = maindata[_key];
         rolledtip.name = name[_key];
         rolledtip.lastdate = System.DateTime.Now.ToString();
@@ -139,6 +138,22 @@ public class TipDictionary : BehaviourButton
             Debug.LogError($"Error saving the tips!");
             throw;
         }
+    }
+
+    public void UserSave()
+    {
+        PlayerPrefs.SetInt(Saved_ID[_key] + ".tipkey", _key);
+    }
+
+    public List<string> LoadUserSave()
+    {
+        List<string> SavedData = new List<string>();
+        for (int i = 0; i < Saved_ID.Count; i++)
+        {
+            int a = PlayerPrefs.GetInt(Saved_ID[i] + ".tipkey", -1);
+            if (a > -1 || a < Saved_ID.Count) SavedData.Add(maindata[a]);
+        }
+        return SavedData;
     }
 
     protected override void OnTouch()
