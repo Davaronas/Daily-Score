@@ -25,17 +25,17 @@ public class StatisticCalculator : MonoBehaviour
         }
         int max = 0;//Napi max
 
-        int avarage;
-        int kkavp=0;
-        int kkavperm = kkavp/7;
+        int avarage; //0
+        int kkavp=0; //0
+        int kkavperm = kkavp/7; //0
         for (int i=0; i<7;i++)
         {
-             int kkmax = 0;
+             int kkmax = 0; //0
             if(0 >max)
             {
-                max = 0;
+                max = 0; //0
             }
-            int kkav = 0;
+            int kkav = 0; //0
         }
         kkavp = kkav;
 
