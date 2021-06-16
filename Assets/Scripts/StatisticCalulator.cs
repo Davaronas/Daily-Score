@@ -37,7 +37,7 @@ public class StatisticCalculator : MonoBehaviour
             }
             int kkav = 0; //0
         }
-        kkavp = kkav;
+      //  kkavp = kkav;
 
         
     }
