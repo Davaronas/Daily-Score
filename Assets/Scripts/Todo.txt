@@ -26,6 +26,8 @@ METRICs should be changed to the selected metric
 
 task type translations
 
+Scroll dragging jiggle bug (should decide which way the user wanted to scroll based on mouse positions ?)
+
 
 
 

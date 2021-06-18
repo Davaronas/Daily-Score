@@ -26,21 +26,24 @@ public class StatisticCalculator : MonoBehaviour
 
         while () //Napi adatokig kell mennie 
         { 
-            int avarage; //átlag
+            int avarage; //Ã¡tlag
             int kkavp = 0; //0
             int kkavperm = kkavp / 7; //0
             for (int i = 0; i < 7; i++)
             {
-                int kkmax = 0; //Ez folyton változó napi adat.
+                int kkmax = 0; //Ez folyton vÃ¡ltozÃ³ napi adat.
                 if (0 > max)
                 {
                     max = kkmax; //0
                 }
                 int kkav = 0; //0
             }
+//<<<<<<< HEAD
+            int kkav = 0; //0
+        }
+      //  kkavp = kkav;
+//>>>>>>> d1ce4ff3e0fc7cb6535675b30b15b8a2b126474c
 
         }
     }
 
-    
-}

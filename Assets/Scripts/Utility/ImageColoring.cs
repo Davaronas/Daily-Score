@@ -16,7 +16,9 @@ public class ImageColoring : MonoBehaviour
     public Color32 color1  = Color.black;
     public Color32 color2 = Color.white;
 
-
+    [Space]
+    public bool overrideAutoBorder = false;
+    public float borderSize = 0;
 
 
     private float avg_ = 0;
@@ -62,7 +64,18 @@ public class ImageColoring : MonoBehaviour
 
             cloneTexture.Apply();
             Rect _rect = new Rect(0, 0, cloneTexture.width, cloneTexture.height);
-            Vector4 _newBorder = new Vector4(cloneTexture.width/10, cloneTexture.width/10, cloneTexture.height/10, cloneTexture.height/10);
+            Vector4 _newBorder = new Vector4(0,0,0,0);
+
+            if (overrideAutoBorder)
+            {
+                _newBorder = new Vector4(borderSize, borderSize, borderSize, borderSize);
+            }
+            else
+            {
+                _newBorder = new Vector4(cloneTexture.width / 10, cloneTexture.width / 10, cloneTexture.height / 10, cloneTexture.height / 10);
+            }
+
+
             image.sprite = Sprite.Create(cloneTexture, _rect, new Vector2(cloneTexture.width/2, cloneTexture.height/2),100,1,SpriteMeshType.FullRect,_newBorder);
         }
       
