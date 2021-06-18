@@ -42,11 +42,13 @@ public static class ScrollSizer
 
     public static void AddSize(RectTransform _scroll, float _amount)
     {
-
+        contentSize = new Vector2(_scroll.sizeDelta.x, _scroll.sizeDelta.y + _amount);
+        _scroll.sizeDelta = contentSize;
     }
 
-    public static void RemoveSize(RectTransform _scroll, float _amount)
+    public static void ReduceSize(RectTransform _scroll, float _amount)
     {
-
+        contentSize = new Vector2(_scroll.sizeDelta.x, _scroll.sizeDelta.y - _amount);
+        _scroll.sizeDelta = contentSize;
     }
 }

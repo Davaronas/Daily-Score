@@ -30,6 +30,8 @@ public class SubmenuBroadcaster : ScrollDragBroadcast
 
     public override void OnDrag(PointerEventData eventData)
     {
+        base.OnDrag(eventData);
+
         submenuScrollRect.OnDrag(eventData);
     }
 
