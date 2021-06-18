@@ -294,6 +294,7 @@ public class AppManager : MonoBehaviour
 
 
     public static bool isNightModeOn = false;
+    public static bool isGold = false;
 
 
 
@@ -719,5 +720,11 @@ public class AppManager : MonoBehaviour
         
     }
 
+
+
+    public const int SavedTipAmountFree = 5;
+    public const int SavedTipAmountGold = 21;
     
+
+
 }

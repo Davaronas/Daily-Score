@@ -19,6 +19,15 @@ public class TipDictionary : BehaviourButton
     public bool first_run = true;
     public bool first_run_roll = true;
     public int c = 0;
+
+
+    private TipManager tipManager;
+
+    private void Awake()
+    {
+        tipManager = FindObjectOfType<TipManager>();
+    }
+
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
@@ -174,5 +183,26 @@ public class TipDictionary : BehaviourButton
         }
         else GetRandomTip();
         SavedTips();
+    }
+
+
+
+
+
+
+
+
+    public void RemoteCall_SaveButtonPressed()
+    {
+        // Ide rakj mindent amit akkor akarsz mikor rákattintanak a tipp mentés gombra
+
+
+        // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
+        tipManager.AddSavedTip(0, "Test");
+    }
+
+    public void DeleteTipButtonPressed(int _id)
+    {
+        // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
     }
 }
