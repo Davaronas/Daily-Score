@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using System.IO;
+using System.Threading.Tasks;
 
-
+struct DailyScoreStruct
+{
+   public DateTime DailyDate;
+   public int dailyScore;
+}
 public class StatisticCalculator : MonoBehaviour
 {
     [HideInInspector] public GoalManager goalManager = null;
      [HideInInspector]public GoalData[] goalDatas = null; //Ezt ki kell kapcsolgatni ha tesztelek és kell.
+    public DateTime Today;
+    public int dailysc = 0;
     void Start()
     {
         goalManager = FindObjectOfType<GoalManager>();
         goalDatas = goalManager.GetGoals();
-        DateTime Today = DateTime.Today;
+        Today = DateTime.Today;
         DateTime LastWeek = Today.AddDays(-7);
         DateTime Test;
         DateTime Lastmodificationfleet =DateTime.Now.AddYears(-10); //Ezzel keresem a maxot
@@ -43,7 +51,7 @@ public class StatisticCalculator : MonoBehaviour
         }
 
         //Napi pont számoló
-        int dailysc = 0;
+       
         while (true) //Naponta kezdenie kell elölről dailysc resettel
         {
             int i = 0;
@@ -61,17 +69,27 @@ public class StatisticCalculator : MonoBehaviour
         for (int i = 0; i < 7; i++)
         {
             int kkmax = dailysc; //Ez folyton változó napi adat.
-            if (0 > max)
+            if (dailysc > max)
             {
                 max = kkmax; 
             }
             int kkav = 0; //0
         }
-        
-        
-        //  kkavp = kkav;
-        
 
+
+        //  kkavp = kkav;
+
+
+       
+    }
+    public void DailyScore()
+    {
+        string dscdate_string = Today.Date.ToString();
+        string dailyscoreint =dailysc.ToString();
+        List<string> dsc = new List<string>();//Lehet nem kell 80%
+        StreamWriter savedsc = new StreamWriter(@"Asstet\Scripts\Stats\dailyscore.txt");
+        foreach (string line in dsc)
+            savedsc.WriteLine($"{Today:d MMMM,yyyy}{dailyscoreint}");
     }
     private void Update()
     {
