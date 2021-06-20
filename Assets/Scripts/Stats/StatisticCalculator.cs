@@ -5,11 +5,17 @@ using System;
 using TMPro;
 using System.IO;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
 
 struct DailyScoreStruct
 {
    public DateTime DailyDate;
    public int dailyScore;
+    public DailyScoreStruct(DateTime dailyDate, int dailyscore)
+    {
+        DailyDate = dailyDate;
+        dailyScore = dailyscore;
+    }
 }
 public class StatisticCalculator : MonoBehaviour
 {
@@ -17,6 +23,9 @@ public class StatisticCalculator : MonoBehaviour
      [HideInInspector]public GoalData[] goalDatas = null; //Ezt ki kell kapcsolgatni ha tesztelek és kell.
     public DateTime Today;
     public int dailysc = 0;
+    public int lastlogdur;
+    public int monthlyavarage;
+    List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
     void Start()
     {
         goalManager = FindObjectOfType<GoalManager>();
@@ -31,6 +40,7 @@ public class StatisticCalculator : MonoBehaviour
         StartCoroutine(TimeCheck());
         print(Today.Day);
         int max = 0;//A MAX ami mindenkori lesz.
+        lastlogdur = Today.Day - AppManager.lastLogin.Day;
 
 
         if(Today.Date != Lastmodificationfleet.Date) //Napi adatokig kell mennie 
@@ -51,8 +61,8 @@ public class StatisticCalculator : MonoBehaviour
         }
 
         //Napi pont számoló
-       
-        while (true) //Naponta kezdenie kell elölről dailysc resettel
+        bool dayhaschanged = false;
+        while (dayhaschanged == true) //Naponta kezdenie kell elölről dailysc resettel
         {
             int i = 0;
             if (goalDatas[i].GetLastModificationTime().Day == Today.Day)
@@ -61,8 +71,9 @@ public class StatisticCalculator : MonoBehaviour
             }
             i++;
         }
-
-        //Heti átlag pont számoló
+        DailyScoreStructsList.Add(new DailyScoreStruct(Today.Date,dailysc));
+       
+        //Átlag pont számoló
         int avarage; //átlag
         int kkavp = 0; //0
         int kkavperm = kkavp / 7; //0
@@ -77,19 +88,98 @@ public class StatisticCalculator : MonoBehaviour
         }
 
 
-        //  kkavp = kkav;
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoresave");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            fileInfo.IsReadOnly = false;
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            DailyScoreStructsList = formatter.Deserialize(stream) as List<DailyScoreStruct>;
+            stream.Close();
+            fileInfo.IsReadOnly = true;
+
+        }
 
 
-       
+
+    }
+    //Beolvasó
+    public void StatLoad()
+    {
+        int fleetmonthly=0;
+        int fleetweekly=0;
+        List<string> dailystats = new List<string>();
+        StreamReader dsts = new StreamReader(@"Assets\Scripts\Stats\dailyscore.txt"); //Testhez való elérési útvonal
+        try
+        {
+            string sor;
+            do
+            {
+                sor = dsts.ReadLine();
+                if (sor == null) break;
+                dailystats.Add(sor);
+
+            } while (sor != null);
+        }
+        catch (IOException)
+        {
+            Debug.LogError($"Error loading in the stats!");
+            throw;
+        }
+        string[] cut = new string[2];
+        for (int i = 0; i <30 ; i++) //Havi debaszogatni kell még
+        {
+            
+            fleetmonthly += DailyScoreStructsList[i].dailyScore;
+            if(i<7)
+            {
+                fleetweekly+=DailyScoreStructsList[i].dailyScore;
+            }
+            
+        }
     }
     public void DailyScore()
     {
         string dscdate_string = Today.Date.ToString();
         string dailyscoreint =dailysc.ToString();
         List<string> dsc = new List<string>();//Lehet nem kell 80%
-        StreamWriter savedsc = new StreamWriter(@"Asstet\Scripts\Stats\dailyscore.txt");
-        foreach (string line in dsc)
-            savedsc.WriteLine($"{Today:d MMMM,yyyy}{dailyscoreint}");
+        //StreamWriter savedsc = new StreamWriter(@"Asstet\Scripts\Stats\dailyscore.txt");
+        if (lastlogdur < 1)
+        {
+            DailyScoreStruct dailyscoreSave;
+            dailyscoreSave.DailyDate = Today.Date;
+            dailyscoreSave.dailyScore = dailysc;
+            DailyScoreStructsList.Add(dailyscoreSave);
+           // foreach (string line in dsc)
+              //  savedsc.WriteLine($"{Today:d MMMM,yyyy}{dailyscoreint}");
+        }
+        else
+        {
+            for (int i = 1; i < lastlogdur; i++)
+            {
+                DateTime dayi = Today.AddDays(-i);
+                
+            }
+        }
+    }
+
+    public void Datasave()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoresave");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfoIfAlreadyExists = new FileInfo(path);
+            fileInfoIfAlreadyExists.IsReadOnly = false;
+        }
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream = new FileStream(path, FileMode.Create);
+        
+        formatter.Serialize(stream, DailyScoreStructsList);
+        stream.Close();
+        FileInfo fileInfo = new FileInfo(path);
+        fileInfo.IsReadOnly = true;
     }
     private void Update()
     {

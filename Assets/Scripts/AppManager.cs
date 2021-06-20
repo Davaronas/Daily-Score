@@ -715,8 +715,8 @@ public class AppManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-       
 
+        lastLogin = DateTime.Now.Date;
         
     }
 
@@ -724,7 +724,10 @@ public class AppManager : MonoBehaviour
 
     public const int SavedTipAmountFree = 5;
     public const int SavedTipAmountGold = 21;
-    
 
+
+
+    //Last Login
+    public static DateTime lastLogin;
 
 }
