@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 
 [RequireComponent(typeof(ScrollRect))]
 
-public class SubmenuScroll : BehaviourButton
+public class SubmenuScroll : BehaviourButton, IBeginDragHandler, IEndDragHandler
 {
     [SerializeField]private RectTransform submenusRectTransform = null;
     [Space]
@@ -71,14 +72,37 @@ public class SubmenuScroll : BehaviourButton
 
     protected override void OnTouch()
     {
+       
+    }
+
+
+    
+
+    protected override void OnRelease()
+    {
+       
+    }
+
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
         breakWarp_ = true;
     }
 
-    protected override void OnRelease()
+    public void OnEndDrag(PointerEventData eventData)
     {
         breakWarp_ = false;
         Invoke(nameof(StartWarping), warpAfterReleaseTime);
     }
+
+  
+
+    public void EnableDrag()
+    {
+        scrollRect.enabled = true;
+    }
+
+
 
     private void StartWarping()
     {
@@ -251,6 +275,5 @@ public class SubmenuScroll : BehaviourButton
         return currentPos;
     }
 
-
-  
+   
 }

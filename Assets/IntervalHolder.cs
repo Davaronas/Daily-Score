@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum IntervalHolderItemType {Interval, Summary };
+
 public class IntervalHolder : MonoBehaviour
 {
     public float y_size { get; private set; } = 0;
 
-    [SerializeField] private RectTransform intervalPrefabRectTransform;
+    [SerializeField] private GameObject intervalPrefab;
+    [SerializeField] private GameObject intervalSummaryPrefab;
     [SerializeField] private RectTransform createTaskScrollContent;
 
     private float intervalPrefab_y = 0;
@@ -27,9 +30,9 @@ public class IntervalHolder : MonoBehaviour
         createTaskScrollContent.sizeDelta = new Vector2(createTaskScrollContent.sizeDelta.x, originalScrollContentSize_y);
     }
 
-    public void IntervalAdded()
+    public void AddItem(IntervalHolderItemType _item)
     {
-        intervalPrefab_y = intervalPrefabRectTransform.sizeDelta.y;
+        intervalPrefab_y = intervalPrefab.GetComponent<RectTransform>().sizeDelta.y;
         y_size += intervalPrefab_y;
         if(y_size > parent_taskTypeTextHolder.sizeDelta.y)
         {
@@ -39,7 +42,7 @@ public class IntervalHolder : MonoBehaviour
 
     public void IntervalRemoved()
     {
-        intervalPrefab_y = intervalPrefabRectTransform.sizeDelta.y;
+        intervalPrefab_y = intervalPrefab.GetComponent<RectTransform>().sizeDelta.y;
         y_size -= intervalPrefab_y;
         if (y_size > parent_taskTypeTextHolder.sizeDelta.y)
         {

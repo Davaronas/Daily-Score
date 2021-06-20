@@ -10,4 +10,7 @@ public class IntervalPrefabUtility : MonoBehaviour
     public TMP_InputField from;
     public TMP_InputField to;
     public TMP_InputField amount;
+
+
+   
 }

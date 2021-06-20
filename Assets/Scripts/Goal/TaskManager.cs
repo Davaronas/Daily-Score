@@ -17,6 +17,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject minimumTexts = null;
     [SerializeField] private GameObject booleanTexts = null;
     [SerializeField] private GameObject optimumTexts = null;
+    [SerializeField] private GameObject intervalTexts = null;
 
     private string enteredName = "default";
     private AppManager.TaskType taskType = 0;
@@ -143,7 +144,8 @@ public class TaskManager : MonoBehaviour
                 targetValueTexts.SetActive(true);
                 break;
             case AppManager.TaskType.Interval:
-
+                intervalTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
                 break;
         }
     }

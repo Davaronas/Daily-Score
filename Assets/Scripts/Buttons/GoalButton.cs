@@ -34,49 +34,17 @@ public class GoalButton : BehaviourButton
         }
     }
 
-   
+    protected override void OnTouch()
+    {
+       goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.GetTouch(0).position);
+    }
+
     protected override void OnRelease()
     {
         if (!goalsScrollRectBroadcaster.isBeingDragged)
         {
             goalManager.OpenGoalPanel(goal);
         }
-
-        /*
-        // hasonlítsd össze az elõzõvel, és döntsd el melyik akciót akarta a felhasználó csinálni:
-        // következõ menüpont, felfele/lefele görgetés, kinyitás
-
-        if (!Application.isEditor)
-        {
-            if (Input.touchCount > 0)
-            {
-                
-
-                if (lastPosition.x < Input.GetTouch(0).position.x - 100)
-                {
-                    submenuScroll.WarpToPosition(1);
-                    AppManager.SubmenuChangedViaScrolling(1);
-                }
-                else
-                {
-                    goalManager.SetGoalPanelData(goal);
-                }
-            }
-        }
-        else
-        {
-            if(lastPosition.x < Input.mousePosition.x - 100 )
-            {
-                submenuScroll.WarpToPosition(1);
-                AppManager.SubmenuChangedViaScrolling(1);
-            }
-            else
-            {
-                goalManager.SetGoalPanelData(goal);
-            }
-        
-        }
-        */
     }
 
     
