@@ -33,7 +33,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        mousePosStart_ = Input.GetTouch(0).position;
+        if(Input.touchCount > 0) mousePosStart_ = Input.GetTouch(0).position;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)

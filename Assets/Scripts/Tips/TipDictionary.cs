@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
-public class TipDictionary : BehaviourButton
+public class TipDictionary : MonoBehaviour
 {   
     [System.Serializable]
     public struct RolledTips
@@ -11,6 +12,7 @@ public class TipDictionary : BehaviourButton
         public string name;
         public string data;
         public string lastdate;
+        public DateTime datum;
     }
     public List<string> datas = new List<string>();
     public List<string> name = new List<string>();
@@ -19,10 +21,10 @@ public class TipDictionary : BehaviourButton
     public bool first_run = true;
     public bool first_run_roll = true;
     public int c = 0;
-
-
+    RolledTips rolledtip;
+    
     private TipManager tipManager;
-
+    public bool empty = true;
     private void Awake()
     {
         tipManager = FindObjectOfType<TipManager>();
@@ -64,12 +66,13 @@ public class TipDictionary : BehaviourButton
         //{
         //	print(Tips[i]);
         //}
+        sr.Close();
     }
     List<int> Saved_ID = new List<int>();
     public void LoadSaved()
     {
         List<string> saved_tips = new List<string>();
-        StreamReader sr = new StreamReader(Path.Combine(Application.persistentDataPath, "SavedTips.txt"));
+        StreamReader sr = new StreamReader(@"Assets\Scripts\Tips\SavedTips.txt");
         try
         {
             string sor;
@@ -90,8 +93,10 @@ public class TipDictionary : BehaviourButton
         for (int i = 0; i < saved_tips.Count; i++)
         {
             cut = saved_tips[i].Split(' ');
+            print(cut[0]);
             Saved_ID.Add(int.Parse(cut[0]));
         }
+        sr.Close();
     }
 
     public string FindTip(int _key)
@@ -109,14 +114,16 @@ public class TipDictionary : BehaviourButton
         }    
     }
 
+    public int go = 0;
     public RolledTips FirstTipRoll()
     {
-        RolledTips rolledtip;
-        int go = 0;
+       
         rolledtip.data = maindata[go];
         rolledtip.name = name[go];
         rolledtip.lastdate = System.DateTime.Now.ToString();
+        rolledtip.datum = DateTime.Now;
         datas.Add(go + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
+        tipmanager.LoadDailyTip(go, rolledtip.name, rolledtip.data);
         go++;
         return rolledtip;
     }
@@ -124,11 +131,13 @@ public class TipDictionary : BehaviourButton
     public RolledTips GetRandomTip()
     {
         RolledTips rolledtip;
-        _key = Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
+        _key = UnityEngine.Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
         rolledtip.data = maindata[_key];
         rolledtip.name = name[_key];
         rolledtip.lastdate = System.DateTime.Now.ToString();
-        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);      
+        rolledtip.datum = DateTime.Now;
+        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
+        tipmanager.LoadDailyTip(_key, rolledtip.name, rolledtip.data);
         return rolledtip;
     }
 
@@ -151,58 +160,83 @@ public class TipDictionary : BehaviourButton
 
     public void UserSave()
     {
+        if (Saved_ID[0] == null)
+        {
+            PlayerPrefs.SetInt(_key + ".tipkey", _key);
+        }
+        else
         PlayerPrefs.SetInt(Saved_ID[_key] + ".tipkey", _key);
     }
 
-    public List<string> LoadUserSave()
+    public void UserDelete(int _id)
     {
-        List<string> SavedData = new List<string>();
+        PlayerPrefs.DeleteKey(_id + ".tipkey");
+    }
+
+    public void LoadUserSave()
+    {
         for (int i = 0; i < Saved_ID.Count; i++)
         {
             int a = PlayerPrefs.GetInt(Saved_ID[i] + ".tipkey", -1);
-            if (a > -1 || a < Saved_ID.Count) SavedData.Add(maindata[a]);
+            if (a > -1 || a < Saved_ID.Count)
+            {
+                tipmanager.AddSavedTip(Saved_ID[a], name[i]);
+            } 
         }
-        return SavedData;
     }
 
-    protected override void OnTouch()
+    TipManager tipmanager = null;
+    // AddSavedTip(int _id, string _header)
+    // RemoveSavedTip(int _id)
+    // LoadDailyTip(int _id, string _header, string _content)
+    void Start()
     {
+        tipmanager = FindObjectOfType<TipManager>();
         if (first_run == true)
         {
             TipLoad();
-            LoadSaved();
+            if (empty == true)
+            {
+                LoadSaved();
+                empty = false;
+            }
             first_run = false;
         }
+        else LoadSaved();
         if (first_run_roll == true)
         {
-            do
+            if (System.DateTime.Now > rolledtip.datum)
             {
                 FirstTipRoll();
                 first_run_roll = false;
-            } while (Saved_ID.Count != Tips.Count);
+            }             
         }
         else GetRandomTip();
+        LoadUserSave();
         SavedTips();
+        LoadSaved();
     }
 
-
-
-
-
-
-
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.A))
+        {               
+            FirstTipRoll();               
+            SavedTips();
+        }
+    }
 
     public void RemoteCall_SaveButtonPressed()
-    {
+    {       
         // Ide rakj mindent amit akkor akarsz mikor rákattintanak a tipp mentés gombra
-
-
+        UserSave();
         // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
-        tipManager.AddSavedTip(0, "Test");
+        tipManager.AddSavedTip(_key, rolledtip.name);
     }
 
     public void DeleteTipButtonPressed(int _id)
     {
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
+        UserDelete(_id);
     }
 }
