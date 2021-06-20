@@ -11,6 +11,9 @@ public class StatisticCalculator : MonoBehaviour
      public GoalData[] goalDatas = null;
     void Start()
     {
+       
+
+        
         goalManager = FindObjectOfType<GoalManager>();
         goalDatas = goalManager.GetGoals();
         DateTime Today = DateTime.Today;
@@ -44,6 +47,7 @@ public class StatisticCalculator : MonoBehaviour
       //  kkavp = kkav;
 //>>>>>>> d1ce4ff3e0fc7cb6535675b30b15b8a2b126474c
 
+        
         }
     }
 
