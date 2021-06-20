@@ -42,23 +42,35 @@ public class StatisticCalculator : MonoBehaviour
             int difference = Today.Day - Lastmodificationfleet.Day;
         }
 
+        //Napi pont számoló
+        int dailysc = 0;
+        while (true) //Naponta kezdenie kell elölről dailysc resettel
+        {
+            int i = 0;
+            if (goalDatas[i].GetLastModificationTime().Day == Today.Day)
+            {
+                dailysc += goalDatas[i].lastChange.amount;
+            }
+            i++;
+        }
+
         //Heti átlag pont számoló
         int avarage; //átlag
         int kkavp = 0; //0
         int kkavperm = kkavp / 7; //0
         for (int i = 0; i < 7; i++)
         {
-            int kkmax = 0; //Ez folyton változó napi adat.
+            int kkmax = dailysc; //Ez folyton változó napi adat.
             if (0 > max)
             {
-                max = kkmax; //0
+                max = kkmax; 
             }
             int kkav = 0; //0
         }
-        //<<<<<<< HEAD
+        
         
         //  kkavp = kkav;
-        //>>>>>>> d1ce4ff3e0fc7cb6535675b30b15b8a2b126474c
+        
 
     }
     private void Update()
