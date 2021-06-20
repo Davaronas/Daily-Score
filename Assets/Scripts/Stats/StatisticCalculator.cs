@@ -16,6 +16,7 @@ struct DailyScoreStruct
         DailyDate = dailyDate;
         dailyScore = dailyscore;
     }
+    //Test
 }
 public class StatisticCalculator : MonoBehaviour
 {
