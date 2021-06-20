@@ -61,11 +61,7 @@ public class TaskManager : MonoBehaviour
 
     private void Start()
     {
-        targetValueTexts.SetActive(false);
-        maximumTexts.SetActive(false);
-        minimumTexts.SetActive(false);
-        booleanTexts.SetActive(false);
-        optimumTexts.SetActive(false);
+        DisableTypeTexts();
     }
 
     private void OnDisable()
@@ -118,6 +114,7 @@ public class TaskManager : MonoBehaviour
         minimumTexts.SetActive(false);
         booleanTexts.SetActive(false);
         optimumTexts.SetActive(false);
+        intervalTexts.SetActive(false);
     }
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
