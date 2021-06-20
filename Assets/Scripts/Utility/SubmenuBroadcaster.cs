@@ -9,6 +9,8 @@ public class SubmenuBroadcaster : ScrollDragBroadcast
     [SerializeField] private ScrollRect submenuScrollRect = null;
     private SubmenuScroll submenuScroll = null;
 
+    private ScrollRect scrollRect = null;
+
 
     private void Awake()
     {
@@ -18,26 +20,28 @@ public class SubmenuBroadcaster : ScrollDragBroadcast
             return;
         }
         submenuScroll = submenuScrollRect.GetComponent<SubmenuScroll>();
+        scrollRect = GetComponent<ScrollRect>();
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
-        base.OnBeginDrag(eventData);
+        // base.OnBeginDrag(eventData);
 
+        scrollRect.enabled = false;
         submenuScrollRect.OnBeginDrag(eventData);
     }
 
 
     public override void OnDrag(PointerEventData eventData)
     {
-        base.OnDrag(eventData);
+      //base.OnDrag(eventData);
 
-        submenuScrollRect.OnDrag(eventData);
+      // submenuScrollRect.OnDrag(eventData);
     }
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        base.OnEndDrag(eventData);
+        //base.OnEndDrag(eventData);
 
         submenuScrollRect.OnEndDrag(eventData);
         AppManager.SubmenuChangedViaScrolling(submenuScroll.WarpToPosition());
