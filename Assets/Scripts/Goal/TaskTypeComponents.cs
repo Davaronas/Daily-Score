@@ -138,6 +138,8 @@ public class TaskTypeComponents : MonoBehaviour
     private List<TMP_InputField> inputFields = new List<TMP_InputField>();
     private List<Toggle> toggles = new List<Toggle>();
 
+    private IntervalHolder intervalHolder;
+
     private void Awake()
     {
         AddArrayToList(inputFields, maxComponents.GetInputFields());
@@ -149,6 +151,8 @@ public class TaskTypeComponents : MonoBehaviour
         AddArrayToList(toggles, minComponents.GetToggles());
         AddArrayToList(toggles, boolComponents.GetToggles());
         AddArrayToList(toggles, optimumComponents.GetToggles());
+
+        intervalHolder = FindObjectOfType<IntervalHolder>();
     }
 
     private void OnDisable()
@@ -170,7 +174,21 @@ public class TaskTypeComponents : MonoBehaviour
         {
             toggles[j].isOn = false;
         }
-        
+
+        for (int i = 0; i < intervalComponents.intervalSummaries.Count;i++)
+        {
+            Destroy(intervalComponents.intervalSummaries[i]);
+        }
+
+        for (int i = 0; i < intervalComponents.intervals.Count;i++)
+        {
+            Destroy(intervalComponents.intervals[i]);
+        }
+
+        intervalComponents.intervals.Clear();
+        intervalComponents.intervalSummaries.Clear();
+        intervalHolder.Clear();
+
     }
 
     private void AddArrayToList(List<TMP_InputField> _list, TMP_InputField[] _array)
@@ -507,7 +525,7 @@ public class TaskTypeComponents : MonoBehaviour
 
             print(_check);
 
-            if(_check > 1)
+            if(_check > 0)
             {
                 return false;
             }
