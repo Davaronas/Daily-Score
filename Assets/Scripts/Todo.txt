@@ -11,6 +11,12 @@ Switching submenu with goal scroll not changing button*
 UIGradient -> ImageColoring*
 Scale goal scroll and task scroll depending on how many goals/tasks are there*
 Create task -> check if int.Parse texts are valid*
+Scroll dragging jiggle bug (should decide which way the user wanted to scroll based on mouse positions ?)* {Solved by using SubmenuScroll ondrag instead of ontouch}
+Interval task type check for overlap*
+Update ispu interval*
+Update metric interval*
+IntervalHolder child order*
+Deleting interval should reduce interval serial numbers*
 
 
 
@@ -26,7 +32,11 @@ METRICs should be changed to the selected metric
 
 task type translations
 
-Scroll dragging jiggle bug (should decide which way the user wanted to scroll based on mouse positions ?)
+
+
+
+
+
 
 
 

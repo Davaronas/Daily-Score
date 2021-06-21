@@ -10,9 +10,11 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject taskPrefab = null;
     [Space]
     [SerializeField] private TMP_Dropdown valueMetricDropdown = null;
+    [SerializeField] private TMP_Dropdown intervalMetricDropdown = null;
     [Space]
     [Tooltip("Type texts")]
     [SerializeField] private GameObject targetValueTexts = null;
+    [SerializeField] private GameObject intervalMeasureTexts = null;
     [SerializeField] private GameObject maximumTexts = null;
     [SerializeField] private GameObject minimumTexts = null;
     [SerializeField] private GameObject booleanTexts = null;
@@ -50,6 +52,7 @@ public class TaskManager : MonoBehaviour
             _metrics.Add(RuntimeTranslator.TranslateTaskMetricType((AppManager.TaskMetricType)i));
         }
         valueMetricDropdown.AddOptions(_metrics);
+        intervalMetricDropdown.AddOptions(_metrics);
 
         AppManager.OnLanguageChanged += LanguageChangedCallback;
 
@@ -109,6 +112,7 @@ public class TaskManager : MonoBehaviour
     private void DisableTypeTexts()
     {
         targetValueTexts.SetActive(false);
+        intervalMeasureTexts.SetActive(false);
 
         maximumTexts.SetActive(false);
         minimumTexts.SetActive(false);
@@ -127,22 +131,27 @@ public class TaskManager : MonoBehaviour
             case AppManager.TaskType.Maximum:
                 maximumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
                 break;
             case AppManager.TaskType.Minimum:
                 minimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
                 break;
             case AppManager.TaskType.Boolean:
                 booleanTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(false);
                 break;
             case AppManager.TaskType.Optimum:
                 optimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
                 break;
             case AppManager.TaskType.Interval:
                 intervalTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(true);
                 break;
         }
     }

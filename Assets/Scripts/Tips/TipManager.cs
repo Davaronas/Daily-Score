@@ -29,11 +29,11 @@ public class TipManager : MonoBehaviour
 
         if(AppManager.isGold)
         {
-            allowedCount = AppManager.SavedTipAmountGold;
+            allowedCount = AppManager.SAVEDTIPAMOUNT_GOLD;
         }
         else
         {
-            allowedCount = AppManager.SavedTipAmountFree;
+            allowedCount = AppManager.SAVEDTIPAMOUNT_FREE;
         }
         ChangeSavedTipAmountText();
     }
@@ -43,11 +43,11 @@ public class TipManager : MonoBehaviour
         // Subscribe to GoldStatusChanged in AppManager (not done yet)
         if (_state)
         {
-            allowedCount = AppManager.SavedTipAmountGold;
+            allowedCount = AppManager.SAVEDTIPAMOUNT_GOLD;
         }
         else
         {
-            allowedCount = AppManager.SavedTipAmountFree;
+            allowedCount = AppManager.SAVEDTIPAMOUNT_FREE;
         }
     }
 

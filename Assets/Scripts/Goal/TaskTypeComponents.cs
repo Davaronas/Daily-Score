@@ -118,6 +118,14 @@ public class OptimumComponents
     }
 }
 
+[System.Serializable]
+public class IntervalComponents
+{
+    public TMP_Dropdown metric_Dropdown;
+    public List<IntervalPrefabUtility> intervals;
+    public List<IntervalSummaryPrefabUtility> intervalSummaries;
+}
+
 
 public class TaskTypeComponents : MonoBehaviour
 {
@@ -125,9 +133,12 @@ public class TaskTypeComponents : MonoBehaviour
     public MinimumComponents minComponents;
     public BooleanComponents boolComponents;
     public OptimumComponents optimumComponents;
+    public IntervalComponents intervalComponents;
 
-    public List<TMP_InputField> inputFields = new List<TMP_InputField>();
-    List<Toggle> toggles = new List<Toggle>();
+    private List<TMP_InputField> inputFields = new List<TMP_InputField>();
+    private List<Toggle> toggles = new List<Toggle>();
+
+    private IntervalHolder intervalHolder;
 
     private void Awake()
     {
@@ -140,6 +151,8 @@ public class TaskTypeComponents : MonoBehaviour
         AddArrayToList(toggles, minComponents.GetToggles());
         AddArrayToList(toggles, boolComponents.GetToggles());
         AddArrayToList(toggles, optimumComponents.GetToggles());
+
+        intervalHolder = FindObjectOfType<IntervalHolder>();
     }
 
     private void OnDisable()
@@ -161,7 +174,21 @@ public class TaskTypeComponents : MonoBehaviour
         {
             toggles[j].isOn = false;
         }
-        
+
+        for (int i = 0; i < intervalComponents.intervalSummaries.Count;i++)
+        {
+            Destroy(intervalComponents.intervalSummaries[i]);
+        }
+
+        for (int i = 0; i < intervalComponents.intervals.Count;i++)
+        {
+            Destroy(intervalComponents.intervals[i]);
+        }
+
+        intervalComponents.intervals.Clear();
+        intervalComponents.intervalSummaries.Clear();
+        intervalHolder.Clear();
+
     }
 
     private void AddArrayToList(List<TMP_InputField> _list, TMP_InputField[] _array)
@@ -198,7 +225,7 @@ public class TaskTypeComponents : MonoBehaviour
                 _taskData = GetOptimumDataFromComponents();
                 break;
             case AppManager.TaskType.Interval:
-                _taskData = new TaskData("INTERVAL NOT SETUP");
+                _taskData = GetIntervalDataFromComponents();
                 break;
             default:
                 _taskData = new TaskData("DOES NOT EXIST");
@@ -361,9 +388,99 @@ public class TaskTypeComponents : MonoBehaviour
             int.Parse(optimumComponents.targetValue_InputField.text),
             int.Parse(optimumComponents.pointsForOptimumValue_InputField.text),
             int.Parse(optimumComponents.pointsLostPerOneMetricDifference_InputField.text),
+            (AppManager.TaskMetricType)optimumComponents.metric_Dropdown.value,
             _streakStartsAfterDays);
 
         return _optimumTaskData;
+    }
+
+    private IntervalTaskData GetIntervalDataFromComponents()
+    {
+        List<Interval> _intervals = new List<Interval>();
+        for(int i = 0; i < intervalComponents.intervals.Count; i++)
+        {
+            if (intervalComponents.intervals[i].HasIntervalSummaryInstance()) // HasIntervalSummary also checks if the inputfield contents are valid
+            {
+                
+                _intervals.Add((Interval)intervalComponents.intervals[i]);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        if(!IntervalRangeCheck())
+        {
+            return null;
+        }
+
+        IntervalTaskData _intervalTaskData = new IntervalTaskData("EMPTY",
+            _intervals.ToArray(),
+            (AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
+
+        return _intervalTaskData;
+    }
+
+    public AppManager.TaskMetricType GetIntervalMetricType()
+    {
+        return (AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value;
+    }
+
+    public int GetIntervalAmount()
+    {
+        return intervalComponents.intervals.Count;
+    }
+
+
+    public void AddInterval(IntervalPrefabUtility _ipu)
+    {
+        intervalComponents.intervals.Add(_ipu);
+    }
+
+    public void AddIntervalSummary(IntervalSummaryPrefabUtility _ispu)
+    {
+        intervalComponents.intervalSummaries.Add(_ispu);
+    }
+
+    public void RemoveInterval(IntervalPrefabUtility _ipu)
+    {
+        int _sn = _ipu.GetSerialNumber();
+        if(intervalComponents.intervals.Contains(_ipu))
+        {
+            intervalComponents.intervals.Remove(_ipu);
+        }
+        else
+        {
+            Debug.LogError($"intervals do not contain this interval: {_ipu}");
+        }
+
+        for(int i = 0; i < intervalComponents.intervals.Count;i++)
+        {
+            print(intervalComponents.intervals[i].GetSerialNumber() + " " + _sn);
+            if (intervalComponents.intervals[i].GetSerialNumber() > _sn)
+            intervalComponents.intervals[i].ReduceIntervalSerialNumberByOne();
+        }
+    }
+
+    public void RemoveIntervalSummary(IntervalSummaryPrefabUtility _ispu)
+    {
+        if (intervalComponents.intervalSummaries.Contains(_ispu))
+        {
+            intervalComponents.intervalSummaries.Remove(_ispu);
+        }
+        else
+        {
+            Debug.LogError($"intervalSummaries do not contain this interval summary: {_ispu}");
+        }
+    }
+
+    public void RemoteCall_IntervalMetricDropdownChanged()
+    {
+        for(int i = 0; i < intervalComponents.intervalSummaries.Count;i++)
+        {
+            intervalComponents.intervalSummaries[i].UpdateMetric((AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
+        }
     }
 
 
@@ -381,5 +498,40 @@ public class TaskTypeComponents : MonoBehaviour
         }
     }
 
+
+    private bool IntervalRangeCheck()
+    {
+        for(int i = 0; i < intervalComponents.intervals.Count - 1; i++)
+        {
+            int[] _ranges = new int[4];
+            intervalComponents.intervals[i].GetRange(out _ranges[0], out _ranges[1]);
+            intervalComponents.intervals[i + 1].GetRange(out _ranges[2], out _ranges[3]);
+
+            /*
+            if (_ranges[0] + _ranges[1] <= _ranges[2] && _ranges[0] + _ranges[1] <= _ranges[3] 
+                ||
+                _ranges[2] <= _ranges[0] && _ranges[2] <= _ranges[1])
+            {
+                // good
+            }
+            else
+            {
+                return false;
+            }
+            */
+
+
+           int _check = Mathf.Max(0, Mathf.Min(_ranges[1], _ranges[3]) - Mathf.Max(_ranges[0], _ranges[2]) + 1);
+
+            print(_check);
+
+            if(_check > 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
 }
