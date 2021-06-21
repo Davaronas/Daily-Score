@@ -37,6 +37,16 @@ public static class RuntimeTranslator
                     
             }
         }
+
+        public static string TranslatePointsWord()
+        {
+            return "Points";
+        }
+
+        public static string TranslateIntervalWord()
+        {
+            return "Interval";
+        }
     }
 
     private static class Hungarian
@@ -71,6 +81,16 @@ public static class RuntimeTranslator
                     return "AppManager.TaskMetricType doesn't contain this type";
 
             }
+        }
+
+        public static string TranslatePointsWord()
+        {
+            return "Pontok";
+        }
+
+        public static string TranslateIntervalWord()
+        {
+            return "Intervallum";
         }
     }
 
@@ -108,6 +128,16 @@ public static class RuntimeTranslator
 
             }
         }
+
+        public static string TranslatePointsWord()
+        {
+            return "Punkte";
+        }
+
+        public static string TranslateIntervalWord()
+        {
+            return "Intervall";
+        }
     }
 
 
@@ -122,11 +152,41 @@ public static class RuntimeTranslator
             case AppManager.Languages.Deutsch:
                 return German.TranslateTaskMetricType(_type);
             default:
-                Debug.LogError($"AppManager.Languages doesn't contain this type: {_type}");
-                return "AppManager.Languages doesn't contain this type";
+              
+                return "AppManager.Languages doesn't contain this language";
 
         }   
    }
+    public static string TranslatePointsWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TranslatePointsWord();
+            case AppManager.Languages.Magyar:
+                return Hungarian.TranslatePointsWord();
+            case AppManager.Languages.Deutsch:
+                return German.TranslatePointsWord();
+            default:
+                return "AppManager.Languages doesn't contain this language";
 
+        }
+    }
+
+    public static string TranslateIntervalWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TranslateIntervalWord();
+            case AppManager.Languages.Magyar:
+                return Hungarian.TranslateIntervalWord();
+            case AppManager.Languages.Deutsch:
+                return German.TranslateIntervalWord();
+            default:
+                return "AppManager.Languages doesn't contain this language";
+
+        }
+    }
 
 }

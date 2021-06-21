@@ -74,15 +74,11 @@ public class Goal : MonoBehaviour
 
     public void AddTask(TaskData _task)
     {
-        print("Add Task " + _task.name);
         
 
         goalData.tasks.Add(_task);
 
-        foreach (TaskData _d in goalData.tasks)
-        {
-            print(_d.name);
-        }
+      
     }
 
     public void UpdateTask(TaskData _taskToUpdate)

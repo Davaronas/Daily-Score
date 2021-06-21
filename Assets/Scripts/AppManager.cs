@@ -218,11 +218,11 @@ public class MinimumTaskData : TaskData
 
     public AppManager.TaskMetricType metric;
     public int targetValue;
+    public int current;
     public int pointsForStayingUnderTargetValue;
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;
     public int streakStartsAfterDays;
-    public int current;
 }
 
 
@@ -245,7 +245,7 @@ public class BooleanTaskData : TaskData
 [System.Serializable]
 public class OptimumTaskData : TaskData
 {
-    public OptimumTaskData(string _name, int _targetValue,int _pointsForOptimum, int _pointsLostPerOneDifference, int _streakStartsAfterDays = 0, int _current = 0) : base(_name)
+    public OptimumTaskData(string _name, int _targetValue, int _pointsForOptimum, int _pointsLostPerOneDifference, AppManager.TaskMetricType _metric, int _streakStartsAfterDays = 0, int _current = 0) : base(_name)
     {
         type = AppManager.TaskType.Optimum;
         targetValue = _targetValue;
@@ -253,14 +253,54 @@ public class OptimumTaskData : TaskData
         pointsLostPerOneDifference = _pointsLostPerOneDifference;
         streakStartsAfterDays = _streakStartsAfterDays;
         current = _current;
+        metric = _metric;
     }
 
     public int targetValue;
+    public int current;
+    public AppManager.TaskMetricType metric;
     public int pointsForOptimum;
     public int pointsLostPerOneDifference;
     public int streakStartsAfterDays;
-    public int current;
 }
+
+[System.Serializable]
+public class IntervalTaskData : TaskData
+{
+    public IntervalTaskData(string _name, Interval[] _intervals, AppManager.TaskMetricType _metric) : base(_name)
+    {
+        type = AppManager.TaskType.Interval;
+        metric = _metric;
+        intervals = _intervals;
+    }
+
+    public int current;
+    public AppManager.TaskMetricType metric;
+    public Interval[] intervals;
+}
+
+[System.Serializable]
+public struct Interval
+{
+    public Interval(int _from, int _to, int _points)
+    {
+        from = _from;
+        to = _to;
+        points = _points;
+    }
+
+    public int from;
+    public int to;
+    public int points;
+
+    public void GetRange(out int _from, out int _to)
+    {
+        _from = from;
+        _to = to;
+    }
+}
+
+
 
 
 
@@ -722,8 +762,8 @@ public class AppManager : MonoBehaviour
 
 
 
-    public const int SavedTipAmountFree = 5;
-    public const int SavedTipAmountGold = 21;
+    public const int SAVEDTIPAMOUNT_FREE = 5;
+    public const int SAVEDTIPAMOUNT_GOLD = 21;
 
 
 
