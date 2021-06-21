@@ -507,18 +507,6 @@ public class TaskTypeComponents : MonoBehaviour
             intervalComponents.intervals[i].GetRange(out _ranges[0], out _ranges[1]);
             intervalComponents.intervals[i + 1].GetRange(out _ranges[2], out _ranges[3]);
 
-            /*
-            if (_ranges[0] + _ranges[1] <= _ranges[2] && _ranges[0] + _ranges[1] <= _ranges[3] 
-                ||
-                _ranges[2] <= _ranges[0] && _ranges[2] <= _ranges[1])
-            {
-                // good
-            }
-            else
-            {
-                return false;
-            }
-            */
 
 
            int _check = Mathf.Max(0, Mathf.Min(_ranges[1], _ranges[3]) - Mathf.Max(_ranges[0], _ranges[2]) + 1);

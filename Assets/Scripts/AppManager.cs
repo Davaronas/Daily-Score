@@ -64,7 +64,7 @@ public struct GoalColor
 [System.Serializable]
 public struct GoalData
 {
-
+    public enum ModificationType { Create, Add, Remove}
     
     
     public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
@@ -82,7 +82,9 @@ public struct GoalData
         max = _max;
         current = _current;
         tasks = new List<TaskData>();
-        lastChange = new LastChange(0,DateTime.Now.ToString());
+        lastChange = new GoalChange(0,ModificationType.Create,DateTime.Now.ToString());
+        modifications = new List<GoalChange>();
+        modifications.Add(lastChange);
     }
 
     public GoalData(string _name, GoalColor[] _colors, int _spriteId, int _max = 0, int _current = 0)
@@ -127,7 +129,9 @@ public struct GoalData
        max = _max;
        current = _current;
        tasks = new List<TaskData>();
-       lastChange = new LastChange(0, DateTime.Now.ToString());
+       lastChange = new GoalChange(0, ModificationType.Create, DateTime.Now.ToString());
+       modifications = new List<GoalChange>();
+        modifications.Add(lastChange);
     }
 
     public DateTime GetLastModificationTime()
@@ -142,20 +146,23 @@ public struct GoalData
    public int max;
    public int current;
    public  List<TaskData> tasks;
-   public LastChange lastChange;
+   public GoalChange lastChange;
+    public List<GoalChange> modifications;
 }
 
 [System.Serializable]
-public struct LastChange
+public struct GoalChange
 {
-    public LastChange(int _amount, string _time)
+    public GoalChange(int _amount,GoalData.ModificationType _modification, string _time)
     {
         amount = _amount;
+        modification = _modification;
         time = _time;
     }
 
 
     public int amount;
+    public GoalData.ModificationType modification;
     public string time;
     
 }
