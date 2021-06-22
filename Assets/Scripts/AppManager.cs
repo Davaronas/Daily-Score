@@ -355,6 +355,8 @@ public class AppManager : MonoBehaviour
    public static event Action<int> OnSubmenuChangedViaScrolling;
    public static event Action OnNewGoalAdded; // might not be needed
    public static event Action OnNewTaskAdded;
+    public static event Action<SingleColorPicker> OnGoalColorPicked;
+    public static event Action<SymbolPicker> OnGoalSymbolPicked;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -377,7 +379,7 @@ public class AppManager : MonoBehaviour
     */
 
 
-            private void Awake()
+    private void Awake()
     {
         OnNewGoalAdded += NewGoalAddedCallback;
         OnNewTaskAdded += NewTaskAddedCallback;
@@ -685,6 +687,16 @@ public class AppManager : MonoBehaviour
     public static void AppLayerChangedToMainMenu()
     {
         OnAppLayerChangedToMainMenu?.Invoke();
+    }
+
+    public static void GoalColorPicked(SingleColorPicker _scp)
+    {
+        OnGoalColorPicked?.Invoke(_scp);
+    }
+
+    public static void GoalSymbolPicked(SymbolPicker _sp)
+    {
+        OnGoalSymbolPicked?.Invoke(_sp);
     }
 
     

@@ -23,4 +23,9 @@ public static class LT_Animator
     {
         LeanTween.size(_what, _sizeToTransition, _speed);
     }
+
+    public static void RotateAround(RectTransform _what, float _speed, int _degree = 360)
+    {
+        LeanTween.rotateAround(_what, new Vector3(0, 0, 1), _degree, _speed);
+    }
 }

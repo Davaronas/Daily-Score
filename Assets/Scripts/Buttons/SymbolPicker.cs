@@ -8,17 +8,54 @@ public class SymbolPicker : BehaviourButton
     public int spriteId = -1;
     private GoalManager goalManager = null;
 
+    private RectTransform rectTransform = null;
+
+    private Vector2 originalSize;
+
+    [SerializeField] private float animationSpeed = 0.5f;
+    [SerializeField] [Range(0, 100)] private int sizePercentIncrease = 20;
+
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
         if (goalManager == null)
         {
-            Debug.LogError("GoalManager doesn't exist, can't send color");
+            Debug.LogError("GoalManager doesn't exist");
         }
+
+        AppManager.OnGoalSymbolPicked += OnSymbolPicked;
+
+        rectTransform = GetComponent<RectTransform>();
+        originalSize = rectTransform.sizeDelta;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        AppManager.OnGoalSymbolPicked -= OnSymbolPicked;
     }
 
     protected override void OnTouch()
     {
         goalManager.SetSpriteId(spriteId);
+        AppManager.GoalSymbolPicked(this);
+    }
+
+    private void OnDisable()
+    {
+        rectTransform.sizeDelta = originalSize;
+    }
+
+    private void OnSymbolPicked(SymbolPicker _sp)
+    {
+        if(_sp == this)
+        {
+            LT_Animator.SizeTransition(rectTransform, originalSize + new Vector2(originalSize.x * ((float)sizePercentIncrease / 100), originalSize.y * ((float)sizePercentIncrease / 100)), animationSpeed);
+         //   LT_Animator.RotateAround(rectTransform, 0.2f);
+        }
+        else
+        {
+            LT_Animator.SizeTransition(rectTransform, originalSize, animationSpeed);
+        }
     }
 }

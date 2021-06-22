@@ -14,16 +14,28 @@ public class SingleColorPicker : BehaviourButton
     private Image image;
     private ImageColoring gradient;
 
-   
+
+    private RectTransform rectTransform = null;
+
+    private Vector2 originalSize;
+
+    [SerializeField] private float animationSpeed = 0.5f;
+    [SerializeField] [Range(0, 100)] private int sizePercentIncrease = 20;
+
 
     private void Awake()
     {
+
+        AppManager.OnGoalColorPicked += OnColorPicked;
 
         goalManager = FindObjectOfType<GoalManager>();
         if (goalManager == null)
         {
             Debug.LogError("GoalManager doesn't exist, can't send color");
         }
+
+        rectTransform = GetComponent<RectTransform>();
+        originalSize = rectTransform.sizeDelta;
 
         // four corner gradient?
 
@@ -43,8 +55,16 @@ public class SingleColorPicker : BehaviourButton
                 col[0] = image.color;
             }
         }
+    }
 
-       
+    protected override void OnDestroy()
+    {
+        AppManager.OnGoalColorPicked -= OnColorPicked;
+    }
+
+    private void OnDisable()
+    {
+        rectTransform.sizeDelta = originalSize;
     }
 
     protected override void OnTouch()
@@ -58,7 +78,20 @@ public class SingleColorPicker : BehaviourButton
             goalManager.SetSelectedColor(col);
         }
 
-        
+        AppManager.GoalColorPicked(this);
+    }
+
+    private void OnColorPicked(SingleColorPicker _scp)
+    {
+        if (_scp == this)
+        {
+            LT_Animator.SizeTransition(rectTransform, originalSize + new Vector2(originalSize.x * ((float)sizePercentIncrease / 100), originalSize.y * ((float)sizePercentIncrease / 100)), animationSpeed);
+         //   LT_Animator.RotateAround(rectTransform, 0.2f);
+        }
+        else
+        {
+            LT_Animator.SizeTransition(rectTransform, originalSize, animationSpeed);
+        }
     }
 
 
