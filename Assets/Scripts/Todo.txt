@@ -1,7 +1,7 @@
 
 
 
-? - need testing
+__ - need testing
 * - done
 
 Scrolling goals content through goals as well*
@@ -33,6 +33,14 @@ METRICs should be changed to the selected metric
 task type translations
 
 setting task amounts
+
+leave toggle or switch to interaction handler ?
+
+task creatin texts bugged
+
+saving task changes
+
+write out metric
 
 
 

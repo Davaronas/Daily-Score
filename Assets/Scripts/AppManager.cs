@@ -178,6 +178,8 @@ public class TaskData
 
    public string name;
    public AppManager.TaskType type;
+
+
 }
 
 
@@ -236,14 +238,15 @@ public class MinimumTaskData : TaskData
 [System.Serializable]
 public class BooleanTaskData : TaskData
 {
-    public BooleanTaskData(string _name, int _pointsGained, int _streakStartsAfrerDays = 0) : base(_name)
+    public BooleanTaskData(string _name, int _pointsGained, int _streakStartsAfterDays = 0) : base(_name)
     {
         type = AppManager.TaskType.Boolean;
         pointsGained = _pointsGained;
-        streakStartsAfterDays = _streakStartsAfrerDays;
-
+        streakStartsAfterDays = _streakStartsAfterDays;
+        isDone = false;
     }
 
+    public bool isDone;
     public int pointsGained;
     public int streakStartsAfterDays;
 }

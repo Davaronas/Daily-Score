@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GoalManager : MonoBehaviour
 {
@@ -177,6 +178,25 @@ public class GoalManager : MonoBehaviour
             _goalDatas.Add(goals[i].GetGoalData());
         }
         return _goalDatas.ToArray();
+    }
+
+    public bool GetLastModificationTime(out DateTime _time)
+    {
+        _time = DateTime.MinValue;
+
+        
+
+        if(goals.Count == 0) { return false; }
+
+        for(int i = 0; i < goals.Count;i++)
+        {
+            if(goals[i].GetGoalData().GetLastModificationTime() > _time)
+            {
+                _time = goals[i].GetGoalData().GetLastModificationTime();
+            }
+        }
+
+        return true;
     }
 
     public Goal GetCurrentlySelectedGoal()
