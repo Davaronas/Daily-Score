@@ -62,7 +62,7 @@ public struct GoalColor
 }
 
 [System.Serializable]
-public struct GoalData
+public class GoalData
 {
     public enum ModificationType { Create, Add, Remove}
     

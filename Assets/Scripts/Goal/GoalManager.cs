@@ -180,9 +180,9 @@ public class GoalManager : MonoBehaviour
         return _goalDatas.ToArray();
     }
 
-    public bool GetLastModificationTime(out DateTime _time)
+    public bool GetLastModificationTime(out GoalData _lastModifiedGoalData)
     {
-        _time = DateTime.MinValue;
+        _lastModifiedGoalData = null;
 
         
 
@@ -190,9 +190,9 @@ public class GoalManager : MonoBehaviour
 
         for(int i = 0; i < goals.Count;i++)
         {
-            if(goals[i].GetGoalData().GetLastModificationTime() > _time)
+            if(goals[i].GetGoalData().GetLastModificationTime() > _lastModifiedGoalData.GetLastModificationTime())
             {
-                _time = goals[i].GetGoalData().GetLastModificationTime();
+                _lastModifiedGoalData = goals[i].GetGoalData();
             }
         }
 
