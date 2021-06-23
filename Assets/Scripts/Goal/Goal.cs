@@ -21,7 +21,7 @@ public class Goal : MonoBehaviour
   
     public int symbolId { get; private set; } = -1;
 
-    private GoalData goalData = new GoalData();
+    private GoalData goalData;
 
 
     
