@@ -11,13 +11,14 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd)
     {
+        Debug.Log(_mtd.current);
         if(_mtd.current <= _mtd.targetValue)
         {
             return _mtd.pointsForStayingUnderTargetValue;
         }
         else
         {
-            return (_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne;
+            return -((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
         }
     }
 

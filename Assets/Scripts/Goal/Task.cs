@@ -12,6 +12,15 @@ public class Task : MonoBehaviour
     [SerializeField] private TMP_InputField currentValueInputField = null;
     [SerializeField] private TMP_Text targetValueText = null;
     [SerializeField] private Toggle booleanTaskTypeToggle = null;
+    [Space]
+    private RectTransform scoreTextRectTransform;
+    [Space]
+    [Space]
+    [Space]
+    [SerializeField] private int scoreTextSizeIncreasePercent = 20;
+    [SerializeField] private float animationSpeed = 0.2f;
+
+    private Vector2 scoreTextOriginalSize;
 
     public bool isPrefab = false;
 
@@ -25,6 +34,8 @@ public class Task : MonoBehaviour
 
     private int currentPoint;
 
+    private Coroutine nextTransition;
+
 
     public void FeedData(TaskData _data)
     {
@@ -33,6 +44,9 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(false);
         booleanTaskTypeToggle.isOn = false;
         booleanTaskTypeToggle.gameObject.SetActive(false);
+
+        scoreTextRectTransform = scoreText.GetComponent<RectTransform>();
+        scoreTextOriginalSize = scoreTextRectTransform.sizeDelta;
 
         switch (_data.type)
         {
@@ -71,8 +85,21 @@ public class Task : MonoBehaviour
         }
         else
         {
+            LTDescr _des = LT_Animator.SizeTransition(scoreTextRectTransform, scoreTextOriginalSize -
+                new Vector2(scoreTextOriginalSize.x * ((float)scoreTextSizeIncreasePercent / 100), scoreTextOriginalSize.y * ((float)scoreTextSizeIncreasePercent / 100)),animationSpeed);
+           nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
             scoreText.text = currentPoint + " p";
         }
+    }
+
+  
+
+    IEnumerator GoBackToNormalSize(float _time)
+    {
+        if(nextTransition != null) {yield break; }
+        yield return new WaitForSeconds(_time);
+        LT_Animator.SizeTransition(scoreTextRectTransform, scoreTextOriginalSize, animationSpeed);
+        nextTransition = null;
     }
 
     private void HandleMaxDataType(TaskData _data)
@@ -84,7 +111,7 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(true);
 
         currentValueInputField.text = _mtd.current.ToString();
-        targetValueText.text = "/" + _mtd.targetValue + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
 
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_mtd);
         SetScoreText(currentPoint);
@@ -101,7 +128,7 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(true);
 
         currentValueInputField.text = _mtd.current.ToString();
-        targetValueText.text = "/" + _mtd.targetValue + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
 
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_mtd);
         SetScoreText(currentPoint);
@@ -133,7 +160,7 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(true);
 
         currentValueInputField.text = _otd.current.ToString();
-        targetValueText.text = "/" + _otd.targetValue + RuntimeTranslator.TranslateTaskMetricType(_otd.metric);
+        targetValueText.text = "/" + _otd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_otd.metric);
 
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_otd);
         SetScoreText(currentPoint);
