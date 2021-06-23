@@ -6,6 +6,7 @@ using TMPro;
 using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 struct DailyScoreStruct
 {
@@ -74,7 +75,7 @@ public class StatisticCalculator : MonoBehaviour
         }
         DailyScoreStructsList.Add(new DailyScoreStruct(Today.Date,dailysc));
        
-        //Átlag pont számoló
+        //Max számoló
         int avarage; //átlag
         int kkavp = 0; //0
         int kkavperm = kkavp / 7; //0
@@ -129,7 +130,13 @@ public class StatisticCalculator : MonoBehaviour
             throw;
         }
         string[] cut = new string[2];
-        for (int i = 0; i <30 ; i++) //Havi debaszogatni kell még
+
+       // var lastitem = goalDatas[].GetLastModificationTime();
+        //Havi pont számoló
+        int monthlenght = 0;
+        monthlenght = Today.Month;
+        //if ((Today.Month-goalDatas[].GetLastModificationTime() )) 
+        for (int i = 0; i <monthlenght ; i++) //Havi debaszogatni kell még
         {
             
             fleetmonthly += DailyScoreStructsList[i].dailyScore;
