@@ -4,21 +4,56 @@ using UnityEngine;
 
 public static class TaskPointCalculator
 {
-   public static int GetPointsFromCurrentValue(MaximumTaskData _mtd)
+
+    public static int GetPointsFromCurrentValue(TaskData _data)
+    {
+        switch (_data.type)
+        {
+            case AppManager.TaskType.Maximum:
+                return GetPointsFromCurrentValue(_data as MaximumTaskData);
+
+            case AppManager.TaskType.Minimum:
+                return GetPointsFromCurrentValue(_data as MinimumTaskData);
+
+            case AppManager.TaskType.Boolean:
+                return GetPointsFromCurrentValue(_data as BooleanTaskData);
+
+            case AppManager.TaskType.Optimum:
+                return GetPointsFromCurrentValue(_data as OptimumTaskData);
+
+            case AppManager.TaskType.Interval:
+                return GetPointsFromCurrentValue(_data as IntervalTaskData);
+
+
+
+           default:
+                Debug.LogError("No datatype has been discovered");
+                return 0;
+
+        }
+    }
+
+
+
+
+    public static int GetPointsFromCurrentValue(MaximumTaskData _mtd)
     {
         return _mtd.current * _mtd.pointsGainedPerOne;
     }
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd)
     {
-        Debug.Log(_mtd.current);
-        if(_mtd.current <= _mtd.targetValue)
+        if(_mtd.current == _mtd.targetValue)
         {
             return _mtd.pointsForStayingUnderTargetValue;
         }
+        else if(_mtd.current < _mtd.targetValue)
+        {
+            return _mtd.pointsForStayingUnderTargetValue + ((_mtd.targetValue -_mtd.current) * _mtd.pointsLostPerOne);
+        }
         else
         {
-            return -((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
+            return _mtd.pointsForStayingUnderTargetValue - ((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
         }
     }
 

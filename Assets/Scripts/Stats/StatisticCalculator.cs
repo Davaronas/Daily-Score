@@ -28,6 +28,27 @@ public class StatisticCalculator : MonoBehaviour
     public int lastlogdur;
     public int monthlyavarage;
     List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
+
+
+
+    private void Awake()
+    {
+        AppManager.OnTaskValueChanged += OnTaskValueChanged;
+    }
+
+    private void OnTaskValueChanged(TaskData _td)
+    {
+        // Amikor a felhasználó változtat értéket ez hívódik. A _td pedig hogy melyik feladat változott.
+        // _td.owner pedig megadja melyik GoalData változott név szerint (ez egy string változó)
+        // hogy ez melyik goaldata úgy tudod megkapni hogy goalManager.SearchGoalByName(_td.owner);
+        // vagy
+        // GoalData _gd; goalManager.SearchGoalByName(_td.owner, out _gd); ezen van bool check is hogy sikerült e megtalálni/létezik e
+
+        // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
+    }
+
+
+
     void Start()
     {
         goalManager = FindObjectOfType<GoalManager>();
@@ -206,6 +227,7 @@ public class StatisticCalculator : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(TimeCheck());
+        AppManager.OnTaskValueChanged -= OnTaskValueChanged;
     }
     //int change = goalDatas[i].lastChange.amount;
 

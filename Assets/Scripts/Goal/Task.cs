@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class Task : MonoBehaviour
 {
@@ -36,9 +37,15 @@ public class Task : MonoBehaviour
 
     private Coroutine nextTransition;
 
+    private GoalManager goalManager;
 
-    public void FeedData(TaskData _data)
+
+   
+
+    public void FeedData(TaskData _data, GoalManager _gm) // we need the goalamanger here because the goalmanager gameobject is disabled at this point
     {
+        goalManager = _gm;
+
 
         currentValueInputField.gameObject.SetActive(false);
         targetValueText.gameObject.SetActive(false);
@@ -47,6 +54,8 @@ public class Task : MonoBehaviour
 
         scoreTextRectTransform = scoreText.GetComponent<RectTransform>();
         scoreTextOriginalSize = scoreTextRectTransform.sizeDelta;
+
+        taskData = _data;
 
         switch (_data.type)
         {
@@ -71,25 +80,40 @@ public class Task : MonoBehaviour
                 break;
         }
 
-        taskData = _data;
         nameText.text = taskData.name;
-        scoreText.text = "-"; // TaskPointCalculator getpoint - handle this at switch
 
     }
 
     private void SetScoreText(int _cp)
     {
+        
+
         if (_cp == 0)
         {
             scoreText.text = "-";
         }
         else
         {
-            LTDescr _des = LT_Animator.SizeTransition(scoreTextRectTransform, scoreTextOriginalSize -
-                new Vector2(scoreTextOriginalSize.x * ((float)scoreTextSizeIncreasePercent / 100), scoreTextOriginalSize.y * ((float)scoreTextSizeIncreasePercent / 100)),animationSpeed);
-           nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
+            if (gameObject.activeInHierarchy)
+            {
+                LTDescr _des = LT_Animator.SizeTransition(scoreTextRectTransform, scoreTextOriginalSize -
+                    new Vector2(scoreTextOriginalSize.x * ((float)scoreTextSizeIncreasePercent / 100), scoreTextOriginalSize.y * ((float)scoreTextSizeIncreasePercent / 100)), animationSpeed);
+                nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
+            }
             scoreText.text = currentPoint + " p";
         }
+
+        GoalData _gd;
+        if(goalManager.SearchGoalByName(taskData.owner, out _gd))
+        {
+            _gd.AddModification(_cp);
+            AppManager.TaskValueChanged(taskData);
+        }
+        
+
+
+           
+
     }
 
   
@@ -116,7 +140,6 @@ public class Task : MonoBehaviour
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_mtd);
         SetScoreText(currentPoint);
 
-        print("mx_td");
     }
 
     private void HandleMinDataType(TaskData _data)
@@ -133,7 +156,6 @@ public class Task : MonoBehaviour
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_mtd);
         SetScoreText(currentPoint);
 
-        print("mn_td");
     }
 
     private void HandleBoolDataType(TaskData _data)
@@ -148,7 +170,6 @@ public class Task : MonoBehaviour
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_btd);
         SetScoreText(currentPoint);
 
-        print("btd");
     }
 
     private void HandleOptimumDataType(TaskData _data)
@@ -165,7 +186,6 @@ public class Task : MonoBehaviour
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_otd);
         SetScoreText(currentPoint);
 
-        print("otd");
     }
 
     private void HandleIntervalDataType(TaskData _data)
@@ -179,7 +199,6 @@ public class Task : MonoBehaviour
         currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_itd);
         SetScoreText(currentPoint);
 
-        print("itd");
     }
 
 
@@ -188,19 +207,17 @@ public class Task : MonoBehaviour
         
         if(taskData == null) { return; } // For some reason this runs earlier than FeedData, investigate further
 
-        if(currentValueInputField.text != "")
-        {
-
-        }
-
-       
+        bool _hasDifference = false;
+        int _parse = 0;
 
         switch (taskData.type)
         {
             case AppManager.TaskType.Maximum:
                 if (currentValueInputField.text != "")
                 {
-                    mxtd.current = int.Parse(currentValueInputField.text);
+                    _parse = int.Parse(currentValueInputField.text);
+                    if (mxtd.current != _parse) { _hasDifference = true; }
+                    mxtd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mxtd);
                 }
                
@@ -208,19 +225,24 @@ public class Task : MonoBehaviour
             case AppManager.TaskType.Minimum:
                 if (currentValueInputField.text != "")
                 {
-                    mntd.current = int.Parse(currentValueInputField.text);
+                    _parse = int.Parse(currentValueInputField.text);
+                    if (mntd.current != _parse) { _hasDifference = true; }
+                    mntd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mntd);
                 }
                 
                 break;
             case AppManager.TaskType.Boolean:
+                _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
                 break;
             case AppManager.TaskType.Optimum:
                 if (currentValueInputField.text != "")
                 {
-                    otd.current = int.Parse(currentValueInputField.text);
+                    _parse = int.Parse(currentValueInputField.text);
+                    if (otd.current != _parse) { _hasDifference = true; }
+                    otd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(otd);
                 }
                 
@@ -228,7 +250,9 @@ public class Task : MonoBehaviour
             case AppManager.TaskType.Interval:
                 if (currentValueInputField.text != "")
                 {
-                    itd.current = int.Parse(currentValueInputField.text);
+                    _parse = int.Parse(currentValueInputField.text);
+                    if (itd.current != _parse) { _hasDifference = true; }
+                    itd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(itd);
                 }
                 
@@ -240,6 +264,7 @@ public class Task : MonoBehaviour
 
         }
 
+        if(_hasDifference)
         SetScoreText(currentPoint);
     }
 

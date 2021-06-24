@@ -23,14 +23,17 @@ public static class RuntimeTranslator
                     return AppManager.TaskMetricType.Minutes.ToString();
                     
                 case AppManager.TaskMetricType.Other:
-                    return AppManager.TaskMetricType.Other.ToString();
+                    return ""; // AppManager.TaskMetricType.Other.ToString();
 
                 case AppManager.TaskMetricType.Mile:
                     return AppManager.TaskMetricType.Mile.ToString();
 
                 case AppManager.TaskMetricType.Pound:
                     return AppManager.TaskMetricType.Pound.ToString();
-                    
+
+                case AppManager.TaskMetricType.Calorie:
+                    return AppManager.TaskMetricType.Calorie.ToString();
+
                 default:
                     Debug.LogError($"AppManager.TaskMetricType doesn't contain this type: {_type}");
                     return "AppManager.TaskMetricType doesn't contain this type";
@@ -68,13 +71,16 @@ public static class RuntimeTranslator
                     return "Perc";
 
                 case AppManager.TaskMetricType.Other:
-                    return "Egyéb";
+                    return "";//"Egyéb";
 
                 case AppManager.TaskMetricType.Mile:
                     return "Mérföld";
 
                 case AppManager.TaskMetricType.Pound:
                     return "Font";
+
+                case AppManager.TaskMetricType.Calorie:
+                    return "Kalória";
 
                 default:
                     Debug.LogError($"AppManager.TaskMetricType doesn't contain this type: {_type}");
@@ -113,13 +119,16 @@ public static class RuntimeTranslator
                     return "Minute";
 
                 case AppManager.TaskMetricType.Other:
-                    return "Andere";
+                    return "";//"Andere";
 
                 case AppManager.TaskMetricType.Mile:
                     return "Meile";
 
                 case AppManager.TaskMetricType.Pound:
                     return "Pfund";
+
+                case AppManager.TaskMetricType.Calorie:
+                    return "Kalorie";
 
 
                 default:

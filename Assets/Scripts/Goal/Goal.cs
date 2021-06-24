@@ -23,8 +23,29 @@ public class Goal : MonoBehaviour
 
     private GoalData goalData;
 
+    private GoalManager goalManager;
 
-    
+
+    private void Awake()
+    {
+        AppManager.OnTaskValueChanged += TaskChanged;
+        goalManager = FindObjectOfType<GoalManager>();
+    }
+
+    private void OnDestroy()
+    {
+        AppManager.OnTaskValueChanged -= TaskChanged;
+    }
+
+    private void TaskChanged(TaskData _td)
+    {
+        if(goalManager.SearchGoalByName(_td.owner) == goalData)
+        {
+            goalData.current = GetPoints();
+            scoreText.text = goalData.current + " p";
+        }
+    }
+
     public void SetData(GoalData _goalData)
     {
         if (isPrefab) { return; }
@@ -46,7 +67,7 @@ public class Goal : MonoBehaviour
     private void Initialize()
     {
         nameText.text = goalName;
-        scoreText.text = "0" + " Points";
+        scoreText.text = goalData.current + " P";
 
         switch(goalData.colorType)
         {
@@ -97,5 +118,17 @@ public class Goal : MonoBehaviour
     public GoalData GetGoalData()
     {
         return goalData;
+    }
+
+    public int GetPoints()
+    {
+        int _amount = 0;
+
+        for (int i = 0; i < goalData.tasks.Count; i++)
+        {
+            _amount += TaskPointCalculator.GetPointsFromCurrentValue(goalData.tasks[i]);
+        }
+
+        return _amount;
     }
 }

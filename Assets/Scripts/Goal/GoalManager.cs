@@ -162,6 +162,7 @@ public class GoalManager : MonoBehaviour
     public void AssignTaskToCurrentGoal(TaskData _data)
     {
         currentlySelectedGoal.AddTask(_data);
+        _data.owner = currentlySelectedGoal.GetGoalData().name;
     }
 
     private void ResizeGoalsContent()
@@ -202,6 +203,37 @@ public class GoalManager : MonoBehaviour
     public Goal GetCurrentlySelectedGoal()
     {
         return currentlySelectedGoal;
+    }
+
+    public bool SearchGoalByName(string _name, out GoalData _gd)
+    {
+        _gd = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            if(goals[i].GetGoalData().name == _name)
+            {
+                _gd = goals[i].GetGoalData();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public GoalData SearchGoalByName(string _name)
+    {
+        GoalData _gd;
+        _gd = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            if (goals[i].GetGoalData().name == _name)
+            {
+                _gd = goals[i].GetGoalData();
+            }
+        }
+        return _gd;
     }
    
 }

@@ -17,6 +17,7 @@ Update ispu interval*
 Update metric interval*
 IntervalHolder child order*
 Deleting interval should reduce interval serial numbers*
+write out metric on task*
 
 
 
@@ -40,7 +41,16 @@ task creatin texts bugged
 
 saving task changes
 
-write out metric
+
+clear interval when disabling create task menu
+
+task current value bit bigger click area than visible
+
+releasing Broadcasters should let the submenu scroll slide just like simply scrolling the submenu scroll
+
+task bonus
+
+streak system gold
 
 
 
