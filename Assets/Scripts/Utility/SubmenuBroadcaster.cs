@@ -47,6 +47,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
             scrollRect.StopMovement();
             scrollRect.enabled = false;
             submenuScrollRect.OnBeginDrag(eventData);
+            
             dragType = DragType.Horizontal;
         }
         else
@@ -59,6 +60,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
         }
 
         base.OnBeginDrag(eventData);
+        submenuScroll.OnBeginDrag(eventData);
     }
 
     public void FeedClickPositionFromGoalButton(Vector2 _touchPos)
@@ -78,6 +80,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
         submenuScrollRect.enabled = true;
         scrollRect.enabled = true;
         submenuScrollRect.OnEndDrag(eventData);
+        submenuScroll.OnEndDrag(eventData);
         AppManager.SubmenuChangedViaScrolling(submenuScroll.WarpToPosition());
     }
 

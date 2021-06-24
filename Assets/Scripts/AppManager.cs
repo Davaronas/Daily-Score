@@ -236,6 +236,7 @@ public class MaximumTaskData : TaskData
 
     public int targetValue;
     public int current;
+    public float currentFloat;
     public AppManager.TaskMetricType metric;
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
@@ -262,6 +263,7 @@ public class MinimumTaskData : TaskData
     public AppManager.TaskMetricType metric;
     public int targetValue;
     public int current;
+    public float currentFloat;
     public int pointsForStayingUnderTargetValue;
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;

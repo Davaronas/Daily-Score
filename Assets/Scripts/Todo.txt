@@ -20,6 +20,7 @@ Deleting interval should reduce interval serial numbers*
 write out metric on task*
 
 
+releasing Broadcasters should let the submenu scroll slide just like simply scrolling the submenu scroll*__
 
 
 Detailed task datas
@@ -46,7 +47,6 @@ clear interval when disabling create task menu
 
 task current value bit bigger click area than visible
 
-releasing Broadcasters should let the submenu scroll slide just like simply scrolling the submenu scroll
 
 task bonus
 
