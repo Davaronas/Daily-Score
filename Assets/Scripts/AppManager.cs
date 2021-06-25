@@ -62,9 +62,9 @@ public struct GoalColor
 }
 
 [System.Serializable]
-public struct GoalData
+public class GoalData
 {
-    public enum ModificationType { Create, Add, Remove}
+    public enum ModificationType { Create, ChangeValue}
     
     
     public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
@@ -82,7 +82,7 @@ public struct GoalData
         max = _max;
         current = _current;
         tasks = new List<TaskData>();
-        lastChange = new GoalChange(0,ModificationType.Create,DateTime.Now.ToString());
+        lastChange = new GoalChange(0,ModificationType.Create,DateTime.Now);
         modifications = new List<GoalChange>();
         modifications.Add(lastChange);
     }
@@ -129,7 +129,7 @@ public struct GoalData
        max = _max;
        current = _current;
        tasks = new List<TaskData>();
-       lastChange = new GoalChange(0, ModificationType.Create, DateTime.Now.ToString());
+       lastChange = new GoalChange(0, ModificationType.Create, DateTime.Now);
        modifications = new List<GoalChange>();
         modifications.Add(lastChange);
     }
@@ -139,7 +139,35 @@ public struct GoalData
         return Convert.ToDateTime(lastChange.time);
     }
 
-   public string name;
+    public void AddModification(GoalChange _m)
+    {
+        modifications.Add(_m);
+        lastChange = _m;
+    }
+
+    public void AddModification(int _amount, ModificationType _modification, DateTime _time)
+    {
+        GoalChange _gc = new GoalChange(_amount, _modification, _time);
+        modifications.Add(_gc);
+        lastChange = _gc;
+    }
+
+    public void AddModification(int _amount, DateTime _time)
+    {
+        GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue, _time);
+        modifications.Add(_gc);
+        lastChange = _gc;
+    }
+
+    public void AddModification(int _amount)
+    {
+        GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue, DateTime.Now);
+        modifications.Add(_gc);
+        lastChange = _gc;
+    }
+
+
+    public string name;
    public GoalColor[] color;
    public ColorType colorType;
    public int spriteId;
@@ -153,17 +181,22 @@ public struct GoalData
 [System.Serializable]
 public struct GoalChange
 {
-    public GoalChange(int _amount,GoalData.ModificationType _modification, string _time)
+    public GoalChange(int _amount,GoalData.ModificationType _modification, DateTime _time)
     {
         amount = _amount;
         modification = _modification;
-        time = _time;
+        time = _time.ToString();
     }
 
 
     public int amount;
     public GoalData.ModificationType modification;
     public string time;
+
+    public DateTime GetDateTime()
+    {
+        return Convert.ToDateTime(time);
+    }
     
 }
 
@@ -174,10 +207,13 @@ public class TaskData
    public TaskData(string _name)
    {
        name = _name;
+       owner = null;
    }
 
    public string name;
    public AppManager.TaskType type;
+   public string owner;
+
 }
 
 
@@ -200,6 +236,7 @@ public class MaximumTaskData : TaskData
 
     public int targetValue;
     public int current;
+    public float currentFloat;
     public AppManager.TaskMetricType metric;
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
@@ -226,6 +263,7 @@ public class MinimumTaskData : TaskData
     public AppManager.TaskMetricType metric;
     public int targetValue;
     public int current;
+    public float currentFloat;
     public int pointsForStayingUnderTargetValue;
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;
@@ -236,14 +274,15 @@ public class MinimumTaskData : TaskData
 [System.Serializable]
 public class BooleanTaskData : TaskData
 {
-    public BooleanTaskData(string _name, int _pointsGained, int _streakStartsAfrerDays = 0) : base(_name)
+    public BooleanTaskData(string _name, int _pointsGained, int _streakStartsAfterDays = 0) : base(_name)
     {
         type = AppManager.TaskType.Boolean;
         pointsGained = _pointsGained;
-        streakStartsAfterDays = _streakStartsAfrerDays;
-
+        streakStartsAfterDays = _streakStartsAfterDays;
+        isDone = false;
     }
 
+    public bool isDone;
     public int pointsGained;
     public int streakStartsAfterDays;
 }
@@ -345,7 +384,7 @@ public class AppManager : MonoBehaviour
 
 
 
-   public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Other, ENUM_END };
+   public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Calorie, Other, ENUM_END };
 
    // all static events should be here
 
@@ -357,6 +396,7 @@ public class AppManager : MonoBehaviour
    public static event Action OnNewTaskAdded;
     public static event Action<SingleColorPicker> OnGoalColorPicked;
     public static event Action<SymbolPicker> OnGoalSymbolPicked;
+    public static event Action<TaskData> OnTaskValueChanged;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -697,6 +737,11 @@ public class AppManager : MonoBehaviour
     public static void GoalSymbolPicked(SymbolPicker _sp)
     {
         OnGoalSymbolPicked?.Invoke(_sp);
+    }
+
+    public static void TaskValueChanged(TaskData _td)
+    {
+        OnTaskValueChanged?.Invoke(_td);
     }
 
     

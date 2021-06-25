@@ -6,6 +6,7 @@ using TMPro;
 using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 struct DailyScoreStruct
 {
@@ -27,6 +28,27 @@ public class StatisticCalculator : MonoBehaviour
     public int lastlogdur;
     public int monthlyavarage;
     List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
+
+
+
+    private void Awake()
+    {
+        AppManager.OnTaskValueChanged += OnTaskValueChanged;
+    }
+
+    private void OnTaskValueChanged(TaskData _td)
+    {
+        // Amikor a felhasználó változtat értéket ez hívódik. A _td pedig hogy melyik feladat változott.
+        // _td.owner pedig megadja melyik GoalData változott név szerint (ez egy string változó)
+        // hogy ez melyik goaldata úgy tudod megkapni hogy goalManager.SearchGoalByName(_td.owner);
+        // vagy
+        // GoalData _gd; goalManager.SearchGoalByName(_td.owner, out _gd); ezen van bool check is hogy sikerült e megtalálni/létezik e
+
+        // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
+    }
+
+
+
     void Start()
     {
         goalManager = FindObjectOfType<GoalManager>();
@@ -74,7 +96,7 @@ public class StatisticCalculator : MonoBehaviour
         }
         DailyScoreStructsList.Add(new DailyScoreStruct(Today.Date,dailysc));
        
-        //Átlag pont számoló
+        //Max számoló
         int avarage; //átlag
         int kkavp = 0; //0
         int kkavperm = kkavp / 7; //0
@@ -129,7 +151,13 @@ public class StatisticCalculator : MonoBehaviour
             throw;
         }
         string[] cut = new string[2];
-        for (int i = 0; i <30 ; i++) //Havi debaszogatni kell még
+
+       // var lastitem = goalDatas[].GetLastModificationTime();
+        //Havi pont számoló
+        int monthlenght = 0;
+        monthlenght = Today.Month;
+        //if ((Today.Month-goalDatas[].GetLastModificationTime() )) 
+        for (int i = 0; i <monthlenght ; i++) //Havi debaszogatni kell még
         {
             
             fleetmonthly += DailyScoreStructsList[i].dailyScore;
@@ -199,6 +227,7 @@ public class StatisticCalculator : MonoBehaviour
     private void OnDestroy()
     {
         StopCoroutine(TimeCheck());
+        AppManager.OnTaskValueChanged -= OnTaskValueChanged;
     }
     //int change = goalDatas[i].lastChange.amount;
 

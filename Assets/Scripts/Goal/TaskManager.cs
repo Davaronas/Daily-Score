@@ -29,7 +29,7 @@ public class TaskManager : MonoBehaviour
     private List<Task> currentTasks = new List<Task>();
 
 
-    private GoalManager goalManager = null;
+    public GoalManager goalManager = null;
     private TaskTypeComponents taskTypeComponents = null;
 
 
@@ -87,7 +87,7 @@ public class TaskManager : MonoBehaviour
         {
             Task _newTask =
                 Instantiate(taskPrefab, Vector3.zero, Quaternion.identity, tasksScrollContentRectTransform.transform).GetComponent<Task>();
-            _newTask.FeedData(_tasks[i]);
+            _newTask.FeedData(_tasks[i], goalManager);
             _newTask.isPrefab = false;
             currentTasks.Add(_newTask);
         }

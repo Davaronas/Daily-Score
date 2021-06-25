@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class GoalManager : MonoBehaviour
 {
@@ -161,6 +162,7 @@ public class GoalManager : MonoBehaviour
     public void AssignTaskToCurrentGoal(TaskData _data)
     {
         currentlySelectedGoal.AddTask(_data);
+        _data.owner = currentlySelectedGoal.GetGoalData().name;
     }
 
     private void ResizeGoalsContent()
@@ -179,9 +181,59 @@ public class GoalManager : MonoBehaviour
         return _goalDatas.ToArray();
     }
 
+    public bool GetLastModificationTime(out GoalData _lastModifiedGoalData)
+    {
+        _lastModifiedGoalData = null;
+
+        
+
+        if(goals.Count == 0) { return false; }
+
+        for(int i = 0; i < goals.Count;i++)
+        {
+            if(goals[i].GetGoalData().GetLastModificationTime() > _lastModifiedGoalData.GetLastModificationTime())
+            {
+                _lastModifiedGoalData = goals[i].GetGoalData();
+            }
+        }
+
+        return true;
+    }
+
     public Goal GetCurrentlySelectedGoal()
     {
         return currentlySelectedGoal;
+    }
+
+    public bool SearchGoalByName(string _name, out GoalData _gd)
+    {
+        _gd = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            if(goals[i].GetGoalData().name == _name)
+            {
+                _gd = goals[i].GetGoalData();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public GoalData SearchGoalByName(string _name)
+    {
+        GoalData _gd;
+        _gd = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            if (goals[i].GetGoalData().name == _name)
+            {
+                _gd = goals[i].GetGoalData();
+            }
+        }
+        return _gd;
     }
    
 }
