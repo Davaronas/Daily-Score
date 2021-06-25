@@ -65,6 +65,8 @@ public struct GoalColor
 public class GoalData
 {
     public enum ModificationType { Create, ChangeValue}
+
+    
     
     
     public GoalData(string _name, Color32 _color,int _spriteId, int _max = 0,  int _current = 0)
@@ -85,6 +87,8 @@ public class GoalData
         lastChange = new GoalChange(0,ModificationType.Create,DateTime.Now);
         modifications = new List<GoalChange>();
         modifications.Add(lastChange);
+
+
     }
 
     public GoalData(string _name, GoalColor[] _colors, int _spriteId, int _max = 0, int _current = 0)
@@ -174,8 +178,12 @@ public class GoalData
    public int max;
    public int current;
    public  List<TaskData> tasks;
+
    public GoalChange lastChange;
     public List<GoalChange> modifications;
+
+  
+
 }
 
 [System.Serializable]
@@ -204,16 +212,23 @@ public struct GoalChange
 [System.Serializable]
 public class TaskData
 {
-   public TaskData(string _name)
+    public enum ActiveType { DayOfWeek, EveryThDay }
+
+    public TaskData(string _name)
    {
        name = _name;
        owner = null;
    }
 
-   public string name;
-   public AppManager.TaskType type;
-   public string owner;
+    public string name;
+    public AppManager.TaskType type;
+    public string owner;
 
+
+    public bool isActiveToday;
+    public ActiveType beingActiveType;
+    public List<DayOfWeek> activeOnDays;
+    public int activeEveryThDay;
 }
 
 

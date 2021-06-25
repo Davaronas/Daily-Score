@@ -18,9 +18,13 @@ Update metric interval*
 IntervalHolder child order*
 Deleting interval should reduce interval serial numbers*
 write out metric on task*
+releasing Broadcasters should let the submenu scroll slide just like simply scrolling the submenu scroll*
+task bonus*
+task type translations*
+setting task amounts*
 
 
-releasing Broadcasters should let the submenu scroll slide just like simply scrolling the submenu scroll*__
+saving task changes*__
 
 
 Detailed task datas
@@ -32,25 +36,23 @@ Multi color image
 
 METRICs should be changed to the selected metric
 
-task type translations
 
-setting task amounts
 
 leave toggle or switch to interaction handler ?
 
 task creatin texts bugged
 
-saving task changes
 
 
 clear interval when disabling create task menu
 
 task current value bit bigger click area than visible
 
-
-task bonus
-
 streak system gold
+
+tasks days
+
+
 
 
 

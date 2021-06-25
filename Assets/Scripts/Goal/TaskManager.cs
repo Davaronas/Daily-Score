@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class TaskManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class TaskManager : MonoBehaviour
     [Space]
     [SerializeField] private TMP_Dropdown valueMetricDropdown = null;
     [SerializeField] private TMP_Dropdown intervalMetricDropdown = null;
+    [SerializeField] private DayToggle[] dayToggles;
+    [SerializeField] private TMP_InputField everyThDayInputField = null;
     [Space]
     [Tooltip("Type texts")]
     [SerializeField] private GameObject targetValueTexts = null;
@@ -29,9 +32,11 @@ public class TaskManager : MonoBehaviour
     private List<Task> currentTasks = new List<Task>();
 
 
-    public GoalManager goalManager = null;
+    [HideInInspector] public GoalManager goalManager = null;
     private TaskTypeComponents taskTypeComponents = null;
 
+    private List<DayOfWeek> selectedActiveDays = new List<DayOfWeek>();
+    private int everyThDay = 0;
 
 
     private VerticalLayoutGroup tasksContentLayoutGroup = null;
@@ -74,6 +79,7 @@ public class TaskManager : MonoBehaviour
         DestroyTasks();
         currentTasks.Clear();
         DisableTypeTexts();
+        ClearDays();
     }
 
     private void OnDestroy()
@@ -95,6 +101,8 @@ public class TaskManager : MonoBehaviour
         // resize task scroll to fit tasks
         ScrollSizer.Resize(tasksScrollContentRectTransform, taskPrefab_Y_Size_ + (tasksContentLayoutGroup.spacing * 2),currentTasks.Count);
     }
+
+
 
     public void DestroyTasks()
     {
@@ -120,6 +128,8 @@ public class TaskManager : MonoBehaviour
         optimumTexts.SetActive(false);
         intervalTexts.SetActive(false);
     }
+
+
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
     {
@@ -184,6 +194,58 @@ public class TaskManager : MonoBehaviour
     public void RemoteCall_SetSelectedName()
     {
         enteredName = taskNameField.text;
+    }
+
+    public void SetActiveDays(DayOfWeek _day, bool _add)
+    {
+        
+
+        if (_add)
+        {
+            if (!selectedActiveDays.Contains(_day))
+            {
+                print("Added");
+                selectedActiveDays.Add(_day);
+                everyThDayInputField.text = "";
+                everyThDay = 0;
+            }
+        }
+        else
+        {
+            if (selectedActiveDays.Contains(_day))
+            {
+                print("Removed");
+                selectedActiveDays.Remove(_day);
+            }
+        }
+    }
+
+    public void RemoteCall_SetEveryThDay()
+    {
+        if (everyThDayInputField.text != "")
+        {
+            print("SEt day");
+            everyThDay = int.Parse(everyThDayInputField.text);
+            selectedActiveDays.Clear();
+            TurnOffDayToggles();
+        }
+    }
+
+    private void ClearDays()
+    {
+        selectedActiveDays.Clear();
+        everyThDay = 0;
+        everyThDayInputField.text = "";
+
+        TurnOffDayToggles();
+    }
+
+    private void TurnOffDayToggles()
+    {
+        for (int i = 0; i < dayToggles.Length; i++)
+        {
+            dayToggles[i].TurnOff();
+        }
     }
 
 

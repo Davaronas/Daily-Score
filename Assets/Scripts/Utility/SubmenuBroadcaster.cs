@@ -81,7 +81,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
         scrollRect.enabled = true;
         submenuScrollRect.OnEndDrag(eventData);
         submenuScroll.OnEndDrag(eventData);
-        AppManager.SubmenuChangedViaScrolling(submenuScroll.WarpToPosition());
+      //  AppManager.SubmenuChangedViaScrolling(submenuScroll.WarpToPosition());
     }
 
     
