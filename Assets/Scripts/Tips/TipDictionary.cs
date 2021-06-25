@@ -114,34 +114,19 @@ public class TipDictionary : MonoBehaviour
         }    
     }
 
-    public int go = 0;
-    public RolledTips FirstTipRoll()
-    {
-       
-        rolledtip.data = maindata[go];
-        rolledtip.name = name[go];
-        rolledtip.lastdate = System.DateTime.Now.ToString();
-        rolledtip.datum = DateTime.Now;
-        datas.Add(go + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
-        tipmanager.LoadDailyTip(go, rolledtip.name, rolledtip.data);
-        go++;
-        return rolledtip;
-    }
     public int _key = 0;
-    public RolledTips GetRandomTip()
-    {
-        RolledTips rolledtip;
-        _key = UnityEngine.Random.Range(Saved_ID.Count-2, Saved_ID.Count); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
+    public void GetRandomTip()
+    {       
+        _key = UnityEngine.Random.Range(0,3); //- ahány végsõ elem a tûréshatár, tippek nagyságátol fuggõen állítsuk.         
         rolledtip.data = maindata[_key];
         rolledtip.name = name[_key];
         rolledtip.lastdate = System.DateTime.Now.ToString();
         rolledtip.datum = DateTime.Now;
         datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
         tipmanager.LoadDailyTip(_key, rolledtip.name, rolledtip.data);
-        return rolledtip;
     }
 
-    public void SavedTips()
+    public void SavingTips()
     {
         StreamWriter sw = new StreamWriter(@"Assets\Scripts\Tips\SavedTips.txt", append: true); //,append: true)
         try
@@ -160,11 +145,6 @@ public class TipDictionary : MonoBehaviour
 
     public void UserSave()
     {
-        if (Saved_ID[0] == null)
-        {
-            PlayerPrefs.SetInt(_key + ".tipkey", _key);
-        }
-        else
         PlayerPrefs.SetInt(Saved_ID[_key] + ".tipkey", _key);
     }
 
@@ -189,40 +169,24 @@ public class TipDictionary : MonoBehaviour
     // AddSavedTip(int _id, string _header)
     // RemoveSavedTip(int _id)
     // LoadDailyTip(int _id, string _header, string _content)
+    public int counter = 0;
     void Start()
     {
-        tipmanager = FindObjectOfType<TipManager>();
-        if (first_run == true)
-        {
-            TipLoad();
-            if (empty == true)
-            {
-                LoadSaved();
-                empty = false;
-            }
-            first_run = false;
-        }
-        else LoadSaved();
-        if (first_run_roll == true)
-        {
-            if (System.DateTime.Now > rolledtip.datum)
-            {
-                FirstTipRoll();
-                first_run_roll = false;
-            }             
-        }
-        else GetRandomTip();
-        LoadUserSave();
-        SavedTips();
-        LoadSaved();
+        tipmanager = FindObjectOfType<TipManager>();       
+        //TipLoad();
+        //LoadSaved();
+        //LoadUserSave();       
+        GetRandomTip();
+        //print("buzi vagyok");
+        SavingTips();
+               
     }
 
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
         {               
-            FirstTipRoll();               
-            SavedTips();
+            
         }
     }
 
