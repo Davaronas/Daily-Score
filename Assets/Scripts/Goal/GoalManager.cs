@@ -143,7 +143,14 @@ public class GoalManager : MonoBehaviour
 
     public void RemoteCall_CreateNewGoal()
     {
-        if (enteredName == "" || !isColorSelected || !isSpriteSelected) { return; }
+        if (enteredName == "")
+        { AppManager.ErrorHappened(ErrorMessages.NameNotEntered()); return; }
+
+        if (!isColorSelected)
+        { AppManager.ErrorHappened(ErrorMessages.ColorNotSelected_CreateGoalPanel()); return; }
+
+        if (!isSpriteSelected)
+        { AppManager.ErrorHappened(ErrorMessages.SymbolNotSelected_CreateGoalPanel()); return; }
 
 
         Goal _newGoal =

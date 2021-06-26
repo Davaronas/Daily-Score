@@ -22,6 +22,8 @@ releasing Broadcasters should let the submenu scroll slide just like simply scro
 task bonus*
 task type translations*
 setting task amounts*
+task numbers -> protect from writing 0 as a first character ? not necessary the first 0 will be ignored*
+tasks days*
 
 
 saving task changes*__
@@ -50,7 +52,9 @@ task current value bit bigger click area than visible
 
 streak system gold
 
-tasks days
+
+
+task active on days -> set on creation, and set on loading in (if current day == any selected day or next active day)
 
 
 

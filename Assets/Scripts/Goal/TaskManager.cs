@@ -23,6 +23,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject booleanTexts = null;
     [SerializeField] private GameObject optimumTexts = null;
     [SerializeField] private GameObject intervalTexts = null;
+    private bool taskTypeSelected = false;
 
     private string enteredName = "default";
     private AppManager.TaskType taskType = 0;
@@ -80,6 +81,7 @@ public class TaskManager : MonoBehaviour
         currentTasks.Clear();
         DisableTypeTexts();
         ClearDays();
+        taskTypeSelected = false;
     }
 
     private void OnDestroy()
@@ -136,6 +138,8 @@ public class TaskManager : MonoBehaviour
         taskType = _taskType;
         DisableTypeTexts();
 
+        taskTypeSelected = true;
+
         switch(_taskType)
         {
             case AppManager.TaskType.Maximum:
@@ -174,22 +178,58 @@ public class TaskManager : MonoBehaviour
             return;
         }
 
-        if (enteredName == "") { return; }
+        if (enteredName == "") { AppManager.ErrorHappened(ErrorMessages.NameNotEntered()); return; }
+
+        if(taskTypeSelected == false) { AppManager.ErrorHappened(ErrorMessages.TaskTypeNotSelected_CreateTaskPanel());  return; }
+
+        TaskData _data = taskTypeComponents.GetData(taskType);
+        if (_data == null) { return; } // error message is inside GetData() function
+
+        if (selectedActiveDays.Count == 0 && everyThDay == 0) { AppManager.ErrorHappened(ErrorMessages.DaysNotSelected_CreateTaskPanel()); return; }
 
 
 
-       TaskData _data = taskTypeComponents.GetData(taskType);
-        if(_data == null) { return; }
-
+      
 
 
         _data.name = enteredName;
+
+        if(selectedActiveDays.Count > 0)
+        {
+            _data.beingActiveType = TaskData.ActiveType.DayOfWeek;
+            _data.activeOnDays = selectedActiveDays;
+
+            for (int i = 0; i < _data.activeOnDays.Count; i++)
+            {
+                if (DateTime.Now.DayOfWeek == _data.activeOnDays[i])
+                {
+                    _data.isActiveToday = true;
+                }
+            }
+            
+
+        }
+        else if(everyThDay > 0)
+        {
+            _data.beingActiveType = TaskData.ActiveType.EveryThDay;
+            _data.activeEveryThDay = everyThDay;
+            _data.isActiveToday = true;
+            _data.lastActiveDay = DateTime.Now;
+            _data.nextActiveDay = CalculateNextActiveDay(_data);
+        }
+
+        
+
         goalManager.AssignTaskToCurrentGoal(_data);
        
 
         AppManager.NewTaskAdded();
     }
 
+    private DateTime CalculateNextActiveDay(TaskData _data)
+    {
+       return  _data.lastActiveDay.AddDays(_data.activeEveryThDay);
+    }
 
     public void RemoteCall_SetSelectedName()
     {
@@ -224,7 +264,13 @@ public class TaskManager : MonoBehaviour
     {
         if (everyThDayInputField.text != "")
         {
-            print("SEt day");
+            if(everyThDayInputField.text == "0")
+            {
+                everyThDayInputField.text = "";
+                // error message, number cannot be 0
+                return;
+            }
+
             everyThDay = int.Parse(everyThDayInputField.text);
             selectedActiveDays.Clear();
             TurnOffDayToggles();

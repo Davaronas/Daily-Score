@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
-
+#region Goal related data types
 public enum ColorType { Simple, Gradient, FourCornerGradient, ENUM_END };
 
 [System.Serializable]
@@ -229,6 +229,9 @@ public class TaskData
     public ActiveType beingActiveType;
     public List<DayOfWeek> activeOnDays;
     public int activeEveryThDay;
+
+    public DateTime nextActiveDay;
+    public DateTime lastActiveDay;
 }
 
 
@@ -251,7 +254,6 @@ public class MaximumTaskData : TaskData
 
     public int targetValue;
     public int current;
-    public float currentFloat;
     public AppManager.TaskMetricType metric;
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
@@ -278,7 +280,6 @@ public class MinimumTaskData : TaskData
     public AppManager.TaskMetricType metric;
     public int targetValue;
     public int current;
-    public float currentFloat;
     public int pointsForStayingUnderTargetValue;
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;
@@ -363,8 +364,187 @@ public struct Interval
 
 
 
+public static class ErrorMessages
+{
+    public static string NameNotEntered()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.NameNotEntered;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.NameNotEntered;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.NameNotEntered;
 
 
+            default:
+                return "";
+
+        }
+    }
+
+     public static string ColorNotSelected_CreateGoalPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.ColorNotSelected_CreateGoalPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.ColorNotSelected_CreateGoalPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.ColorNotSelected_CreateGoalPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static string SymbolNotSelected_CreateGoalPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.SymbolNotSelected_CreateGoalPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.SymbolNotSelected_CreateGoalPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.SymbolNotSelected_CreateGoalPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+public static string DaysNotSelected_CreateTaskPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.DaysNotSelected_CreateTaskPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.DaysNotSelected_CreateTaskPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.DaysNotSelected_CreateTaskPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static string TaskTypeNotSelected_CreateTaskPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TaskTypeNotSelected_CreateTaskPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.TaskTypeNotSelected_CreateTaskPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.TaskTypeNotSelected_CreateTaskPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static string TaskTypeInputFieldEmpty_CreateTaskTPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TaskTypeInputFieldEmpty_CreateTaskTPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.TaskTypeInputFieldEmpty_CreateTaskTPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.TaskTypeInputFieldEmpty_CreateTaskTPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static string IntervalTaskTypeOverlap_CreateTaskPanel()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.IntervalTaskTypeOverlap_CreateTaskPanel;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.IntervalTaskTypeOverlap_CreateTaskPanel;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.IntervalTaskTypeOverlap_CreateTaskPanel;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static class English
+    {
+        public const string NameNotEntered = "Please enter a name!";
+        public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
+        public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
+        public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
+        public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
+        public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
+        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+    }
+
+    public static class Magyar
+    {
+        public const string NameNotEntered = "Please select a name!";
+        public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
+        public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
+        public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
+        public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
+        public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
+        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+    }
+
+    public static class Deutsch
+    {
+        public const string NameNotEntered = "Please enter a name!";
+        public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
+        public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
+        public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
+        public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
+        public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
+        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+    }
+
+    // max task type
+
+}
+
+
+#endregion
 
 
 public class AppManager : MonoBehaviour
@@ -376,6 +556,7 @@ public class AppManager : MonoBehaviour
    [SerializeField] private GameObject goalPanel;
    [SerializeField] private GameObject createTaskPanel;
    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private ErrorWindow errorPanel;
    [Space]
    [Space]
    [SerializeField] private Sprite[] symbols_e;
@@ -412,6 +593,7 @@ public class AppManager : MonoBehaviour
     public static event Action<SingleColorPicker> OnGoalColorPicked;
     public static event Action<SymbolPicker> OnGoalSymbolPicked;
     public static event Action<TaskData> OnTaskValueChanged;
+    public static event Action<string> OnErrorHappened;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -439,6 +621,7 @@ public class AppManager : MonoBehaviour
         OnNewGoalAdded += NewGoalAddedCallback;
         OnNewTaskAdded += NewTaskAddedCallback;
         OnGoalOpened += OnGoalOpenedCallback;
+        OnErrorHappened += OnErrorHappenedCallback;
 
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
@@ -453,6 +636,7 @@ public class AppManager : MonoBehaviour
         OnNewGoalAdded -= NewGoalAddedCallback;
         OnNewTaskAdded -= NewTaskAddedCallback;
         OnGoalOpened -= OnGoalOpenedCallback;
+        OnErrorHappened -= OnErrorHappenedCallback;
 
     }
 
@@ -587,6 +771,8 @@ public class AppManager : MonoBehaviour
             stream.Close();
             fileInfo.IsReadOnly = true;
 
+            // check each goal if they should be active today
+
             goalManager.LoadGoals(_savedGoals);
         }
         else
@@ -603,6 +789,7 @@ public class AppManager : MonoBehaviour
         goalPanel.SetActive(false);
         createTaskPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        errorPanel.gameObject.SetActive(false);
 
 
         // set language if already saved one
@@ -687,7 +874,16 @@ public class AppManager : MonoBehaviour
   
 
 
-   
+    public static void ErrorHappened(string _error)
+    {
+        OnErrorHappened?.Invoke(_error);
+    }
+
+    public void OnErrorHappenedCallback(string _error)
+    {
+        errorPanel.ShowError(_error);
+        errorPanel.gameObject.SetActive(true);
+    }
 
 
 
@@ -793,6 +989,11 @@ public class AppManager : MonoBehaviour
         SetAppLayer(3);
 
        
+    }
+
+    public void RemoteCall_TurnOffErrorPanel()
+    {
+        errorPanel.gameObject.SetActive(false);
     }
 
    

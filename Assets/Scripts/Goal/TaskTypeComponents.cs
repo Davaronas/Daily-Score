@@ -248,6 +248,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -265,6 +266,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -273,7 +275,11 @@ public class TaskTypeComponents : MonoBehaviour
             _streakStartsAfterDays = 0;
         }
 
-        if(!isValid( maxComponents.targetValue_InputField)  || !isValid(maxComponents.pointsPerOneMetric_InputField)) { return null; }
+        if(!isValid( maxComponents.targetValue_InputField)  || !isValid(maxComponents.pointsPerOneMetric_InputField))
+        { 
+            AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
+            return null; 
+        }
 
 
         MaximumTaskData _maximumTaskData = new MaximumTaskData("EMPTY",
@@ -299,6 +305,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -316,6 +323,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -324,7 +332,11 @@ public class TaskTypeComponents : MonoBehaviour
             _streakStartsAfterDays = 0;
         }
 
-        if(!isValid(minComponents.targetValue_InputField) || !isValid(minComponents.pointsForStayingUnderLimit_InputField) || !isValid(minComponents.pointsLostPerOneMetric_InputField)){ return null; }
+        if(!isValid(minComponents.targetValue_InputField) || !isValid(minComponents.pointsForStayingUnderLimit_InputField) || !isValid(minComponents.pointsLostPerOneMetric_InputField))
+        {
+            AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
+            return null; 
+        }
 
         MinimumTaskData _minimumTaskData = new MinimumTaskData("EMPTY",
             (AppManager.TaskMetricType)minComponents.metric_Dropdown.value,
@@ -348,6 +360,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -355,7 +368,11 @@ public class TaskTypeComponents : MonoBehaviour
         {
             _streakStartsAfterDays = 0;
         }
-        if (!isValid(boolComponents.pointsGained_InputField)) { return null; }
+        if (!isValid(boolComponents.pointsGained_InputField)) 
+        {
+            AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
+            return null;
+        }
 
         BooleanTaskData _boolTaskData = new BooleanTaskData("EMPTY", int.Parse(boolComponents.pointsGained_InputField.text), _streakStartsAfterDays);
 
@@ -373,6 +390,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -382,7 +400,10 @@ public class TaskTypeComponents : MonoBehaviour
         }
 
         if(!isValid(optimumComponents.targetValue_InputField) || !isValid(optimumComponents.pointsForOptimumValue_InputField) || !isValid(optimumComponents.pointsLostPerOneMetricDifference_InputField))
-        { return null; }
+        {
+            AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
+            return null; 
+        }
 
         OptimumTaskData _optimumTaskData = new OptimumTaskData("EMPTY",
             int.Parse(optimumComponents.targetValue_InputField.text),
@@ -406,6 +427,7 @@ public class TaskTypeComponents : MonoBehaviour
             }
             else
             {
+                AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
                 return null;
             }
         }
@@ -453,6 +475,7 @@ public class TaskTypeComponents : MonoBehaviour
         else
         {
             Debug.LogError($"intervals do not contain this interval: {_ipu}");
+            return;
         }
 
         for(int i = 0; i < intervalComponents.intervals.Count;i++)
@@ -515,6 +538,13 @@ public class TaskTypeComponents : MonoBehaviour
 
             if(_check > 0)
             {
+                // there is an overlap
+                // error
+                AppManager.ErrorHappened(ErrorMessages.IntervalTaskTypeOverlap_CreateTaskPanel());
+                intervalComponents.intervals[i].from.text = "";
+                intervalComponents.intervals[i].to.text = "";
+                intervalComponents.intervals[i + 1].from.text = "";
+                intervalComponents.intervals[i + 1].to.text = "";
                 return false;
             }
         }

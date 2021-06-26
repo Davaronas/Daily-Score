@@ -24,14 +24,15 @@ public class Task : MonoBehaviour
     private Vector2 scoreTextOriginalSize;
 
     public bool isPrefab = false;
+    
+     private TaskData taskData;
 
-    private TaskData taskData;
-
-    private MaximumTaskData mxtd;
-    private MinimumTaskData mntd;
-    private BooleanTaskData btd;
-    private OptimumTaskData otd;
-    private IntervalTaskData itd;
+    [Space]
+    [SerializeField] private MaximumTaskData mxtd;
+    [SerializeField] private MinimumTaskData mntd;
+    [SerializeField] private BooleanTaskData btd;
+    [SerializeField] private OptimumTaskData otd;
+    [SerializeField] private IntervalTaskData itd;
 
     private int currentPoint;
 
