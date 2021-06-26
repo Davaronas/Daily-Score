@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System;
+using System.Runtime.Serialization.Formatters.Binary;
 
 public class megbasszaakurvaanyjat : MonoBehaviour
 {
@@ -13,8 +14,10 @@ public class megbasszaakurvaanyjat : MonoBehaviour
         public string data;
         public string lastdate;
         public DateTime datum;
+        public bool saved;
     }
     RolledTips rolledtip;
+    public List<RolledTips> TipUserSave = new List<RolledTips>();
     public List<string> datas = new List<string>();
     public List<string> name = new List<string>();
     public List<string> maindata = new List<string>();
@@ -72,7 +75,6 @@ public class megbasszaakurvaanyjat : MonoBehaviour
         StreamWriter sw = new StreamWriter(@"Assets\Scripts\Tips\SavedTips.txt", append: true); //,append: true)
         try
         {
-            print(datas[c]);
             sw.WriteLine(datas[c]);
             c++;
             sw.Close();
@@ -108,7 +110,7 @@ public class megbasszaakurvaanyjat : MonoBehaviour
         for (int i = 0; i < saved_tips.Count; i++)
         {
             cut = saved_tips[i].Split(' ');
-            print(cut[0]);
+            //print(cut[0]);
             Saved_ID.Add(int.Parse(cut[0]));
         }
         sr.Close();
@@ -118,6 +120,7 @@ public class megbasszaakurvaanyjat : MonoBehaviour
     public int test = 0;
     public void GetRandomTip()
     {
+        rolledtip = new RolledTips();
          _key = UnityEngine.Random.Range(0, Tips.Count);
         if (test == _key)
         {
@@ -131,18 +134,19 @@ public class megbasszaakurvaanyjat : MonoBehaviour
         rolledtip.name = name[_key];
         rolledtip.lastdate = System.DateTime.Now.ToString();
         rolledtip.datum = DateTime.Now;
-        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate);
+        rolledtip.saved = false;
+        datas.Add(_key + " " + rolledtip.name + " " + rolledtip.data + " " + rolledtip.lastdate + " " + rolledtip.saved);
         tipmanager.LoadDailyTip(_key, rolledtip.name, rolledtip.data);
     }
-
     
     void Start()
     {
         tipmanager = FindObjectOfType<TipManager>();
-        TipLoad();
-        GetRandomTip();
-        SavingTips();
         LoadUserSave();
+        TipLoad();
+        LoadSaved();
+        GetRandomTip();
+        SavingTips();         
     }
 
     void Update()
@@ -156,28 +160,63 @@ public class megbasszaakurvaanyjat : MonoBehaviour
 
     public void LoadUserSave()
     {
-        for (int i = 0; i < Saved_ID.Count; i++)
+        LoadData();
+        print(TipUserSave == null);
+        print(TipUserSave.Count);
+        for (int i = 0; i < TipUserSave.Count; i++)
         {
-            int a = PlayerPrefs.GetInt(Saved_ID[i] + ".tipkey", -1);
-            if (a > -1 || a < Saved_ID.Count)
+            tipmanager.AddSavedTip(i, TipUserSave[i].name);
+        }      
+    }
+
+    public void SaveData()
+    {
+        if (!Directory.Exists("SavedTip_ID"))
+            Directory.CreateDirectory("SavedTip_ID");
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream saveFile = File.Create("SavedTip_ID/savedtip_id.binary");
+
+        RolledTips[] _rolledtips = TipUserSave.ToArray();
+
+        formatter.Serialize(saveFile, _rolledtips);
+
+        saveFile.Close();
+    }
+
+    public void LoadData()
+    {
+        if (!Directory.Exists("SavedTip_ID"))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream saveFile = File.Open("SavedTip_ID/savedtip_id.binary", FileMode.Open);
+            RolledTips[] _rolledtips = (RolledTips[])formatter.Deserialize(saveFile);
+            for (int i = 0; i < _rolledtips.Length; i++)
             {
-                tipmanager.AddSavedTip(Saved_ID[a], name[i]);
+                TipUserSave.Add(_rolledtips[i]);
             }
-        }
+            saveFile.Close();
+        }      
     }
 
     public void RemoteCall_SaveButtonPressed()
     {
         // Ide rakj mindent amit akkor akarsz mikor rákattintanak a tipp mentés gombra
-        //PlayerPrefs.SetInt(Saved_ID[_key] + ".tipkey", _key); ebben szar az indexeles
+        //ebben szar az indexeles
+        rolledtip.saved = true;
+               
+        TipUserSave.Add(rolledtip);
+        print(TipUserSave.Count);
+        SaveData();
         // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
         tipmanager.AddSavedTip(_key, rolledtip.name);
     }
 
     public void DeleteTipButtonPressed(int _id)
     {
+        TipUserSave.Remove(TipUserSave[_id]);
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
-        PlayerPrefs.DeleteKey(_id + ".tipkey");
+        //PlayerPrefs.DeleteKey(_id + ".id");
     }
 
 }

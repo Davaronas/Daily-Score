@@ -131,7 +131,7 @@ public class TipDictionary : MonoBehaviour
         StreamWriter sw = new StreamWriter(@"Assets\Scripts\Tips\SavedTips.txt", append: true); //,append: true)
         try
         {
-            print(datas[c]);
+            //print(datas[c]);
             sw.WriteLine(datas[c]);
             c++;
             sw.Close();
