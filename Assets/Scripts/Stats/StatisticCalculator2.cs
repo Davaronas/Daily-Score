@@ -26,6 +26,7 @@ public class StatisticCalculator2 : MonoBehaviour
     public DateTime Today;
     public int dailysc = 0;
     public int lastlogdur;
+    public int weeklyavarage;
     public int monthlyavarage;
     List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
     [SerializeField] TMP_Text dailyScoreText;
@@ -85,11 +86,18 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void WeeklyScoreCal()
     {
+        weeklyavarage = 0;
+        int i = 0;
 
+
+        dailyScoreText.text = weeklyavarage.ToString();
     }
     void MonthlyAvarageCalc()
     {
+        monthlyavarage = 0;
+        int i = 0;
 
+        dailyScoreText.text = monthlyavarage.ToString();
     }
 
 
