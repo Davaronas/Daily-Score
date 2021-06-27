@@ -88,3 +88,6 @@
 0 A futás mint gógymód: A napi rendszeres futás erősíti az immunrendszert. 2021. 06. 26. 13:49:35 False
 1 Meditáció a nyugalom teremtóje: A rendszeres meditációs gyakorlatok végzése segítí a lélek egyensúlyban tartását. 2021. 06. 26. 13:49:54 False
 1 Meditáció a nyugalom teremtóje: A rendszeres meditációs gyakorlatok végzése segítí a lélek egyensúlyban tartását. 2021. 06. 26. 13:50:09 False
+1 Meditáció a nyugalom teremtóje: A rendszeres meditációs gyakorlatok végzése segítí a lélek egyensúlyban tartását. 2021. 06. 27. 13:46:18 False
+1 Meditáció a nyugalom teremtóje: A rendszeres meditációs gyakorlatok végzése segítí a lélek egyensúlyban tartását. 2021. 06. 27. 14:03:25 False
+0 A futás mint gógymód: A napi rendszeres futás erősíti az immunrendszert. 2021. 06. 27. 14:30:25 False
