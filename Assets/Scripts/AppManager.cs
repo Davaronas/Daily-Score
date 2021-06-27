@@ -136,6 +136,7 @@ public class GoalData
        lastChange = new GoalChange(0, ModificationType.Create, DateTime.Now);
        modifications = new List<GoalChange>();
         modifications.Add(lastChange);
+        dailyScores = new List<ScorePerDay>();
     }
 
     public DateTime GetLastModificationTime()
@@ -149,25 +150,16 @@ public class GoalData
         lastChange = _m;
     }
 
-    public void AddModification(int _amount, ModificationType _modification, DateTime _time)
-    {
-        GoalChange _gc = new GoalChange(_amount, _modification, _time);
-        modifications.Add(_gc);
-        lastChange = _gc;
-    }
-
-    public void AddModification(int _amount, DateTime _time)
-    {
-        GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue, _time);
-        modifications.Add(_gc);
-        lastChange = _gc;
-    }
-
     public void AddModification(int _amount)
     {
         GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue, DateTime.Now);
         modifications.Add(_gc);
         lastChange = _gc;
+    }
+
+    public void AddDailyScore(int _amount, DateTime _time)
+    {
+        dailyScores.Add(new ScorePerDay(_amount, _time));
     }
 
 
@@ -246,7 +238,7 @@ public class TaskData
 
     public bool isActiveToday;
     public ActiveType beingActiveType;
-    public List<DayOfWeek> activeOnDays;
+    public List<int> activeOnDays;
     public int activeEveryThDay;
 
     public DateTime nextActiveDay;
@@ -770,7 +762,90 @@ public class AppManager : MonoBehaviour
         Debug.LogError($"There is no such layer index: {_layer}");
     }
 
-    
+    private void GoalActivityCheck(GoalData[] _goaldatas)
+    {
+        DateTime _today = DateTime.Now.Date;
+
+        if(DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
+
+
+        // reset goals
+        for (int i = 0; i < _goaldatas.Length; i++)
+        {
+            if(_goaldatas[i].current > 0)
+            {
+                _goaldatas[i].AddDailyScore(_goaldatas[i].current,lastLogin.Date);
+                _goaldatas[i].current = 0;
+
+
+                // reset tasks
+                for (int j = 0; j < _goaldatas[i].tasks.Count; j++)
+                {
+                    switch(_goaldatas[i].tasks[j].type)
+                    {
+                        case TaskType.Maximum:
+                            ((MaximumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                            break;
+                        case TaskType.Minimum:
+                            ((MinimumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                        break;
+                        case TaskType.Boolean:
+                            ((BooleanTaskData)_goaldatas[i].tasks[j]).isDone = false;
+                            break;
+                        case TaskType.Optimum:
+                            ((OptimumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                            break;
+                        case TaskType.Interval:
+                            ((IntervalTaskData)_goaldatas[i].tasks[j]).current = 0;
+                            break;
+                    }
+
+                    _goaldatas[i].tasks[j].isActiveToday = false;
+
+                    // check if tasks should be active today
+                    if (_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.DayOfWeek)
+                    {
+                        for (int k = 0; k < _goaldatas[i].tasks[j].activeOnDays.Count; k++)
+                        {
+                            if (_today.DayOfWeek == (DayOfWeek)_goaldatas[i].tasks[j].activeOnDays[k])
+                            {
+                                _goaldatas[i].tasks[j].isActiveToday = true;
+                            }
+                        }
+                        
+                    }
+                    else if(_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.EveryThDay)
+                    {
+                        
+                        if(_goaldatas[i].tasks[j].nextActiveDay.Date == _today) // next date is today
+                        {
+                            _goaldatas[i].tasks[j].isActiveToday = true;
+                        }
+                        else
+                        {
+                            DateTime _nextThDays = _goaldatas[i].tasks[j].nextActiveDay.Date;
+                            while (_nextThDays < _today) // depending on last login this may take a long time
+                            {
+                                _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
+                                if (_nextThDays == _today) // one of every th day is today
+                                {
+                                    _goaldatas[i].tasks[j].isActiveToday = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // add 0 points for each missed day
+
+                for(int o = 1; o < (_today - lastLogin).Days;o++)
+                {
+                    _goaldatas[i].AddDailyScore(0, lastLogin.AddDays(o));
+                }
+            }
+        }
+    }
 
     private void Start()
     {
@@ -792,14 +867,17 @@ public class AppManager : MonoBehaviour
 
             // check each goal if they should be active today
 
+
+            GoalActivityCheck(_savedGoals);
             goalManager.LoadGoals(_savedGoals);
         }
         else
         {
 
         }
-    
-    
+
+        // in case we cannot reach OnApplicationQuit (crash or dead battery) we set the last login here as well, after we evaluate it earlier
+        lastLogin = DateTime.Now;
 
 
         introductionPanel.SetActive(false);

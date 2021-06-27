@@ -197,11 +197,16 @@ public class TaskManager : MonoBehaviour
         if(selectedActiveDays.Count > 0)
         {
             _data.beingActiveType = TaskData.ActiveType.DayOfWeek;
-            _data.activeOnDays = selectedActiveDays;
+            _data.activeOnDays = new List<int>();
+
+            for (int i = 0; i < selectedActiveDays.Count; i++)
+            {
+                _data.activeOnDays.Add((int)selectedActiveDays[i]);
+            }
 
             for (int i = 0; i < _data.activeOnDays.Count; i++)
             {
-                if (DateTime.Now.DayOfWeek == _data.activeOnDays[i])
+                if ((int)DateTime.Now.DayOfWeek == _data.activeOnDays[i])
                 {
                     _data.isActiveToday = true;
                 }

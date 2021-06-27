@@ -56,6 +56,8 @@ streak system gold
 
 task active on days -> set on creation, and set on loading in (if current day == any selected day or next active day)
 
+Gold panel create new texts for new line
+
 
 
 

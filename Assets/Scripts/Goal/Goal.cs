@@ -21,7 +21,7 @@ public class Goal : MonoBehaviour
   
     public int symbolId { get; private set; } = -1;
 
-    private GoalData goalData;
+   [SerializeField] private GoalData goalData;
 
     private GoalManager goalManager;
 
