@@ -181,8 +181,8 @@ public class GoalData
 
    public GoalChange lastChange;
     public List<GoalChange> modifications;
-
-  
+    public List<ScorePerDay> dailyScores;
+    
 
 }
 
@@ -206,6 +206,25 @@ public struct GoalChange
         return Convert.ToDateTime(time);
     }
     
+}
+[System.Serializable]
+public struct ScorePerDay
+{
+    public ScorePerDay(int _amount,  DateTime _time)
+    {
+        amount = _amount;
+        time = _time.ToString();
+    }
+
+
+    public int amount;
+    public string time;
+
+    public DateTime GetDateTime()
+    {
+        return Convert.ToDateTime(time);
+    }
+
 }
 
 
