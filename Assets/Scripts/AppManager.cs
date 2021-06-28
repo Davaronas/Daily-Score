@@ -573,10 +573,13 @@ public class AppManager : MonoBehaviour
    [SerializeField] private Sprite[] symbols_e;
    private static Sprite[] symbols;
 
+    public string testTime;
+    public string testLastLoginTime;
+    // yyyy. mm. dd. 0:00:00
 
 
 
-   private GoalManager goalManager = null;
+    private GoalManager goalManager = null;
    private TaskManager taskManager = null;
 
    public enum Languages { English, Magyar, Deutsch, ENUM_END };
@@ -611,7 +614,7 @@ public class AppManager : MonoBehaviour
    public static event Action OnAppLayerChangedToMainMenu;
 
 
-
+   
 
 
 
@@ -764,15 +767,16 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = DateTime.Now.Date;
+        DateTime _today =     Convert.ToDateTime(testTime); //DateTime.Now.Date;
+        print(_today.ToString());
 
-        if(DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
+        if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
 
 
         // reset goals
         for (int i = 0; i < _goaldatas.Length; i++)
         {
-            if(_goaldatas[i].current > 0)
+          //  if(_goaldatas[i].current > 0)
             {
                 _goaldatas[i].AddDailyScore(_goaldatas[i].current,lastLogin.Date);
                 _goaldatas[i].current = 0;
@@ -824,15 +828,16 @@ public class AppManager : MonoBehaviour
                         else
                         {
                             DateTime _nextThDays = _goaldatas[i].tasks[j].nextActiveDay.Date;
-                            while (_nextThDays < _today) // depending on last login this may take a long time
+                            while (_nextThDays < _today)
                             {
-                                _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
+                                _nextThDays = _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
                                 if (_nextThDays == _today) // one of every th day is today
                                 {
                                     _goaldatas[i].tasks[j].isActiveToday = true;
                                     break;
                                 }
                             }
+                            
                         }
                     }
                 }
@@ -867,8 +872,10 @@ public class AppManager : MonoBehaviour
 
             // check each goal if they should be active today
 
-
+            
+            lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin",DateTime.Now.ToString()));
             GoalActivityCheck(_savedGoals);
+
             goalManager.LoadGoals(_savedGoals);
         }
         else
@@ -878,6 +885,7 @@ public class AppManager : MonoBehaviour
 
         // in case we cannot reach OnApplicationQuit (crash or dead battery) we set the last login here as well, after we evaluate it earlier
         lastLogin = DateTime.Now;
+        PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
 
 
         introductionPanel.SetActive(false);
@@ -1134,7 +1142,7 @@ public class AppManager : MonoBehaviour
     {
 
         lastLogin = DateTime.Now.Date;
-        
+        PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
 
