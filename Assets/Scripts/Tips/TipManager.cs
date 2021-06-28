@@ -14,6 +14,9 @@ public class TipManager : MonoBehaviour
     [SerializeField] private TMP_Text dailyTipContent;
     [SerializeField] private RectTransform tipSubmenuScrollContent;
 
+    [SerializeField] private GameObject saveTipButton;
+    private TipMain tipMain;
+
     private int dailyTipId = -1;
 
     private List<SavedTip> savedTips = new List<SavedTip>();
@@ -36,7 +39,13 @@ public class TipManager : MonoBehaviour
             allowedCount = AppManager.SAVEDTIPAMOUNT_FREE;
         }
         ChangeSavedTipAmountText();
+
+        tipMain = FindObjectOfType<TipMain>();
+
+
     }
+
+
 
     public void GoldStatusChanged(bool _state)
     {
@@ -64,6 +73,7 @@ public class TipManager : MonoBehaviour
         if(savedTips.Count >= allowedCount)
         {
             // do some animation to the save button to tell the player what's the problem
+            AppManager.ErrorHappened(ErrorMessages.SavedTipContainerIsFull());
             return;
         }
 
@@ -74,6 +84,14 @@ public class TipManager : MonoBehaviour
         _newSavedTip.SetData(_id, _header);
         ChangeSavedTipAmountText();
         ScrollSizer.AddSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
+    }
+
+    public void DisableSaveButton()
+    {
+        if (tipMain.Saved_ID.Contains(dailyTipId))
+        {
+            saveTipButton.SetActive(false);
+        }
     }
 
     public void RemoveSavedTip(int _id)
@@ -103,6 +121,11 @@ public class TipManager : MonoBehaviour
         dailyTipId = _id;
         dailyTipHeader.text = _header;
         dailyTipContent.text = _content;
+
+        if(tipMain.Saved_ID.Contains(_id))
+        {
+            saveTipButton.SetActive(false);
+        }
     }
 
     public int GetHeldTipId()

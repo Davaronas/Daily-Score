@@ -36,6 +36,7 @@ public class StatisticCalculator2 : MonoBehaviour
     private void Awake()
     {
         AppManager.OnTaskValueChanged += OnTaskValueChanged;
+        AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
         goalManager = FindObjectOfType<GoalManager>();
     }
 
@@ -119,7 +120,10 @@ public class StatisticCalculator2 : MonoBehaviour
        
     }
 
-   
+    private void OnNewDayStartedDuringRuntime()
+    {
+
+    }
     IEnumerator TimeCheck()
     {
         while (true)
@@ -133,5 +137,6 @@ public class StatisticCalculator2 : MonoBehaviour
     {
         StopCoroutine(TimeCheck());
         AppManager.OnTaskValueChanged -= OnTaskValueChanged;
+        AppManager.OnNewDayStartedDuringRuntime -= OnNewDayStartedDuringRuntime;
     }
 }

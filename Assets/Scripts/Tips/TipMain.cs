@@ -32,12 +32,16 @@ public class TipMain : MonoBehaviour
     private void Awake()
     {
         tipManager = FindObjectOfType<TipManager>();
+        AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
     }
 
     public void TipLoad()
     {
         List<string> _tips = new List<string>();
-        StreamReader sr = new StreamReader(Application.persistentDataPath + "/tips.txt");
+        string path = Application.persistentDataPath + "/tips.txt";
+        if(!File.Exists(path)) { Debug.LogError("tips.txt doesn't exist"); return; }
+
+        StreamReader sr = new StreamReader(path);
         try
         {
             string sor;
@@ -98,7 +102,10 @@ public class TipMain : MonoBehaviour
     {
         last_tip = new string[4];
         List<string> saved_tips = new List<string>();
-        StreamReader sr = new StreamReader(Application.persistentDataPath + "/SavedTips.txt");
+        string path = Application.persistentDataPath + "/SavedTips.txt";
+        if (!File.Exists(path)) { Debug.LogError("SavedTips.txt doesn't exist"); return; }
+
+        StreamReader sr = new StreamReader(path);
         try
         {
             string sor;
@@ -245,7 +252,19 @@ public class TipMain : MonoBehaviour
         SaveData();
         // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
         tipmanager.AddSavedTip(_key, rolledtip.name);
+        tipmanager.DisableSaveButton();
     }
+
+    public void RemoteCall_WatchAdButtonPressed()
+    {
+
+    }
+
+    private void OnNewDayStartedDuringRuntime()
+    {
+
+    }
+
     public void DeleteTipButtonPressed(int _id)
     {
         Loaded.Remove(Loaded[_id]);
@@ -258,5 +277,10 @@ public class TipMain : MonoBehaviour
         
         if (Loaded != null)
         SaveData();
+    }
+
+    private void OnDestroy()
+    {
+        AppManager.OnNewDayStartedDuringRuntime -= OnNewDayStartedDuringRuntime;
     }
 }

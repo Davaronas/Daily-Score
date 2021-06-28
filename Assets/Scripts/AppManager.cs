@@ -397,6 +397,46 @@ public static class ErrorMessages
         }
     }
 
+    public static string NewDayStarted()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.NewDayStarted;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.NewDayStarted; ;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.NewDayStarted; ;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    public static string SavedTipContainerIsFull()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.SavedTipContainerIsFull;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.SavedTipContainerIsFull;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.SavedTipContainerIsFull;
+
+
+            default:
+                return "";
+
+        }
+    }
+
      public static string ColorNotSelected_CreateGoalPanel()
     {
         switch(AppManager.currentLanguage)
@@ -526,6 +566,8 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
         public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+        public const string NewDayStarted = "New day started!";
+        public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
     }
 
     public static class Magyar
@@ -537,7 +579,10 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
         public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+        public const string NewDayStarted = "New day started!";
+        public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
     }
+
 
     public static class Deutsch
     {
@@ -548,6 +593,9 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
         public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
+        public const string NewDayStarted = "New day started!";
+        public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
+
     }
 
     // max task type
@@ -608,6 +656,7 @@ public class AppManager : MonoBehaviour
     public static event Action<SymbolPicker> OnGoalSymbolPicked;
     public static event Action<TaskData> OnTaskValueChanged;
     public static event Action<string> OnErrorHappened;
+    public static event Action OnNewDayStartedDuringRuntime;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -902,6 +951,8 @@ public class AppManager : MonoBehaviour
         // decide starting page
 
 
+        StartCoroutine(TimeChecker());
+
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
     }
@@ -1154,5 +1205,28 @@ public class AppManager : MonoBehaviour
 
     //Last Login
     public static DateTime lastLogin;
+
+    IEnumerator TimeChecker()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(1);
+            
+            if(DateTime.Now.TimeOfDay == new TimeSpan(0,0,0))
+            {
+                // save goal daily scores
+
+                // reset tasks
+                AppManager.ErrorHappened(ErrorMessages.NewDayStarted());
+                GoalActivityCheck(goalManager.GetGoals());
+                lastLogin = DateTime.Now;
+                PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+
+                OnNewDayStartedDuringRuntime?.Invoke();
+            }
+
+            
+        }
+    }
 
 }
