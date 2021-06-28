@@ -18,14 +18,14 @@ public class TipManager : MonoBehaviour
 
     private List<SavedTip> savedTips = new List<SavedTip>();
     private float tipPrefab_Y_Size = 0;
-    private TipDictionary tipDictionary;
+    private TipMain tipDictionary;
 
     private int allowedCount;
 
     private void Awake()
     {
         tipPrefab_Y_Size = tipPrefab.GetComponent<RectTransform>().rect.height;
-        tipDictionary = FindObjectOfType<TipDictionary>();
+        tipDictionary = FindObjectOfType<TipMain>();
 
         if(AppManager.isGold)
         {
