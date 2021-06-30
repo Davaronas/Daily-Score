@@ -5,6 +5,8 @@ using System;
 using UnityEngine.EventSystems;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Unity.Notifications.Android;
+     
 
 
 #region Goal related data types
@@ -19,6 +21,7 @@ public struct GoalColor
         g = _c32.g;
         b = _c32.b;
         a = _c32.a;
+        
     }
 
     public GoalColor(int _r, int _g, int _b, int _a)
@@ -241,8 +244,9 @@ public class TaskData
     public List<int> activeOnDays;
     public int activeEveryThDay;
 
-    public DateTime nextActiveDay;
-    public DateTime lastActiveDay;
+    public string nextActiveDay;
+
+    public string lastChangedValue;
 }
 
 
@@ -816,7 +820,7 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today =     Convert.ToDateTime(testTime); //DateTime.Now.Date;
+        DateTime _today = DateTime.Now.Date;   // Convert.ToDateTime(testTime); //
         print(_today.ToString());
 
         if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
@@ -870,19 +874,20 @@ public class AppManager : MonoBehaviour
                     else if(_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.EveryThDay)
                     {
                         
-                        if(_goaldatas[i].tasks[j].nextActiveDay.Date == _today) // next date is today
+                        if(Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date == _today) // next date is today
                         {
                             _goaldatas[i].tasks[j].isActiveToday = true;
                         }
                         else
                         {
-                            DateTime _nextThDays = _goaldatas[i].tasks[j].nextActiveDay.Date;
+                            DateTime _nextThDays = Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date;
                             while (_nextThDays < _today)
                             {
                                 _nextThDays = _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
                                 if (_nextThDays == _today) // one of every th day is today
                                 {
                                     _goaldatas[i].tasks[j].isActiveToday = true;
+                                    _goaldatas[i].tasks[j].nextActiveDay = DateTime.Now.Date.AddDays(_goaldatas[i].tasks[j].activeEveryThDay).ToString();
                                     break;
                                 }
                             }
@@ -893,10 +898,12 @@ public class AppManager : MonoBehaviour
 
                 // add 0 points for each missed day
 
+                /*
                 for(int o = 1; o < (_today - lastLogin).Days;o++)
                 {
                     _goaldatas[i].AddDailyScore(0, lastLogin.AddDays(o));
                 }
+                */
             }
         }
     }
@@ -916,6 +923,10 @@ public class AppManager : MonoBehaviour
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
             GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
+            foreach(GoalData _gd in _savedGoals)
+            {
+                print(_gd.current);
+            }
             stream.Close();
             fileInfo.IsReadOnly = true;
 
@@ -1169,6 +1180,10 @@ public class AppManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
         GoalData[] _goalDatas = goalManager.GetGoals();
+        foreach (GoalData _gd in _goalDatas)
+        {
+            print(_gd.current);
+        }
         formatter.Serialize(stream, _goalDatas);
         stream.Close();
         FileInfo fileInfo = new FileInfo(path);

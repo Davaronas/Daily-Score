@@ -193,6 +193,7 @@ public class TaskManager : MonoBehaviour
 
 
         _data.name = enteredName;
+        _data.lastChangedValue = DateTime.MinValue.ToString();
 
         if(selectedActiveDays.Count > 0)
         {
@@ -219,8 +220,7 @@ public class TaskManager : MonoBehaviour
             _data.beingActiveType = TaskData.ActiveType.EveryThDay;
             _data.activeEveryThDay = everyThDay;
             _data.isActiveToday = true;
-            _data.lastActiveDay = DateTime.Now;
-            _data.nextActiveDay = CalculateNextActiveDay(_data);
+            _data.nextActiveDay = CalculateNextActiveDay(_data).ToString();
         }
 
         
@@ -233,7 +233,7 @@ public class TaskManager : MonoBehaviour
 
     private DateTime CalculateNextActiveDay(TaskData _data)
     {
-       return  _data.lastActiveDay.AddDays(_data.activeEveryThDay);
+       return DateTime.Now.Date.AddDays(_data.activeEveryThDay);
     }
 
     public void RemoteCall_SetSelectedName()
