@@ -5,7 +5,7 @@ using System;
 using UnityEngine.EventSystems;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using Unity.Notifications.Android;
+
      
 
 
@@ -694,6 +694,7 @@ public class AppManager : MonoBehaviour
         taskManager = FindObjectOfType<TaskManager>();
 
        
+
 
         symbols = symbols_e;
     }
