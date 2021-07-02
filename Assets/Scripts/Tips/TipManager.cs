@@ -121,10 +121,14 @@ public class TipManager : MonoBehaviour
         dailyTipId = _id;
         dailyTipHeader.text = _header;
         dailyTipContent.text = _content;
+        EnableSaveButton(_id);
+    }
 
-        if(tipMain.Saved_ID.Contains(_id))
+    public void EnableSaveButton(int _id)
+    {
+        if (!tipMain.Loaded.Contains(_id))
         {
-            saveTipButton.SetActive(false);
+            saveTipButton.SetActive(true);
         }
     }
 
