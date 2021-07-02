@@ -87,17 +87,66 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void WeeklyScoreCal()
     {
+        int [] weeklydata = new int[7];
         weeklyavarage = 0;
+        int weeklyfleet=0;
         int i = 0;
-
-
+        do
+        {
+            if(GoalDATAS[i].GetLastModificationTime() >= Today.AddDays(-7))
+            {
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Monday))
+                {
+                    weeklydata[1] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Tuesday))
+                {
+                    weeklydata[2] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Wednesday))
+                {
+                    weeklydata[3] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Thursday))
+                {
+                    weeklydata[4] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Friday))
+                {
+                    weeklydata[5] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Saturday))
+                {
+                    weeklydata[6] += GoalDATAS[i].current;
+                }
+                if ((GoalDATAS[i].GetLastModificationTime().DayOfWeek == DayOfWeek.Sunday))
+                {
+                    weeklydata[7] += GoalDATAS[i].current;
+                }
+            }
+            i++;
+        } while (GoalDATAS.Length == i);
+        for (int j = 1; j <= 7; j++)
+        {
+            weeklyfleet += weeklydata[i];
+        }
+        weeklyavarage = weeklyfleet / 7;
         dailyScoreText.text = weeklyavarage.ToString();
     }
     void MonthlyAvarageCalc()
     {
         monthlyavarage = 0;
+        int monthlyfleet = 0;
         int i = 0;
-
+        do
+        {
+            if (GoalDATAS[i].GetLastModificationTime() >= Today.AddDays(-30))
+            {
+                monthlyfleet += GoalDATAS[i].current;
+            }
+            i++;
+        } while (GoalDATAS.Length == i);
+        monthlyavarage = monthlyfleet / 30;
         dailyScoreText.text = monthlyavarage.ToString();
     }
 
