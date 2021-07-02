@@ -19,6 +19,7 @@ public class TipMain : MonoBehaviour
         public bool saved;
     }
     RolledTips rolledtip;
+    
     public List<RolledTips> TipUserSave = new List<RolledTips>();
     public List<string> datas = new List<string>();
     public List<string> name = new List<string>();
@@ -29,52 +30,12 @@ public class TipMain : MonoBehaviour
     public int c = 0;
     private TipManager tipManager;
     TipManager tipmanager = null;
+    public bool gold;
     private void Awake()
     {
         tipManager = FindObjectOfType<TipManager>();
         AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
-    }
-
-    public void TipLoad()
-    {
-        List<string> _tips = new List<string>();
-        string path = Application.persistentDataPath + "/tips.txt";
-        if(!File.Exists(path)) { Debug.LogError("tips.txt doesn't exist"); return; }
-
-        StreamReader sr = new StreamReader(path);
-        try
-        {
-            string sor;
-            do
-            {
-                sor = sr.ReadLine();
-                if (sor == null) break;
-                _tips.Add(sor);
-
-            } while (sor != null);
-        }
-        catch (IOException)
-        {
-            Debug.LogError($"Error loading in the tips!");
-            throw;
-        }
-        string[] cut = new string[2];
-        for (int i = 0; i < _tips.Count; i++)
-        {
-            Tips.Add(i, _tips[i]);
-        }
-        for (int i = 0; i < _tips.Count; i++)
-        {
-            print(_tips[i]);
-            cut = _tips[i].Split('-');
-            name.Add(cut[0]);
-            maindata.Add(cut[1]);
-        }
-        //for (int i = 0; i < Tips.Count; i++)
-        //{
-        //	print(Tips[i]);
-        //}
-        sr.Close();
+        gold = AppManager.isGold;
     }
 
     public void SavingTips()
@@ -130,8 +91,8 @@ public class TipMain : MonoBehaviour
             Saved_ID.Add(int.Parse(cut[0]));  
         }
         cut = saved_tips[saved_tips.Count-1].Split('-');
-        print(cut[1]);
-        print(last_tip.Length);
+        //print(cut[1]);
+        //print(last_tip.Length);
         last_tip[0] = cut[1];
         last_tip[1] = cut[2];
         test = Saved_ID[Saved_ID.Count-1];
@@ -161,23 +122,53 @@ public class TipMain : MonoBehaviour
         datas.Add(rolledtip.ID + "-" + rolledtip.name + "-" + rolledtip.data + "-" + rolledtip.lastdate + "-" + rolledtip.saved);
         tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
     }
-    
+
     void Start()
     {
-        tipmanager = FindObjectOfType<TipManager>();        
-        TipLoad();
-        LoadUserSave();
-        LoadSaved();
-        if (System.DateTime.Today != AppManager.lastLogin)
+        tipmanager = FindObjectOfType<TipManager>();
+        print(Application.persistentDataPath);
+        if (PlayerPrefs.GetInt("FIRSTTIMEOPENING", 1) == 1)
         {
+            ResourceLoad();
             GetRandomTip();
-            //PlayerPrefs.SetString("LastLogin", System.DateTime.Today.ToString());
             SavingTips();
+            PlayerPrefs.SetInt("FIRSTTIMEOPENING", 0);
         }
         else
         {
-            tipmanager.LoadDailyTip(Saved_ID[0],last_tip[0],last_tip[1]);
-        }
+            print("ciganyvagyok");
+            ResourceLoad();
+            LoadUserSave();
+            LoadSaved();
+            if (System.DateTime.Today != AppManager.lastLogin)
+            {
+                GetRandomTip();
+                SavingTips();
+            }
+            else
+            {
+                tipmanager.LoadDailyTip(Saved_ID[0], last_tip[0], last_tip[1]);
+            }
+        }       
+    }
+
+    public void ResourceLoad()
+    {
+        int i = 0;
+        print("mükszik");
+        
+        TextAsset textAsset = (TextAsset)Resources.Load("tips",typeof(TextAsset));
+        //reader = new StringReader(textAsset.text);
+        string path = "Assets/Resources/tips.txt";
+        foreach (var line in File.ReadLines(path))
+        {
+            print("mukszik");
+            string[] parts = line.Split('-');
+            print(parts[0] + parts[1]);
+            name.Add(parts[0]);
+            maindata.Add(parts[1]);
+            i++;
+        }              
     }
 
     void Update()
@@ -204,11 +195,13 @@ public class TipMain : MonoBehaviour
         StreamWriter sw = new StreamWriter(Application.persistentDataPath + "/binary.txt"); //,append: true)
         try
         {
-            do
+            while (c != Loaded.Count)
             {
+                print(Loaded[c]);
+                print(Loaded.Count);
                 sw.WriteLine(Loaded[c]);
                 c++;
-            } while (c != Loaded.Count);
+            } 
         }
         catch (IOException)
         {
@@ -247,9 +240,10 @@ public class TipMain : MonoBehaviour
     {
         // Ide rakj mindent amit akkor akarsz mikor rákattintanak a tipp mentés gombra
         rolledtip.saved = true;
+        print(rolledtip.ID);
         Loaded.Add(rolledtip.ID);
         
-        SaveData();
+        //SaveData();
         // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
         tipmanager.AddSavedTip(_key, rolledtip.name);
         tipmanager.DisableSaveButton();
@@ -267,15 +261,14 @@ public class TipMain : MonoBehaviour
 
     public void DeleteTipButtonPressed(int _id)
     {
+        print(_id);
+        print(Loaded[0]);
         Loaded.Remove(Loaded[_id]);
+        tipmanager.EnableSaveButton(_id);
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
-        //PlayerPrefs.DeleteKey(_id + ".id");
     }
     public void OnApplicationQuit()
     {
-        //print("lefut");
-        
-        if (Loaded != null)
         SaveData();
     }
 
