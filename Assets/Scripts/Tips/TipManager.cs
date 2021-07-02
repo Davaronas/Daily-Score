@@ -15,6 +15,15 @@ public class TipManager : MonoBehaviour
     [SerializeField] private RectTransform tipSubmenuScrollContent;
 
     [SerializeField] private GameObject saveTipButton;
+    [SerializeField] private GameObject tip;
+
+
+
+    private GameObject saveTipButton2;
+    private TMP_Text dailyTipHeader2;
+    private TMP_Text dailyTipContent2;
+
+
 
     private int dailyTipId = -1;
 
@@ -23,6 +32,8 @@ public class TipManager : MonoBehaviour
     private TipMain tipMain;
 
     private int allowedCount;
+
+    public int secondTipUnlockedToday = 0;
 
     private void Awake()
     {
@@ -39,11 +50,14 @@ public class TipManager : MonoBehaviour
         }
         ChangeSavedTipAmountText();
 
-
+        
 
     }
 
+    public static void UnlockSecondTip()
+    {
 
+    }
 
     public void GoldStatusChanged(bool _state)
     {
