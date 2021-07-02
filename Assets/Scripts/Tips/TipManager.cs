@@ -15,20 +15,19 @@ public class TipManager : MonoBehaviour
     [SerializeField] private RectTransform tipSubmenuScrollContent;
 
     [SerializeField] private GameObject saveTipButton;
-    private TipMain tipMain;
 
     private int dailyTipId = -1;
 
     private List<SavedTip> savedTips = new List<SavedTip>();
     private float tipPrefab_Y_Size = 0;
-    private TipMain tipDictionary;
+    private TipMain tipMain;
 
     private int allowedCount;
 
     private void Awake()
     {
         tipPrefab_Y_Size = tipPrefab.GetComponent<RectTransform>().rect.height;
-        tipDictionary = FindObjectOfType<TipMain>();
+        tipMain = FindObjectOfType<TipMain>();
 
         if(AppManager.isGold)
         {
@@ -40,7 +39,6 @@ public class TipManager : MonoBehaviour
         }
         ChangeSavedTipAmountText();
 
-        tipMain = FindObjectOfType<TipMain>();
 
 
     }
@@ -111,7 +109,7 @@ public class TipManager : MonoBehaviour
 
         savedTips.Remove(_tipToDelete);
         Destroy(_tipToDelete.gameObject);
-        tipDictionary.DeleteTipButtonPressed(_id);
+        tipMain.DeleteTipButtonPressed(_id);
         ChangeSavedTipAmountText();
         ScrollSizer.ReduceSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
     }

@@ -232,6 +232,7 @@ public class TaskData
    {
        name = _name;
        owner = null;
+       notificationIds = new List<int>();
    }
 
     public string name;
@@ -247,6 +248,7 @@ public class TaskData
     public string nextActiveDay;
 
     public string lastChangedValue;
+    public List<int> notificationIds;
 }
 
 

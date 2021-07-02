@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,38 @@ public static class RuntimeTranslator
 {
     private static class English
     {
+
+        public static string TranslateDayOfWeek(DayOfWeek _day)
+        {
+            switch(_day)
+            {
+                case DayOfWeek.Monday:
+                    return _day.ToString();
+                
+                case DayOfWeek.Tuesday:
+                    return _day.ToString();
+
+                case DayOfWeek.Wednesday:
+                    return _day.ToString();
+
+                case DayOfWeek.Thursday:
+                    return _day.ToString();
+
+                case DayOfWeek.Friday:
+                    return _day.ToString();
+
+                case DayOfWeek.Saturday:
+                    return _day.ToString();
+
+                case DayOfWeek.Sunday:
+                    return _day.ToString();
+
+                default:
+
+                    return "";
+            }
+        }
+
         public static string TranslateTaskMetricType(AppManager.TaskMetricType _type)
         {
             switch(_type)
@@ -54,6 +87,41 @@ public static class RuntimeTranslator
 
     private static class Hungarian
     {
+        public static string TranslateDayOfWeek(DayOfWeek _day)
+        {
+           
+                switch (_day)
+                {
+                    case DayOfWeek.Monday:
+                        return "Hétfõ";
+
+
+                    case DayOfWeek.Tuesday:
+                        return "Kedd";
+
+
+                    case DayOfWeek.Wednesday:
+                        return "Szerda";
+
+
+                    case DayOfWeek.Thursday:
+                        return "Csütörtök";
+
+                    case DayOfWeek.Friday:
+                        return "Péntek";
+
+                    case DayOfWeek.Saturday:
+                        return "Szombat";
+
+                    case DayOfWeek.Sunday:
+                        return "Vasárnap";
+
+                    default:
+                        return "";
+                }
+            
+        }
+
         public static string TranslateTaskMetricType(AppManager.TaskMetricType _type)
         {
             switch (_type)
@@ -102,6 +170,40 @@ public static class RuntimeTranslator
 
     private static class German
     {
+        public static string TranslateDayOfWeek(DayOfWeek _day)
+        {
+            switch (_day)
+            {
+                case DayOfWeek.Monday:
+                    return "Montag";
+
+
+                case DayOfWeek.Tuesday:
+                    return "Dienstag";
+
+
+                case DayOfWeek.Wednesday:
+                    return "Mittwoch";
+
+
+                case DayOfWeek.Thursday:
+                    return "Donnerstag";
+
+                case DayOfWeek.Friday:
+                    return "Freitag";
+
+                case DayOfWeek.Saturday:
+                    return "Samstag";
+
+                case DayOfWeek.Sunday:
+                    return "Sonnstag";
+
+                default:
+                    return "";
+            }
+        }
+
+
         public static string TranslateTaskMetricType(AppManager.TaskMetricType _type)
         {
             switch (_type)
@@ -192,6 +294,22 @@ public static class RuntimeTranslator
                 return Hungarian.TranslateIntervalWord();
             case AppManager.Languages.Deutsch:
                 return German.TranslateIntervalWord();
+            default:
+                return "AppManager.Languages doesn't contain this language";
+
+        }
+    }
+
+    public static string TranslateDayOfWeek(DayOfWeek _day)
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TranslateDayOfWeek(_day);
+            case AppManager.Languages.Magyar:
+                return Hungarian.TranslateDayOfWeek(_day);
+            case AppManager.Languages.Deutsch:
+                return German.TranslateDayOfWeek(_day);
             default:
                 return "AppManager.Languages doesn't contain this language";
 

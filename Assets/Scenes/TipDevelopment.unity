@@ -1528,7 +1528,6 @@ GameObject:
   - component: {fileID: 557992189}
   - component: {fileID: 557992188}
   - component: {fileID: 557992191}
-  - component: {fileID: 557992190}
   m_Layer: 5
   m_Name: TipTesterButton
   m_TagString: Untagged
@@ -1593,25 +1592,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557992186}
   m_CullTransparentMesh: 1
---- !u!114 &557992190
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557992186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de1ae5949e938a140befa689e1d005c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  datas: []
-  name: []
-  maindata: []
-  first_run: 1
-  first_run_roll: 1
-  c: 0
-  _key: 0
 --- !u!114 &557992191
 MonoBehaviour:
   m_ObjectHideFlags: 0

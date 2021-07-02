@@ -70,7 +70,6 @@ public class IntervalPrefabUtility : MonoBehaviour
             {
                 intervalSummaryInstance.UpdateNumbers(intervalConverted.from, intervalConverted.to, intervalConverted.points);
             }
-
         }
     }
 
