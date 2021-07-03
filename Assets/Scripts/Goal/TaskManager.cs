@@ -23,6 +23,11 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject booleanTexts = null;
     [SerializeField] private GameObject optimumTexts = null;
     [SerializeField] private GameObject intervalTexts = null;
+    [Space]
+    [SerializeField] private GameObject notificationDaySelectorPanel = null;
+    [SerializeField] private GameObject notificationDaySelectorWindow = null;
+    [SerializeField] private GameObject notificationDayButtonPrefab = null;
+    [SerializeField] private NotificationHolder notificationHolder = null;
     private bool taskTypeSelected = false;
 
     private string enteredName = "default";
@@ -82,6 +87,8 @@ public class TaskManager : MonoBehaviour
         DisableTypeTexts();
         ClearDays();
         taskTypeSelected = false;
+        notificationDaySelectorPanel.SetActive(false);
+        notificationHolder.Clear();
     }
 
     private void OnDestroy()
@@ -261,6 +268,10 @@ public class TaskManager : MonoBehaviour
             {
                 print("Removed");
                 selectedActiveDays.Remove(_day);
+                if(notificationHolder.HasDay(_day))
+                {
+                    notificationHolder.DeleteNotification(_day);
+                }
             }
         }
     }
@@ -279,7 +290,62 @@ public class TaskManager : MonoBehaviour
             everyThDay = int.Parse(everyThDayInputField.text);
             selectedActiveDays.Clear();
             TurnOffDayToggles();
+            notificationHolder.Clear();
         }
+    }
+
+    public void RemoteCall_CreateNewNotification()
+    {
+        if(selectedActiveDays.Count == 0 && everyThDay == 0)
+        {
+            AppManager.ErrorHappened(ErrorMessages.DaysNotSelected_CreateTaskPanel());
+            return;
+        }
+
+        bool _foundSelectable = false;
+        if (selectedActiveDays.Count > 0)
+        {
+            for (int i = 0; i < selectedActiveDays.Count; i++)
+            {
+                if (!notificationHolder.HasDay(selectedActiveDays[i]))
+                {
+                    NotificationDaySelectButton _newButton = Instantiate(notificationDayButtonPrefab, transform.position, Quaternion.identity, notificationDaySelectorWindow.transform).GetComponent<NotificationDaySelectButton>();
+                    _newButton.SetData(selectedActiveDays[i], this);
+                    _foundSelectable = true;
+                }
+            }
+
+            if (_foundSelectable)
+            {
+                notificationDaySelectorPanel.SetActive(true);
+            }
+            else
+            {
+                AppManager.ErrorHappened(ErrorMessages.EverySelectedDayHasNotifications());
+            }
+        }
+        else if (everyThDay > 0)
+        {
+            if (!notificationHolder.HasDay(DateTime.Today.DayOfWeek))
+            {
+                NotificationDaySelected(DateTime.Today.DayOfWeek);
+            }
+            else
+            {
+                AppManager.ErrorHappened(ErrorMessages.EverySelectedDayHasNotifications());
+            }
+                
+        }
+    }
+
+    public void NotificationDaySelected(DayOfWeek _day)
+    {
+        notificationHolder.CreateNewNotification(_day);
+        for (int i = 0; i < notificationDaySelectorWindow.transform.childCount; i++)
+        {
+           Destroy(notificationDaySelectorWindow.transform.GetChild(i).gameObject);
+        }
+        notificationDaySelectorPanel.SetActive(false);
     }
 
     private void ClearDays()

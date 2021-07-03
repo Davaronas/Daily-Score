@@ -14,19 +14,20 @@ public class NotificationDaySelectButton : BehaviourButton
 
     private void Awake()
     {
-        taskManager = FindObjectOfType<TaskManager>();
+        
         intervalHolder = FindObjectOfType<IntervalHolder>();
     }
 
-    public void SetData(DayOfWeek _day)
+    public void SetData(DayOfWeek _day, TaskManager _taskManager)
     {
         day = _day;
         dayText.text = RuntimeTranslator.TranslateDayOfWeek(day);
+        taskManager = _taskManager;
     }
 
     protected override void OnTouch()
     {
-       
+        taskManager.NotificationDaySelected(day);
     }
 
 

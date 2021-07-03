@@ -58,6 +58,8 @@ create task texts should be one block, and not seperated into several small text
 
 Gold panel create new texts for new line
 
+don't show day selection and notification selection before type selected
+
 
 
 

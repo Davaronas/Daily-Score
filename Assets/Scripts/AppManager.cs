@@ -563,6 +563,28 @@ public static string DaysNotSelected_CreateTaskPanel()
         }
     }
 
+    public static string EverySelectedDayHasNotifications()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.EverySelectedDayHasNotifications;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.EverySelectedDayHasNotifications;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.EverySelectedDayHasNotifications;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+    
+
     public static class English
     {
         public const string NameNotEntered = "Please enter a name!";
@@ -574,11 +596,12 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
+        public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
     }
 
     public static class Magyar
     {
-        public const string NameNotEntered = "Please select a name!";
+        public const string NameNotEntered = "Please enter a name!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -587,6 +610,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
+        public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
     }
 
 
@@ -601,6 +625,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
+        public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
 
     }
 
