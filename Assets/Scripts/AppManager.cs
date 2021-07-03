@@ -823,7 +823,7 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = DateTime.Now.Date;   // Convert.ToDateTime(testTime); //
+        DateTime _today = Convert.ToDateTime(testTime);        // DateTime.Now.Date;   // //
         print(_today.ToString());
 
         if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
