@@ -38,8 +38,12 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnTaskValueChanged += OnTaskValueChanged;
         AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
         goalManager = FindObjectOfType<GoalManager>();
+        AppManager.OnGoalOpened += OnGoalOpened;
     }
-
+    private void OnGoalOpened(Goal _td)
+    {
+        
+    }
     private void OnTaskValueChanged(TaskData _td)
     {
         // Amikor a felhasználó változtat értéket ez hívódik. A _td pedig hogy melyik feladat változott.
@@ -150,6 +154,22 @@ public class StatisticCalculator2 : MonoBehaviour
         dailyScoreText.text = monthlyavarage.ToString();
     }
 
+    void TaskDailyCalc()
+    {
+        goalManager.GetCurrentlySelectedGoal();
+        int dailytaskpoint = 0;
+        int i = 0;
+        do
+        {
+            if (GoalDATAS[i].GetLastModificationTime().Day == Today.Day)
+            {
+                //dailytaskpoint += GoalDATAS[i].tasks.current;
+            }
+        } while (i==GoalDATAS.Length);
+        
+
+    }
+
 
     void Start()
     {
@@ -187,5 +207,6 @@ public class StatisticCalculator2 : MonoBehaviour
         StopCoroutine(TimeCheck());
         AppManager.OnTaskValueChanged -= OnTaskValueChanged;
         AppManager.OnNewDayStartedDuringRuntime -= OnNewDayStartedDuringRuntime;
+        AppManager.OnGoalOpened -= OnGoalOpened;
     }
 }
