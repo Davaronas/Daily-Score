@@ -101,18 +101,25 @@ public class TipMain : MonoBehaviour
 
     public int _key = 0;
     public int test = 0;
+    public bool second = false;
+    public List<string> itwas = new List<string>();
     public void GetRandomTip()
-    {      
-        rolledtip = new RolledTips();
-         _key = UnityEngine.Random.Range(0, Tips.Count);
-        if (test == _key)
+    {
+        if (second == true)
+        {
+            itwas.Add(rolledtip.ID.ToString());
+            itwas.Add(rolledtip.name);
+            itwas.Add(rolledtip.data);
+        }
+        //rolledtip = new RolledTips();
+         _key = UnityEngine.Random.Range(0, maindata.Count);
+        if (rolledtip.ID == _key)
         {
             do
             {
-                _key = UnityEngine.Random.Range(0, Tips.Count);
-            } while (test != _key);
+                _key = UnityEngine.Random.Range(0, maindata.Count);
+            } while (rolledtip.ID == _key);
         }
-        test = _key;
         rolledtip.ID = _key;
         rolledtip.data = maindata[_key];
         rolledtip.name = name[_key];
@@ -120,7 +127,6 @@ public class TipMain : MonoBehaviour
         rolledtip.datum = DateTime.Now;
         rolledtip.saved = false;
         datas.Add(rolledtip.ID + "-" + rolledtip.name + "-" + rolledtip.data + "-" + rolledtip.lastdate + "-" + rolledtip.saved);
-        tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
     }
 
     void Start()
@@ -131,23 +137,29 @@ public class TipMain : MonoBehaviour
         {
             ResourceLoad();
             GetRandomTip();
+            tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
             SavingTips();
             PlayerPrefs.SetInt("FIRSTTIMEOPENING", 0);
         }
         else
         {
-            print("ciganyvagyok");
+            // print("ciganyvagyok");
             ResourceLoad();
-            LoadUserSave();
             LoadSaved();
-            if (System.DateTime.Today != AppManager.lastLogin)
+            LoadUserSave();
+            if (System.DateTime.Today != AppManager.lastLogin.Date)
             {
                 GetRandomTip();
+                tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
                 SavingTips();
             }
             else
             {
-                tipmanager.LoadDailyTip(Saved_ID[0], last_tip[0], last_tip[1]);
+                if (second == true)
+                {
+                    tipmanager.LoadDailyTip(Saved_ID[Saved_ID.Count-1], name[Saved_ID.Count-1], maindata[Saved_ID.Count-1]);
+                }
+                tipmanager.LoadDailyTip(Saved_ID[Saved_ID.Count], name[Saved_ID.Count], maindata[Saved_ID.Count]);
             }
         }       
     }
@@ -155,14 +167,12 @@ public class TipMain : MonoBehaviour
     public void ResourceLoad()
     {
         int i = 0;
-        print("mükszik");
-        
         TextAsset textAsset = (TextAsset)Resources.Load("tips",typeof(TextAsset));
         //reader = new StringReader(textAsset.text);
         string path = "Assets/Resources/tips.txt";
         foreach (var line in File.ReadLines(path))
         {
-            print("mukszik");
+            //print("mukszik");
             string[] parts = line.Split('-');
             print(parts[0] + parts[1]);
             name.Add(parts[0]);
@@ -185,15 +195,43 @@ public class TipMain : MonoBehaviour
         LoadData();
         for (int i = 0; i < Loaded.Count; i++)
         {
-            tipmanager.AddSavedTip(Loaded[i], name[i]);
+            //print(Loaded[i]);
+            tipmanager.AddSavedTip(Loaded[i], name[Loaded[i]]);
         }      
     }
 
     public int AskForSecondTip(out string _header, out string _content)
     {
-        _header = ""; // a címe a tipnek
-        _content = ""; // a tartalma a tipnek
-        return 0; // tip id ide
+        second = true;
+        if (PlayerPrefs.GetInt("FIRSTTIMEOPENINGSECOND", 1) == 1)
+        {
+            GetRandomTip();
+            SavingTips();
+            _header = rolledtip.name; // a címe a tipnek
+            _content = rolledtip.data; // a tartalma a tipnek
+            return rolledtip.ID; // tip id ide
+            PlayerPrefs.SetInt("FIRSTTIMEOPENINGSECOND", 0);
+        }
+        else
+        {
+            if (System.DateTime.Today != AppManager.lastLogin.Date)
+            {
+                GetRandomTip();
+                SavingTips();
+                _header = rolledtip.name; // a címe a tipnek
+                _content = rolledtip.data; // a tartalma a tipnek
+                return rolledtip.ID; // tip id ide
+            }
+            else
+            {
+                //tipmanager.UnlockSecondTip(); tip feloldas
+                GetRandomTip();
+                SavingTips();
+                _header = name[Saved_ID.Count]; // a címe a tipnek
+                _content = maindata[Saved_ID.Count]; // a tartalma a tipnek
+                return Saved_ID[Saved_ID.Count]; // tip id ide
+            }
+        }
     }
 
     public void SaveData()
@@ -204,8 +242,8 @@ public class TipMain : MonoBehaviour
         {
             while (c != Loaded.Count)
             {
-                print(Loaded[c]);
-                print(Loaded.Count);
+                //print(Loaded[c]);
+                //print(Loaded.Count);
                 sw.WriteLine(Loaded[c]);
                 c++;
             } 
@@ -247,17 +285,27 @@ public class TipMain : MonoBehaviour
     {
         // Ide rakj mindent amit akkor akarsz mikor rákattintanak a tipp mentés gombra
         rolledtip.saved = true;
-        print(rolledtip.ID);
-        Loaded.Add(rolledtip.ID);
+        if (second == true)
+        {
+            tipmanager.AddSavedTip(int.Parse(itwas[0]), itwas[1]);
+            Loaded.Add(int.Parse(itwas[0]));
+        }
+        else
+        {
+            Loaded.Add(rolledtip.ID);
+            tipmanager.AddSavedTip(_key, rolledtip.name);    
+        }
+        SaveData();
         
-        //SaveData();
-        // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
-        tipmanager.AddSavedTip(_key, rolledtip.name);
     }
 
     public void RemoteCall_SecondTip_SaveButtonPressed()
     {
-
+        print(rolledtip.ID);
+        rolledtip.saved = true;
+        Loaded.Add(rolledtip.ID);
+        tipmanager.AddSavedTip(_key, rolledtip.name);
+        SaveData();
     }
 
    
@@ -270,11 +318,18 @@ public class TipMain : MonoBehaviour
     public void DeleteTipButtonPressed(int _id)
     {
         print(_id);
-        print(Loaded[0]);
-        Loaded.Remove(Loaded[_id]);
+        //print(Loaded[_id]);
+        for (int i = 0; i < Loaded.Count; i++)
+        {
+            if (Loaded[i] == _id)
+            {
+                Loaded.Remove(Loaded[i]);
+            }
+        }
         tipmanager.SetSaveButtonState(_id);
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
     }
+
     public void OnApplicationQuit()
     {
         SaveData();
