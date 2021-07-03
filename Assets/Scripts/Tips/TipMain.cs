@@ -189,6 +189,13 @@ public class TipMain : MonoBehaviour
         }      
     }
 
+    public int AskForSecondTip(out string _header, out string _content)
+    {
+        _header = ""; // a címe a tipnek
+        _content = ""; // a tartalma a tipnek
+        return 0; // tip id ide
+    }
+
     public void SaveData()
     {
         c = 0;
@@ -246,13 +253,14 @@ public class TipMain : MonoBehaviour
         //SaveData();
         // ITt a nullát meg a "Test"-et cseréld ki a mai tipp adataira, ezt csak azért csináltam hogy tudjam tesztelni hogy mûködnek e egyéb dolgok
         tipmanager.AddSavedTip(_key, rolledtip.name);
-        tipmanager.DisableSaveButton();
     }
 
-    public void RemoteCall_WatchAdButtonPressed()
+    public void RemoteCall_SecondTip_SaveButtonPressed()
     {
 
     }
+
+   
 
     private void OnNewDayStartedDuringRuntime()
     {
@@ -264,7 +272,7 @@ public class TipMain : MonoBehaviour
         print(_id);
         print(Loaded[0]);
         Loaded.Remove(Loaded[_id]);
-        tipmanager.EnableSaveButton(_id);
+        tipmanager.SetSaveButtonState(_id);
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
     }
     public void OnApplicationQuit()

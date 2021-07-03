@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class TipManager : MonoBehaviour
 {
@@ -14,18 +15,15 @@ public class TipManager : MonoBehaviour
     [SerializeField] private TMP_Text dailyTipContent;
     [SerializeField] private RectTransform tipSubmenuScrollContent;
 
-    [SerializeField] private GameObject saveTipButton;
-    [SerializeField] private GameObject tip;
+
+    [SerializeField] private DisplayedTip mainTip;
+    [SerializeField] private DisplayedTip secondTip;
+    [SerializeField] private GameObject secondTipOverlay;
 
 
 
-    private GameObject saveTipButton2;
-    private TMP_Text dailyTipHeader2;
-    private TMP_Text dailyTipContent2;
-
-
-
-    private int dailyTipId = -1;
+  
+    private int secondTipId = -1;
 
     private List<SavedTip> savedTips = new List<SavedTip>();
     private float tipPrefab_Y_Size = 0;
@@ -33,7 +31,7 @@ public class TipManager : MonoBehaviour
 
     private int allowedCount;
 
-    public int secondTipUnlockedToday = 0;
+   [HideInInspector] public int secondTipUnlockedToday = 0;
 
     private void Awake()
     {
@@ -43,6 +41,7 @@ public class TipManager : MonoBehaviour
         if(AppManager.isGold)
         {
             allowedCount = AppManager.SAVEDTIPAMOUNT_GOLD;
+            UnlockSecondTip();
         }
         else
         {
@@ -50,13 +49,42 @@ public class TipManager : MonoBehaviour
         }
         ChangeSavedTipAmountText();
 
-        
+
+
+       
+
+        if(AppManager.lastLogin.Date != DateTime.Now.Date)
+        {
+            secondTipUnlockedToday = 0;
+            PlayerPrefs.SetInt("SecondTipUnlocked", 0);
+        }
+        else
+        {
+            secondTipUnlockedToday = PlayerPrefs.GetInt("SecondTipUnlocked", 0);
+        }
+
+        if(secondTipUnlockedToday == 1)
+        {
+            UnlockSecondTip();
+        }
 
     }
 
-    public static void UnlockSecondTip()
+    public void UnlockSecondTip()
     {
 
+
+        secondTip.SetData(tipMain.AskForSecondTip(out string _h, out string _c), _h, _c);
+        secondTipOverlay.SetActive(false);
+        SetSaveButtonState(secondTip.tipId);
+
+        
+    }
+
+    public void RemoteCall_WatchAdButtonPressed()
+    {
+        UnlockSecondTip();
+        PlayerPrefs.SetInt("SecondTipUnlocked", 1);
     }
 
     public void GoldStatusChanged(bool _state)
@@ -96,15 +124,13 @@ public class TipManager : MonoBehaviour
         _newSavedTip.SetData(_id, _header);
         ChangeSavedTipAmountText();
         ScrollSizer.AddSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
+
+        SetSaveButtonState(mainTip.tipId);
+        SetSaveButtonState(secondTip.tipId);
+
     }
 
-    public void DisableSaveButton()
-    {
-        if (tipMain.Saved_ID.Contains(dailyTipId))
-        {
-            saveTipButton.SetActive(false);
-        }
-    }
+    
 
     public void RemoveSavedTip(int _id)
     {
@@ -130,23 +156,38 @@ public class TipManager : MonoBehaviour
 
     public void LoadDailyTip(int _id, string _header, string _content)
     {
-        dailyTipId = _id;
-        dailyTipHeader.text = _header;
-        dailyTipContent.text = _content;
-        EnableSaveButton(_id);
+        mainTip.SetData(_id, _header, _content);
+        SetSaveButtonState(mainTip.tipId);
+
+
     }
 
-    public void EnableSaveButton(int _id)
+    public void SetSaveButtonState(int _id)
     {
-        if (!tipMain.Loaded.Contains(_id))
+        if (tipMain.Loaded.Contains(_id))
         {
-            saveTipButton.SetActive(true);
+            if (mainTip.tipId == _id)
+            {
+                mainTip.SetSaveButtonState(false);
+            }
+
+            if (secondTip.tipId == _id)
+            {
+                secondTip.SetSaveButtonState(false);
+            }
         }
-    }
+        else
+        {
+            if (mainTip.tipId == _id)
+            {
+                mainTip.SetSaveButtonState(true);
+            }
 
-    public int GetHeldTipId()
-    {
-        return dailyTipId;
+            if (secondTip.tipId == _id)
+            {
+                secondTip.SetSaveButtonState(true);
+            }
+        }
+        
     }
-
 }
