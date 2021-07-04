@@ -219,7 +219,19 @@ public class TaskManager : MonoBehaviour
                     _data.isActiveToday = true;
                 }
             }
-            
+
+            NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
+            for (int i = 0; i < _npus.Length; i++)
+            {
+                _data.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
+                int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
+                DateTime _fireTime = DateTime.Today;
+                _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime.AddMinutes(_npus[i].minuteNumber);
+                NotificationManager.SendNotification(_data.owner + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
+            }
+
 
         }
         else if(everyThDay > 0)
@@ -228,7 +240,24 @@ public class TaskManager : MonoBehaviour
             _data.activeEveryThDay = everyThDay;
             _data.isActiveToday = true;
             _data.nextActiveDay = CalculateNextActiveDay(_data).ToString();
+
+
+            NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
+            for (int i = 0; i < _npus.Length; i++)
+            {
+                _data.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
+                int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
+                DateTime _fireTime = DateTime.Today;
+                _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime.AddMinutes(_npus[i].minuteNumber);
+                NotificationManager.SendNotification(_data.owner + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
+            }
         }
+
+
+
+        notificationHolder.Clear();
 
         
 
@@ -257,6 +286,12 @@ public class TaskManager : MonoBehaviour
             if (!selectedActiveDays.Contains(_day))
             {
                 print("Added");
+
+                if(everyThDay != 0)
+                {
+                    notificationHolder.Clear();
+                }
+
                 selectedActiveDays.Add(_day);
                 everyThDayInputField.text = "";
                 everyThDay = 0;
@@ -280,17 +315,29 @@ public class TaskManager : MonoBehaviour
     {
         if (everyThDayInputField.text != "")
         {
-            if(everyThDayInputField.text == "0")
+            if (everyThDayInputField.text == "0")
             {
                 everyThDayInputField.text = "";
-                // error message, number cannot be 0
+                AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
                 return;
             }
+            else
+            {
+                everyThDay = int.Parse(everyThDayInputField.text);
+                selectedActiveDays.Clear();
+                TurnOffDayToggles();
+            }
 
-            everyThDay = int.Parse(everyThDayInputField.text);
-            selectedActiveDays.Clear();
-            TurnOffDayToggles();
             notificationHolder.Clear();
+        }
+        else
+        {
+            everyThDay = 0;
+
+            if (selectedActiveDays.Count == 0)
+            {
+                notificationHolder.Clear();
+            }
         }
     }
 
@@ -328,7 +375,7 @@ public class TaskManager : MonoBehaviour
         {
             if (!notificationHolder.HasDay(DateTime.Today.DayOfWeek))
             {
-                NotificationDaySelected(DateTime.Today.DayOfWeek);
+                NotificationEveryThDaySelected(everyThDay);
             }
             else
             {
@@ -344,6 +391,16 @@ public class TaskManager : MonoBehaviour
         for (int i = 0; i < notificationDaySelectorWindow.transform.childCount; i++)
         {
            Destroy(notificationDaySelectorWindow.transform.GetChild(i).gameObject);
+        }
+        notificationDaySelectorPanel.SetActive(false);
+    }
+
+    public void NotificationEveryThDaySelected(int _resetDay)
+    {
+        notificationHolder.CreateNewNotification(_resetDay);
+        for (int i = 0; i < notificationDaySelectorWindow.transform.childCount; i++)
+        {
+            Destroy(notificationDaySelectorWindow.transform.GetChild(i).gameObject);
         }
         notificationDaySelectorPanel.SetActive(false);
     }

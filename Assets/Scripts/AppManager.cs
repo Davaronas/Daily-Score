@@ -232,7 +232,7 @@ public class TaskData
    {
        name = _name;
        owner = null;
-       notificationIds = new List<int>();
+       notificationAttachedActiveDay = new List<int>();
    }
 
     public string name;
@@ -248,7 +248,7 @@ public class TaskData
     public string nextActiveDay;
 
     public string lastChangedValue;
-    public List<int> notificationIds;
+    public List<int> notificationAttachedActiveDay;
 }
 
 
@@ -583,6 +583,26 @@ public static string DaysNotSelected_CreateTaskPanel()
         }
     }
 
+    public static string EnterRealisticNumbers()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.EnterRealisticNumbers;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.EnterRealisticNumbers;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.EnterRealisticNumbers;
+
+
+            default:
+                return "";
+
+        }
+    }
+
     
 
     public static class English
@@ -597,6 +617,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
         public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
+        public const string EnterRealisticNumbers = "Please enter realistic numbers!";
     }
 
     public static class Magyar
@@ -611,6 +632,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
         public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
+        public const string EnterRealisticNumbers = "Please enter realistic numbers!";
     }
 
 
@@ -626,6 +648,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string NewDayStarted = "New day started!";
         public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
         public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
+        public const string EnterRealisticNumbers = "Please enter realistic numbers!";
 
     }
 

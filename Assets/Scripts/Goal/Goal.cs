@@ -118,6 +118,19 @@ public class Goal : MonoBehaviour
         return goalData.tasks.ToArray();
     }
 
+    public bool SearchForTask(string _task)
+    {
+        for (int i = 0; i < goalData.tasks.Count; i++)
+        {
+            if(goalData.tasks[i].name == _task)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public GoalData GetGoalData()
     {
         return goalData;

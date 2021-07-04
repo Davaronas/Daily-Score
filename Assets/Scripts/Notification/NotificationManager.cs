@@ -16,9 +16,25 @@ public class NotificationManager : MonoBehaviour
         public string text;
         public string fireTime;
         public int resetIntervalDays;
+        public string ownerTask;
+
+
+        public static bool operator ==(NotificationData _data1,NotificationData _data2)
+        {
+            return (_data1.ownerTask == _data2.ownerTask &&
+               Convert.ToDateTime(_data1.fireTime).DayOfWeek == Convert.ToDateTime(_data2.fireTime).DayOfWeek);
+           
+
+        }
+
+        public static bool operator !=(NotificationData _data1, NotificationData _data2)
+        {
+            return (_data1.ownerTask != _data2.ownerTask ||
+               Convert.ToDateTime(_data1.fireTime).DayOfWeek != Convert.ToDateTime(_data2.fireTime).DayOfWeek);
+        }
     }
 
-    public static List<NotificationData> notifications;
+    public static List<NotificationData> notifications = new List<NotificationData>();
 
 
     //public static event AndroidNotificationCenter.NotificationReceivedCallback OnNotificationReceived;
@@ -56,6 +72,8 @@ public class NotificationManager : MonoBehaviour
                 }
             }
         }
+
+        CreateChannel();
     }
 
     public static bool GetNotificationData(int _id, out NotificationData _data)
@@ -69,6 +87,21 @@ public class NotificationManager : MonoBehaviour
                 return true;
             }
         }
+        _data = new NotificationData();
+        return false;
+    }
+
+    public static bool GetNotificationData(string _owner, DayOfWeek _day, out NotificationData _data)
+    {
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            if(notifications[i].ownerTask == _owner && Convert.ToDateTime(notifications[i].fireTime).DayOfWeek == _day)
+            {
+                _data = notifications[i];
+                return true;
+            }
+        }
+
         _data = new NotificationData();
         return false;
     }
@@ -90,18 +123,20 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
-    public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays)
+    public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner)
     {
         AndroidNotification notification = new AndroidNotification();
         notification.Title = "Your Title";
         notification.Text = "Your Text";
         notification.FireTime = _fireTime;
+        
 
         NotificationData notificationData = new NotificationData();
         notificationData.title = notification.Title;
         notificationData.text = notification.Text;
         notificationData.fireTime = notification.FireTime.ToString();
         notificationData.resetIntervalDays = _resetDays;
+        notificationData.ownerTask = _owner;
 
         notificationData.id = AndroidNotificationCenter.SendNotification(notification, "dailyscore_id");
 
@@ -154,6 +189,19 @@ public class NotificationManager : MonoBehaviour
         
             Debug.LogError($"Id does not exist in the notification center: {_id}");
         
+    }
+
+    public static void DeleteNotification(NotificationData _data)
+    {
+
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            if(notifications[i] == _data)
+            {
+                notifications.Remove(notifications[i]);
+                break;
+            }
+        }
     }
 
     

@@ -10,8 +10,8 @@ public class NotificationPrefabUtility : MonoBehaviour
     public TMP_InputField hour;
     public TMP_InputField minute;
 
-    private int hourNumber;
-    private int minuteNumber;
+    public int hourNumber = 12;
+    public int minuteNumber = 0;
 
     public DayOfWeek daySelected;
 
@@ -29,23 +29,45 @@ public class NotificationPrefabUtility : MonoBehaviour
 
     public void SetSelectedDay(int _day)
     {
-        dayText.text = _day + "." + RuntimeTranslator.TranslateDayOfWeek(DateTime.Today.DayOfWeek);
+        dayText.text = RuntimeTranslator.TranslateDayOfWeek(DateTime.Today.DayOfWeek) + " + " + _day;
     }
 
 
-    public void EditHour()
+    public void RemoteCall_EditHour()
     {
         if(hour.text != "")
         {
             hourNumber = int.Parse(hour.text);
+            if(hourNumber > 23 || hourNumber < 0)
+            {
+                hour.text = "";
+                hourNumber = 12;
+                AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+            }
+        }
+        else
+        {
+            hourNumber = 12;
         }
     }
 
-    public void EditMinute()
+    public void RemoteCall_EditMinute()
     {
         if(minute.text != "")
         {
+            
+
             minuteNumber = int.Parse(minute.text);
+            if(minuteNumber > 59 || minuteNumber < 0)
+            {
+                minute.text = "";
+                minuteNumber = 0;
+                AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+            }
+        }
+        else
+        {
+            minuteNumber = 0;
         }
     }
 
