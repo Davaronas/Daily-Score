@@ -92,6 +92,7 @@ public class Task : MonoBehaviour
         if (_cp == 0 && Convert.ToDateTime(taskData.lastChangedValue) < DateTime.Today)
         {
             scoreText.text = "-";
+            print("Don't change");
         }
         else
         {
@@ -102,6 +103,7 @@ public class Task : MonoBehaviour
                 nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
             }
             scoreText.text = currentPoint + " p";
+            print("Change");
         }
 
     }
@@ -239,7 +241,7 @@ public class Task : MonoBehaviour
     public void RemoteCall_TaskEdited()
     {
         
-        if(taskData == null || currentValueInputField.text == "") { return; } // For some reason this runs earlier than FeedData, investigate further
+        if(taskData == null) { return; } // For some reason this runs earlier than FeedData, investigate further
 
         bool _hasDifference = false;
         int _parse = 0;

@@ -88,7 +88,8 @@ public class TipMain : MonoBehaviour
         {
             cut = saved_tips[i].Split('-');
             //print(cut[1]);
-            Saved_ID.Add(int.Parse(cut[0]));  
+            int.TryParse(cut[0], out int _p);
+            Saved_ID.Add(_p);  
         }
         cut = saved_tips[saved_tips.Count-1].Split('-');
         //print(cut[1]);
@@ -132,7 +133,7 @@ public class TipMain : MonoBehaviour
     void Start()
     {
         tipmanager = FindObjectOfType<TipManager>();
-        print(Application.persistentDataPath);
+       // print(Application.persistentDataPath);
         if (PlayerPrefs.GetInt("FIRSTTIMEOPENING", 1) == 1)
         {
             ResourceLoad();
@@ -166,19 +167,34 @@ public class TipMain : MonoBehaviour
 
     public void ResourceLoad()
     {
-        int i = 0;
-        TextAsset textAsset = (TextAsset)Resources.Load("tips",typeof(TextAsset));
+        //  int i = 0;
+
+        // print(textAsset);
         //reader = new StringReader(textAsset.text);
-        string path = "Assets/Resources/tips.txt";
-        foreach (var line in File.ReadLines(path))
+        //string path = "Assets/Resources/tips.txt";
+        // foreach (var line in File.ReadLines(path))
+        /*
+        foreach(var line in File.ReadLines(textAsset))
+         {
+             //print("mukszik");
+             string[] parts = line.Split('-');
+           //  print(parts[0] + parts[1]);
+             name.Add(parts[0]);
+             maindata.Add(parts[1]);
+             i++;
+         }           
+        */
+
+        TextAsset textAsset = (TextAsset)Resources.Load("tips");
+        string[] _lines = textAsset.ToString().Split('\n');
+        print(_lines.Length);
+
+        foreach (string _line in _lines)
         {
-            //print("mukszik");
-            string[] parts = line.Split('-');
-            print(parts[0] + parts[1]);
-            name.Add(parts[0]);
-            maindata.Add(parts[1]);
-            i++;
-        }              
+            string[] _parts = _line.Split('-');
+            name.Add(_parts[0]);
+            maindata.Add(_parts[1]);
+        }
     }
 
     void Update()
@@ -209,8 +225,8 @@ public class TipMain : MonoBehaviour
             SavingTips();
             _header = rolledtip.name; // a címe a tipnek
             _content = rolledtip.data; // a tartalma a tipnek
-            return rolledtip.ID; // tip id ide
             PlayerPrefs.SetInt("FIRSTTIMEOPENINGSECOND", 0);
+            return rolledtip.ID; // tip id ide
         }
         else
         {
@@ -317,16 +333,17 @@ public class TipMain : MonoBehaviour
 
     public void DeleteTipButtonPressed(int _id)
     {
-        print(_id);
+        
         //print(Loaded[_id]);
         for (int i = 0; i < Loaded.Count; i++)
         {
             if (Loaded[i] == _id)
             {
                 Loaded.Remove(Loaded[i]);
+                print($"Found and deleted: {_id}");
             }
         }
-        tipmanager.SetSaveButtonState(_id);
+       // tipmanager.SetSaveButtonState(_id);
         // Vedd ki a mentettek közül az _id-val rendelkezõ tippet
     }
 

@@ -62,7 +62,6 @@ public class Goal : MonoBehaviour
         goalName = _goalData.name;
         symbolId = _goalData.spriteId;
 
-        print(goalData.current);
 
         Initialize();
     }

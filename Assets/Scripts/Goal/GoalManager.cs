@@ -69,7 +69,7 @@ public class GoalManager : MonoBehaviour
             Goal _newGoal =
             Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
             _newGoal.isPrefab = false;
-            print(_goals[i].current);
+          //  print(_goals[i].current);
             _newGoal.SetData(_goals[i]);
             goals.Add(_newGoal);
         }

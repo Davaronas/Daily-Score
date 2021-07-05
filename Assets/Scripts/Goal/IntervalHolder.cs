@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum IntervalHolderItemType {Interval, Summary };
 
@@ -11,6 +12,7 @@ public class IntervalHolder : MonoBehaviour
     [SerializeField] private GameObject intervalPrefab;
     [SerializeField] private GameObject intervalSummaryPrefab;
     [SerializeField] private RectTransform createTaskScrollContent;
+
     [SerializeField] private RectTransform addIntervalButton;
 
     private float intervalPrefab_y = 0;
@@ -18,16 +20,20 @@ public class IntervalHolder : MonoBehaviour
     private float originalScrollContentSize_y;
     private float scrollContentSizeAfterUse_y;
 
-    private RectTransform parent_taskTypeTextHolder;
-    private RectTransform rectTransform;
+  //  private RectTransform parent_taskTypeTextHolder;
+  //  private RectTransform rectTransform;
+
+  
+
 
     private TaskTypeComponents taskTypeComponents;
 
     private void Awake()
     {
-        parent_taskTypeTextHolder = transform.parent.GetComponent<RectTransform>();
-        rectTransform = GetComponent<RectTransform>();
+     //   parent_taskTypeTextHolder = transform.parent.GetComponent<RectTransform>();
+      //  rectTransform = GetComponent<RectTransform>();
         originalScrollContentSize_y = createTaskScrollContent.sizeDelta.y;
+       
 
         intervalPrefab_y = intervalPrefab.GetComponent<RectTransform>().sizeDelta.y;
         intervalSummaryPrefab_y = intervalSummaryPrefab.GetComponent<RectTransform>().sizeDelta.y;
@@ -39,6 +45,8 @@ public class IntervalHolder : MonoBehaviour
     {
         scrollContentSizeAfterUse_y = createTaskScrollContent.sizeDelta.y;
         createTaskScrollContent.sizeDelta = new Vector2(createTaskScrollContent.sizeDelta.x, originalScrollContentSize_y);
+        
+
     }
 
     private void OnEnable()
@@ -106,6 +114,8 @@ public class IntervalHolder : MonoBehaviour
     public void Clear()
     {
         scrollContentSizeAfterUse_y = originalScrollContentSize_y;
+
+
     }
 
     

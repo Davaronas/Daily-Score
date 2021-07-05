@@ -756,6 +756,12 @@ public class AppManager : MonoBehaviour
         OnGoalOpened -= OnGoalOpenedCallback;
         OnErrorHappened -= OnErrorHappenedCallback;
 
+        if (Application.isEditor)
+        {
+            lastLogin = DateTime.Now.Date;
+            PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+        }
+
     }
 
     private int GetAppLayer()
@@ -871,8 +877,7 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = Convert.ToDateTime(testTime);        // DateTime.Now.Date;   // //
-        print(_today.ToString());
+        DateTime _today = DateTime.Now.Date; //Convert.ToDateTime(testTime);        //   
 
         if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
 
@@ -976,14 +981,13 @@ public class AppManager : MonoBehaviour
             GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
             foreach(GoalData _gd in _savedGoals)
             {
-                print(_gd.current);
+               // print(_gd.current);
             }
             stream.Close();
             fileInfo.IsReadOnly = true;
 
             // check each goal if they should be active today
 
-            
             lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin",DateTime.Now.ToString()));
             GoalActivityCheck(_savedGoals);
 
@@ -1261,6 +1265,8 @@ public class AppManager : MonoBehaviour
         lastLogin = DateTime.Now.Date;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
+
+    
 
 
 

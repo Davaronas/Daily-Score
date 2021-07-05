@@ -150,6 +150,7 @@ public class TipManager : MonoBehaviour
         savedTips.Remove(_tipToDelete);
         Destroy(_tipToDelete.gameObject);
         tipMain.DeleteTipButtonPressed(_id);
+        SetSaveButtonState(_id);
         ChangeSavedTipAmountText();
         ScrollSizer.ReduceSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
     }
@@ -175,6 +176,7 @@ public class TipManager : MonoBehaviour
             {
                 secondTip.SetSaveButtonState(false);
             }
+            print($"Contains id: {_id}");
         }
         else
         {
@@ -187,6 +189,8 @@ public class TipManager : MonoBehaviour
             {
                 secondTip.SetSaveButtonState(true);
             }
+
+            print($"Does not contain id: {_id}");
         }
         
     }

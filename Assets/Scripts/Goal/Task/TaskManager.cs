@@ -227,11 +227,12 @@ public class TaskManager : MonoBehaviour
                 int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
                 print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
                 DateTime _fireTime = DateTime.Today;
-                _fireTime.AddDays(daysUntilNextDay);
-                _fireTime.AddHours(-_fireTime.Hour);
-                _fireTime.AddHours(_npus[i].hourNumber);
-                _fireTime.AddMinutes(_npus[i].minuteNumber);
-                NotificationManager.SendNotification(_data.owner + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
+                _fireTime = _fireTime.AddDays(daysUntilNextDay);
+                // _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+                print(_fireTime);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
             }
 
 
@@ -251,10 +252,12 @@ public class TaskManager : MonoBehaviour
              //   int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
                // print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
                 DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
-                _fireTime.AddHours(-_fireTime.Hour);
-                _fireTime.AddHours(_npus[i].hourNumber);
-                _fireTime.AddMinutes(_npus[i].minuteNumber);
-                NotificationManager.SendNotification(_data.owner + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
+                // _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+
+                print(_fireTime);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
             }
         }
 
@@ -288,7 +291,7 @@ public class TaskManager : MonoBehaviour
         {
             if (!selectedActiveDays.Contains(_day))
             {
-                print("Added");
+
 
                 if(everyThDay != 0)
                 {

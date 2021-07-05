@@ -83,7 +83,6 @@ public class NotificationHolder : MonoBehaviour
 
     public void Clear()
     {
-        print("Clear");
 
         for (int i = 0; i < notifications.Count; i++)
         {

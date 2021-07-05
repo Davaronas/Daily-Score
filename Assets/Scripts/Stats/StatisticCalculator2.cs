@@ -93,7 +93,7 @@ public class StatisticCalculator2 : MonoBehaviour
     {
         print(goalManager);
         GoalDATAS = goalManager.GetGoals();
-        print(GoalDATAS == null);
+     //   print(GoalDATAS == null);
     }
 
     void DailyScoreCalc()
@@ -132,31 +132,31 @@ public class StatisticCalculator2 : MonoBehaviour
                     {
                         case DayOfWeek.Monday:
                             weeklydata[0] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week0");
+                          //  print("Week0");
                             break;
                         case DayOfWeek.Tuesday:
                             weeklydata[1] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week1");
+                           // print("Week1");
                             break;
                         case DayOfWeek.Wednesday:
                             weeklydata[2] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week2");
+                          //  print("Week2");
                             break;
                         case DayOfWeek.Thursday:
                             weeklydata[3] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week3");
+                         //   print("Week3");
                             break;
                         case DayOfWeek.Friday:
                             weeklydata[4] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week4");
+                         //   print("Week4");
                             break;
                         case DayOfWeek.Saturday:
                             weeklydata[5] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week5");
+                          //  print("Week5");
                             break;
                         case DayOfWeek.Sunday:
                             weeklydata[6] += GoalDATAS[i].dailyScores[k].amount;
-                            print("Week6");
+                         //   print("Week6");
                             break;
                     }
                 }
@@ -165,8 +165,8 @@ public class StatisticCalculator2 : MonoBehaviour
         for (int j = 0; j < 7; j++)
         {
             weeklyfleet += weeklydata[j];
-            print(weeklydata[j]);
-            print(weeklyfleet);
+           // print(weeklydata[j]);
+           // print(weeklyfleet);
         }
         weeklyavarage = weeklyfleet / 7;
        
@@ -326,7 +326,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int lastmodmaxI = 0;
         Console.WriteLine(Today.ToString("{0}")); //Debug
         StartCoroutine(TimeCheck());
-        print(Today.Day);
+ //       print(Today.Day);
         int max = 0;//A MAX ami mindenkori lesz.
         lastlogdur = Today.Day - AppManager.lastLogin.Day;
         StatLoad();

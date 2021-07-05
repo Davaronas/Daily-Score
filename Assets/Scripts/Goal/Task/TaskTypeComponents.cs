@@ -134,6 +134,8 @@ public class TaskTypeComponents : MonoBehaviour
     public BooleanComponents boolComponents;
     public OptimumComponents optimumComponents;
     public IntervalComponents intervalComponents;
+    [Space]
+    public ScrollRect createTaskScrollRect = null;
 
     private List<TMP_InputField> inputFields = new List<TMP_InputField>();
     private List<Toggle> toggles = new List<Toggle>();
@@ -158,6 +160,7 @@ public class TaskTypeComponents : MonoBehaviour
     private void OnDisable()
     {
         ClearComponents();
+
     }
 
     private void ClearComponents()
@@ -177,17 +180,20 @@ public class TaskTypeComponents : MonoBehaviour
 
         for (int i = 0; i < intervalComponents.intervalSummaries.Count;i++)
         {
-            Destroy(intervalComponents.intervalSummaries[i]);
+            Destroy(intervalComponents.intervalSummaries[i].gameObject);
         }
 
         for (int i = 0; i < intervalComponents.intervals.Count;i++)
         {
-            Destroy(intervalComponents.intervals[i]);
+            Destroy(intervalComponents.intervals[i].gameObject);
         }
+
 
         intervalComponents.intervals.Clear();
         intervalComponents.intervalSummaries.Clear();
         intervalHolder.Clear();
+
+        createTaskScrollRect.verticalNormalizedPosition = 1;
 
     }
 
