@@ -89,7 +89,8 @@ public class TipMain : MonoBehaviour
             cut = saved_tips[i].Split('-');
             //print(cut[1]);
             int.TryParse(cut[0], out int _p);
-            Saved_ID.Add(_p);  
+            Saved_ID.Add(_p);
+            
         }
         cut = saved_tips[saved_tips.Count-1].Split('-');
         //print(cut[1]);
@@ -148,6 +149,7 @@ public class TipMain : MonoBehaviour
             ResourceLoad();
             LoadSaved();
             LoadUserSave();
+            //print("anyad:" + Saved_ID[Saved_ID.Count-1]);
             if (System.DateTime.Today != AppManager.lastLogin.Date)
             {
                 GetRandomTip();
@@ -232,6 +234,7 @@ public class TipMain : MonoBehaviour
         {
             if (System.DateTime.Today != AppManager.lastLogin.Date)
             {
+                //új nap
                 GetRandomTip();
                 SavingTips();
                 _header = rolledtip.name; // a címe a tipnek
@@ -240,12 +243,11 @@ public class TipMain : MonoBehaviour
             }
             else
             {
+                //ugyan az a nap
                 //tipmanager.UnlockSecondTip(); tip feloldas
-                GetRandomTip();
-                SavingTips();
-                _header = name[Saved_ID.Count]; // a címe a tipnek
-                _content = maindata[Saved_ID.Count]; // a tartalma a tipnek
-                return Saved_ID[Saved_ID.Count]; // tip id ide
+                _header = name[Saved_ID[Saved_ID.Count-1]]; // a címe a tipnek
+                _content = maindata[Saved_ID[Saved_ID.Count-1]]; // a tartalma a tipnek
+                return Saved_ID[Saved_ID.Count-1]; // tip id ide
             }
         }
     }
