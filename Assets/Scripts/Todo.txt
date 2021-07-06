@@ -25,6 +25,7 @@ setting task amounts*
 task numbers -> protect from writing 0 as a first character ? not necessary the first 0 will be ignored*
 tasks days*
 task active on days -> set on creation, and set on loading in (if current day == any selected day or next active day)*
+clear interval when disabling create task menu*
 
 
 saving task changes*__
@@ -47,7 +48,6 @@ task creatin texts bugged
 
 
 
-clear interval when disabling create task menu
 
 task current value bit bigger click area than visible
 
