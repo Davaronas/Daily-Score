@@ -430,6 +430,16 @@ public class TaskManager : MonoBehaviour
 
 
 
+
+
+
+    public void EditTask(TaskData _task)
+    {
+
+    }
+
+
+
     private void LanguageChangedCallback(AppManager.Languages _lang)
     {
         valueMetricDropdown.ClearOptions();

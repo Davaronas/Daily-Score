@@ -13,6 +13,7 @@ public class Task : MonoBehaviour
     [SerializeField] private TMP_InputField currentValueInputField = null;
     [SerializeField] private TMP_Text targetValueText = null;
     [SerializeField] private Toggle booleanTaskTypeToggle = null;
+    [SerializeField] private Image inactivePanel = null;
     [Space]
     private RectTransform scoreTextRectTransform;
     [Space]
@@ -82,6 +83,19 @@ public class Task : MonoBehaviour
         }
 
         nameText.text = taskData.name;
+
+        if(!_data.isActiveToday)
+        {
+            inactivePanel.enabled = true;
+            currentValueInputField.interactable = false;
+            booleanTaskTypeToggle.interactable = false;
+        }
+        else
+        {
+            inactivePanel.enabled = false;
+            currentValueInputField.interactable = true;
+            booleanTaskTypeToggle.interactable = true;
+        }
 
     }
 

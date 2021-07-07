@@ -8,6 +8,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public class NotificationManager : MonoBehaviour
 {
+
+    GoalManager goalManager = null;
+
     [System.Serializable]
     public struct NotificationData
     {
@@ -18,6 +21,8 @@ public class NotificationManager : MonoBehaviour
         public int resetIntervalDays;
         public string ownerTask;
 
+
+       
 
         public static bool operator ==(NotificationData _data1,NotificationData _data2)
         {
@@ -41,10 +46,13 @@ public class NotificationManager : MonoBehaviour
 
     //   public static Dictionary<int, NotificationData> notificationIds = new Dictionary<int, NotificationData>();
 
-   // public delegate void NotificationReceivedCallback(AndroidNotificationIntentData data);
+    // public delegate void NotificationReceivedCallback(AndroidNotificationIntentData data);
 
 
-
+    private void Awake()
+    {
+        goalManager = FindObjectOfType<GoalManager>();
+    }
 
     private void Start()
     {
@@ -66,6 +74,7 @@ public class NotificationManager : MonoBehaviour
                 NotificationStatus _status = AndroidNotificationCenter.CheckScheduledNotificationStatus(notifications[i].id);
                 if (_status == NotificationStatus.Delivered)
                 {
+                  //  if(notifications[i].ownerTask) // find if owner exists
                     NotificationData _replace = notifications[i];
                     ClearNotification(notifications[i].id);
                     SendNotification(_replace);

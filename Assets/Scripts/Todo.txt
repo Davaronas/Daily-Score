@@ -62,7 +62,10 @@ don't show day selection and notification selection before type selected
 
 
 
-
+task uninteractable when inactive*
+delete goal
+notification check task and goal existance
+edit task ?
 
 
 
