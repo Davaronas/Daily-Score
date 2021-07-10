@@ -41,6 +41,7 @@ public class Task : MonoBehaviour
 
     private GoalManager goalManager;
 
+    public bool isEditedToday = false; 
 
    
 
@@ -101,7 +102,6 @@ public class Task : MonoBehaviour
 
     private void SetScoreText(int _cp)
     {
-        
 
         if (_cp == 0 && Convert.ToDateTime(taskData.lastChangedValue) < DateTime.Today)
         {
@@ -118,6 +118,7 @@ public class Task : MonoBehaviour
             }
             scoreText.text = currentPoint + " p";
             print("Change");
+            isEditedToday = true;
         }
 
     }

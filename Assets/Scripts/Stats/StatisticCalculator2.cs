@@ -34,14 +34,23 @@ public class StatisticCalculator2 : MonoBehaviour
     public int maxoftheday;
     public int maxoftheweek;
     public int maxofthemonth;
+    public float alltimevarage;
+
+
     List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
     [SerializeField] TMP_Text dailyScoreText;
+    [SerializeField] TMP_Text dailyScoreTextStatMenu;
     [SerializeField] TMP_Text taskdailyScoreText;
     [SerializeField] TMP_Text weeklyScoreText;
+    [SerializeField] TMP_Text weeklyScoreTextStatMenu;
     [SerializeField] TMP_Text taskweeklyScoreText;
     [SerializeField] TMP_Text monthlyScoreText;
     [SerializeField] TMP_Text maxScoreText;
     [SerializeField] TMP_Text taskmaxScoreText;
+    [SerializeField] TMP_Text HighScoreThisWeekStatMenu;
+    [SerializeField] TMP_Text HighCoreThisMonthScoreStatMenu;
+    [SerializeField] TMP_Text AllTimeBestScoreTextStatMenu;
+    [SerializeField] TMP_Text AllTimeAvarageScoreTextStatMenu;
     public GoalData[] GoalDATAS;
 
 
@@ -109,6 +118,7 @@ public class StatisticCalculator2 : MonoBehaviour
             }
         }
         dailyScoreText.text = dailysc.ToString();
+        dailyScoreTextStatMenu.text = dailysc.ToString();
     }
 
     void WeeklyScoreCal()
@@ -116,6 +126,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int [] weeklydata = new int[7];
         weeklyavarage = 0;
         float weeklyfleet=dailysc;
+        int daycounter = 0;
         int i = 0;
         for (int l = 0; l < 7; l++)
         {
@@ -128,6 +139,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 
                 if (Convert.ToDateTime( GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
                 {
+                    daycounter++;
                     switch (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).DayOfWeek)
                     {
                         case DayOfWeek.Monday:
@@ -168,14 +180,16 @@ public class StatisticCalculator2 : MonoBehaviour
            // print(weeklydata[j]);
            // print(weeklyfleet);
         }
-        weeklyavarage = weeklyfleet / 7;
+        weeklyavarage = weeklyfleet / daycounter;
        
-        weeklyScoreText.text = Mathf.Round(weeklyavarage).ToString();
+        weeklyScoreText.text = Math.Round(weeklyavarage,2).ToString();
+        weeklyScoreTextStatMenu.text = Math.Round(weeklyavarage,2).ToString();
     }
     void MonthlyAvarageCalc()
     {
         monthlyavarage = 0;
         int monthlyfleet = 0;
+        int daycountermonth = 0;
         int i = 0;
             for (int j = 0; j < GoalDATAS.Length; j++)
             {
@@ -187,13 +201,13 @@ public class StatisticCalculator2 : MonoBehaviour
                 {
                     if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
                     {
+                    daycountermonth++;
                         monthlyfleet += GoalDATAS[j].dailyScores[k].amount;
                     }
                 }
             }
-        monthlyavarage = monthlyfleet / 30;
-        Mathf.Round(weeklyavarage);
-        //monthlyScoreText.text = monthlyavarage.ToString();
+        monthlyavarage = monthlyfleet / daycountermonth;
+        monthlyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
     }
 
     void TaskDailyCalc()
@@ -203,7 +217,11 @@ public class StatisticCalculator2 : MonoBehaviour
         int i = 0;
         for (int j = 0; j < currentselectedGoal.tasks.Count; j++)
         {
-            dailytaskpoint += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
+            if (currentselectedGoal.tasks[j].isActiveToday)
+            {
+                dailytaskpoint += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
+            }
+            
         }
 
         taskdailyScoreText.text = dailytaskpoint.ToString();
@@ -260,13 +278,16 @@ public class StatisticCalculator2 : MonoBehaviour
         }
         weeklytaskpointav = weeklytaskfleet / 7;
 
-        taskweeklyScoreText.text = Mathf.Round(weeklytaskpointav).ToString();
+        taskweeklyScoreText.text = Math.Round(weeklytaskpointav,2).ToString();
     }
     public void MAXCalc()
     {
         int maxmonthfleet = 0;
         int maxweekfleet = 0;
         int maxmaxfleet = 0;
+        int alltimeavaragefleet = 0;
+        int kcounter = 0;
+        
         for (int j = 0; j < GoalDATAS.Length; j++)
         {
             if (GoalDATAS[j].dailyScores == null)
@@ -275,10 +296,14 @@ public class StatisticCalculator2 : MonoBehaviour
             }
             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
             {
+                kcounter++;
+                alltimeavaragefleet += GoalDATAS[j].dailyScores[k].amount;
                 if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
                 {
+                    
                     if(Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-7))
                     {
+                        
                         if(maxweekfleet< GoalDATAS[j].dailyScores[k].amount)
                         {
                             maxweekfleet = GoalDATAS[j].dailyScores[k].amount;
@@ -298,7 +323,13 @@ public class StatisticCalculator2 : MonoBehaviour
         maxofmax = maxmaxfleet;
         maxofthemonth = maxmonthfleet;
         maxoftheweek = maxweekfleet;
+        alltimevarage =alltimeavaragefleet / kcounter;
         maxScoreText.text = maxofmax.ToString();
+        HighScoreThisWeekStatMenu.text = maxoftheweek.ToString();
+        HighCoreThisMonthScoreStatMenu.text = maxofthemonth.ToString();
+        AllTimeBestScoreTextStatMenu.text = maxofmax.ToString();
+        AllTimeAvarageScoreTextStatMenu.text = Math.Round(alltimevarage,2).ToString();
+        
     }
     public void TaskMaskCalc()
     {
