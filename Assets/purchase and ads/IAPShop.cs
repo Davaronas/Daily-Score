@@ -9,6 +9,10 @@ public class IAPShop : MonoBehaviour
 
     public void OnPurchaseComplete(Product gold)
     {
+        SubscriptionManager _manager = new SubscriptionManager(gold, "");
+
+        
+
         if (gold.definition.id == goods)
         {
             //reward the player for buying gold
@@ -25,17 +29,10 @@ public class IAPShop : MonoBehaviour
         Debug.Log("Purchase of " + gold.definition.id + "failed due to " + reason);
     }
 
-    private void Start()
-    {
-        /*
-        Product gold;
-        SubscriptionManager _manager = new SubscriptionManager(gold, "as");
-        SubscriptionInfo _info;
-        _info = _manager.getSubscriptionInfo();
-        _info.
-        */
+ 
+        
 
 
 
-    }
+    
 }

@@ -24,6 +24,12 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject optimumTexts = null;
     [SerializeField] private GameObject intervalTexts = null;
     [Space]
+    [SerializeField] private GameObject taskNameField_GO = null;
+    [SerializeField] private GameObject taskTypeButtons = null;
+    [SerializeField] private TMP_Text taskNameText_EditMode = null;
+    [SerializeField] private TMP_Text taskTypeInfoText_EditMode = null;
+    [SerializeField] private TMP_Text taskTypeText_EditMode = null;
+    [Space]
     [SerializeField] private GameObject notificationDaySelectorPanel = null;
     [SerializeField] private GameObject notificationDaySelectorWindow = null;
     [SerializeField] private GameObject notificationDayButtonPrefab = null;
@@ -89,6 +95,7 @@ public class TaskManager : MonoBehaviour
         taskTypeSelected = false;
         notificationDaySelectorPanel.SetActive(false);
         notificationHolder.Clear();
+        DisableEditModeTextsAndEnableCreateModeTexts();
     }
 
     private void OnDestroy()
@@ -138,7 +145,20 @@ public class TaskManager : MonoBehaviour
         intervalTexts.SetActive(false);
     }
 
+    private void DisableEditModeTextsAndEnableCreateModeTexts()
+    {
+        taskNameText_EditMode.gameObject.SetActive(false);
+        taskTypeInfoText_EditMode.gameObject.SetActive(false);
+        taskTypeText_EditMode.gameObject.SetActive(false);
 
+        taskNameField_GO.SetActive(true);
+        taskTypeButtons.SetActive(true);
+    }
+
+    public void EditTask(TaskData _data)
+    {
+        taskNameText_EditMode
+    }
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
     {
@@ -433,10 +453,7 @@ public class TaskManager : MonoBehaviour
 
 
 
-    public void EditTask(TaskData _task)
-    {
-
-    }
+   
 
 
 

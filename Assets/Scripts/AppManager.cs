@@ -233,6 +233,7 @@ public class TaskData
        name = _name;
        owner = null;
        notificationAttachedActiveDay = new List<int>();
+       isEditedToday = false;
    }
 
     public string name;
@@ -241,6 +242,7 @@ public class TaskData
 
 
     public bool isActiveToday;
+    public bool isEditedToday;
     public ActiveType beingActiveType;
     public List<int> activeOnDays;
     public int activeEveryThDay;
@@ -894,6 +896,8 @@ public class AppManager : MonoBehaviour
                 // reset tasks
                 for (int j = 0; j < _goaldatas[i].tasks.Count; j++)
                 {
+                    _goaldatas[i].tasks[j].isEditedToday = false;
+
                     switch(_goaldatas[i].tasks[j].type)
                     {
                         case TaskType.Maximum:

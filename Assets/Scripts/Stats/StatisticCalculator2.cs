@@ -217,7 +217,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int i = 0;
         for (int j = 0; j < currentselectedGoal.tasks.Count; j++)
         {
-            if (currentselectedGoal.tasks[j].isActiveToday)
+            if (!currentselectedGoal.tasks[j].isEditedToday)
             {
                 dailytaskpoint += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
             }

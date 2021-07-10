@@ -142,6 +142,8 @@ public class TaskTypeComponents : MonoBehaviour
 
     private IntervalHolder intervalHolder;
 
+    
+
     private void Awake()
     {
         AddArrayToList(inputFields, maxComponents.GetInputFields());
