@@ -33,12 +33,26 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(Input.touchCount > 0) mousePosStart_ = Input.GetTouch(0).position;
+        if (!Application.isEditor)
+        {
+            if (Input.touchCount > 0) mousePosStart_ = Input.GetTouch(0).position;
+        }
+        else
+        {
+            mousePosStart_ = Input.mousePosition;
+        }
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
-        mousePosStartDrag_ = Input.GetTouch(0).position;
+        if (!Application.isEditor)
+        {
+            mousePosStartDrag_ = Input.GetTouch(0).position;
+        }
+        else
+        {
+            mousePosStartDrag_ = Input.mousePosition;
+        }
 
         if(Mathf.Abs(mousePosStart_.x - mousePosStartDrag_.x) > Mathf.Abs(mousePosStart_.y - mousePosStartDrag_.y))
         {

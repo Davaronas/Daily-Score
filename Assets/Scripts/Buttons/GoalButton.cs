@@ -36,7 +36,14 @@ public class GoalButton : BehaviourButton
 
     protected override void OnTouch()
     {
-       goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.GetTouch(0).position);
+        if (!Application.isEditor)
+        {
+            goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.GetTouch(0).position);
+        }
+        else
+        {
+            goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.mousePosition);
+        }
     }
 
     protected override void OnRelease()
