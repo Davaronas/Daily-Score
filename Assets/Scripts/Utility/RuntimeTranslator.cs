@@ -7,7 +7,29 @@ public static class RuntimeTranslator
 {
     private static class English
     {
+        public static string TranslateTaskType(AppManager.TaskType _type)
+        {
+            switch (_type)
+            {
+                case AppManager.TaskType.Maximum:
+                    return "Maximum";
 
+                case AppManager.TaskType.Minimum:
+                    return "Minimum";
+
+                case AppManager.TaskType.Boolean:
+                    return "Done/Not done";
+
+                case AppManager.TaskType.Optimum:
+                    return "Optimum";
+
+                case AppManager.TaskType.Interval:
+                    return "Interval";
+
+                default:
+                    return "";
+            }
+        }
         public static string TranslateDayOfWeek(DayOfWeek _day)
         {
             switch(_day)
@@ -87,6 +109,30 @@ public static class RuntimeTranslator
 
     private static class Hungarian
     {
+        public static string TranslateTaskType(AppManager.TaskType _type)
+        {
+            switch (_type)
+            {
+                case AppManager.TaskType.Maximum:
+                    return "Maximum";
+
+                case AppManager.TaskType.Minimum:
+                    return "Minimum";
+
+                case AppManager.TaskType.Boolean:
+                    return "Kész/Nincs kész";
+
+                case AppManager.TaskType.Optimum:
+                    return "Optimum";
+
+                case AppManager.TaskType.Interval:
+                    return "Intervallum";
+
+                default:
+                    return "";
+            }
+        }
+
         public static string TranslateDayOfWeek(DayOfWeek _day)
         {
            
@@ -168,8 +214,37 @@ public static class RuntimeTranslator
         }
     }
 
+
+
     private static class German
     {
+
+        
+        public static string TranslateTaskType(AppManager.TaskType _type)
+        {
+            switch (_type)
+            {
+                case AppManager.TaskType.Maximum:
+                    return "Maximum";
+
+                case AppManager.TaskType.Minimum:
+                    return "Minimum";
+
+                case AppManager.TaskType.Boolean:
+                    return "Getan/Nicht getan";
+
+                case AppManager.TaskType.Optimum:
+                    return "Optimum";
+
+                case AppManager.TaskType.Interval:
+                    return "Intervall";
+
+                default:
+                    return "";
+            }
+        }
+        
+
         public static string TranslateDayOfWeek(DayOfWeek _day)
         {
             switch (_day)
@@ -251,6 +326,28 @@ public static class RuntimeTranslator
         }
     }
 
+
+    
+    public static string TranslateTaskType(AppManager.TaskType _type)
+    {
+        
+
+
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.TranslateTaskType(_type);
+            case AppManager.Languages.Magyar:
+                return Hungarian.TranslateTaskType(_type);
+            case AppManager.Languages.Deutsch:
+                return German.TranslateTaskType(_type);
+            default:
+
+                return "AppManager.Languages doesn't contain this language";
+
+        }
+    }
+    
 
    public static string TranslateTaskMetricType(AppManager.TaskMetricType _type)
    {

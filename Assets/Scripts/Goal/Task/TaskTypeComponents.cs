@@ -215,6 +215,78 @@ public class TaskTypeComponents : MonoBehaviour
         }
     }
 
+    public void EditMode_SetMaxDataComponents(MaximumTaskData _mtd)
+    {
+        maxComponents.metric_Dropdown.value = (int)_mtd.metric;
+        maxComponents.targetValue_InputField.text = _mtd.targetValue.ToString();
+        maxComponents.pointsPerOneMetric_InputField.text = _mtd.pointsGainedPerOne.ToString();
+
+        if(_mtd.overachievePercentBonus > 0)
+        {
+            maxComponents.overachieveBonus_Toggle.isOn = true;
+            maxComponents.overachieveBonusPercent_InputField.text = _mtd.overachievePercentBonus.ToString();
+        }
+
+        if(_mtd.streakStartsAfterDays > 0)
+        {
+            maxComponents.streak_Toggle.isOn = true;
+            maxComponents.streakStartsAfterDays_InputField.text = _mtd.streakStartsAfterDays.ToString();
+        }
+    }
+
+    public void EditMode_SetMinDataComponents(MinimumTaskData _mtd)
+    {
+        minComponents.metric_Dropdown.value = (int)_mtd.metric;
+        minComponents.targetValue_InputField.text = _mtd.targetValue.ToString();
+        minComponents.pointsForStayingUnderLimit_InputField.text = _mtd.pointsForStayingUnderTargetValue.ToString();
+        minComponents.pointsLostPerOneMetric_InputField.text = _mtd.pointsLostPerOne.ToString();
+        
+
+        if (_mtd.underTargetValuePercentBonus > 0)
+        {
+            minComponents.stayingUnderLimit_Toggle.isOn = true;
+            minComponents.stayingUnderLimitBonusPercent_InputField.text = _mtd.underTargetValuePercentBonus.ToString();
+        }
+
+        if (_mtd.streakStartsAfterDays > 0)
+        {
+            minComponents.streak_Toggle.isOn = true;
+            minComponents.streakStartsAfterDays_InputField.text = _mtd.streakStartsAfterDays.ToString();
+        }
+    }
+
+    public void EditMode_SetBoolDataComponents(BooleanTaskData _btd)
+    {
+        boolComponents.pointsGained_InputField.text = _btd.pointsGained.ToString();
+
+        if(_btd.streakStartsAfterDays > 0)
+        {
+            boolComponents.streak_Toggle.isOn = true;
+            boolComponents.streakStartsAfterDays_InputField.text = _btd.streakStartsAfterDays.ToString();
+        }
+
+        
+    }
+
+    public void EditMode_SetOptimumDataComponents(OptimumTaskData _otd)
+    {
+        optimumComponents.targetValue_InputField.text = _otd.targetValue.ToString();
+        optimumComponents.metric_Dropdown.value = (int)_otd.metric;
+        optimumComponents.pointsForOptimumValue_InputField.text = _otd.pointsForOptimum.ToString();
+        optimumComponents.pointsLostPerOneMetricDifference_InputField.text = _otd.pointsLostPerOneDifference.ToString();
+
+        if(_otd.streakStartsAfterDays > 0)
+        {
+            optimumComponents.streak_Toggle.isOn = true;
+            optimumComponents.streakStartsAfterDays_InputField.text = _otd.streakStartsAfterDays.ToString();
+        }
+    }
+
+    public void EditMode_SetIntervalDataComponents(IntervalTaskData _itd)
+    {
+
+    }
+
     public TaskData GetData(AppManager.TaskType _type)
     {
         TaskData _taskData = null;

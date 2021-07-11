@@ -25,4 +25,14 @@ public class DayToggle : MonoBehaviour
     {
         toggle.isOn = false;
     }
+
+    public void TurnOn()
+    {
+        toggle.isOn = true;
+    }
+
+    public DayOfWeek GetDay()
+    {
+        return day;
+    }
 }

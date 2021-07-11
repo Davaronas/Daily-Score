@@ -26,9 +26,12 @@ public class TaskManager : MonoBehaviour
     [Space]
     [SerializeField] private GameObject taskNameField_GO = null;
     [SerializeField] private GameObject taskTypeButtons = null;
+    [SerializeField] private GameObject createNewTaskButton = null;
     [SerializeField] private TMP_Text taskNameText_EditMode = null;
     [SerializeField] private TMP_Text taskTypeInfoText_EditMode = null;
     [SerializeField] private TMP_Text taskTypeText_EditMode = null;
+    [SerializeField] private GameObject confirmChangesButton_EditMode = null;
+    [SerializeField] private GameObject deleteTaskButton_EditMode = null;
     [Space]
     [SerializeField] private GameObject notificationDaySelectorPanel = null;
     [SerializeField] private GameObject notificationDaySelectorWindow = null;
@@ -150,14 +153,85 @@ public class TaskManager : MonoBehaviour
         taskNameText_EditMode.gameObject.SetActive(false);
         taskTypeInfoText_EditMode.gameObject.SetActive(false);
         taskTypeText_EditMode.gameObject.SetActive(false);
+        confirmChangesButton_EditMode.SetActive(false);
+        deleteTaskButton_EditMode.SetActive(false);
 
         taskNameField_GO.SetActive(true);
         taskTypeButtons.SetActive(true);
+        createNewTaskButton.SetActive(true);
     }
 
     public void EditTask(TaskData _data)
     {
-        taskNameText_EditMode
+        taskNameText_EditMode.text = _data.name;
+        taskTypeText_EditMode.text = RuntimeTranslator.TranslateTaskType(_data.type);
+
+        taskNameText_EditMode.gameObject.SetActive(true);
+        taskTypeInfoText_EditMode.gameObject.SetActive(true);
+        taskTypeText_EditMode.gameObject.SetActive(true);
+        confirmChangesButton_EditMode.SetActive(true);
+        deleteTaskButton_EditMode.SetActive(true);
+
+        taskNameField_GO.SetActive(false);
+        taskTypeButtons.SetActive(false);
+        createNewTaskButton.SetActive(false);
+
+        switch (_data.type)
+        {
+            case AppManager.TaskType.Maximum:
+                taskTypeComponents.EditMode_SetMaxDataComponents(_data as MaximumTaskData);
+                maximumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+                break;
+            case AppManager.TaskType.Minimum:
+                taskTypeComponents.EditMode_SetMinDataComponents(_data as MinimumTaskData);
+                minimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+                break;
+            case AppManager.TaskType.Boolean:
+                taskTypeComponents.EditMode_SetBoolDataComponents(_data as BooleanTaskData);
+                booleanTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(false);
+                break;
+            case AppManager.TaskType.Optimum:
+                taskTypeComponents.EditMode_SetOptimumDataComponents(_data as OptimumTaskData);
+                optimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+                break;
+            case AppManager.TaskType.Interval:
+                taskTypeComponents.EditMode_SetIntervalDataComponents(_data as IntervalTaskData);
+                intervalTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(true);
+                break;
+        }
+
+        for (int i = 0; i < dayToggles.Length; i++)
+        {
+
+            if (_data.activeOnDays.Count > 0)
+            {
+                for (int j = 0; j < _data.activeOnDays.Count; j++)
+                {
+                    if (dayToggles[i].GetDay() == (DayOfWeek)_data.activeOnDays[j])
+                    {
+                        dayToggles[i].TurnOn();
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                everyThDayInputField.text = _data.activeEveryThDay.ToString();
+            }
+        }
+
+        // feed task type components and day holders or everyThDay input field
+        // notifications
     }
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)

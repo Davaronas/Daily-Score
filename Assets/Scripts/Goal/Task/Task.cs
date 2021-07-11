@@ -105,7 +105,6 @@ public class Task : MonoBehaviour
         if (_cp == 0 && !taskData.isEditedToday)
         {
             scoreText.text = "-";
-            print("Don't change");
         }
         else
         {
@@ -116,7 +115,6 @@ public class Task : MonoBehaviour
                 nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
             }
             scoreText.text = currentPoint + " p";
-            print("Change");
             taskData.isEditedToday = true;
         }
 
@@ -128,8 +126,6 @@ public class Task : MonoBehaviour
         if (goalManager.SearchGoalByName(taskData.owner, out _gd))
         {
             _gd.AddModification(_cp);
-            AppManager.TaskValueChanged(taskData);
-            print("task changed");
         }
     }
 
