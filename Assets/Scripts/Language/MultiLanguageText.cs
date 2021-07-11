@@ -20,7 +20,26 @@ public class MultiLanguageText : MonoBehaviour
     private void Awake()
     {
         text = GetComponent<TMP_Text>();
-        text.text = textToDisplay;
+
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                text.text = languages[0];
+                break;
+            case AppManager.Languages.Magyar:
+                text.text = languages[1];
+                break;
+            case AppManager.Languages.Deutsch:
+                text.text = languages[2];
+                break;
+            default:
+                text.text = "";
+                break;
+        }
+
+        
+
+
         AppManager.OnLanguageChanged += LanguageChanged;
     }
 

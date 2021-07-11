@@ -87,7 +87,7 @@ public class GoalData
         max = _max;
         current = _current;
         tasks = new List<TaskData>();
-        lastChange = new GoalChange(0,ModificationType.Create,DateTime.Now);
+        lastChange = new GoalChange(0,ModificationType.Create,"",DateTime.Now);
         modifications = new List<GoalChange>();
         modifications.Add(lastChange);
 
@@ -136,7 +136,7 @@ public class GoalData
        max = _max;
        current = _current;
        tasks = new List<TaskData>();
-       lastChange = new GoalChange(0, ModificationType.Create, DateTime.Now);
+       lastChange = new GoalChange(0, ModificationType.Create,"", DateTime.Now);
        modifications = new List<GoalChange>();
         modifications.Add(lastChange);
         dailyScores = new List<ScorePerDay>();
@@ -153,11 +153,12 @@ public class GoalData
         lastChange = _m;
     }
 
-    public void AddModification(int _amount)
+    public void AddModification(int _amount, string _task)
     {
-        GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue, DateTime.Now);
+        GoalChange _gc = new GoalChange(_amount, ModificationType.ChangeValue,_task, DateTime.Now);
         modifications.Add(_gc);
         lastChange = _gc;
+
     }
 
     public void AddDailyScore(int _amount, DateTime _time)
@@ -184,16 +185,18 @@ public class GoalData
 [System.Serializable]
 public struct GoalChange
 {
-    public GoalChange(int _amount,GoalData.ModificationType _modification, DateTime _time)
+    public GoalChange(int _amount,GoalData.ModificationType _modification,string _taskName ,DateTime _time)
     {
         amount = _amount;
         modification = _modification;
         time = _time.ToString();
+        taskName = _taskName;
     }
 
 
     public int amount;
     public GoalData.ModificationType modification;
+    public string taskName;
     public string time;
 
     public DateTime GetDateTime()

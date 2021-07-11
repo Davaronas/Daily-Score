@@ -120,12 +120,12 @@ public class Task : MonoBehaviour
 
     }
 
-    private void ModificationHappened(int _cp)
+    private void ModificationHappened(int _cp, string _task)
     {
         GoalData _gd;
         if (goalManager.SearchGoalByName(taskData.owner, out _gd))
         {
-            _gd.AddModification(_cp);
+            _gd.AddModification(_cp, _task);
         }
     }
 
@@ -313,7 +313,7 @@ public class Task : MonoBehaviour
         if (_hasDifference)
         {
             SetScoreText(currentPoint);
-            ModificationHappened(currentPoint);
+            ModificationHappened(currentPoint, taskData.name);
             taskData.lastChangedValue = DateTime.Now.Date.ToString();
         }
     }
