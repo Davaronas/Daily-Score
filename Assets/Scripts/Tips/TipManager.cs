@@ -190,7 +190,7 @@ public class TipManager : MonoBehaviour
                 secondTip.SetSaveButtonState(true);
             }
 
-            print($"Does not contain id: {_id}");
+           // print($"Does not contain id: {_id}");
         }
         
     }

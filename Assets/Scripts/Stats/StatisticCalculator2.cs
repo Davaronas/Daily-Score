@@ -100,7 +100,6 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void StatLoad()
     {
-        print(goalManager);
         GoalDATAS = goalManager.GetGoals();
      //   print(GoalDATAS == null);
     }
@@ -223,7 +222,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int i = 0;
         for (int j = 0; j < currentselectedGoal.tasks.Count; j++)
         {
-            if (!currentselectedGoal.tasks[j].isEditedToday)
+            if (currentselectedGoal.tasks[j].isEditedToday)
             {
                 dailytaskpoint += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
             }

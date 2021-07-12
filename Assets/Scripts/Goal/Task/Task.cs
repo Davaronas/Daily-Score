@@ -126,6 +126,7 @@ public class Task : MonoBehaviour
         if (goalManager.SearchGoalByName(taskData.owner, out _gd))
         {
             _gd.AddModification(_cp, _task);
+            AppManager.TaskValueChanged(taskData);
         }
     }
 
@@ -313,8 +314,8 @@ public class Task : MonoBehaviour
         if (_hasDifference)
         {
             SetScoreText(currentPoint);
-            ModificationHappened(currentPoint, taskData.name);
             taskData.lastChangedValue = DateTime.Now.Date.ToString();
+            ModificationHappened(currentPoint, taskData.name);
         }
     }
 
