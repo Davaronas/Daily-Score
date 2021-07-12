@@ -86,13 +86,13 @@ public class Task : MonoBehaviour
 
         if(!_data.isActiveToday)
         {
-            inactivePanel.enabled = true;
+            inactivePanel.gameObject.SetActive(true);
             currentValueInputField.interactable = false;
             booleanTaskTypeToggle.interactable = false;
         }
         else
         {
-            inactivePanel.enabled = false;
+            inactivePanel.gameObject.SetActive(false);
             currentValueInputField.interactable = true;
             booleanTaskTypeToggle.interactable = true;
         }

@@ -284,7 +284,16 @@ public class TaskTypeComponents : MonoBehaviour
 
     public void EditMode_SetIntervalDataComponents(IntervalTaskData _itd)
     {
+        EditMode_AddIntervals(_itd.intervals);
+    }
+    
+    public void EditMode_AddIntervals(Interval[] _intervals)
+    {
+        for (int i = 0; i < _intervals.Length; i++)
+        {
+            intervalHolder.EditMode_AddInterval(i, _intervals[i].from, _intervals[i].to, _intervals[i].points);
 
+        }
     }
 
     public TaskData GetData(AppManager.TaskType _type)

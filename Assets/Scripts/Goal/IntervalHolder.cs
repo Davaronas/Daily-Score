@@ -51,9 +51,24 @@ public class IntervalHolder : MonoBehaviour
 
     private void OnEnable()
     {
-        createTaskScrollContent.sizeDelta = new Vector2(createTaskScrollContent.sizeDelta.x, scrollContentSizeAfterUse_y);
+      //  createTaskScrollContent.sizeDelta = new Vector2(createTaskScrollContent.sizeDelta.x, scrollContentSizeAfterUse_y);
     }
 
+    public void EditMode_AddInterval(int _serialNumber, int _from, int _to, int _amount)
+    {
+        GameObject _newInterval = Instantiate(intervalPrefab, transform.position, Quaternion.identity, transform);
+        IntervalPrefabUtility _ipu = _newInterval.GetComponent<IntervalPrefabUtility>();
+        _ipu.SetIntervalSerialNumber(taskTypeComponents.GetIntervalAmount() + 1);
+        _ipu.SetNumbers(_from, _to, _amount, this);
+        _newInterval.transform.SetSiblingIndex(taskTypeComponents.GetIntervalAmount()); // put this after the last interval, but beofre the button
+        taskTypeComponents.AddInterval(_ipu);
+
+
+
+        intervalPrefab_y = intervalPrefab.GetComponent<RectTransform>().sizeDelta.y;
+
+        ScrollSizer.AddSize(createTaskScrollContent, intervalPrefab_y);
+    }
 
     public void RemoteCall_AddInterval()
     {

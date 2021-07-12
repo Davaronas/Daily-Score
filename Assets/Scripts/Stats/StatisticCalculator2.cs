@@ -180,6 +180,9 @@ public class StatisticCalculator2 : MonoBehaviour
            // print(weeklydata[j]);
            // print(weeklyfleet);
         }
+
+        if(daycounter == 0) { return; }
+
         weeklyavarage = weeklyfleet / daycounter;
        
         weeklyScoreText.text = Math.Round(weeklyavarage,2).ToString();
@@ -206,6 +209,9 @@ public class StatisticCalculator2 : MonoBehaviour
                     }
                 }
             }
+
+            if(daycountermonth == 0) { return; }
+
         monthlyavarage = monthlyfleet / daycountermonth;
         monthlyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
     }
@@ -323,7 +329,12 @@ public class StatisticCalculator2 : MonoBehaviour
         maxofmax = maxmaxfleet;
         maxofthemonth = maxmonthfleet;
         maxoftheweek = maxweekfleet;
-        alltimevarage =alltimeavaragefleet / kcounter;
+
+        if (kcounter != 0)
+        {
+            alltimevarage =alltimeavaragefleet / kcounter;
+        }
+
         maxScoreText.text = maxofmax.ToString();
         HighScoreThisWeekStatMenu.text = maxoftheweek.ToString();
         HighCoreThisMonthScoreStatMenu.text = maxofthemonth.ToString();

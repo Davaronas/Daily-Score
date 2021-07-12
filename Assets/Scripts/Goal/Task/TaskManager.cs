@@ -32,6 +32,7 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private TMP_Text taskTypeText_EditMode = null;
     [SerializeField] private GameObject confirmChangesButton_EditMode = null;
     [SerializeField] private GameObject deleteTaskButton_EditMode = null;
+    [SerializeField] private GameObject resetTaskButton_EditMode = null;
     [Space]
     [SerializeField] private GameObject notificationDaySelectorPanel = null;
     [SerializeField] private GameObject notificationDaySelectorWindow = null;
@@ -84,7 +85,7 @@ public class TaskManager : MonoBehaviour
 
     private void Start()
     {
-        DisableTypeTexts();
+        OnDisable();
     }
 
     private void OnDisable()
@@ -98,7 +99,16 @@ public class TaskManager : MonoBehaviour
         taskTypeSelected = false;
         notificationDaySelectorPanel.SetActive(false);
         notificationHolder.Clear();
-        DisableEditModeTextsAndEnableCreateModeTexts();
+        DisableEditModeObjectsAndEnableCreateModeObjects();
+    }
+
+    private void ClearDays()
+    {
+        selectedActiveDays.Clear();
+        everyThDay = 0;
+        everyThDayInputField.text = "";
+
+        TurnOffDayToggles();
     }
 
     private void OnDestroy()
@@ -148,13 +158,14 @@ public class TaskManager : MonoBehaviour
         intervalTexts.SetActive(false);
     }
 
-    private void DisableEditModeTextsAndEnableCreateModeTexts()
+    private void DisableEditModeObjectsAndEnableCreateModeObjects()
     {
         taskNameText_EditMode.gameObject.SetActive(false);
         taskTypeInfoText_EditMode.gameObject.SetActive(false);
         taskTypeText_EditMode.gameObject.SetActive(false);
         confirmChangesButton_EditMode.SetActive(false);
         deleteTaskButton_EditMode.SetActive(false);
+        resetTaskButton_EditMode.SetActive(false);
 
         taskNameField_GO.SetActive(true);
         taskTypeButtons.SetActive(true);
@@ -171,10 +182,19 @@ public class TaskManager : MonoBehaviour
         taskTypeText_EditMode.gameObject.SetActive(true);
         confirmChangesButton_EditMode.SetActive(true);
         deleteTaskButton_EditMode.SetActive(true);
+        resetTaskButton_EditMode.SetActive(true);
 
         taskNameField_GO.SetActive(false);
         taskTypeButtons.SetActive(false);
         createNewTaskButton.SetActive(false);
+
+
+        for (int i = 0; i < _data.activeOnDays.Count; i++)
+        {
+            selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[i]);
+        }
+
+        everyThDay = _data.activeEveryThDay;
 
         switch (_data.type)
         {
@@ -228,6 +248,15 @@ public class TaskManager : MonoBehaviour
             {
                 everyThDayInputField.text = _data.activeEveryThDay.ToString();
             }
+        }
+
+        for (int i = 0; i < _data.notificationAttachedActiveDay.Count; i++)
+        {
+            NotificationManager.NotificationData _nd;
+            NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[i], _data.name, out _nd);
+           NotificationPrefabUtility _npu =  notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[i]);
+            _npu.hour.text = Convert.ToDateTime(_nd.fireTime).Hour.ToString();
+            _npu.minute.text = Convert.ToDateTime(_nd.fireTime).Minute.ToString();
         }
 
         // feed task type components and day holders or everyThDay input field
@@ -295,11 +324,11 @@ public class TaskManager : MonoBehaviour
 
         _data.name = enteredName;
         _data.lastChangedValue = DateTime.MinValue.ToString();
+        _data.activeOnDays = new List<int>();
 
         if(selectedActiveDays.Count > 0)
         {
             _data.beingActiveType = TaskData.ActiveType.DayOfWeek;
-            _data.activeOnDays = new List<int>();
 
             for (int i = 0; i < selectedActiveDays.Count; i++)
             {
@@ -473,7 +502,7 @@ public class TaskManager : MonoBehaviour
         }
         else if (everyThDay > 0)
         {
-            if (!notificationHolder.HasDay(DateTime.Today.DayOfWeek))
+            if (!notificationHolder.HasDay(DateTime.Today.DayOfWeek) && notificationHolder.GetNotificationAmount() < 1)
             {
                 NotificationEveryThDaySelected(everyThDay);
             }
@@ -505,14 +534,7 @@ public class TaskManager : MonoBehaviour
         notificationDaySelectorPanel.SetActive(false);
     }
 
-    private void ClearDays()
-    {
-        selectedActiveDays.Clear();
-        everyThDay = 0;
-        everyThDayInputField.text = "";
-
-        TurnOffDayToggles();
-    }
+   
 
     private void TurnOffDayToggles()
     {

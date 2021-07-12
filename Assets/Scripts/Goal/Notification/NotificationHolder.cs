@@ -29,7 +29,7 @@ public class NotificationHolder : MonoBehaviour
         parentOriginalPos = parentRT.position;
     }
 
-    public void CreateNewNotification(DayOfWeek _day)
+    public NotificationPrefabUtility CreateNewNotification(DayOfWeek _day)
     {
       NotificationPrefabUtility  _npu =  Instantiate(notificationPrefab, transform.position, Quaternion.identity, transform).GetComponent<NotificationPrefabUtility>();
         _npu.SetSelectedDay(_day);
@@ -38,9 +38,10 @@ public class NotificationHolder : MonoBehaviour
 
         ScrollSizer.AddSize(createTaskScrollContent, notificationPrefab_y);
         parentRT.anchoredPosition += new Vector2(0, notificationPrefab_y);
+        return _npu;
     }
 
-    public void CreateNewNotification(int _reset)
+    public NotificationPrefabUtility CreateNewNotification(int _reset)
     {
         NotificationPrefabUtility _npu = Instantiate(notificationPrefab, transform.position, Quaternion.identity, transform).GetComponent<NotificationPrefabUtility>();
         _npu.SetSelectedDay(_reset);
@@ -49,6 +50,7 @@ public class NotificationHolder : MonoBehaviour
 
         ScrollSizer.AddSize(createTaskScrollContent, notificationPrefab_y);
         parentRT.anchoredPosition += new Vector2(0, notificationPrefab_y);
+        return _npu;
     }
 
     public void DeleteNotification(DayOfWeek _day)
@@ -98,6 +100,11 @@ public class NotificationHolder : MonoBehaviour
     public List<NotificationPrefabUtility> GetNotifications()
     {
         return notifications;
+    }
+
+    public int GetNotificationAmount()
+    {
+        return notifications.Count;
     }
 
     public bool HasDay(DayOfWeek _day)

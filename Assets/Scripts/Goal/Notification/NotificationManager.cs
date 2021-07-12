@@ -100,6 +100,23 @@ public class NotificationManager : MonoBehaviour
         return false;
     }
 
+    public static bool GetNotificationData(DayOfWeek _day,string _task, out NotificationData _data)
+    {
+
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            if (Convert.ToDateTime(notifications[i].fireTime).DayOfWeek == _day && notifications[i].ownerTask == _task)
+            {
+                _data = notifications[i];
+                return true;
+            }
+        }
+        _data = new NotificationData();
+        return false;
+    }
+
+
+
     public static bool GetNotificationData(string _owner, DayOfWeek _day, out NotificationData _data)
     {
         for (int i = 0; i < notifications.Count; i++)
@@ -195,6 +212,7 @@ public class NotificationManager : MonoBehaviour
             }
         }
 
+        SaveNotificationData();
         
             Debug.LogError($"Id does not exist in the notification center: {_id}");
         
@@ -211,6 +229,8 @@ public class NotificationManager : MonoBehaviour
                 break;
             }
         }
+
+        SaveNotificationData();
     }
 
     

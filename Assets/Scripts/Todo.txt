@@ -67,6 +67,12 @@ delete goal
 notification check task and goal existance
 edit task ?
 
+delete notification - delete from notification manager too (delete all and replace all perhaps ?)
+
+remove reset task points from all history
+click on averages will turn to other type of averages
+click on highscores will turn to other types of highscores
+
 
 
 

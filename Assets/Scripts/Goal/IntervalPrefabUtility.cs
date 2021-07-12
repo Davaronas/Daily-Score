@@ -44,6 +44,31 @@ public class IntervalPrefabUtility : MonoBehaviour
         header.text = serialNumber + ". " + RuntimeTranslator.TranslateIntervalWord();
     }
 
+    public void SetNumbers(int _from, int _to, int _amount, IntervalHolder _intervalHolder)
+    {
+        from.text = _from.ToString();
+        to.text = _to.ToString();
+        amount.text = _to.ToString();
+
+        CreateSummaryInstance(_intervalHolder);
+    }
+
+    private void CreateSummaryInstance(IntervalHolder _intervalHolder)
+    {
+        intervalConverted = (Interval)this;
+
+        intervalHolder = _intervalHolder;
+
+        if (intervalSummaryInstance == null)
+        {
+            intervalHolder.AddIntervalSummary(this);
+        }
+        else
+        {
+            intervalSummaryInstance.UpdateNumbers(intervalConverted.from, intervalConverted.to, intervalConverted.points);
+        }
+    }
+
     public void RemoteCall_FinishedEditing()
     {
         if(from.text == "" || to.text == "" || amount.text == "") 
@@ -60,7 +85,7 @@ public class IntervalPrefabUtility : MonoBehaviour
         {
             // input fields are valid
 
-                intervalConverted = (Interval)this;
+            intervalConverted = (Interval)this;
 
             if (intervalSummaryInstance == null)
             {
