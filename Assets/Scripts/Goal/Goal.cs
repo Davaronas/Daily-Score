@@ -43,7 +43,6 @@ public class Goal : MonoBehaviour
         {
             goalData.current = GetPoints();
             scoreText.text = goalData.current + " p";
-            print(goalData.current + " task changed");
         }
     }
 
@@ -144,7 +143,6 @@ public class Goal : MonoBehaviour
             _amount += TaskPointCalculator.GetPointsFromCurrentValue(goalData.tasks[i]);
         }
 
-        print(_amount);
 
         return _amount;
     }

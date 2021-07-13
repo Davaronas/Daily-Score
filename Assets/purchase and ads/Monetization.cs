@@ -16,7 +16,7 @@ public class Monetization : MonoBehaviour
 
     void Start()
     {
-        print(gameId);
+       // print(gameId);
         Advertisement.Initialize(gameId, TestMode);
     }
 

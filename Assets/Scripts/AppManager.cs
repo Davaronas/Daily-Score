@@ -714,6 +714,7 @@ public class AppManager : MonoBehaviour
     public static event Action<SingleColorPicker> OnGoalColorPicked;
     public static event Action<SymbolPicker> OnGoalSymbolPicked;
     public static event Action<TaskData> OnTaskValueChanged;
+    public static event Action OnTaskEdited;
     public static event Action<string> OnErrorHappened;
     public static event Action OnNewDayStartedDuringRuntime;
 
@@ -744,6 +745,7 @@ public class AppManager : MonoBehaviour
         OnNewTaskAdded += NewTaskAddedCallback;
         OnGoalOpened += OnGoalOpenedCallback;
         OnErrorHappened += OnErrorHappenedCallback;
+        OnTaskEdited += OnTaskEditedCallback;
 
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
@@ -760,6 +762,7 @@ public class AppManager : MonoBehaviour
         OnNewTaskAdded -= NewTaskAddedCallback;
         OnGoalOpened -= OnGoalOpenedCallback;
         OnErrorHappened -= OnErrorHappenedCallback;
+        OnTaskEdited -= OnTaskEditedCallback;
 
         if (Application.isEditor)
         {
@@ -1141,6 +1144,18 @@ public class AppManager : MonoBehaviour
         SetAppLayer(2);
     }
 
+
+    public static void TaskEdited(TaskData _task)
+    {
+        OnTaskEdited?.Invoke();
+        OnTaskValueChanged?.Invoke(_task);
+    }
+
+
+    private void OnTaskEditedCallback()
+    {
+        SetAppLayer(212);
+    }
 
     public static void NewTaskAdded()
     {

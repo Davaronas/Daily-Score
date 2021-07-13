@@ -78,4 +78,19 @@ public class NotificationPrefabUtility : MonoBehaviour
         return daySelected;
     }
 
+    public void SetHourAndMinute(int _hour, int _minute)
+    {
+        hour.text = _hour.ToString();
+        minute.text = _minute.ToString();
+
+        hourNumber = _hour;
+        minuteNumber = _minute;
+    }
+
+    public void RemoteCall_DeleteNotification()
+    {
+        notificationHolder.DeleteNotification(daySelected);
+      
+    }
+
 }

@@ -189,7 +189,7 @@ public class TipMain : MonoBehaviour
 
         TextAsset textAsset = (TextAsset)Resources.Load("tips");
         string[] _lines = textAsset.ToString().Split('\n');
-        print(_lines.Length);
+    //    print(_lines.Length);
 
         foreach (string _line in _lines)
         {

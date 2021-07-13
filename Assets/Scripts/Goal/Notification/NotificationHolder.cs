@@ -119,4 +119,9 @@ public class NotificationHolder : MonoBehaviour
 
         return false;
     }
+
+    public void RemoveNotification(NotificationPrefabUtility _npu)
+    {
+        notifications.Remove(_npu);
+    }
 }

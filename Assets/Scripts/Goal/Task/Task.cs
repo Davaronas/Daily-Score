@@ -42,7 +42,11 @@ public class Task : MonoBehaviour
     private GoalManager goalManager;
 
 
-   
+
+  
+
+    
+
 
     public void FeedData(TaskData _data, GoalManager _gm) // we need the goalamanger here because the goalmanager gameobject is disabled at this point
     {

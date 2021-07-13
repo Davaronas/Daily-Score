@@ -47,6 +47,7 @@ public class TaskManager : MonoBehaviour
 
     private List<Task> currentTasks = new List<Task>();
 
+    private TaskData currentlySelectedTask = null;
 
     [HideInInspector] public GoalManager goalManager = null;
     private TaskTypeComponents taskTypeComponents = null;
@@ -174,6 +175,10 @@ public class TaskManager : MonoBehaviour
 
     public void EditTask(TaskData _data)
     {
+        print("Edit task");
+
+        currentlySelectedTask = _data;
+
         taskNameText_EditMode.text = _data.name;
         taskTypeText_EditMode.text = RuntimeTranslator.TranslateTaskType(_data.type);
 
@@ -189,13 +194,18 @@ public class TaskManager : MonoBehaviour
         createNewTaskButton.SetActive(false);
 
 
+
+        /*
         for (int i = 0; i < _data.activeOnDays.Count; i++)
         {
             selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[i]);
         }
+        */
 
         everyThDay = _data.activeEveryThDay;
 
+
+        // show task data type texts
         switch (_data.type)
         {
             case AppManager.TaskType.Maximum:
@@ -230,6 +240,10 @@ public class TaskManager : MonoBehaviour
                 break;
         }
 
+
+        // turn on active day toggles / every th day input field
+
+
         for (int i = 0; i < dayToggles.Length; i++)
         {
 
@@ -240,6 +254,8 @@ public class TaskManager : MonoBehaviour
                     if (dayToggles[i].GetDay() == (DayOfWeek)_data.activeOnDays[j])
                     {
                         dayToggles[i].TurnOn();
+                        print((DayOfWeek)_data.activeOnDays[j]);
+                      //  selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[j]);
                         break;
                     }
                 }
@@ -250,17 +266,221 @@ public class TaskManager : MonoBehaviour
             }
         }
 
+        /*
+        foreach (DayOfWeek _day in selectedActiveDays)
+        {
+            print(_day);
+        }
+        */
+
+
+        // display notifications attached to this task
         for (int i = 0; i < _data.notificationAttachedActiveDay.Count; i++)
         {
             NotificationManager.NotificationData _nd;
-            NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[i], _data.name, out _nd);
-           NotificationPrefabUtility _npu =  notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[i]);
-            _npu.hour.text = Convert.ToDateTime(_nd.fireTime).Hour.ToString();
-            _npu.minute.text = Convert.ToDateTime(_nd.fireTime).Minute.ToString();
+
+            if (NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[i], _data.name, out _nd))
+            {
+                NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[i]);
+                _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
+            }
+            
         }
 
         // feed task type components and day holders or everyThDay input field
         // notifications
+
+
+        // switch _data.activeOnDays with selected actice days
+    }
+
+
+
+    public void RemoteCall_ConfirmEditChanges()
+    {
+        if(currentlySelectedTask == null)
+        {
+            Debug.LogError("No task is selected");
+            return;
+        }
+
+     
+
+        if (selectedActiveDays.Count == 0 && everyThDay == 0) { AppManager.ErrorHappened(ErrorMessages.DaysNotSelected_CreateTaskPanel()); return; }
+
+        /*
+        foreach (DayOfWeek _day in selectedActiveDays)
+        {
+            print(_day);
+        }
+        */
+
+
+
+        currentlySelectedTask.isEditedToday = false;
+        currentlySelectedTask.activeOnDays.Clear();
+        currentlySelectedTask.activeEveryThDay = 0;
+
+        switch (currentlySelectedTask.type)
+        {
+            case AppManager.TaskType.Maximum:
+                MaximumTaskData _new_mxtd = taskTypeComponents.GetData(currentlySelectedTask.type) as MaximumTaskData;
+                if(_new_mxtd == null) { return; }
+                ((MaximumTaskData)currentlySelectedTask).pointsGainedPerOne = _new_mxtd.pointsGainedPerOne;
+                ((MaximumTaskData)currentlySelectedTask).targetValue = _new_mxtd.targetValue;
+                ((MaximumTaskData)currentlySelectedTask).overachievePercentBonus = _new_mxtd.overachievePercentBonus;
+                ((MaximumTaskData)currentlySelectedTask).metric = _new_mxtd.metric;
+                ((MaximumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_mxtd.streakStartsAfterDays;
+                ((MaximumTaskData)currentlySelectedTask).current = 0;
+
+
+              
+
+
+                break;
+            case AppManager.TaskType.Minimum:
+                MinimumTaskData _new_mntd = taskTypeComponents.GetData(currentlySelectedTask.type) as MinimumTaskData;
+                if (_new_mntd == null) { return; }
+                ((MinimumTaskData)currentlySelectedTask).targetValue = _new_mntd.targetValue;
+                ((MinimumTaskData)currentlySelectedTask).pointsLostPerOne = _new_mntd.pointsLostPerOne;
+                ((MinimumTaskData)currentlySelectedTask).pointsForStayingUnderTargetValue = _new_mntd.pointsForStayingUnderTargetValue;
+                ((MinimumTaskData)currentlySelectedTask).underTargetValuePercentBonus = _new_mntd.underTargetValuePercentBonus;
+                ((MinimumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_mntd.streakStartsAfterDays;
+                ((MinimumTaskData)currentlySelectedTask).metric = _new_mntd.metric;
+                ((MinimumTaskData)currentlySelectedTask).current = 0;
+                break;
+            case AppManager.TaskType.Boolean:
+                BooleanTaskData _new_btd = taskTypeComponents.GetData(currentlySelectedTask.type) as BooleanTaskData;
+                if (_new_btd == null) { return; }
+                ((BooleanTaskData)currentlySelectedTask).pointsGained = _new_btd.pointsGained;
+                ((BooleanTaskData)currentlySelectedTask).isDone = false;
+                
+
+                break;
+            case AppManager.TaskType.Optimum:
+                OptimumTaskData _new_otd = taskTypeComponents.GetData(currentlySelectedTask.type) as OptimumTaskData;
+                if (_new_otd == null) { return; }
+                ((OptimumTaskData)currentlySelectedTask).metric = _new_otd.metric;
+                ((OptimumTaskData)currentlySelectedTask).pointsForOptimum = _new_otd.pointsForOptimum;
+                ((OptimumTaskData)currentlySelectedTask).pointsLostPerOneDifference = _new_otd.pointsLostPerOneDifference;
+                ((OptimumTaskData)currentlySelectedTask).targetValue = _new_otd.targetValue;
+                ((OptimumTaskData)currentlySelectedTask).current = 0;
+                ((OptimumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_otd.streakStartsAfterDays;
+
+
+                break;
+            case AppManager.TaskType.Interval:
+                IntervalTaskData _new_itd = taskTypeComponents.GetData(currentlySelectedTask.type) as IntervalTaskData;
+                if (_new_itd == null) { return; }
+                ((IntervalTaskData)currentlySelectedTask).intervals = _new_itd.intervals;
+                ((IntervalTaskData)currentlySelectedTask).current = 0;
+                ((IntervalTaskData)currentlySelectedTask).metric = _new_itd.metric;
+                break;
+        }
+
+        if (everyThDay > 0)
+        {
+            currentlySelectedTask.activeEveryThDay = everyThDay;
+            currentlySelectedTask.beingActiveType = TaskData.ActiveType.EveryThDay;
+            currentlySelectedTask.isActiveToday = true;
+        }
+        else
+        {
+            currentlySelectedTask.beingActiveType = TaskData.ActiveType.DayOfWeek;
+            for (int i = 0; i < selectedActiveDays.Count; i++)
+            {
+                if(selectedActiveDays[i] == DateTime.Today.DayOfWeek)
+                {
+                    currentlySelectedTask.isActiveToday = true;
+                }
+                else
+                {
+                    currentlySelectedTask.isActiveToday = false;
+                }
+                currentlySelectedTask.activeOnDays.Add((int)selectedActiveDays[i]);
+            }
+        }
+
+
+
+        foreach(int _day in currentlySelectedTask.notificationAttachedActiveDay)
+        {
+            NotificationManager.NotificationData _nd;
+            if(NotificationManager.GetNotificationData((DayOfWeek)_day,currentlySelectedTask.name,out _nd))
+            {
+                NotificationManager.DeleteNotification(_nd);
+            }
+
+           
+        }
+
+        currentlySelectedTask.notificationAttachedActiveDay.Clear();
+
+        if (selectedActiveDays.Count > 0)
+        {
+
+
+          
+
+            for (int i = 0; i < currentlySelectedTask.activeOnDays.Count; i++)
+            {
+                if ((int)DateTime.Now.DayOfWeek == currentlySelectedTask.activeOnDays[i])
+                {
+                    currentlySelectedTask.isActiveToday = true;
+                }
+            }
+
+            NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
+            for (int i = 0; i < _npus.Length; i++)
+            {
+                currentlySelectedTask.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
+                int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
+                //print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
+                DateTime _fireTime = DateTime.Today;
+                _fireTime = _fireTime.AddDays(daysUntilNextDay);
+                // _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+                print(_fireTime);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
+                    " notification", "Don't forget " + currentlySelectedTask.name + 
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, currentlySelectedTask.name);
+            }
+
+
+        }
+        else if (everyThDay > 0)
+        {
+
+            currentlySelectedTask.activeEveryThDay = everyThDay;
+            currentlySelectedTask.isActiveToday = true;
+            currentlySelectedTask.nextActiveDay = CalculateNextActiveDay(currentlySelectedTask).ToString();
+
+
+            NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
+            for (int i = 0; i < _npus.Length; i++)
+            {
+                currentlySelectedTask.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
+                //   int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
+                // print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
+                DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
+                // _fireTime.AddHours(-_fireTime.Hour);
+                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
+                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+
+                print(_fireTime);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
+                    " notification", "Don't forget " + currentlySelectedTask.name +
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+
+            }
+        }
+
+
+
+
+        AppManager.TaskEdited(currentlySelectedTask);
+
     }
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
@@ -348,7 +568,7 @@ public class TaskManager : MonoBehaviour
             {
                 _data.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
                 int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
-                print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
+                //print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
                 DateTime _fireTime = DateTime.Today;
                 _fireTime = _fireTime.AddDays(daysUntilNextDay);
                 // _fireTime.AddHours(-_fireTime.Hour);
@@ -394,6 +614,8 @@ public class TaskManager : MonoBehaviour
        
 
         AppManager.NewTaskAdded();
+
+    //    print(_data.name + " " + _data.activeOnDays.Count);
     }
 
     private DateTime CalculateNextActiveDay(TaskData _data)
@@ -422,6 +644,7 @@ public class TaskManager : MonoBehaviour
                 }
 
                 selectedActiveDays.Add(_day);
+              //  print(_day);
                 everyThDayInputField.text = "";
                 everyThDay = 0;
             }
@@ -430,7 +653,6 @@ public class TaskManager : MonoBehaviour
         {
             if (selectedActiveDays.Contains(_day))
             {
-                print("Removed");
                 selectedActiveDays.Remove(_day);
                 if(notificationHolder.HasDay(_day))
                 {

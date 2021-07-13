@@ -76,7 +76,6 @@ public class StatisticCalculator2 : MonoBehaviour
 
         // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
         
-        print("Task");
         Invoke(nameof( GoalScoreCalcs),0.1f);
         Invoke(nameof(TaskGoalCalc),0.2f);
 

@@ -73,6 +73,11 @@ remove reset task points from all history
 click on averages will turn to other type of averages
 click on highscores will turn to other types of highscores
 
+streak
+
+
+replace active days, replace points
+
 
 
 
