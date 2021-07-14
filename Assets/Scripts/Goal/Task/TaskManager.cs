@@ -244,10 +244,10 @@ public class TaskManager : MonoBehaviour
         // turn on active day toggles / every th day input field
 
 
-        for (int i = 0; i < dayToggles.Length; i++)
+        if (_data.activeOnDays.Count > 0)
         {
 
-            if (_data.activeOnDays.Count > 0)
+            for (int i = 0; i < dayToggles.Length; i++)
             {
                 for (int j = 0; j < _data.activeOnDays.Count; j++)
                 {
@@ -255,16 +255,50 @@ public class TaskManager : MonoBehaviour
                     {
                         dayToggles[i].TurnOn();
                         print((DayOfWeek)_data.activeOnDays[j]);
-                      //  selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[j]);
+                        //  selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[j]);
                         break;
                     }
                 }
             }
-            else
+
+            for (int k = 0; k < _data.notificationAttachedActiveDay.Count; k++)
             {
-                everyThDayInputField.text = _data.activeEveryThDay.ToString();
+
+                NotificationManager.NotificationData _nd;
+
+                print(_data.notificationAttachedActiveDay[k] + " found");
+
+                if (NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[k], _data.name, out _nd))
+                {
+                    NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[k]);
+                    _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
+                }
+
             }
+
+
         }
+        else
+        {
+
+            NotificationManager.NotificationData _nd;
+
+            if (NotificationManager.GetNotificationData_NoDayCheck(_data.name, out _nd))
+            {
+                NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[0]);
+                _npu.SetDayPlusIntervalDays((DayOfWeek)_data.notificationAttachedActiveDay[0], _nd.resetIntervalDays);
+                _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
+            }
+
+            everyThDayInputField.text = _data.activeEveryThDay.ToString();
+        }
+        
+
+
+        
+
+
+      
 
         /*
         foreach (DayOfWeek _day in selectedActiveDays)
@@ -275,17 +309,7 @@ public class TaskManager : MonoBehaviour
 
 
         // display notifications attached to this task
-        for (int i = 0; i < _data.notificationAttachedActiveDay.Count; i++)
-        {
-            NotificationManager.NotificationData _nd;
 
-            if (NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[i], _data.name, out _nd))
-            {
-                NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[i]);
-                _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
-            }
-            
-        }
 
         // feed task type components and day holders or everyThDay input field
         // notifications
@@ -414,10 +438,10 @@ public class TaskManager : MonoBehaviour
            
         }
 
-        currentlySelectedTask.notificationAttachedActiveDay.Clear();
 
         if (selectedActiveDays.Count > 0)
         {
+            currentlySelectedTask.notificationAttachedActiveDay.Clear();
 
 
           
@@ -435,10 +459,8 @@ public class TaskManager : MonoBehaviour
             {
                 currentlySelectedTask.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
                 int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
-                //print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
                 DateTime _fireTime = DateTime.Today;
                 _fireTime = _fireTime.AddDays(daysUntilNextDay);
-                // _fireTime.AddHours(-_fireTime.Hour);
                 _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
                 print(_fireTime);
@@ -457,22 +479,48 @@ public class TaskManager : MonoBehaviour
             currentlySelectedTask.nextActiveDay = CalculateNextActiveDay(currentlySelectedTask).ToString();
 
 
-            NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
-            for (int i = 0; i < _npus.Length; i++)
+
+            NotificationManager.NotificationData _nd;
+
+            if (NotificationManager.GetNotificationData_NoDayCheck(currentlySelectedTask.name, out _nd))
             {
-                currentlySelectedTask.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
-                //   int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
-                // print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
-                DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
-                // _fireTime.AddHours(-_fireTime.Hour);
-                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
-                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+                NotificationManager.DeleteNotification(_nd);
+                NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
+                if (_npus.Length > 0)
+                {
+                    if(_npus[0].daySelected != Convert.ToDateTime( _nd.fireTime).DayOfWeek)
+                    {
 
-                print(_fireTime);
-                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
-                    " notification", "Don't forget " + currentlySelectedTask.name +
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+                        currentlySelectedTask.notificationAttachedActiveDay.Add((int)_npus[0].daySelected);
+                     //   int daysUntilNextDay = ((int)(Convert.ToDateTime(_nd.fireTime)).DayOfWeek - (int)DateTime.Today.DayOfWeek + 7) % 7;
+                        DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
+                        _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
+                        _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
+                        print(_fireTime + " " + _fireTime.DayOfWeek);
+                        NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
+                            + " notification", "Don't forget " + currentlySelectedTask.name +
+                            "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+                    }
+                    else
+                    {
+                        DateTime _fireTime = Convert.ToDateTime( _nd.fireTime);
+                        _fireTime.AddHours(-Convert.ToDateTime(_nd.fireTime).Hour);
+                        _fireTime.AddMinutes(-Convert.ToDateTime(_nd.fireTime).Minute);
+                        _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
+                        _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
+
+                        NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
+                           + " notification", "Don't forget " + currentlySelectedTask.name +
+                           "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+                    }
+                }
+            }
+            else
+            {
+
+
+               
             }
         }
 
@@ -568,14 +616,14 @@ public class TaskManager : MonoBehaviour
             {
                 _data.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
                 int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
-                //print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
                 DateTime _fireTime = DateTime.Today;
                 _fireTime = _fireTime.AddDays(daysUntilNextDay);
-                // _fireTime.AddHours(-_fireTime.Hour);
                 _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
                 print(_fireTime);
-                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
+                    + " notification", "Don't forget " + _data.name + 
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
             }
 
 
@@ -589,19 +637,18 @@ public class TaskManager : MonoBehaviour
 
 
             NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
-            for (int i = 0; i < _npus.Length; i++)
-            {
-                _data.notificationAttachedActiveDay.Add((int)_npus[i].daySelected);
-             //   int daysUntilNextDay = ((int)_npus[i].daySelected - (int)DateTime.Today.DayOfWeek + 7) % 7;
-               // print("Days until " + _npus[i].daySelected + " " + daysUntilNextDay);
+       
+                _data.notificationAttachedActiveDay.Add((int)DateTime.Today.DayOfWeek);
+  
                 DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
-                // _fireTime.AddHours(-_fireTime.Hour);
-                _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
-                _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+                _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
+                _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
-                print(_fireTime);
-                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + " notification", "Don't forget " + _data.name + "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
-            }
+                print(_fireTime + " " + _fireTime.DayOfWeek);
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name 
+                    + " notification", "Don't forget " + _data.name +
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
+            
         }
 
 
@@ -769,14 +816,42 @@ public class TaskManager : MonoBehaviour
 
 
 
+    public bool TaskExists(string _task)
+    {
+        GoalData[] _datas = goalManager.GetGoals();
+        for (int i = 0; i < _datas.Length; i++)
+        {
+            if(_datas[i].TaskExists(_task))
+            {
+                return true;
+            }
+        }
 
+        return false;
+    }
 
    
+
+
+    public void DeleteTask()
+    {
+        goalManager.GetCurrentlySelectedGoal().GetGoalData().tasks.Remove(currentlySelectedTask);
+
+        AppManager.TaskEdited(currentlySelectedTask);
+    }
 
 
 
     private void LanguageChangedCallback(AppManager.Languages _lang)
     {
+        Invoke( nameof(ChangeMetricDropdownLanguage), 0.1f);
+
+    }
+
+    private void ChangeMetricDropdownLanguage()
+    {
+
+
         valueMetricDropdown.ClearOptions();
 
         List<string> _metrics = new List<string>();

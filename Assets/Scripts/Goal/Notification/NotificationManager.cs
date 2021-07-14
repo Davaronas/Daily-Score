@@ -9,7 +9,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class NotificationManager : MonoBehaviour
 {
 
-    GoalManager goalManager = null;
+   private GoalManager goalManager = null;
+    private TaskManager taskManager = null;
 
     [System.Serializable]
     public struct NotificationData
@@ -52,6 +53,7 @@ public class NotificationManager : MonoBehaviour
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
+        taskManager = FindObjectOfType<TaskManager>();
     }
 
     private void Start()
@@ -71,13 +73,19 @@ public class NotificationManager : MonoBehaviour
             for (int i = 0; i < notifications.Count; i++)
             {
 
+              
+
                 NotificationStatus _status = AndroidNotificationCenter.CheckScheduledNotificationStatus(notifications[i].id);
+
+
+
+
                 if (_status == NotificationStatus.Delivered)
                 {
                   //  if(notifications[i].ownerTask) // find if owner exists
                     NotificationData _replace = notifications[i];
                     ClearNotification(notifications[i].id);
-                    SendNotification(_replace);
+                    SendNotificationWithAddingResetTime(_replace);
                 }
             }
         }
@@ -132,6 +140,21 @@ public class NotificationManager : MonoBehaviour
         return false;
     }
 
+    public static bool GetNotificationData_NoDayCheck(string _owner, out NotificationData _data)
+    {
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            if (notifications[i].ownerTask == _owner)
+            {
+                _data = notifications[i];
+                return true;
+            }
+        }
+
+        _data = new NotificationData();
+        return false;
+    }
+
 
     public static void CreateChannel()
     {
@@ -174,7 +197,7 @@ public class NotificationManager : MonoBehaviour
 
     }
 
-    public static void SendNotification(NotificationData _data)
+    public static void SendNotificationWithAddingResetTime(NotificationData _data)
     {
         AndroidNotification notification = new AndroidNotification();
         notification.Title = _data.title;
@@ -225,6 +248,7 @@ public class NotificationManager : MonoBehaviour
         {
             if(notifications[i] == _data)
             {
+                AndroidNotificationCenter.CancelNotification(notifications[i].id);
                 notifications.Remove(notifications[i]);
                 break;
             }
@@ -272,7 +296,7 @@ public class NotificationManager : MonoBehaviour
             {
                 NotificationData _replace = notifications[i];
                 ClearNotification(notifications[i].id);
-                SendNotification(_replace);
+                SendNotificationWithAddingResetTime(_replace);
             }
         }
     }
@@ -291,7 +315,7 @@ public class NotificationManager : MonoBehaviour
                 {
                     NotificationData _replace = notifications[i];
                     ClearNotification(notifications[i].id);
-                    SendNotification(_replace);
+                    SendNotificationWithAddingResetTime(_replace);
                 }
             }
         }

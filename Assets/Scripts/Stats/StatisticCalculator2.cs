@@ -236,6 +236,7 @@ public class StatisticCalculator2 : MonoBehaviour
     {
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         float weeklytaskpointav = 0;
+        int kcounter = 0;
         float weeklytaskfleet = dailytaskpoint;
         int[] weeklydata = new int[7];
         for (int k = 0; k < currentselectedGoal.dailyScores.Count; k++)
@@ -243,6 +244,8 @@ public class StatisticCalculator2 : MonoBehaviour
 
             if (Convert.ToDateTime(currentselectedGoal.dailyScores[k].time).Date >= Today.AddDays(-7))
             {
+                kcounter++;
+
                 switch (Convert.ToDateTime(currentselectedGoal.dailyScores[k].time).DayOfWeek)
                 {
                     case DayOfWeek.Monday:
@@ -280,7 +283,22 @@ public class StatisticCalculator2 : MonoBehaviour
         {
             weeklytaskfleet += weeklydata[j];
         }
-        weeklytaskpointav = weeklytaskfleet / 7;
+
+        /*
+        for (int j = 0; j < currentselectedGoal.tasks.Count; j++)
+        {
+            if (currentselectedGoal.tasks[j].isEditedToday)
+            {
+                print("calculate " + currentselectedGoal.tasks[j].name + " " + weeklytaskfleet);
+                weeklytaskfleet += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
+            }
+        }
+        */
+
+        if (kcounter >= 0)
+        {
+            weeklytaskpointav = weeklytaskfleet / (kcounter + 1);
+        }
 
         taskweeklyScoreText.text = Math.Round(weeklytaskpointav,2).ToString();
     }

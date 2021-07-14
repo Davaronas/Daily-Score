@@ -26,12 +26,19 @@ task numbers -> protect from writing 0 as a first character ? not necessary the 
 tasks days*
 task active on days -> set on creation, and set on loading in (if current day == any selected day or next active day)*
 clear interval when disabling create task menu*
+task uninteractable when inactive*
+notification check task and goal existance*
+task current value bit bigger click area than visible*
+Gold panel create new texts for new line*
+replace active days, replace points*
+edit task*
+delete notification - delete from notification manager too (delete all and replace all perhaps ?)*
+Detailed task datas*
 
 
 saving task changes*__
 
 
-Detailed task datas
 
 
 Setting up sprites
@@ -49,25 +56,21 @@ task creatin texts bugged
 
 
 
-task current value bit bigger click area than visible
 
 streak system gold
 
 
 create task texts should be one block, and not seperated into several small textrs
 
-Gold panel create new texts for new line
 
 don't show day selection and notification selection before type selected
 
 
 
-task uninteractable when inactive*
 delete goal
-notification check task and goal existance
-edit task ?
+delet task
+reset task
 
-delete notification - delete from notification manager too (delete all and replace all perhaps ?)
 
 remove reset task points from all history
 click on averages will turn to other type of averages
@@ -76,7 +79,6 @@ click on highscores will turn to other types of highscores
 streak
 
 
-replace active days, replace points
 
 
 

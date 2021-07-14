@@ -166,6 +166,19 @@ public class GoalData
         dailyScores.Add(new ScorePerDay(_amount, _time));
     }
 
+    public bool TaskExists(string _task)
+    {
+        for (int i = 0; i < tasks.Count; i++)
+        {
+            if(tasks[i].name == _task)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     public string name;
    public GoalColor[] color;

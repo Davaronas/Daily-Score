@@ -32,6 +32,11 @@ public class NotificationPrefabUtility : MonoBehaviour
         dayText.text = RuntimeTranslator.TranslateDayOfWeek(DateTime.Today.DayOfWeek) + " + " + _day;
     }
 
+    public void SetDayPlusIntervalDays(DayOfWeek _day, int _reset)
+    {
+        dayText.text = RuntimeTranslator.TranslateDayOfWeek(_day) + " + " + _reset;
+    }
+
 
     public void RemoteCall_EditHour()
     {

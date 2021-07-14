@@ -41,7 +41,7 @@ public class Task : MonoBehaviour
 
     private GoalManager goalManager;
 
-
+    private bool allowValueChange = false;
 
   
 
@@ -55,7 +55,6 @@ public class Task : MonoBehaviour
 
         currentValueInputField.gameObject.SetActive(false);
         targetValueText.gameObject.SetActive(false);
-        booleanTaskTypeToggle.isOn = false;
         booleanTaskTypeToggle.gameObject.SetActive(false);
 
         scoreTextRectTransform = scoreText.GetComponent<RectTransform>();
@@ -100,6 +99,8 @@ public class Task : MonoBehaviour
             currentValueInputField.interactable = true;
             booleanTaskTypeToggle.interactable = true;
         }
+
+        allowValueChange = true;
 
     }
 
@@ -203,6 +204,14 @@ public class Task : MonoBehaviour
         currentValueInputField.gameObject.SetActive(false);
         targetValueText.gameObject.SetActive(false);
         booleanTaskTypeToggle.gameObject.SetActive(true);
+        if(btd.isDone == true)
+        {
+            booleanTaskTypeToggle.isOn = true;
+        }
+        else
+        {
+            booleanTaskTypeToggle.isOn = false;
+        }
 
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
@@ -287,6 +296,8 @@ public class Task : MonoBehaviour
                 _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
+
+                print(btd.isDone);
                 break;
             case AppManager.TaskType.Optimum:
                 if (currentValueInputField.text != "")
