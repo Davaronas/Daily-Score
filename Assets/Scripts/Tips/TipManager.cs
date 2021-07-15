@@ -165,6 +165,8 @@ public class TipManager : MonoBehaviour
 
     public void SetSaveButtonState(int _id)
     {
+        print(mainTip.GetHeldTipId() + " " + secondTip.GetHeldTipId());
+
         if (tipMain.Loaded.Contains(_id))
         {
             if (mainTip.tipId == _id)

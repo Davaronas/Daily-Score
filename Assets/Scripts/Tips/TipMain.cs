@@ -140,6 +140,7 @@ public class TipMain : MonoBehaviour
             ResourceLoad();
             GetRandomTip();
             tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
+            print(rolledtip.ID + " " + rolledtip.name + " " + rolledtip.data);
             SavingTips();
             PlayerPrefs.SetInt("FIRSTTIMEOPENING", 0);
         }
@@ -154,6 +155,7 @@ public class TipMain : MonoBehaviour
             {
                 GetRandomTip();
                 tipmanager.LoadDailyTip(rolledtip.ID, rolledtip.name, rolledtip.data);
+                print(rolledtip.ID + " " + rolledtip.name + " " + rolledtip.data);
                 SavingTips();
             }
             else
@@ -161,8 +163,11 @@ public class TipMain : MonoBehaviour
                 if (second == true)
                 {
                     tipmanager.LoadDailyTip(Saved_ID[Saved_ID.Count-1], name[Saved_ID.Count-1], maindata[Saved_ID.Count-1]);
+                    print(rolledtip.ID + " " + name[Saved_ID.Count - 1] + " " + maindata[Saved_ID.Count - 1]);
                 }
                 tipmanager.LoadDailyTip(Saved_ID[Saved_ID.Count], name[Saved_ID.Count], maindata[Saved_ID.Count]);
+                print(rolledtip.ID + " " + name[Saved_ID.Count] + " " + maindata[Saved_ID.Count]);
+
             }
         }       
     }
@@ -228,6 +233,7 @@ public class TipMain : MonoBehaviour
             _header = rolledtip.name; // a címe a tipnek
             _content = rolledtip.data; // a tartalma a tipnek
             PlayerPrefs.SetInt("FIRSTTIMEOPENINGSECOND", 0);
+            print(rolledtip.ID + " " + _header + " " + " " + _content); 
             return rolledtip.ID; // tip id ide
         }
         else
@@ -239,6 +245,7 @@ public class TipMain : MonoBehaviour
                 SavingTips();
                 _header = rolledtip.name; // a címe a tipnek
                 _content = rolledtip.data; // a tartalma a tipnek
+                print(rolledtip.ID + " " + _header + " " + " " + _content);
                 return rolledtip.ID; // tip id ide
             }
             else
@@ -247,6 +254,7 @@ public class TipMain : MonoBehaviour
                 //tipmanager.UnlockSecondTip(); tip feloldas
                 _header = name[Saved_ID[Saved_ID.Count-1]]; // a címe a tipnek
                 _content = maindata[Saved_ID[Saved_ID.Count-1]]; // a tartalma a tipnek
+                print(Saved_ID[Saved_ID.Count - 1] + " " + _header + " " + " " + _content);
                 return Saved_ID[Saved_ID.Count-1]; // tip id ide
             }
         }
