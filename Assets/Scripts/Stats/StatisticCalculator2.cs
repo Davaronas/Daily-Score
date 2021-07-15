@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
+/// <summary>
+/// StatCalc version 2.6
+/// </summary>
 struct DailyScoreStruct
 {
     public DateTime DailyDate;
