@@ -51,6 +51,7 @@ public class StatisticCalculator2 : MonoBehaviour
     [SerializeField] TMP_Text HighCoreThisMonthScoreStatMenu;
     [SerializeField] TMP_Text AllTimeBestScoreTextStatMenu;
     [SerializeField] TMP_Text AllTimeAvarageScoreTextStatMenu;
+    [SerializeField] BarChartHolder barchart;
     public GoalData[] GoalDATAS;
 
 
@@ -63,8 +64,8 @@ public class StatisticCalculator2 : MonoBehaviour
     }
     private void OnGoalOpened(Goal _td)
     {
-        GoalScoreCalcs();
-        TaskGoalCalc();
+        Invoke(nameof(GoalScoreCalcs), 0.1f);
+        Invoke(nameof(TaskGoalCalc), 0.2f);
     }
     private void OnTaskValueChanged(TaskData _td)
     {
@@ -371,6 +372,64 @@ public class StatisticCalculator2 : MonoBehaviour
         }
 
         taskmaxScoreText.text = taskmaxfleet.ToString();
+    }
+
+    void RemoteCall_weeklygraph()
+    {
+        List<BarChartInfo> barChartInfos = new List<BarChartInfo>();
+        StatLoad();
+        int i;
+        int[] weeklydata = new int[7];
+        for (i = 0; i < GoalDATAS.Length; i++)
+        {
+            for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
+            {
+
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
+                {
+                    switch (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).DayOfWeek)
+                    {
+                        case DayOfWeek.Monday:
+                            weeklydata[0] += GoalDATAS[i].dailyScores[k].amount;
+                            //  print("Week0");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[0],RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(1,3)));
+                            break;
+                        case DayOfWeek.Tuesday:
+                            weeklydata[1] += GoalDATAS[i].dailyScores[k].amount;
+                            // print("Week1");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[1], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Tuesday).Substring(1, 3)));
+                            break;
+                        case DayOfWeek.Wednesday:
+                            weeklydata[2] += GoalDATAS[i].dailyScores[k].amount;
+                            //  print("Week2");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[2], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Wednesday).Substring(1, 3)));
+                            break;
+                        case DayOfWeek.Thursday:
+                            weeklydata[3] += GoalDATAS[i].dailyScores[k].amount;
+                            //   print("Week3");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[3], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Thursday).Substring(1, 3)));
+                            break;
+                        case DayOfWeek.Friday:
+                            weeklydata[4] += GoalDATAS[i].dailyScores[k].amount;
+                            //   print("Week4");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[4], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Friday).Substring(1, 3)));
+                            break;
+                        case DayOfWeek.Saturday:
+                            weeklydata[5] += GoalDATAS[i].dailyScores[k].amount;
+                            //  print("Week5");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[5], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Saturday).Substring(1, 3)));
+                            break;
+                        case DayOfWeek.Sunday:
+                            weeklydata[6] += GoalDATAS[i].dailyScores[k].amount;
+                            //   print("Week6");
+                            barChartInfos.Add(new BarChartInfo(weeklydata[6], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Sunday).Substring(1, 3)));
+                            break;
+                    }
+                }
+            }
+        }
+        barchart.Clear();
+        barchart.LoadData(barChartInfos.ToArray(),true);
     }
 
     void Start()

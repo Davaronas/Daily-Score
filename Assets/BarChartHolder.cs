@@ -8,6 +8,11 @@ public struct BarChartInfo
 {
    public float point;
   public  string description;
+    public BarChartInfo(float pont, string desc)
+    {
+        point = pont;
+        description = desc;
+    }
 }
 
 public class BarChartHolder : MonoBehaviour
