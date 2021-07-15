@@ -374,7 +374,7 @@ public class StatisticCalculator2 : MonoBehaviour
         taskmaxScoreText.text = taskmaxfleet.ToString();
     }
 
-    void RemoteCall_weeklygraph()
+    public void Weeklygraph()
     {
         List<BarChartInfo> barChartInfos = new List<BarChartInfo>();
         StatLoad();

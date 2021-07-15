@@ -41,6 +41,7 @@ public class BarChartHolder : MonoBehaviour
         minText_RT = minText.GetComponent<RectTransform>();
         maxText_RT = maxText.GetComponent<RectTransform>();
 
+        /*
         LoadBar(200, "V");
         LoadBar(240, "K");
         LoadBar(300, "H");
@@ -48,6 +49,7 @@ public class BarChartHolder : MonoBehaviour
         LoadBar(310, "P");
         LoadBar(280, "Sze");
         LoadBar(230, "Szo");
+        */
     }
 
 

@@ -413,4 +413,36 @@ public static class RuntimeTranslator
         }
     }
 
+    public static string TranslateWeeklyWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return "Weekly";
+            case AppManager.Languages.Magyar:
+                return "Heti";
+            case AppManager.Languages.Deutsch:
+                return "Wöchentlich";
+            default:
+                return "AppManager.Languages doesn't contain this language";
+
+        }
+    }
+
+    public static string TranslateMonthlyWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return "Monthly";
+            case AppManager.Languages.Magyar:
+                return "Havi";
+            case AppManager.Languages.Deutsch:
+                return "Monatlich";
+            default:
+                return "AppManager.Languages doesn't contain this language";
+
+        }
+    }
+
 }
