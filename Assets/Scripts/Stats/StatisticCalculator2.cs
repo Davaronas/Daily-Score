@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
 /// <summary>
-/// StatCalc version 2.6
+/// StatCalc version 2.7
 /// </summary>
 struct DailyScoreStruct
 {
@@ -54,10 +54,16 @@ public class StatisticCalculator2 : MonoBehaviour
     [SerializeField] TMP_Text HighCoreThisMonthScoreStatMenu;
     [SerializeField] TMP_Text AllTimeBestScoreTextStatMenu;
     [SerializeField] TMP_Text AllTimeAvarageScoreTextStatMenu;
-    [SerializeField] BarChartHolder barchart;
+
     public GoalData[] GoalDATAS;
 
-
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    [SerializeField] PieChart piechart1;
+    [SerializeField] PieChart piechart2;
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    [SerializeField] BarChartHolder barchart1;
+    [SerializeField] BarChartHolder barchart2;
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void Awake()
     {
         AppManager.OnTaskValueChanged += OnTaskValueChanged;
@@ -79,9 +85,9 @@ public class StatisticCalculator2 : MonoBehaviour
         // GoalData _gd; goalManager.SearchGoalByName(_td.owner, out _gd); ezen van bool check is hogy sikerült e megtalálni/létezik e
 
         // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
-        
-        Invoke(nameof( GoalScoreCalcs),0.1f);
-        Invoke(nameof(TaskGoalCalc),0.2f);
+
+        Invoke(nameof(GoalScoreCalcs), 0.1f);
+        Invoke(nameof(TaskGoalCalc), 0.2f);
 
 
     }
@@ -104,14 +110,14 @@ public class StatisticCalculator2 : MonoBehaviour
     void StatLoad()
     {
         GoalDATAS = goalManager.GetGoals();
-     //   print(GoalDATAS == null);
+        //   print(GoalDATAS == null);
     }
 
     void DailyScoreCalc()
     {
         int i = 0;
         dailysc = 0;
-        for ( i = 0; i < GoalDATAS.Length; i++)
+        for (i = 0; i < GoalDATAS.Length; i++)
         {
             if (GoalDATAS[i].GetLastModificationTime().Day == Today.Day)
             {
@@ -125,70 +131,70 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void WeeklyScoreCal()
     {
-        int [] weeklydata = new int[7];
+        int[] weeklydata = new int[7];
         weeklyavarage = 0;
-        float weeklyfleet=dailysc;
+        float weeklyfleet = dailysc;
         int daycounter = 0;
         int i = 0;
         for (int l = 0; l < 7; l++)
         {
             weeklydata[l] = 0;
         }
-        for(i = 0; i<GoalDATAS.Length; i++)
+        for (i = 0; i < GoalDATAS.Length; i++)
         {
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
             {
-                
-                if (Convert.ToDateTime( GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
+
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
                 {
                     daycounter++;
                     switch (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).DayOfWeek)
                     {
                         case DayOfWeek.Monday:
                             weeklydata[0] += GoalDATAS[i].dailyScores[k].amount;
-                          //  print("Week0");
+                            //  print("Week0");
                             break;
                         case DayOfWeek.Tuesday:
                             weeklydata[1] += GoalDATAS[i].dailyScores[k].amount;
-                           // print("Week1");
+                            // print("Week1");
                             break;
                         case DayOfWeek.Wednesday:
                             weeklydata[2] += GoalDATAS[i].dailyScores[k].amount;
-                          //  print("Week2");
+                            //  print("Week2");
                             break;
                         case DayOfWeek.Thursday:
                             weeklydata[3] += GoalDATAS[i].dailyScores[k].amount;
-                         //   print("Week3");
+                            //   print("Week3");
                             break;
                         case DayOfWeek.Friday:
                             weeklydata[4] += GoalDATAS[i].dailyScores[k].amount;
-                         //   print("Week4");
+                            //   print("Week4");
                             break;
                         case DayOfWeek.Saturday:
                             weeklydata[5] += GoalDATAS[i].dailyScores[k].amount;
-                          //  print("Week5");
+                            //  print("Week5");
                             break;
                         case DayOfWeek.Sunday:
                             weeklydata[6] += GoalDATAS[i].dailyScores[k].amount;
-                         //   print("Week6");
+                            //   print("Week6");
                             break;
                     }
                 }
             }
-        } 
+        }
         for (int j = 0; j < 7; j++)
         {
             weeklyfleet += weeklydata[j];
-           // print(weeklydata[j]);
-           // print(weeklyfleet);
+            // print(weeklydata[j]);
+            // print(weeklyfleet);
         }
 
-        if(daycounter == 0) { return; }
+        if (daycounter == 0) { return; }
 
         weeklyavarage = weeklyfleet / daycounter;
-       
-        weeklyScoreText.text = Math.Round(weeklyavarage,2).ToString();
-        weeklyScoreTextStatMenu.text = Math.Round(weeklyavarage,2).ToString();
+
+        weeklyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
+        weeklyScoreTextStatMenu.text = Math.Round(weeklyavarage, 2).ToString();
     }
     void MonthlyAvarageCalc()
     {
@@ -196,23 +202,23 @@ public class StatisticCalculator2 : MonoBehaviour
         int monthlyfleet = 0;
         int daycountermonth = 0;
         int i = 0;
-            for (int j = 0; j < GoalDATAS.Length; j++)
+        for (int j = 0; j < GoalDATAS.Length; j++)
+        {
+            if (GoalDATAS[j].dailyScores == null)
             {
-                if(GoalDATAS[j].dailyScores == null)
-                {
                 continue;
-                }
-                for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+            }
+            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
                 {
-                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
-                    {
                     daycountermonth++;
-                        monthlyfleet += GoalDATAS[j].dailyScores[k].amount;
-                    }
+                    monthlyfleet += GoalDATAS[j].dailyScores[k].amount;
                 }
             }
+        }
 
-            if(daycountermonth == 0) { return; }
+        if (daycountermonth == 0) { return; }
 
         monthlyavarage = monthlyfleet / daycountermonth;
         monthlyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
@@ -229,7 +235,7 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 dailytaskpoint += TaskPointCalculator.GetPointsFromCurrentValue(currentselectedGoal.tasks[j]);
             }
-            
+
         }
 
         taskdailyScoreText.text = dailytaskpoint.ToString();
@@ -304,7 +310,7 @@ public class StatisticCalculator2 : MonoBehaviour
             weeklytaskpointav = weeklytaskfleet / (kcounter + 1);
         }
 
-        taskweeklyScoreText.text = Math.Round(weeklytaskpointav,2).ToString();
+        taskweeklyScoreText.text = Math.Round(weeklytaskpointav, 2).ToString();
     }
     public void MAXCalc()
     {
@@ -313,7 +319,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int maxmaxfleet = 0;
         int alltimeavaragefleet = 0;
         int kcounter = 0;
-        
+
         for (int j = 0; j < GoalDATAS.Length; j++)
         {
             if (GoalDATAS[j].dailyScores == null)
@@ -326,21 +332,21 @@ public class StatisticCalculator2 : MonoBehaviour
                 alltimeavaragefleet += GoalDATAS[j].dailyScores[k].amount;
                 if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
                 {
-                    
-                    if(Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-7))
+
+                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-7))
                     {
-                        
-                        if(maxweekfleet< GoalDATAS[j].dailyScores[k].amount)
+
+                        if (maxweekfleet < GoalDATAS[j].dailyScores[k].amount)
                         {
                             maxweekfleet = GoalDATAS[j].dailyScores[k].amount;
                         }
                     }
-                   if(maxmonthfleet < GoalDATAS[j].dailyScores[k].amount)
+                    if (maxmonthfleet < GoalDATAS[j].dailyScores[k].amount)
                     {
                         maxmonthfleet = GoalDATAS[j].dailyScores[k].amount;
                     }
                 }
-                if(maxmaxfleet < GoalDATAS[j].dailyScores[k].amount)
+                if (maxmaxfleet < GoalDATAS[j].dailyScores[k].amount)
                 {
                     maxmaxfleet = GoalDATAS[j].dailyScores[k].amount;
                 }
@@ -352,15 +358,15 @@ public class StatisticCalculator2 : MonoBehaviour
 
         if (kcounter != 0)
         {
-            alltimevarage =alltimeavaragefleet / kcounter;
+            alltimevarage = alltimeavaragefleet / kcounter;
         }
 
         maxScoreText.text = maxofmax.ToString();
         HighScoreThisWeekStatMenu.text = maxoftheweek.ToString();
         HighCoreThisMonthScoreStatMenu.text = maxofthemonth.ToString();
         AllTimeBestScoreTextStatMenu.text = maxofmax.ToString();
-        AllTimeAvarageScoreTextStatMenu.text = Math.Round(alltimevarage,2).ToString();
-        
+        AllTimeAvarageScoreTextStatMenu.text = Math.Round(alltimevarage, 2).ToString();
+
     }
     public void TaskMaskCalc()
     {
@@ -368,7 +374,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int taskmaxfleet = currentselectedGoal.current;
         for (int j = 0; j < currentselectedGoal.dailyScores.Count; j++)
         {
-            if(taskmaxfleet < currentselectedGoal.dailyScores[j].amount)
+            if (taskmaxfleet < currentselectedGoal.dailyScores[j].amount)
             {
                 taskmaxfleet = currentselectedGoal.dailyScores[j].amount;
             }
@@ -383,6 +389,7 @@ public class StatisticCalculator2 : MonoBehaviour
         StatLoad();
         int i;
         int[] weeklydata = new int[7];
+        int counter = 0;
         for (i = 0; i < GoalDATAS.Length; i++)
         {
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
@@ -390,12 +397,13 @@ public class StatisticCalculator2 : MonoBehaviour
 
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
                 {
+                    counter++;
                     switch (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).DayOfWeek)
                     {
                         case DayOfWeek.Monday:
                             weeklydata[0] += GoalDATAS[i].dailyScores[k].amount;
                             //  print("Week0");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[0],RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(1,3)));
+                            barChartInfos.Add(new BarChartInfo(weeklydata[0], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(1, 3)));
                             break;
                         case DayOfWeek.Tuesday:
                             weeklydata[1] += GoalDATAS[i].dailyScores[k].amount;
@@ -431,8 +439,136 @@ public class StatisticCalculator2 : MonoBehaviour
                 }
             }
         }
-        barchart.Clear();
-        barchart.LoadData(barChartInfos.ToArray(),true);
+        barchart1.Clear();
+        if (counter >= 1)
+        {
+            barchart1.LoadData(barChartInfos.ToArray(), true);
+        }
+
+    }
+
+    public void MonthlyGraph()
+    {
+        List<BarChartInfo> barChartInfosmonth = new List<BarChartInfo>();
+        int[] monthlyData = new int[30];
+        int i = 0;
+        for (int j = 0; j < GoalDATAS.Length; j++)
+        {
+            if (GoalDATAS[j].dailyScores == null)
+            {
+                continue;
+            }
+            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
+                {
+
+                    monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
+                    i++;
+                }
+            }
+        }
+        barchart1.Clear();
+        if (i >= 1)
+        {
+            for (int l = 0; l < monthlyData.Length; l++)
+            {
+                barChartInfosmonth.Add(new BarChartInfo(monthlyData[l], ""));
+            }
+            barchart1.LoadData(barChartInfosmonth.ToArray(), false);
+        }
+
+
+    }
+
+    public void GoalPieDaily()
+    {
+        StatLoad();
+        List<PieChartInfo> PiteNap = new List<PieChartInfo>();
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+        }
+        piechart1.Clear();
+        if (PiteNap.Count > 0)
+        {
+            piechart1.LoadData(PiteNap.ToArray());
+        }
+    }
+
+    public void GoalPieWeek()
+    {
+        StatLoad();
+        List<PieChartInfo> PiteHete = new List<PieChartInfo>();
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+            
+            float sziauram = 0;
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(-7))
+                {
+                sziauram += GoalDATAS[i].dailyScores[j].amount;
+                }
+            }
+                PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+            
+        }
+        piechart1.Clear();
+        if (PiteHete.Count > 0)
+        {
+            piechart1.LoadData(PiteHete.ToArray());
+        }
+    }
+
+    public void GoalPieMonth()
+    {
+        StatLoad();
+        List<PieChartInfo> PiteHava = new List<PieChartInfo>();
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+
+            float sziauram = 0;
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(-30))
+                {
+                    sziauram += GoalDATAS[i].dailyScores[j].amount;
+                }
+            }
+            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+
+        }
+        piechart1.Clear();
+        if (PiteHava.Count > 0)
+        {
+            piechart1.LoadData(PiteHava.ToArray());
+        }
+    }
+
+    public void GoalPieMind()
+    {
+        StatLoad();
+        List<PieChartInfo> PiteMind = new List<PieChartInfo>();
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+
+            float sziauram = 0;
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                sziauram += GoalDATAS[i].dailyScores[j].amount;
+            }
+            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+
+        }
+        piechart1.Clear();
+        if (PiteMind.Count > 0)
+        {
+            piechart1.LoadData(PiteMind.ToArray());
+        }
     }
 
     void Start()
