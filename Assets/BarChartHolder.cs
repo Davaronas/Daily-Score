@@ -8,10 +8,10 @@ public struct BarChartInfo
 {
    public float point;
   public  string description;
-    public BarChartInfo(float pont, string desc)
+    public BarChartInfo(float _pont, string _desc)
     {
-        point = pont;
-        description = desc;
+        point = _pont;
+        description = _desc;
     }
 }
 
@@ -41,7 +41,7 @@ public class BarChartHolder : MonoBehaviour
         minText_RT = minText.GetComponent<RectTransform>();
         maxText_RT = maxText.GetComponent<RectTransform>();
 
-        /*
+        
         LoadBar(200, "V");
         LoadBar(240, "K");
         LoadBar(300, "H");
@@ -49,7 +49,7 @@ public class BarChartHolder : MonoBehaviour
         LoadBar(310, "P");
         LoadBar(280, "Sze");
         LoadBar(230, "Szo");
-        */
+        
     }
 
 
@@ -98,6 +98,8 @@ public class BarChartHolder : MonoBehaviour
         {
             min = _points;
         }
+
+        
 
         BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
         bars.Add(_newBar,_points);
