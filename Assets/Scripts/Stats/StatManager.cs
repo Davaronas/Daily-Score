@@ -14,6 +14,7 @@ public class StatManager : MonoBehaviour
     private void Awake()
     {
         statCalculator = FindObjectOfType<StatisticCalculator2>();
+        AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
 
 
         barChart1_dropdown.ClearOptions();
@@ -21,7 +22,6 @@ public class StatManager : MonoBehaviour
         _optionsBarChart1.Add(RuntimeTranslator.TranslateWeeklyWord());
         _optionsBarChart1.Add(RuntimeTranslator.TranslateMonthlyWord());
         barChart1_dropdown.AddOptions(_optionsBarChart1);
-        barChart1_dropdown.value = 0;
 
         pieChart1_dropdown.ClearOptions();
         List<string> _optionsPieChart1 = new List<string>();
@@ -30,10 +30,29 @@ public class StatManager : MonoBehaviour
         _optionsPieChart1.Add(RuntimeTranslator.TranslateMonthlyWord());
         _optionsPieChart1.Add(RuntimeTranslator.TranslateAllTimeWord());
         pieChart1_dropdown.AddOptions(_optionsPieChart1);
-        pieChart1_dropdown.value = 0;
 
 
+        Invoke(nameof(LoadDefaults), 0.2f);
+        
+    }
 
+    private void OnDestroy()
+    {
+        
+    }
+
+    private void LoadDefaults()
+    {
+        pieChart1_dropdown.value = 1;
+        barChart1_dropdown.value = 0;
+    }
+
+    private void UpdateIfDailyIsSelected(TaskData _data)
+    {
+        if(pieChart1_dropdown.value == 0)
+        {
+            statCalculator.GoalPieDaily();
+        }
     }
 
     public void RemoteCall_BarChartValueChanged()

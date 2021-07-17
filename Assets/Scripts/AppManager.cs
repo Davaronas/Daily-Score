@@ -1047,7 +1047,8 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
             }
-            stream.Close(); */
+            */
+            stream.Close(); 
             fileInfo.IsReadOnly = true;
 
             // check each goal if they should be active today

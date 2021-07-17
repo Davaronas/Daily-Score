@@ -396,7 +396,7 @@ public class StatisticCalculator2 : MonoBehaviour
                // int _sum = 0;
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
             {
-                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date > Today.AddDays(-7))
                 {
                     //_sum += GoalDATAS[i].dailyScores[k].amount;
 
