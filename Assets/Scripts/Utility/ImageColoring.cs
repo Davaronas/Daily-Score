@@ -35,7 +35,7 @@ public class ImageColoring : MonoBehaviour
     }
 
     [ContextMenu("UpdateColor")]
-    private void UpdateTexture()
+    public void UpdateTexture()
     {
      
         image = GetComponent<Image>();

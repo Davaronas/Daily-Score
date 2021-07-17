@@ -42,13 +42,7 @@ public class BarChartHolder : MonoBehaviour
         maxText_RT = maxText.GetComponent<RectTransform>();
 
         
-        LoadBar(200, "V");
-        LoadBar(240, "K");
-        LoadBar(300, "H");
-        LoadBar(260, "Cs");
-        LoadBar(310, "P");
-        LoadBar(280, "Sze");
-        LoadBar(230, "Szo");
+       
         
     }
 
@@ -81,8 +75,14 @@ public class BarChartHolder : MonoBehaviour
 
         bars.Clear();
 
-        min = 0;
-        max = Mathf.Infinity;
+        min = Mathf.Infinity;
+        max = 0;
+
+        maxText.text = max.ToString();
+        minText.text = min.ToString();
+
+        maxText_RT.anchoredPosition = new Vector2(0, 0);
+        minText_RT.anchoredPosition = new Vector2(0, 0);
     }
    
 

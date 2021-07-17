@@ -429,10 +429,10 @@ public static class ErrorMessages
                 return English.NewDayStarted;
 
             case AppManager.Languages.Magyar:
-                return Magyar.NewDayStarted; ;
+                return Magyar.NewDayStarted; 
 
             case AppManager.Languages.Deutsch:
-                return Deutsch.NewDayStarted; ;
+                return Deutsch.NewDayStarted; 
 
 
             default:
@@ -1004,7 +1004,46 @@ public class AppManager : MonoBehaviour
             GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
             foreach(GoalData _gd in _savedGoals)
             {
-               // print(_gd.current);
+                // print(_gd.current);
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60)));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40)));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-39)));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-38)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-37)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-36)));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-34)));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-32)));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-31)));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-30)));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-29)));
+                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-28)));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-27)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-26)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-25)));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-24)));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-23)));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-22)));
+                _gd.dailyScores.Add(new ScorePerDay(550, DateTime.Today.AddDays(-21)));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-20)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-19)));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-18)));
+                _gd.dailyScores.Add(new ScorePerDay(50, DateTime.Today.AddDays(-17)));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-16)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-15)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-14)));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-13)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-12)));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-11)));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-10)));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-9)));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-8)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-7)));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5)));
+                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4)));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-3)));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
             }
             stream.Close();
             fileInfo.IsReadOnly = true;

@@ -25,7 +25,7 @@ struct DailyScoreStruct
 
 public class StatisticCalculator2 : MonoBehaviour
 {
-    [HideInInspector] public GoalManager goalManager = null;
+     public GoalManager goalManager = null;
     public DateTime Today;
     public int dailysc = 0;
     public int lastlogdur;
@@ -68,7 +68,7 @@ public class StatisticCalculator2 : MonoBehaviour
     {
         AppManager.OnTaskValueChanged += OnTaskValueChanged;
         AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
-        goalManager = FindObjectOfType<GoalManager>();
+       
         AppManager.OnGoalOpened += OnGoalOpened;
     }
     private void OnGoalOpened(Goal _td)
@@ -109,6 +109,7 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void StatLoad()
     {
+
         GoalDATAS = goalManager.GetGoals();
         //   print(GoalDATAS == null);
     }
@@ -392,56 +393,70 @@ public class StatisticCalculator2 : MonoBehaviour
         int counter = 0;
         for (i = 0; i < GoalDATAS.Length; i++)
         {
+               // int _sum = 0;
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
             {
-
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
                 {
+                    //_sum += GoalDATAS[i].dailyScores[k].amount;
+
                     counter++;
+                    
                     switch (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).DayOfWeek)
                     {
+
                         case DayOfWeek.Monday:
                             weeklydata[0] += GoalDATAS[i].dailyScores[k].amount;
                             //  print("Week0");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[0], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(1, 3)));
+                         //   barChartInfos.Add(new BarChartInfo(weeklydata[0], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Tuesday:
                             weeklydata[1] += GoalDATAS[i].dailyScores[k].amount;
                             // print("Week1");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[1], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Tuesday).Substring(1, 3)));
+                          //  barChartInfos.Add(new BarChartInfo(weeklydata[1], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Tuesday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Wednesday:
                             weeklydata[2] += GoalDATAS[i].dailyScores[k].amount;
                             //  print("Week2");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[2], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Wednesday).Substring(1, 3)));
+                           // barChartInfos.Add(new BarChartInfo(weeklydata[2], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Wednesday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Thursday:
                             weeklydata[3] += GoalDATAS[i].dailyScores[k].amount;
                             //   print("Week3");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[3], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Thursday).Substring(1, 3)));
+                           // barChartInfos.Add(new BarChartInfo(weeklydata[3], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Thursday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Friday:
                             weeklydata[4] += GoalDATAS[i].dailyScores[k].amount;
                             //   print("Week4");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[4], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Friday).Substring(1, 3)));
+                           // barChartInfos.Add(new BarChartInfo(weeklydata[4], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Friday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Saturday:
                             weeklydata[5] += GoalDATAS[i].dailyScores[k].amount;
                             //  print("Week5");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[5], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Saturday).Substring(1, 3)));
+                           // barChartInfos.Add(new BarChartInfo(weeklydata[5], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Saturday).Substring(0, 2)));
                             break;
                         case DayOfWeek.Sunday:
                             weeklydata[6] += GoalDATAS[i].dailyScores[k].amount;
                             //   print("Week6");
-                            barChartInfos.Add(new BarChartInfo(weeklydata[6], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Sunday).Substring(1, 3)));
+                           // barChartInfos.Add(new BarChartInfo(weeklydata[6], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Sunday).Substring(0, 2)));
                             break;
                     }
+                    
                 }
             }
+           // weeklydata[i] = _sum;
         }
         barchart1.Clear();
         if (counter >= 1)
         {
+            barChartInfos.Add(new BarChartInfo(weeklydata[0], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Sunday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[1], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Monday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[2], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Tuesday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[3], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Wednesday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[4], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Thursday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[5], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Friday).Substring(0, 3)));
+            barChartInfos.Add(new BarChartInfo(weeklydata[6], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Saturday).Substring(0, 3)));
+
             barchart1.LoadData(barChartInfos.ToArray(), true);
         }
 
@@ -450,7 +465,7 @@ public class StatisticCalculator2 : MonoBehaviour
     public void MonthlyGraph()
     {
         List<BarChartInfo> barChartInfosmonth = new List<BarChartInfo>();
-        int[] monthlyData = new int[30];
+        int[] monthlyData = new int[31];
         int i = 0;
         for (int j = 0; j < GoalDATAS.Length; j++)
         {
@@ -460,10 +475,11 @@ public class StatisticCalculator2 : MonoBehaviour
             }
             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
             {
-                if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
+                if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) > Today.AddDays(-29))
                 {
 
                     monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
+                    print(i);
                     i++;
                 }
             }
@@ -487,7 +503,7 @@ public class StatisticCalculator2 : MonoBehaviour
         List<PieChartInfo> PiteNap = new List<PieChartInfo>();
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
-            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[0]));
         }
         piechart1.Clear();
         if (PiteNap.Count > 0)
@@ -512,7 +528,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-                PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+                PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,GoalDATAS[i].color[0]));
             
         }
         piechart1.Clear();
@@ -538,7 +554,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,  GoalDATAS[i].color[0]));
 
         }
         piechart1.Clear();
@@ -561,7 +577,7 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 sziauram += GoalDATAS[i].dailyScores[j].amount;
             }
-            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[1] + GoalDATAS[i].color[0]));
+            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0]));
 
         }
         piechart1.Clear();
