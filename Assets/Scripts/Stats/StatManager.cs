@@ -45,7 +45,7 @@ public class StatManager : MonoBehaviour
                 statCalculator.Weeklygraph();
                 break;
             case 1:
-              //  statCalculator.MonthlyGraph();
+                statCalculator.MonthlyGraph();
                 break;
         }
     }

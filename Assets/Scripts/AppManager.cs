@@ -898,7 +898,7 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = DateTime.Now.Date; //Convert.ToDateTime(testTime);        //   
+        DateTime _today = Convert.ToDateTime(testTime);   //       // DateTime.Now.Date;  
 
         if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
 
@@ -1002,8 +1002,10 @@ public class AppManager : MonoBehaviour
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
             GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
-            foreach(GoalData _gd in _savedGoals)
+            
+            /*foreach(GoalData _gd in _savedGoals)
             {
+                _gd.dailyScores.Clear();
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60)));
                 _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40)));
@@ -1045,7 +1047,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
             }
-            stream.Close();
+            stream.Close(); */
             fileInfo.IsReadOnly = true;
 
             // check each goal if they should be active today

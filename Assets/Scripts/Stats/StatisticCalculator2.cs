@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
 /// <summary>
-/// StatCalc version 2.7
+/// StatCalc version 2.7.2
 /// </summary>
 struct DailyScoreStruct
 {
@@ -465,8 +465,9 @@ public class StatisticCalculator2 : MonoBehaviour
     public void MonthlyGraph()
     {
         List<BarChartInfo> barChartInfosmonth = new List<BarChartInfo>();
-        int[] monthlyData = new int[31];
+        int[] monthlyData = new int[30];
         int i = 0;
+        int minusdays = -30;
         for (int j = 0; j < GoalDATAS.Length; j++)
         {
             if (GoalDATAS[j].dailyScores == null)
@@ -475,12 +476,21 @@ public class StatisticCalculator2 : MonoBehaviour
             }
             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
             {
-                if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) > Today.AddDays(-29))
+               
+                if (minusdays >=0)
                 {
+                    break;
+                }
+                else
+                {
+                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) > Today.AddDays(minusdays))
+                    {
 
-                    monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
-                    print(i);
-                    i++;
+                        monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
+                        print(i);
+                        i++;
+                        minusdays++;
+                    }
                 }
             }
         }
@@ -490,6 +500,7 @@ public class StatisticCalculator2 : MonoBehaviour
             for (int l = 0; l < monthlyData.Length; l++)
             {
                 barChartInfosmonth.Add(new BarChartInfo(monthlyData[l], ""));
+                print(l);
             }
             barchart1.LoadData(barChartInfosmonth.ToArray(), false);
         }
