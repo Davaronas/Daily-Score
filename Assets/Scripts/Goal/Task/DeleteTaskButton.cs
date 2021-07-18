@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DeleteTaskButton : BehaviourButton
 {
     private TaskManager taskManager = null;
-    [SerializeField] private Image deleteFill = null;
+    [SerializeField] private Image imageToFill = null;
     private bool isFilling = false;
 
     [SerializeField] private float fillSpeed = 0.02f;
@@ -26,13 +26,13 @@ public class DeleteTaskButton : BehaviourButton
     {
         if(isFilling)
         {
-            deleteFill.fillAmount += fillSpeed;
+            imageToFill.fillAmount += fillSpeed;
 
-            if(deleteFill.fillAmount >= 1)
+            if(imageToFill.fillAmount >= 1)
             {
                 taskManager.DeleteTask();
                 isFilling = false;
-                deleteFill.fillAmount = 0;
+                imageToFill.fillAmount = 0;
             }
         }
     }
@@ -40,6 +40,6 @@ public class DeleteTaskButton : BehaviourButton
     protected override void OnPointerExit()
     {
         isFilling = false;
-        deleteFill.fillAmount = 0;
+        imageToFill.fillAmount = 0;
     }
 }

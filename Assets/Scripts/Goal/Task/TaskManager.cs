@@ -637,17 +637,20 @@ public class TaskManager : MonoBehaviour
 
 
             NotificationPrefabUtility[] _npus = notificationHolder.GetNotifications().ToArray();
-       
+            if (_npus.Length > 0)
+            {
+
                 _data.notificationAttachedActiveDay.Add((int)DateTime.Today.DayOfWeek);
-  
+
                 DateTime _fireTime = DateTime.Today.AddDays(everyThDay);
                 _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
                 print(_fireTime + " " + _fireTime.DayOfWeek);
-                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name 
+                NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                     + " notification", "Don't forget " + _data.name +
                     "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
+            }
             
         }
 
@@ -818,7 +821,7 @@ public class TaskManager : MonoBehaviour
 
     public bool TaskExists(string _task)
     {
-        GoalData[] _datas = goalManager.GetGoals();
+        GoalData[] _datas = goalManager.GetExistingGoals();
         for (int i = 0; i < _datas.Length; i++)
         {
             if(_datas[i].TaskExists(_task))
@@ -838,6 +841,58 @@ public class TaskManager : MonoBehaviour
         goalManager.GetCurrentlySelectedGoal().GetGoalData().tasks.Remove(currentlySelectedTask);
 
         AppManager.TaskEdited(currentlySelectedTask);
+    }
+
+    public void ResetTask()
+    {
+        List<GoalChange> _modificationsOfResetTask = new List<GoalChange>();
+        GoalData _currentGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
+        for (int i = 0; i < _currentGoal.modifications.Count; i++)
+        {
+           if(_currentGoal.modifications[i].taskName == currentlySelectedTask.name)
+           {
+                _modificationsOfResetTask.Add(_currentGoal.modifications[i]);
+                _currentGoal.modifications.Remove(_currentGoal.modifications[i]);
+           }
+        }
+
+        for (int j = 0; j < _currentGoal.dailyScores.Count; j++)
+        {
+            for (int k = 0; k < _modificationsOfResetTask.Count; k++)
+            {
+                if (_currentGoal.dailyScores[j].GetDateTime() == _modificationsOfResetTask[k].GetDateTime())
+                {
+                    _currentGoal.dailyScores[j] = new ScorePerDay(_currentGoal.dailyScores[j].amount - _modificationsOfResetTask[k].amount, DateTime.Today);
+                }
+            }
+        }
+
+
+        switch (currentlySelectedTask.type)
+        {
+            case AppManager.TaskType.Maximum:
+                ((MaximumTaskData)currentlySelectedTask).current = 0;
+                break;
+            case AppManager.TaskType.Minimum:
+                ((MinimumTaskData)currentlySelectedTask).current = 0;
+                break;
+            case AppManager.TaskType.Boolean:
+                ((BooleanTaskData)currentlySelectedTask).isDone = false;
+                break;
+            case AppManager.TaskType.Optimum:
+                ((OptimumTaskData)currentlySelectedTask).current = 0;
+                break;
+            case AppManager.TaskType.Interval:
+                ((IntervalTaskData)currentlySelectedTask).current = 0;
+                break;
+        }
+
+        currentlySelectedTask.isEditedToday = false;
+
+
+        AppManager.TaskEdited(currentlySelectedTask);
+
+        // remove from daily score where modification task equals current (could also remove those modifications)
     }
 
 

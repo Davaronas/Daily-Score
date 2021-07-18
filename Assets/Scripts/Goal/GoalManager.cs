@@ -12,6 +12,8 @@ public class GoalManager : MonoBehaviour
     [SerializeField] private TMP_InputField createGoal_goalNameInputField = null;
     [Space]
     [SerializeField] private GameObject goalPrefab = null;
+    [SerializeField] private GameObject askToDeleteGoalPanel = null;
+    [SerializeField] private TMP_Text askToDeleteGoal_goalName = null;
 
     [Space]
     [Space]
@@ -22,6 +24,7 @@ public class GoalManager : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] private float goalMenuPanel_whiteStrengthOnGoalColor = 0.5f;
 
     private List<Goal> goals = new List<Goal>();
+    private List<GoalData> deletedGoals = new List<GoalData>();
     private string enteredName = "";
     private GoalColor[] selectedColors;
     private ColorType colorType;
@@ -30,6 +33,7 @@ public class GoalManager : MonoBehaviour
     private bool isSpriteSelected = false;
 
     private Goal currentlySelectedGoal = null;
+    private Goal goalToDelete = null;
 
     private TaskManager taskManager = null;
 
@@ -60,18 +64,26 @@ public class GoalManager : MonoBehaviour
         createGoal_goalNameInputField.text = "";
         isColorSelected = false;
         isSpriteSelected = false;
+        askToDeleteGoalPanel.SetActive(false);
     }
 
     public void LoadGoals(GoalData[] _goals)
     {
         for (int i = 0; i < _goals.Length; i++)
         {
-            Goal _newGoal =
-            Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
-            _newGoal.isPrefab = false;
-          //  print(_goals[i].current);
-            _newGoal.SetData(_goals[i]);
-            goals.Add(_newGoal);
+            if (!_goals[i].isDeleted)
+            {
+                Goal _newGoal =
+                Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
+                _newGoal.isPrefab = false;
+                //  print(_goals[i].current);
+                _newGoal.SetData(_goals[i]);
+                goals.Add(_newGoal);
+            }
+            else
+            {
+                deletedGoals.Add(_goals[i]);
+            }
         }
 
 
@@ -133,7 +145,38 @@ public class GoalManager : MonoBehaviour
     }
 
     
+    public void AskToDeleteGoal(Goal _goal)
+    {
+        // ask panel
 
+        //   DeleteGoal(_goal);
+        goalToDelete = _goal;
+        askToDeleteGoal_goalName.text = _goal.GetGoalData().name;
+        ShowAskToDeleteGoalPanel();
+    }
+
+    private void ShowAskToDeleteGoalPanel()
+    {
+        askToDeleteGoalPanel.SetActive(true);
+    }
+
+    private void HideAskToDeleteGoalPanel()
+    {
+        askToDeleteGoalPanel.SetActive(false);
+    }
+
+    public void RemoteCall_DeleteGoal()
+    {
+        deletedGoals.Add(goalToDelete.GetGoalData());
+        goals.Remove(goalToDelete);
+        Destroy(goalToDelete.gameObject);
+        askToDeleteGoalPanel.SetActive(false);
+    }
+
+    public void RemoteCall_CancelDeleteGoal()
+    {
+        HideAskToDeleteGoalPanel();
+    }
 
 
     public void RemoteCall_SetSelectedName()
@@ -178,7 +221,7 @@ public class GoalManager : MonoBehaviour
         ScrollSizer.Resize(goalsScrollContentRectTransform, goalPrefab_Y_Size_ + (goalsContentLayoutGroup.spacing * 2), goals.Count);
     }
 
-    public GoalData[] GetGoals()
+    public GoalData[] GetExistingGoals()
     {
         List<GoalData> _goalDatas = new List<GoalData>();
 
@@ -186,6 +229,23 @@ public class GoalManager : MonoBehaviour
         {
             _goalDatas.Add(goals[i].GetGoalData());
         }
+        return _goalDatas.ToArray();
+    }
+
+    public GoalData[] GetAllGoals()
+    {
+        List<GoalData> _goalDatas = new List<GoalData>();
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            _goalDatas.Add(goals[i].GetGoalData());
+        }
+
+        for (int j = 0; j < deletedGoals.Count; j++)
+        {
+            _goalDatas.Add(deletedGoals[j]);
+        }
+
         return _goalDatas.ToArray();
     }
 

@@ -80,10 +80,12 @@ daily score on top
 streak
 
 goal and task name length 25 character
-pie chart use gradient colors
+pie chart use gradient colors, set goal colors that will be used
+
+show goals and tasks separately on bar chart
 
 
-
+number restrictions on task values?
 
 
 

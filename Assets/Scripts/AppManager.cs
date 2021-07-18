@@ -90,8 +90,7 @@ public class GoalData
         lastChange = new GoalChange(0,ModificationType.Create,"",DateTime.Now);
         modifications = new List<GoalChange>();
         modifications.Add(lastChange);
-
-
+        isDeleted = false;
     }
 
     public GoalData(string _name, GoalColor[] _colors, int _spriteId, int _max = 0, int _current = 0)
@@ -140,6 +139,8 @@ public class GoalData
        modifications = new List<GoalChange>();
         modifications.Add(lastChange);
         dailyScores = new List<ScorePerDay>();
+        isDeleted = false;
+        
     }
 
     public DateTime GetLastModificationTime()
@@ -187,6 +188,7 @@ public class GoalData
    public int max;
    public int current;
    public  List<TaskData> tasks;
+   public bool isDeleted;
 
    public GoalChange lastChange;
     public List<GoalChange> modifications;
@@ -1003,7 +1005,7 @@ public class AppManager : MonoBehaviour
             FileStream stream = new FileStream(path, FileMode.Open);
             GoalData[] _savedGoals = formatter.Deserialize(stream) as GoalData[];
             
-            /*foreach(GoalData _gd in _savedGoals)
+            foreach(GoalData _gd in _savedGoals)
             {
                 _gd.dailyScores.Clear();
                 // print(_gd.current);
@@ -1046,8 +1048,9 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-3)));
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
+                Debug.Log(DateTime.Today.AddDays(-1));
             }
-            */
+            
             stream.Close(); 
             fileInfo.IsReadOnly = true;
 
@@ -1311,7 +1314,7 @@ public class AppManager : MonoBehaviour
 
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
-        GoalData[] _goalDatas = goalManager.GetGoals();
+        GoalData[] _goalDatas = goalManager.GetAllGoals();
         foreach (GoalData _gd in _goalDatas)
         {
             print(_gd.current);
@@ -1367,7 +1370,7 @@ public class AppManager : MonoBehaviour
 
                 // reset tasks
                 AppManager.ErrorHappened(ErrorMessages.NewDayStarted());
-                GoalActivityCheck(goalManager.GetGoals());
+                GoalActivityCheck(goalManager.GetExistingGoals());
                 lastLogin = DateTime.Now;
                 PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
 

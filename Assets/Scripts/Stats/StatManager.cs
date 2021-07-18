@@ -15,8 +15,24 @@ public class StatManager : MonoBehaviour
     {
         statCalculator = FindObjectOfType<StatisticCalculator2>();
         AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
+        AppManager.OnLanguageChanged += LoadCharts;
+
+       
 
 
+        Invoke(nameof(LoadCharts), 0.5f);
+        
+    }
+
+    private void OnDestroy()
+    {
+        AppManager.OnTaskValueChanged -= UpdateIfDailyIsSelected;
+        AppManager.OnLanguageChanged -= LoadCharts;
+
+    }
+
+    private void LoadCharts(AppManager.Languages _l)
+    {
         barChart1_dropdown.ClearOptions();
         List<string> _optionsBarChart1 = new List<string>();
         _optionsBarChart1.Add(RuntimeTranslator.TranslateWeeklyWord());
@@ -31,19 +47,8 @@ public class StatManager : MonoBehaviour
         _optionsPieChart1.Add(RuntimeTranslator.TranslateAllTimeWord());
         pieChart1_dropdown.AddOptions(_optionsPieChart1);
 
-
-        Invoke(nameof(LoadDefaults), 0.2f);
-        
-    }
-
-    private void OnDestroy()
-    {
-        
-    }
-
-    private void LoadDefaults()
-    {
         pieChart1_dropdown.value = 1;
+        barChart1_dropdown.value = 1;
         barChart1_dropdown.value = 0;
     }
 
