@@ -66,6 +66,37 @@ public static class TaskPointCalculator
             _amount = _mtd.current * _mtd.pointsGainedPerOne;
         }
 
+        if (_amount > 0)
+        {
+            if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
+            {
+                switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
+                {
+                    case 1:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                        break;
+                    case 2:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 3:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 4:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                        break;
+                    case 5:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                        break;
+                    default:
+                        _amount =  Mathf.RoundToInt
+                            (_amount * Mathf.Clamp
+                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER + 
+                            (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5)* AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                            0,AppManager.MAXSTREAKMULTIPLIER));
+                        break;
+                }
+            }
+        }
 
         return _amount;
     }
@@ -93,6 +124,8 @@ public static class TaskPointCalculator
            _floatCurrent = _mtd.pointsForStayingUnderTargetValue - ((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
         }
 
+      
+
         return Mathf.RoundToInt(_floatCurrent);
     }
 
@@ -119,6 +152,38 @@ public static class TaskPointCalculator
             _amount = _mtd.pointsForStayingUnderTargetValue - ((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
         }
 
+        if (_amount > 0)
+        {
+            if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
+            {
+                switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
+                {
+                    case 1:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                        break;
+                    case 2:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 3:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 4:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                        break;
+                    case 5:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                        break;
+                    default:
+                        _amount = Mathf.RoundToInt
+                            (_amount * Mathf.Clamp
+                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                            (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                            0, AppManager.MAXSTREAKMULTIPLIER));
+                        break;
+                }
+            }
+        }
+
         return _amount;
     }
 
@@ -126,7 +191,38 @@ public static class TaskPointCalculator
     {
         if(_btd.isDone)
         {
-            return _btd.pointsGained;
+            int _amount = _btd.pointsGained;
+                if (_btd.completedTargetDaysIn_a_Row > _btd.streakStartsAfterDays)
+                {
+                    switch (_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays)
+                    {
+                        case 1:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                            break;
+                        case 2:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 3:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 4:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                            break;
+                        case 5:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                            break;
+                        default:
+                            _amount = Mathf.RoundToInt
+                                (_amount * Mathf.Clamp
+                                ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                                (((_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                                0, AppManager.MAXSTREAKMULTIPLIER));
+                            break;
+                    }
+                }
+            
+
+            return _amount;
         }
         else
         {
@@ -136,14 +232,50 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(OptimumTaskData _otd)
     {
+        int _amount = 0;
+
         if(_otd.current == _otd.targetValue)
         {
-            return _otd.pointsForOptimum;
+            _amount = _otd.pointsForOptimum;
         }
         else
         {
-            return _otd.pointsForOptimum - ( Mathf.Abs(_otd.current - _otd.targetValue) * _otd.pointsLostPerOneDifference);
+            _amount = _otd.pointsForOptimum - ( Mathf.Abs(_otd.current - _otd.targetValue) * _otd.pointsLostPerOneDifference);
         }
+
+        if (_amount > 0)
+        {
+            if (_otd.completedTargetDaysIn_a_Row > _otd.streakStartsAfterDays)
+            {
+                switch (_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays)
+                {
+                    case 1:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                        break;
+                    case 2:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 3:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 4:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                        break;
+                    case 5:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                        break;
+                    default:
+                        _amount = Mathf.RoundToInt
+                            (_amount * Mathf.Clamp
+                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                            (((_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                            0, AppManager.MAXSTREAKMULTIPLIER));
+                        break;
+                }
+            }
+        }
+
+        return _amount;
     }
 
     public static int GetPointsFromCurrentValue(IntervalTaskData _itd)
@@ -155,6 +287,8 @@ public static class TaskPointCalculator
                 return _itd.intervals[i].points;
             }
         }
+
+       
 
         return 0;
     }

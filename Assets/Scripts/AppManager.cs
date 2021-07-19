@@ -287,6 +287,7 @@ public class MaximumTaskData : TaskData
         pointsGainedPerOne = _pointsGainedPerOne;
         overachievePercentBonus = _overachievePercentBonus;
         streakStartsAfterDays = _streakStartsAfterDays;
+        completedTargetDaysIn_a_Row = 0;
     }
 
     public int targetValue;
@@ -295,6 +296,7 @@ public class MaximumTaskData : TaskData
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
     public int streakStartsAfterDays;
+    public int completedTargetDaysIn_a_Row;
 }
 
 [System.Serializable]
@@ -312,6 +314,7 @@ public class MinimumTaskData : TaskData
         underTargetValuePercentBonus = _underTargetValuePercentBonus;
         streakStartsAfterDays = _streakStartsAfterDays;
         current = _current;
+        completedTargetDaysIn_a_Row = 0;
     }
 
     public AppManager.TaskMetricType metric;
@@ -321,6 +324,7 @@ public class MinimumTaskData : TaskData
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;
     public int streakStartsAfterDays;
+    public int completedTargetDaysIn_a_Row;
 }
 
 
@@ -333,11 +337,13 @@ public class BooleanTaskData : TaskData
         pointsGained = _pointsGained;
         streakStartsAfterDays = _streakStartsAfterDays;
         isDone = false;
+        completedTargetDaysIn_a_Row = 0;
     }
 
     public bool isDone;
     public int pointsGained;
     public int streakStartsAfterDays;
+    public int completedTargetDaysIn_a_Row;
 }
 
 
@@ -353,6 +359,7 @@ public class OptimumTaskData : TaskData
         streakStartsAfterDays = _streakStartsAfterDays;
         current = _current;
         metric = _metric;
+        completedTargetDaysIn_a_Row = 0;
     }
 
     public int targetValue;
@@ -361,6 +368,7 @@ public class OptimumTaskData : TaskData
     public int pointsForOptimum;
     public int pointsLostPerOneDifference;
     public int streakStartsAfterDays;
+    public int completedTargetDaysIn_a_Row;
 }
 
 [System.Serializable]
@@ -964,15 +972,52 @@ public class AppManager : MonoBehaviour
                     switch(_goaldatas[i].tasks[j].type)
                     {
                         case TaskType.Maximum:
+                            if(((MaximumTaskData)_goaldatas[i].tasks[j]).current >= ((MaximumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                            {
+                                ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                            }
+                            else
+                            {
+                                ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                            }
+
                             ((MaximumTaskData)_goaldatas[i].tasks[j]).current = 0;
                             break;
                         case TaskType.Minimum:
+                            if (((MinimumTaskData)_goaldatas[i].tasks[j]).current < ((MinimumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                            {
+                                ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                            }
+                            else
+                            {
+                                ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                            }
+
                             ((MinimumTaskData)_goaldatas[i].tasks[j]).current = 0;
                         break;
                         case TaskType.Boolean:
+
+                            if(((BooleanTaskData)_goaldatas[i].tasks[j]).isDone)
+                            {
+                                ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                            }
+                            else
+                            {
+                                ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                            }
                             ((BooleanTaskData)_goaldatas[i].tasks[j]).isDone = false;
                             break;
                         case TaskType.Optimum:
+                            if (((OptimumTaskData)_goaldatas[i].tasks[j]).current == ((OptimumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                            {
+                                ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                            }
+                            else
+                            {
+                                ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                            }
+
+
                             ((OptimumTaskData)_goaldatas[i].tasks[j]).current = 0;
                             break;
                         case TaskType.Interval:
@@ -1087,7 +1132,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6)));
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5)));
                 _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4)));
-                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-3)));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3)));
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
                 Debug.Log(DateTime.Today.AddDays(-1));
@@ -1396,7 +1441,13 @@ public class AppManager : MonoBehaviour
     public const int SAVEDTIPAMOUNT_GOLD = 21;
     public const int MAXNAMESIZE = 25;
 
-
+    public const float FIRSTDAYSTREAKMULTIPLIER = 1.1f;
+    public const float SECONDDAYSTREAKMULTIPLIER = 1.2f;
+    public const float THIRDDAYSTREAKMULTIPLIER = 1.29f;
+    public const float FOURTHDAYSTREAKMULTIPLIER = 1.37f;
+    public const float FIFTHDAYSTREAKMULTIPLIER = 1.45f;
+    public const float MORETHANFIVEDAYSTREAKMULTIPLIERADD = 0.05f;
+    public const float MAXSTREAKMULTIPLIER = 2.00f;
 
     //Last Login
     public static DateTime lastLogin;

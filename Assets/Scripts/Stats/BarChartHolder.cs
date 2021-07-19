@@ -21,6 +21,8 @@ public class BarChartHolder : MonoBehaviour
     [SerializeField] private GameObject barPrefab = null;
     [SerializeField] private TMP_Text minText = null;
     [SerializeField] private TMP_Text maxText = null;
+    [SerializeField] private TMP_Text minTime = null;
+    [SerializeField] private TMP_Text maxTime = null;
 
     private RectTransform minText_RT = null;
     private RectTransform maxText_RT = null;
@@ -58,10 +60,15 @@ public class BarChartHolder : MonoBehaviour
         }
         else
         {
+            
+
             for (int i = 0; i < _infos.Length; i++)
             {
                 LoadBar(_infos[i].point, _infos[i].description,false);
             }
+
+            minTime.text = _infos[0].description;
+            maxTime.text = _infos[_infos.Length - 1].description;
         }
     }
 
@@ -81,8 +88,12 @@ public class BarChartHolder : MonoBehaviour
         maxText.text = max.ToString();
         minText.text = min.ToString();
 
-        maxText_RT.anchoredPosition = new Vector2(0, 0);
-        minText_RT.anchoredPosition = new Vector2(0, 0);
+        maxText_RT.anchoredPosition = new Vector2(-5, 0);
+        minText_RT.anchoredPosition = new Vector2(-5, 0);
+
+        minTime.text = "";
+        maxTime.text = "";
+      
     }
    
 
@@ -124,8 +135,8 @@ public class BarChartHolder : MonoBehaviour
         maxText.text = max.ToString();
         minText.text = min.ToString();
 
-        maxText_RT.anchoredPosition = new Vector2(0, holderHeight);
-        minText_RT.anchoredPosition = new Vector2(0, min / max * holderHeight);
+        maxText_RT.anchoredPosition = new Vector2(-5, holderHeight);
+        minText_RT.anchoredPosition = new Vector2(-5, min / max * holderHeight);
 
     }
 }

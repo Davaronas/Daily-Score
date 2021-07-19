@@ -352,6 +352,11 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(maxComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(maxComponents.streakStartsAfterDays_InputField.text);
+                if (_streakStartsAfterDays == 0)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    return null;
+                }
             }
             else
             {
@@ -409,6 +414,11 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(minComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(minComponents.streakStartsAfterDays_InputField.text);
+                if(_streakStartsAfterDays == 0)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    return null;
+                }
             }
             else
             {
@@ -446,6 +456,11 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(boolComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(boolComponents.streakStartsAfterDays_InputField.text);
+                if (_streakStartsAfterDays == 0)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    return null;
+                }
             }
             else
             {
@@ -476,6 +491,11 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(optimumComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(optimumComponents.streakStartsAfterDays_InputField.text);
+                if (_streakStartsAfterDays == 0)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    return null;
+                }
             }
             else
             {
