@@ -466,7 +466,7 @@ public class TaskManager : MonoBehaviour
                 print(_fireTime);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
                     " notification", "Don't forget " + currentlySelectedTask.name + 
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, currentlySelectedTask.name);
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
 
 
@@ -500,7 +500,7 @@ public class TaskManager : MonoBehaviour
                         print(_fireTime + " " + _fireTime.DayOfWeek);
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                             + " notification", "Don't forget " + currentlySelectedTask.name +
-                            "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+                            "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
                     }
                     else
                     {
@@ -512,7 +512,7 @@ public class TaskManager : MonoBehaviour
 
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                            + " notification", "Don't forget " + currentlySelectedTask.name +
-                           "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name);
+                           "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
                     }
                 }
             }
@@ -578,7 +578,10 @@ public class TaskManager : MonoBehaviour
 
         if (enteredName == "") { AppManager.ErrorHappened(ErrorMessages.NameNotEntered()); return; }
 
-        if(taskTypeSelected == false) { AppManager.ErrorHappened(ErrorMessages.TaskTypeNotSelected_CreateTaskPanel());  return; }
+        if (enteredName.Length > AppManager.MAXNAMESIZE)
+        { AppManager.ErrorHappened(ErrorMessages.NameTooLong()); return; }
+
+        if (taskTypeSelected == false) { AppManager.ErrorHappened(ErrorMessages.TaskTypeNotSelected_CreateTaskPanel());  return; }
 
         TaskData _data = taskTypeComponents.GetData(taskType);
         if (_data == null) { return; } // error message is inside GetData() function
@@ -623,7 +626,7 @@ public class TaskManager : MonoBehaviour
                 print(_fireTime);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                     + " notification", "Don't forget " + _data.name + 
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name);
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
 
 
@@ -649,7 +652,7 @@ public class TaskManager : MonoBehaviour
                 print(_fireTime + " " + _fireTime.DayOfWeek);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                     + " notification", "Don't forget " + _data.name +
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name);
+                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
             
         }

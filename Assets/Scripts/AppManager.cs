@@ -403,6 +403,26 @@ public struct Interval
 
 public static class ErrorMessages
 {
+
+    public static string NameTooLong()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.NameTooLong;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.NameTooLong;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.NameTooLong;
+
+
+            default:
+                return "";
+
+        }
+    }
     public static string NameNotEntered()
     {
         switch(AppManager.currentLanguage)
@@ -628,6 +648,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     public static class English
     {
         public const string NameNotEntered = "Please enter a name!";
+        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE + 1} characters!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -643,6 +664,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     public static class Magyar
     {
         public const string NameNotEntered = "Please enter a name!";
+        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -659,6 +681,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     public static class Deutsch
     {
         public const string NameNotEntered = "Please enter a name!";
+        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -693,6 +716,9 @@ public class AppManager : MonoBehaviour
    [Space]
    [Space]
    [SerializeField] private Sprite[] symbols_e;
+    [SerializeField] private GameObject DEBUG_error;
+    [SerializeField] private TMPro.TMP_Text DEBUG_errortext;
+    [Space]
    private static Sprite[] symbols;
 
     public string testTime;
@@ -764,7 +790,7 @@ public class AppManager : MonoBehaviour
 
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
-
+        Application.logMessageReceived += ErrorCallback;
        
 
 
@@ -778,6 +804,7 @@ public class AppManager : MonoBehaviour
         OnGoalOpened -= OnGoalOpenedCallback;
         OnErrorHappened -= OnErrorHappenedCallback;
         OnTaskEdited -= OnTaskEditedCallback;
+        Application.logMessageReceived -= ErrorCallback;
 
         if (Application.isEditor)
         {
@@ -785,6 +812,21 @@ public class AppManager : MonoBehaviour
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
 
+    }
+
+    private void ErrorCallback(string logString, string stackTrace, LogType type)
+    {
+        if(type == LogType.Error || type == LogType.Exception)
+        {
+            DEBUG_errortext.text = logString + " \n" + stackTrace;
+            DEBUG_error.SetActive(true);
+            //Invoke(nameof(DisableError), 0.5f);
+        }
+    }
+
+    private void DisableError()
+    {
+        DEBUG_error.SetActive(false);
     }
 
     private int GetAppLayer()
@@ -1011,7 +1053,7 @@ public class AppManager : MonoBehaviour
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60)));
                 _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40)));
-                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-39)));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-39)));
                 _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-38)));
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-37)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-36)));
@@ -1038,7 +1080,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-13)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-12)));
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-11)));
-                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-10)));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500,2000), DateTime.Today.AddDays(-10)));
                 _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-9)));
                 _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-8)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-7)));
@@ -1352,6 +1394,7 @@ public class AppManager : MonoBehaviour
 
     public const int SAVEDTIPAMOUNT_FREE = 5;
     public const int SAVEDTIPAMOUNT_GOLD = 21;
+    public const int MAXNAMESIZE = 25;
 
 
 

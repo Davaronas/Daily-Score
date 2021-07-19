@@ -168,6 +168,7 @@ public class GoalManager : MonoBehaviour
     public void RemoteCall_DeleteGoal()
     {
         deletedGoals.Add(goalToDelete.GetGoalData());
+        goalToDelete.GetGoalData().isDeleted = true;
         goals.Remove(goalToDelete);
         Destroy(goalToDelete.gameObject);
         askToDeleteGoalPanel.SetActive(false);
@@ -189,6 +190,9 @@ public class GoalManager : MonoBehaviour
     {
         if (enteredName == "")
         { AppManager.ErrorHappened(ErrorMessages.NameNotEntered()); return; }
+
+        if(enteredName.Length > AppManager.MAXNAMESIZE)
+        { AppManager.ErrorHappened(ErrorMessages.NameTooLong()); return; }
 
         if (!isColorSelected)
         { AppManager.ErrorHappened(ErrorMessages.ColorNotSelected_CreateGoalPanel()); return; }

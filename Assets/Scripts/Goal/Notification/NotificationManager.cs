@@ -22,8 +22,28 @@ public class NotificationManager : MonoBehaviour
         public int resetIntervalDays;
         public string ownerTask;
 
+        public override bool Equals(object obj)
+        {
+            return obj is NotificationData data &&
+                   id == data.id &&
+                   title == data.title &&
+                   text == data.text &&
+                   fireTime == data.fireTime &&
+                   resetIntervalDays == data.resetIntervalDays &&
+                   ownerTask == data.ownerTask;
+        }
 
-       
+        public override int GetHashCode()
+        {
+            int hashCode = 1679236910;
+            hashCode = hashCode * -1521134295 + id.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(title);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(text);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(fireTime);
+            hashCode = hashCode * -1521134295 + resetIntervalDays.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(ownerTask);
+            return hashCode;
+        }
 
         public static bool operator ==(NotificationData _data1,NotificationData _data2)
         {
@@ -58,6 +78,8 @@ public class NotificationManager : MonoBehaviour
 
     private void Start()
     {
+
+        
 
         string path = Path.Combine(Application.persistentDataPath, "notificationdata");
         if (File.Exists(path))
@@ -172,12 +194,13 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
-    public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner)
+    public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner, string _spriteId)
     {
         AndroidNotification notification = new AndroidNotification();
         notification.Title = _title;
         notification.Text = _text;
         notification.FireTime = _fireTime;
+        notification.SmallIcon = _spriteId;
         
 
         NotificationData notificationData = new NotificationData();

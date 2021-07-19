@@ -87,6 +87,8 @@ show goals and tasks separately on bar chart
 
 number restrictions on task values?
 
+notification icons
+
 
 
 
