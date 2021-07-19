@@ -735,7 +735,7 @@ public class AppManager : MonoBehaviour
 
 
 
-    private GoalManager goalManager = null;
+    private static GoalManager goalManager = null;
    private TaskManager taskManager = null;
 
    public enum Languages { English, Magyar, Deutsch, ENUM_END };
@@ -813,6 +813,8 @@ public class AppManager : MonoBehaviour
         OnErrorHappened -= OnErrorHappenedCallback;
         OnTaskEdited -= OnTaskEditedCallback;
         Application.logMessageReceived -= ErrorCallback;
+
+        SaveGoalData();
 
         if (Application.isEditor)
         {
@@ -1173,6 +1175,7 @@ public class AppManager : MonoBehaviour
 
 
         StartCoroutine(TimeChecker());
+        SaveGoalData();
 
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
@@ -1287,6 +1290,7 @@ public class AppManager : MonoBehaviour
     private void NewGoalAddedCallback()
     {
         SetAppLayer(2);
+        SaveGoalData();
     }
 
 
@@ -1300,16 +1304,20 @@ public class AppManager : MonoBehaviour
     private void OnTaskEditedCallback()
     {
         SetAppLayer(212);
+        SaveGoalData();
     }
 
     public static void NewTaskAdded()
     {
         OnNewTaskAdded?.Invoke();
+       
+        
     }
 
     private void NewTaskAddedCallback()
     {
         SetAppLayer(212);
+        SaveGoalData();
     }
 
 
@@ -1387,7 +1395,28 @@ public class AppManager : MonoBehaviour
 
    
 
+    public static void SaveGoalData()
+    {
+        print("Save");
+        string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfoIfAlreadyExists = new FileInfo(path);
+            fileInfoIfAlreadyExists.IsReadOnly = false;
+        }
 
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream = new FileStream(path, FileMode.Create);
+        GoalData[] _goalDatas = goalManager.GetAllGoals();
+        foreach (GoalData _gd in _goalDatas)
+        {
+            print(_gd.current);
+        }
+        formatter.Serialize(stream, _goalDatas);
+        stream.Close();
+        FileInfo fileInfo = new FileInfo(path);
+        fileInfo.IsReadOnly = true;
+    }
 
     public void DEBUG_RemoteCall_SaveGoals()
     {
@@ -1428,7 +1457,7 @@ public class AppManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-
+        SaveGoalData();
         lastLogin = DateTime.Now.Date;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
