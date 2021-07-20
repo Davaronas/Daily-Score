@@ -315,6 +315,25 @@ public class StatisticCalculator2 : MonoBehaviour
     }
     public void MAXCalc()
     {
+        // dictionary <int, DateTime> all
+        // month[30]
+        // week[7]
+
+        // all
+
+        // 30 days
+
+        // 7 days
+
+
+        // collect datetimes and add integers to it if bigger than 30 days, compare with month max
+
+        // if i (-30 day) == dailyscore[k]
+        // i += ds amount
+
+        //if j (-7 day) == ds[k]
+        // j += ds amount
+
         int maxmonthfleet = 0;
         int maxweekfleet = 0;
         int maxmaxfleet = 0;
@@ -645,7 +664,7 @@ public class StatisticCalculator2 : MonoBehaviour
         List<PieChartInfo> PiteNap = new List<PieChartInfo>();
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
-            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[0]));
+            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
         }
         piechart1.Clear();
         if (PiteNap.Count > 0)
@@ -670,7 +689,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-                PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,GoalDATAS[i].color[0]));
+                PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
             
         }
         piechart1.Clear();
@@ -696,7 +715,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,  GoalDATAS[i].color[0]));
+            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name,  GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -719,7 +738,7 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 sziauram += GoalDATAS[i].dailyScores[j].amount;
             }
-            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0]));
+            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();

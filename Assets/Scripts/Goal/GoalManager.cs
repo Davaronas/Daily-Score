@@ -293,6 +293,17 @@ public class GoalManager : MonoBehaviour
         return false;
     }
 
+    public Color32[] GetGoalColors()
+    {
+        List<Color32> _colors = new List<Color32>();
+        for (int i = 0; i < goals.Count; i++)
+        {
+           _colors.Add(goals[i].GetGoalData().color[0]);
+        }
+
+        return _colors.ToArray();
+    }
+
     public GoalData SearchGoalByName(string _name)
     {
         GoalData _gd;
