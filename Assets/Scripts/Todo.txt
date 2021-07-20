@@ -34,6 +34,8 @@ replace active days, replace points*
 edit task*
 delete notification - delete from notification manager too (delete all and replace all perhaps ?)*
 Detailed task datas*
+fix highscores*
+one color / one goal*
 
 
 saving task changes*__
@@ -89,9 +91,13 @@ number restrictions on task values?
 notification icons
 
 
-fix highscores
-one color / one goal*
+
 two names shouldn't be the same
+notificaton don't fire when task is already done ?
+second tip only unlock when video is succesfully watched
+
+holnapra:
+infok, unity fiók, error forditások, task szövegek
 
 
 

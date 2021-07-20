@@ -21,6 +21,7 @@ public class NotificationManager : MonoBehaviour
         public string fireTime;
         public int resetIntervalDays;
         public string ownerTask;
+        public int spriteId;
 
         public override bool Equals(object obj)
         {
@@ -200,7 +201,7 @@ public class NotificationManager : MonoBehaviour
         notification.Title = _title;
         notification.Text = _text;
         notification.FireTime = _fireTime;
-        notification.SmallIcon = _spriteId;
+        notification.SmallIcon = "icon_" + _spriteId;
         
 
         NotificationData notificationData = new NotificationData();
@@ -209,6 +210,7 @@ public class NotificationManager : MonoBehaviour
         notificationData.fireTime = notification.FireTime.ToString();
         notificationData.resetIntervalDays = _resetDays;
         notificationData.ownerTask = _owner;
+        notificationData.spriteId =int.Parse(_spriteId);
 
         notificationData.id = AndroidNotificationCenter.SendNotification(notification, "dailyscore_id");
 
@@ -226,6 +228,7 @@ public class NotificationManager : MonoBehaviour
         notification.Title = _data.title;
         notification.Text = _data.text;
         notification.FireTime = Convert.ToDateTime(_data.fireTime).AddDays(_data.resetIntervalDays);
+        notification.SmallIcon = "icon_" + _data.spriteId;
 
      
 

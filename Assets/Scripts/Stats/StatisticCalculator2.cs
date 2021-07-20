@@ -315,6 +315,112 @@ public class StatisticCalculator2 : MonoBehaviour
     }
     public void MAXCalc()
     {
+        Dictionary<DateTime, int> _unkownDates = new Dictionary<DateTime, int>();
+        int[] _month = new int[30];
+        int[] _week = new int[7];
+
+        int _allTimeMax = 0;
+        int _monthMax = 0;
+        int _weekMax = 0;
+
+        float _allTimeAverage = 0;
+        float _monthAverage = 0;
+        float _weekAverage = 0;
+
+        int _allTimeFound = 0;
+        int _monthTimeFound = 0;
+        int _weekTimeFound = 0;
+
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                _allTimeAverage += GoalDATAS[i].dailyScores[j].amount;
+                _allTimeFound++;
+
+                if (!_unkownDates.ContainsKey(GoalDATAS[i].dailyScores[j].GetDateTime()))
+                {
+                    _unkownDates.Add(GoalDATAS[i].dailyScores[j].GetDateTime(), GoalDATAS[i].dailyScores[j].amount);
+                }
+                else
+                {
+                    _unkownDates[GoalDATAS[i].dailyScores[j].GetDateTime()] += GoalDATAS[i].dailyScores[j].amount;
+                }
+
+                for (int k = 0; k < 30; k++)
+                {
+                    if (GoalDATAS[i].dailyScores[j].GetDateTime() == Today.AddDays(-k))
+                    {
+                        _month[k] += GoalDATAS[i].dailyScores[j].amount;
+                        _monthAverage += GoalDATAS[i].dailyScores[j].amount;
+                        _monthTimeFound++;
+                        break;
+                    }
+                }
+
+                for (int l = 0; l < 7; l++)
+                {
+                    if (GoalDATAS[i].dailyScores[j].GetDateTime() == Today.AddDays(-l))
+                    {
+                        _week[l] += GoalDATAS[i].dailyScores[j].amount;
+                        _weekAverage += GoalDATAS[i].dailyScores[j].amount;
+                        _weekTimeFound++;
+                        break;
+                    }
+                }
+
+            }
+        }
+
+        foreach(KeyValuePair<DateTime, int> _d in _unkownDates)
+        {
+            if(_d.Value > _allTimeMax)
+            {
+                _allTimeMax = _d.Value;
+            }
+        }
+
+        for (int i = 0; i < _month.Length; i++)
+        {
+            if(_month[i] > _monthMax )
+            {
+                _monthMax = _month[i];
+            }
+        }
+
+
+        for (int i = 0; i < _week.Length; i++)
+        {
+            if (_week[i] > _weekMax)
+            {
+                _weekMax = _week[i];
+            }
+        }
+
+
+        if (_allTimeFound > 0)
+        {
+            _allTimeAverage /= _allTimeFound;
+        }
+
+        if (_monthTimeFound > 0)
+        {
+            _monthAverage /= _monthTimeFound;
+        }
+
+        if (_weekTimeFound > 0)
+        {
+            _weekAverage /= _weekTimeFound;
+        }
+
+
+
+        maxScoreText.text = _allTimeMax.ToString();
+        HighScoreThisWeekStatMenu.text = _weekMax.ToString();
+        HighCoreThisMonthScoreStatMenu.text = _monthMax.ToString();
+        AllTimeBestScoreTextStatMenu.text = _allTimeMax.ToString();
+        AllTimeAvarageScoreTextStatMenu.text = Math.Round(_allTimeAverage, 2).ToString();
+
         // dictionary <int, DateTime> all
         // month[30]
         // week[7]
@@ -334,6 +440,7 @@ public class StatisticCalculator2 : MonoBehaviour
         //if j (-7 day) == ds[k]
         // j += ds amount
 
+        /*
         int maxmonthfleet = 0;
         int maxweekfleet = 0;
         int maxmaxfleet = 0;
@@ -386,6 +493,7 @@ public class StatisticCalculator2 : MonoBehaviour
         HighCoreThisMonthScoreStatMenu.text = maxofthemonth.ToString();
         AllTimeBestScoreTextStatMenu.text = maxofmax.ToString();
         AllTimeAvarageScoreTextStatMenu.text = Math.Round(alltimevarage, 2).ToString();
+        */
 
     }
     public void TaskMaskCalc()

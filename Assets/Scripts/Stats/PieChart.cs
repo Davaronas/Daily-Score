@@ -139,9 +139,12 @@ public class PieChart : MonoBehaviour
 
             _fill += _infos[j].point / sum;
 
-            GameObject _newElement = Instantiate(elementPrefab, transform.position, Quaternion.identity, elementHolder);
-            _newElement.GetComponent<TMP_Text>().text = _infos[j].description + " " + Math.Round(_infos[j].point / sum * 100, 1) + "%";
-            _newElement.GetComponentInChildren<Image>().color = _infos[j].color;
+            if (_infos[j].point > 0)
+            {
+                GameObject _newElement = Instantiate(elementPrefab, transform.position, Quaternion.identity, elementHolder);
+                _newElement.GetComponent<TMP_Text>().text = _infos[j].description + " " + Math.Round(_infos[j].point / sum * 100, 1) + "%";
+                _newElement.GetComponentInChildren<Image>().color = _infos[j].color;
+            }
 
             if(j == _maxIndex)
             {

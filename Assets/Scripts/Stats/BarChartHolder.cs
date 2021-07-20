@@ -67,6 +67,8 @@ public class BarChartHolder : MonoBehaviour
                 LoadBar(_infos[i].point, _infos[i].description,false);
             }
 
+           
+
             minTime.text = _infos[0].description;
             maxTime.text = _infos[_infos.Length - 1].description;
         }
@@ -85,8 +87,8 @@ public class BarChartHolder : MonoBehaviour
         min = Mathf.Infinity;
         max = 0;
 
-        maxText.text = max.ToString();
-        minText.text = min.ToString();
+        maxText.text = "0";
+        minText.text = "0";
 
         maxText_RT.anchoredPosition = new Vector2(-5, 0);
         minText_RT.anchoredPosition = new Vector2(-5, 0);
@@ -133,7 +135,15 @@ public class BarChartHolder : MonoBehaviour
         }
 
         maxText.text = max.ToString();
-        minText.text = min.ToString();
+
+        if (min != Mathf.Infinity)
+        {
+            minText.text = min.ToString();
+        }
+        else
+        {
+            minText.text = "0";
+        }
 
         maxText_RT.anchoredPosition = new Vector2(-5, holderHeight);
         minText_RT.anchoredPosition = new Vector2(-5, min / max * holderHeight);

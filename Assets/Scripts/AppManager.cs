@@ -657,6 +657,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     {
         public const string NameNotEntered = "Please enter a name!";
         public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE + 1} characters!";
+        public const string NameIsTaken = "The name you entered is already taken. Please enter a different name!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -673,6 +674,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     {
         public const string NameNotEntered = "Please enter a name!";
         public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
+        public const string NameIsTaken = "The name you entered is already taken. Please enter a different name!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
@@ -690,6 +692,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     {
         public const string NameNotEntered = "Please enter a name!";
         public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
+        public const string NameIsTaken = "The name you entered is already taken. Please enter a different name!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
         public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
