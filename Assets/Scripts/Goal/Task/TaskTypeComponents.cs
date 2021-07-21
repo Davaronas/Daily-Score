@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 [System.Serializable]
 public class MaximumComponents
@@ -14,6 +15,9 @@ public class MaximumComponents
     public TMP_InputField overachieveBonusPercent_InputField;
     public Toggle streak_Toggle;
     public TMP_InputField streakStartsAfterDays_InputField;
+
+    
+     
 
     public TMP_InputField[] GetInputFields()
     {
@@ -142,7 +146,9 @@ public class TaskTypeComponents : MonoBehaviour
 
     private IntervalHolder intervalHolder;
 
-    
+
+    public Action<string> MetricUpdateNeeded;
+    public Action<string> TargetValueUpdateNeeded;
 
     private void Awake()
     {
@@ -157,6 +163,21 @@ public class TaskTypeComponents : MonoBehaviour
         AddArrayToList(toggles, optimumComponents.GetToggles());
 
         intervalHolder = FindObjectOfType<IntervalHolder>();
+    }
+
+    public string GetTargetValue()
+    {
+        return maxComponents.targetValue_InputField.text;
+    }
+
+    public string GetNonIntervalMetric()
+    {
+        return maxComponents.metric_Dropdown.options[maxComponents.metric_Dropdown.value].text;
+    }
+
+    public string GetIntervalMetric()
+    {
+        return intervalComponents.metric_Dropdown.options[intervalComponents.metric_Dropdown.value].text;
     }
 
     private void OnDisable()
@@ -613,6 +634,18 @@ public class TaskTypeComponents : MonoBehaviour
         {
             intervalComponents.intervalSummaries[i].UpdateMetric((AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
         }
+
+        MetricUpdateNeeded?.Invoke(GetIntervalMetric());
+    }
+
+    public void RemoteCall_NonIntervalMetricDropdownChanged()
+    {
+        MetricUpdateNeeded?.Invoke(GetNonIntervalMetric());
+    }
+
+    public void RemoteCall_TargetValueChanged()
+    {
+        TargetValueUpdateNeeded?.Invoke(GetTargetValue());
     }
 
 

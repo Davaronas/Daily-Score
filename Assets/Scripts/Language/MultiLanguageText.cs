@@ -10,7 +10,7 @@ public class MultiLanguageText : MonoBehaviour
     
 
     [SerializeField]
-    private string[] languages = new string[(int)AppManager.Languages.ENUM_END];
+    public string[] languages = new string[(int)AppManager.Languages.ENUM_END];
 
     private TMP_Text text = null;
 

@@ -38,6 +38,9 @@ public class TaskManager : MonoBehaviour
     [SerializeField] private GameObject notificationDaySelectorWindow = null;
     [SerializeField] private GameObject notificationDayButtonPrefab = null;
     [SerializeField] private NotificationHolder notificationHolder = null;
+    [Space]
+    [SerializeField] private GameObject infoPanel = null;
+    [SerializeField] private TMP_Text infoPanelText = null;
     private bool taskTypeSelected = false;
 
     private string enteredName = "default";
@@ -60,6 +63,11 @@ public class TaskManager : MonoBehaviour
 
     // aid variables
     private float taskPrefab_Y_Size_;
+
+
+    public Action<string> TaskNameUpdateNeeded;
+    public Action<string> MetricUpdateNeeded;
+    public Action<string> TargetValueUpdateNeeded;
 
     private void Awake()
     {
@@ -101,6 +109,7 @@ public class TaskManager : MonoBehaviour
         notificationDaySelectorPanel.SetActive(false);
         notificationHolder.Clear();
         DisableEditModeObjectsAndEnableCreateModeObjects();
+        HideInfoPanel();
     }
 
     private void ClearDays()
@@ -205,6 +214,8 @@ public class TaskManager : MonoBehaviour
         everyThDay = _data.activeEveryThDay;
 
 
+        TaskNameUpdateNeeded?.Invoke(_data.name);
+
         // show task data type texts
         switch (_data.type)
         {
@@ -213,30 +224,44 @@ public class TaskManager : MonoBehaviour
                 maximumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Minimum:
                 taskTypeComponents.EditMode_SetMinDataComponents(_data as MinimumTaskData);
                 minimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Boolean:
                 taskTypeComponents.EditMode_SetBoolDataComponents(_data as BooleanTaskData);
                 booleanTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Optimum:
                 taskTypeComponents.EditMode_SetOptimumDataComponents(_data as OptimumTaskData);
                 optimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Interval:
                 taskTypeComponents.EditMode_SetIntervalDataComponents(_data as IntervalTaskData);
                 intervalTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
                 intervalMeasureTexts.SetActive(true);
+
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetIntervalMetric());
                 break;
         }
 
@@ -536,34 +561,65 @@ public class TaskManager : MonoBehaviour
         taskType = _taskType;
         DisableTypeTexts();
 
+
+
         taskTypeSelected = true;
 
-        switch(_taskType)
+        if (enteredName == "")
+        {
+            TaskNameUpdateNeeded?.Invoke("?");
+        }
+        else
+        {
+            TaskNameUpdateNeeded?.Invoke(enteredName);
+        }
+
+        string _targetValue = taskTypeComponents.GetTargetValue();
+        if(_targetValue == "")
+        {
+            _targetValue = "?";
+        }
+
+        switch (_taskType)
         {
             case AppManager.TaskType.Maximum:
                 maximumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(_targetValue);
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Minimum:
                 minimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(_targetValue);
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Boolean:
                 booleanTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(_targetValue);
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Optimum:
                 optimumTexts.SetActive(true);
                 targetValueTexts.SetActive(true);
                 intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(_targetValue);
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
                 break;
             case AppManager.TaskType.Interval:
                 intervalTexts.SetActive(true);
                 targetValueTexts.SetActive(false);
                 intervalMeasureTexts.SetActive(true);
+
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetIntervalMetric());
                 break;
         }
     }
@@ -679,6 +735,7 @@ public class TaskManager : MonoBehaviour
     public void RemoteCall_SetSelectedName()
     {
         enteredName = taskNameField.text;
+        TaskNameUpdateNeeded?.Invoke(enteredName);
     }
 
     public void SetActiveDays(DayOfWeek _day, bool _add)
@@ -900,16 +957,32 @@ public class TaskManager : MonoBehaviour
 
 
 
+    public void ShowInfoPanel(string _text)
+    {
+        infoPanelText.text = _text;
+        infoPanel.SetActive(true);
+    }
+
+    public void RemoteCall_HideInfoPanel()
+    {
+        HideInfoPanel();
+    }
+
+    private void HideInfoPanel()
+    {
+        infoPanel.SetActive(false);
+    }
+
     private void LanguageChangedCallback(AppManager.Languages _lang)
     {
-        Invoke( nameof(ChangeMetricDropdownLanguage), 0.1f);
+        Invoke( nameof(ChangeMetricDropdownLanguage), 0.2f);
 
     }
 
     private void ChangeMetricDropdownLanguage()
     {
 
-
+        intervalMetricDropdown.ClearOptions();
         valueMetricDropdown.ClearOptions();
 
         List<string> _metrics = new List<string>();
@@ -918,6 +991,7 @@ public class TaskManager : MonoBehaviour
             _metrics.Add(RuntimeTranslator.TranslateTaskMetricType((AppManager.TaskMetricType)i));
         }
         valueMetricDropdown.AddOptions(_metrics);
+        intervalMetricDropdown.AddOptions(_metrics);
     }
 
 }
