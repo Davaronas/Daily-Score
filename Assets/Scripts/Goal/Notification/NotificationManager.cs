@@ -197,6 +197,11 @@ public class NotificationManager : MonoBehaviour
 
     public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner, string _spriteId)
     {
+        if(_fireTime < DateTime.Now )
+        {
+            _fireTime = _fireTime.AddDays(_resetDays);
+        }
+
         AndroidNotification notification = new AndroidNotification();
         notification.Title = _title;
         notification.Text = _text;

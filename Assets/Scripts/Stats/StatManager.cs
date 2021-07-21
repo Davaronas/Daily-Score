@@ -62,7 +62,7 @@ public class StatManager : MonoBehaviour
 
     public void RemoteCall_BarChartValueChanged()
     {
-        print("Value changed bar " + barChart1_dropdown.value);
+       
         switch(barChart1_dropdown.value)
         {
             case 0:
@@ -76,7 +76,7 @@ public class StatManager : MonoBehaviour
 
     public void RemoteCall_PieChartValueChanged()
     {
-        print("Value changed pie "+ pieChart1_dropdown.value);
+
         switch (pieChart1_dropdown.value)
         {
             case 0:

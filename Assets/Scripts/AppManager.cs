@@ -656,7 +656,7 @@ public static string DaysNotSelected_CreateTaskPanel()
     public static class English
     {
         public const string NameNotEntered = "Please enter a name!";
-        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE + 1} characters!";
+        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
         public const string NameIsTaken = "The name you entered is already taken. Please enter a different name!";
         public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
         public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
@@ -672,19 +672,19 @@ public static string DaysNotSelected_CreateTaskPanel()
 
     public static class Magyar
     {
-        public const string NameNotEntered = "Please enter a name!";
-        public readonly static string NameTooLong = $"The entered name is too long. Please enter a name with no more than {AppManager.MAXNAMESIZE} characters!";
-        public const string NameIsTaken = "The name you entered is already taken. Please enter a different name!";
-        public const string ColorNotSelected_CreateGoalPanel = "Please select a color!";
-        public const string SymbolNotSelected_CreateGoalPanel = "Please select a symbol!";
-        public const string DaysNotSelected_CreateTaskPanel = "Please specify when do you want this task to be active!";
-        public const string TaskTypeNotSelected_CreateTaskPanel = "Please select a way to earn points!";
-        public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "One or more required input fields are empty!";
-        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "One or more intervals overlap. Please ensure the ranges of the intervals do not overlap!";
-        public const string NewDayStarted = "New day started!";
-        public const string SavedTipContainerIsFull = "Saved Tip container is full, consider switching to a Gold account, if you haven't already";
-        public const string EverySelectedDayHasNotifications = "Every selected day already has notifications attached to them";
-        public const string EnterRealisticNumbers = "Please enter realistic numbers!";
+        public const string NameNotEntered = "Kérjük adja meg a nevet!";
+        public readonly static string NameTooLong = $"A beírt név túl hosszú! Kérjük maximum {AppManager.MAXNAMESIZE} karakter hosszúságú nevet adjon meg!";
+        public const string NameIsTaken = "Ez a név máshol már létezik. Kérjük más nevet adjon meg!";
+        public const string ColorNotSelected_CreateGoalPanel = "Kérjük, hogy válasszon egy színt!";
+        public const string SymbolNotSelected_CreateGoalPanel = "Kérjük, hogy válasszon egy szimbólumot!";
+        public const string DaysNotSelected_CreateTaskPanel = "Kérjük adja meg mely napokon szeretné, hogy a feladat aktív legyen!";
+        public const string TaskTypeNotSelected_CreateTaskPanel = "Kérjük adja meg a pontszámítás módját!";
+        public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "Egy vagy több kötelezõ kitöltendõ rész üres!";
+        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "Egy vagy több intervallum tartalmazza ugyanazokat az értékeket. Kérjük gyõzõdjön meg róla, hogy az intervallumok nem fedik túl egymást!";
+        public const string NewDayStarted = "Új nap kezdõdött!";
+        public const string SavedTipContainerIsFull = "Nincs több hely a mentett tippek számára. Ha szeretne további tippeket menteni, gondolja meg, hogy Gold fiókra vált!";
+        public const string EverySelectedDayHasNotifications = "Minden kiválasztott naphoz tartozik már értesítés";
+        public const string EnterRealisticNumbers = "Kérjük értelmezhetõ számokat adjon meg!";
     }
 
 
@@ -815,9 +815,10 @@ public class AppManager : MonoBehaviour
         OnGoalOpened -= OnGoalOpenedCallback;
         OnErrorHappened -= OnErrorHappenedCallback;
         OnTaskEdited -= OnTaskEditedCallback;
+        OnTaskValueChanged += OnTaskValueChangedCallback;
         Application.logMessageReceived -= ErrorCallback;
 
-        SaveGoalData();
+       // SaveGoalData();
 
         if (Application.isEditor)
         {
@@ -955,7 +956,7 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = Convert.ToDateTime(testTime);   //       // DateTime.Now.Date;  
+        DateTime _today = DateTime.Now.Date;    // Convert.ToDateTime(testTime);          //
 
         if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
 
@@ -1180,10 +1181,11 @@ public class AppManager : MonoBehaviour
 
 
         StartCoroutine(TimeChecker());
-        SaveGoalData();
+        StartCoroutine(Save());
 
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
+      //  FindObjectOfType<Canvas>().pixelPerfect = false;
     }
 
     private void Update()
@@ -1295,7 +1297,7 @@ public class AppManager : MonoBehaviour
     private void NewGoalAddedCallback()
     {
         SetAppLayer(2);
-        SaveGoalData();
+        StartCoroutine(Save());
     }
 
 
@@ -1303,12 +1305,21 @@ public class AppManager : MonoBehaviour
     {
         OnTaskEdited?.Invoke();
         OnTaskValueChanged?.Invoke(_task);
+        
     }
 
 
     private void OnTaskEditedCallback()
     {
         SetAppLayer(212);
+        StartCoroutine(Save());
+        
+    }
+
+    IEnumerator Save()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         SaveGoalData();
     }
 
@@ -1322,7 +1333,7 @@ public class AppManager : MonoBehaviour
     private void NewTaskAddedCallback()
     {
         SetAppLayer(212);
-        SaveGoalData();
+        StartCoroutine(Save());
     }
 
 
@@ -1355,6 +1366,12 @@ public class AppManager : MonoBehaviour
     public static void TaskValueChanged(TaskData _td)
     {
         OnTaskValueChanged?.Invoke(_td);
+        Debug.Log("WHy");
+    }
+
+    private void OnTaskValueChangedCallback(TaskData _td)
+    {
+        StartCoroutine(Save());
     }
 
     
@@ -1402,7 +1419,6 @@ public class AppManager : MonoBehaviour
 
     public static void SaveGoalData()
     {
-        print("Save");
         string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
         if (File.Exists(path))
         {
@@ -1415,13 +1431,23 @@ public class AppManager : MonoBehaviour
         GoalData[] _goalDatas = goalManager.GetAllGoals();
         foreach (GoalData _gd in _goalDatas)
         {
-            print(_gd.current);
+            print(_gd.name);
+            foreach(TaskData _td in _gd.tasks)
+            {
+                print(_td.name);
+
+                if(_td.type == TaskType.Boolean)
+                print(((BooleanTaskData)_td).isDone);
+            }
+            //  print(_gd.current);
         }
         formatter.Serialize(stream, _goalDatas);
         stream.Close();
         FileInfo fileInfo = new FileInfo(path);
         fileInfo.IsReadOnly = true;
     }
+
+  
 
     public void DEBUG_RemoteCall_SaveGoals()
     {

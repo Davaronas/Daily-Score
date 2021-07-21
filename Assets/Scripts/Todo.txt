@@ -99,6 +99,12 @@ second tip only unlock when video is succesfully watched
 holnapra:
 infok, unity fiók, error forditások, task szövegek
 
+interval: at least one interval + error message
+
+back: close day selector, close info panel, close error panel
+
+rezgés törlésnél
+
 
 
 

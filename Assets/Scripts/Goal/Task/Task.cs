@@ -130,6 +130,7 @@ public class Task : MonoBehaviour
         GoalData _gd;
         if (goalManager.SearchGoalByName(taskData.owner, out _gd))
         {
+            print("WTF");
             _gd.AddModification(_cp, _task);
             AppManager.TaskValueChanged(taskData);
         }
@@ -265,7 +266,7 @@ public class Task : MonoBehaviour
     public void RemoteCall_TaskEdited()
     {
         
-        if(taskData == null) { return; } // For some reason this runs earlier than FeedData, investigate further
+        if(taskData == null || !allowValueChange) { return; } // For some reason this runs earlier than FeedData, investigate further
 
         bool _hasDifference = false;
         int _parse = 0;
@@ -297,7 +298,6 @@ public class Task : MonoBehaviour
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
 
-                print(btd.isDone);
                 break;
             case AppManager.TaskType.Optimum:
                 if (currentValueInputField.text != "")

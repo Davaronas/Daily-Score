@@ -70,11 +70,16 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
        
         AppManager.OnGoalOpened += OnGoalOpened;
+
+        
+
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
+
     }
     private void OnGoalOpened(Goal _td)
     {
-        Invoke(nameof(GoalScoreCalcs), 0.1f);
-        Invoke(nameof(TaskGoalCalc), 0.2f);
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
     }
     private void OnTaskValueChanged(TaskData _td)
     {
@@ -86,8 +91,8 @@ public class StatisticCalculator2 : MonoBehaviour
 
         // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
 
-        Invoke(nameof(GoalScoreCalcs), 0.1f);
-        Invoke(nameof(TaskGoalCalc), 0.2f);
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
 
 
     }
@@ -134,8 +139,9 @@ public class StatisticCalculator2 : MonoBehaviour
     {
         int[] weeklydata = new int[7];
         weeklyavarage = 0;
+      //  print(dailysc);
         float weeklyfleet = dailysc;
-        int daycounter = 0;
+        int daycounter = 1;
         int i = 0;
         for (int l = 0; l < 7; l++)
         {
@@ -190,18 +196,17 @@ public class StatisticCalculator2 : MonoBehaviour
             // print(weeklyfleet);
         }
 
-        if (daycounter == 0) { return; }
+       // if (daycounter == 0) { return; }
 
-        weeklyavarage = weeklyfleet / daycounter;
-
+        weeklyavarage = (float)weeklyfleet / daycounter;
         weeklyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
         weeklyScoreTextStatMenu.text = Math.Round(weeklyavarage, 2).ToString();
     }
     void MonthlyAvarageCalc()
     {
         monthlyavarage = 0;
-        int monthlyfleet = 0;
-        int daycountermonth = 0;
+        int monthlyfleet = dailysc;
+        int daycountermonth = 1;
         int i = 0;
         for (int j = 0; j < GoalDATAS.Length; j++)
         {
@@ -219,14 +224,15 @@ public class StatisticCalculator2 : MonoBehaviour
             }
         }
 
-        if (daycountermonth == 0) { return; }
+       // if (daycountermonth == 0) { return; }
 
-        monthlyavarage = monthlyfleet / daycountermonth;
+        monthlyavarage = (float)monthlyfleet / daycountermonth;
         monthlyScoreText.text = Math.Round(weeklyavarage, 2).ToString();
     }
 
     void TaskDailyCalc()
     {
+        
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         dailytaskpoint = 0;
         int i = 0;
@@ -319,17 +325,17 @@ public class StatisticCalculator2 : MonoBehaviour
         int[] _month = new int[30];
         int[] _week = new int[7];
 
-        int _allTimeMax = 0;
-        int _monthMax = 0;
-        int _weekMax = 0;
+        int _allTimeMax = dailysc;
+        int _monthMax = dailysc;
+        int _weekMax = dailysc;
 
         float _allTimeAverage = 0;
         float _monthAverage = 0;
         float _weekAverage = 0;
 
-        int _allTimeFound = 0;
-        int _monthTimeFound = 0;
-        int _weekTimeFound = 0;
+        int _allTimeFound = 1;
+        int _monthTimeFound = 1;
+        int _weekTimeFound = 1;
 
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
@@ -397,6 +403,9 @@ public class StatisticCalculator2 : MonoBehaviour
             }
         }
 
+        _monthAverage += dailysc;
+        _allTimeAverage += dailysc;
+        _weekAverage += dailysc;
 
         if (_allTimeFound > 0)
         {
@@ -576,7 +585,7 @@ public class StatisticCalculator2 : MonoBehaviour
 
         foreach(int _w in weeklydata)
         {
-            print(_w);
+           // print(_w);
         }
 
         barchart1.Clear();
