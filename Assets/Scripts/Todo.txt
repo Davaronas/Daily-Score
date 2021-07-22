@@ -36,50 +36,51 @@ delete notification - delete from notification manager too (delete all and repla
 Detailed task datas*
 fix highscores*
 one color / one goal*
+notification don't fire immediately if time is less than now*
+METRICs should be changed to the selected metric*
 
 
 saving task changes*__
+task creatin texts bugged*
+streak system gold*
+create task texts should be one block, and not seperated into several small textrs*
+reset task*
+delete goal*
+delet task*
+streak*
 
 
+remove reset task points from all history*__
 
 
 Setting up sprites
 
 Multi color image
 
-METRICs should be changed to the selected metric
 
 
 
 leave toggle or switch to interaction handler ?
 
-task creatin texts bugged
 
 
 
 
 
-streak system gold
 
 
-create task texts should be one block, and not seperated into several small textrs
 
 
 don't show day selection and notification selection before type selected
 
 
 
-delete goal
-delet task
-reset task
 
 
-remove reset task points from all history
 click on averages will turn to other type of averages
 click on highscores will turn to other types of highscores
 daily score on top
 
-streak
 
 goal and task name length 25 character
 
@@ -104,6 +105,12 @@ interval: at least one interval + error message
 back: close day selector, close info panel, close error panel
 
 rezgés törlésnél
+
+ongoal delete: save goals, calculate stats
+
+calculate deleted goals daily scores ?
+
+statcalc cleanup
 
 
 

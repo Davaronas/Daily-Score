@@ -172,6 +172,8 @@ public class GoalManager : MonoBehaviour
         goals.Remove(goalToDelete);
         Destroy(goalToDelete.gameObject);
         askToDeleteGoalPanel.SetActive(false);
+
+        AppManager.GoalDeleted();
     }
 
     public void RemoteCall_CancelDeleteGoal()

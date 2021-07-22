@@ -769,6 +769,7 @@ public class AppManager : MonoBehaviour
     public static event Action OnTaskEdited;
     public static event Action<string> OnErrorHappened;
     public static event Action OnNewDayStartedDuringRuntime;
+    public static event Action OnGoalDeleted;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -798,6 +799,7 @@ public class AppManager : MonoBehaviour
         OnGoalOpened += OnGoalOpenedCallback;
         OnErrorHappened += OnErrorHappenedCallback;
         OnTaskEdited += OnTaskEditedCallback;
+        OnGoalDeleted += OnGoalDeletedCallback;
 
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
@@ -815,10 +817,11 @@ public class AppManager : MonoBehaviour
         OnGoalOpened -= OnGoalOpenedCallback;
         OnErrorHappened -= OnErrorHappenedCallback;
         OnTaskEdited -= OnTaskEditedCallback;
-        OnTaskValueChanged += OnTaskValueChangedCallback;
+        OnTaskValueChanged -= OnTaskValueChangedCallback;
         Application.logMessageReceived -= ErrorCallback;
+        OnGoalDeleted -= OnGoalDeletedCallback;
 
-       // SaveGoalData();
+        // SaveGoalData();
 
         if (Application.isEditor)
         {
@@ -958,7 +961,7 @@ public class AppManager : MonoBehaviour
     {
         DateTime _today = DateTime.Now.Date;    // Convert.ToDateTime(testTime);          //
 
-        if (DateTime.Now.Date == _today) { return; } // still the same day, we don't need to reset
+        if (lastLogin.Date == _today) { return; } // still the same day, we don't need to reset
 
 
         // reset goals
@@ -1322,6 +1325,18 @@ public class AppManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         SaveGoalData();
     }
+    
+
+    public static void GoalDeleted()
+    {
+        OnGoalDeleted?.Invoke();
+    }
+
+
+    private void OnGoalDeletedCallback()
+    {
+        StartCoroutine(Save());
+    }
 
     public static void NewTaskAdded()
     {
@@ -1366,7 +1381,6 @@ public class AppManager : MonoBehaviour
     public static void TaskValueChanged(TaskData _td)
     {
         OnTaskValueChanged?.Invoke(_td);
-        Debug.Log("WHy");
     }
 
     private void OnTaskValueChangedCallback(TaskData _td)
@@ -1428,15 +1442,15 @@ public class AppManager : MonoBehaviour
 
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
-        GoalData[] _goalDatas = goalManager.GetAllGoals();
+        GoalData[] _goalDatas = goalManager.GetExistingGoals(); // Get All GOals
         foreach (GoalData _gd in _goalDatas)
         {
-            print(_gd.name);
+          //  print(_gd.name);
             foreach(TaskData _td in _gd.tasks)
             {
-                print(_td.name);
+               // print(_td.name);
 
-                if(_td.type == TaskType.Boolean)
+                 if(_td.type == TaskType.Boolean)
                 print(((BooleanTaskData)_td).isDone);
             }
             //  print(_gd.current);
@@ -1493,7 +1507,19 @@ public class AppManager : MonoBehaviour
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
-    
+    private void OnApplicationFocus(bool focus)
+    {
+        if(focus)
+        {
+            GoalActivityCheck(goalManager.GetExistingGoals());
+            lastLogin = DateTime.Now;
+        }
+        else
+        {
+            SaveGoalData();
+            PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+        }
+    }
 
 
 

@@ -70,12 +70,19 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnNewDayStartedDuringRuntime += OnNewDayStartedDuringRuntime;
        
         AppManager.OnGoalOpened += OnGoalOpened;
-
+        AppManager.OnGoalDeleted += OnGoalDeleted;
         
 
         Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
 
     }
+
+    private void OnGoalDeleted()
+    {
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
+    }
+
     private void OnGoalOpened(Goal _td)
     {
         Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
@@ -903,5 +910,6 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnTaskValueChanged -= OnTaskValueChanged;
         AppManager.OnNewDayStartedDuringRuntime -= OnNewDayStartedDuringRuntime;
         AppManager.OnGoalOpened -= OnGoalOpened;
+        AppManager.OnGoalDeleted -= OnGoalDeleted;
     }
 }

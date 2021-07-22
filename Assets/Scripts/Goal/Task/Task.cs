@@ -130,7 +130,6 @@ public class Task : MonoBehaviour
         GoalData _gd;
         if (goalManager.SearchGoalByName(taskData.owner, out _gd))
         {
-            print("WTF");
             _gd.AddModification(_cp, _task);
             AppManager.TaskValueChanged(taskData);
         }
@@ -297,7 +296,7 @@ public class Task : MonoBehaviour
                 _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
-
+                print("BOOL FIRED");
                 break;
             case AppManager.TaskType.Optimum:
                 if (currentValueInputField.text != "")
