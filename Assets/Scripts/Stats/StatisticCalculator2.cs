@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
 /// <summary>
-/// StatCalc version 2.7.2
+/// StatCalc version 2.7.3
 /// </summary>
 struct DailyScoreStruct
 {
@@ -38,6 +38,7 @@ public class StatisticCalculator2 : MonoBehaviour
     public int maxoftheweek;
     public int maxofthemonth;
     public float alltimevarage;
+    public int buttoncounter = 0;
 
 
     List<DailyScoreStruct> DailyScoreStructsList = new List<DailyScoreStruct>();
@@ -872,6 +873,108 @@ public class StatisticCalculator2 : MonoBehaviour
         }
     }
 
+    void RewindDaily(int buttoncounter)
+    {
+        StatLoad();
+        int rewindtimes = buttoncounter;
+        int buttonchecker = 0;
+
+        List<PieChartInfo> RewindDay = new List<PieChartInfo>();
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date == Today.AddDays(rewindtimes)) //Itt lehet a kutya
+                {
+                    RewindDay.Add(new PieChartInfo(GoalDATAS[i].dailyScores[j].amount, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                    print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
+                }
+            }
+            
+
+        }
+        piechart1.Clear();
+        if (RewindDay.Count > 0)
+        {
+            piechart1.LoadData(RewindDay.ToArray());
+        }
+
+    }
+    void RewindWeek(int buttoncounter)
+    {
+        StatLoad();
+        List<PieChartInfo> RewindWeek = new List<PieChartInfo>();
+        int rewindtimes;
+        int buttonchecker = 0;
+        if(buttoncounter == 0)
+        {
+            rewindtimes = 1;
+        }
+        else
+        {
+            rewindtimes = Math.Abs(buttoncounter) +1;
+        }
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+
+            float sziauram = 0;
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes+1 *-7) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes * -7))) //Itt lehet a kutya
+                {
+                    sziauram += GoalDATAS[i].dailyScores[j].amount;
+                    print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
+                }
+            }
+            RewindWeek.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+
+        }
+        piechart1.Clear();
+        if (RewindWeek.Count > 0)
+        {
+            piechart1.LoadData(RewindWeek.ToArray());
+        }
+    }
+
+    void RewindMonth(int buttoncounter)
+    {
+        StatLoad();
+        List<PieChartInfo> RewindMonth = new List<PieChartInfo>();
+        int rewindtimes;
+        int buttonchecker = 0;
+        if (buttoncounter == 0)
+        {
+            rewindtimes = 1;
+        }
+        else
+        {
+            rewindtimes = Math.Abs(buttoncounter) + 1;
+        }
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+
+
+            float sziauram = 0;
+            for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+            {
+                if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes + 1 * -30) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes * -30))) //Itt lehet a kutya
+                {
+                    sziauram += GoalDATAS[i].dailyScores[j].amount;
+                    print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
+                }
+            }
+            RewindMonth.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+
+        }
+        piechart1.Clear();
+        if (RewindMonth.Count > 0)
+        {
+            piechart1.LoadData(RewindMonth.ToArray());
+        }
+    }
     void Start()
     {
         
@@ -888,7 +991,7 @@ public class StatisticCalculator2 : MonoBehaviour
         lastlogdur = Today.Day - AppManager.lastLogin.Day;
         StatLoad();
         Invoke(nameof(GoalScoreCalcs), 0.2f);
-
+        RewindWeek(0);
     }
 
     private void OnNewDayStartedDuringRuntime()
