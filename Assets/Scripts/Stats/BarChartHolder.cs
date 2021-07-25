@@ -24,6 +24,8 @@ public class BarChartHolder : MonoBehaviour
     [SerializeField] private TMP_Text minTime = null;
     [SerializeField] private TMP_Text maxTime = null;
 
+    [SerializeField] private GameObject disabledImage = null;
+
     private RectTransform minText_RT = null;
     private RectTransform maxText_RT = null;
 
@@ -43,14 +45,34 @@ public class BarChartHolder : MonoBehaviour
         minText_RT = minText.GetComponent<RectTransform>();
         maxText_RT = maxText.GetComponent<RectTransform>();
 
-        
-       
-        
+        disabledImage.SetActive(false);
+
+
+
     }
 
 
     public void LoadData(BarChartInfo[] _infos, bool _displayTexts)
     {
+        bool _foundNonZero = false;
+        for (int i = 0; i < _infos.Length; i++)
+        {
+            if(_infos[i].point != 0)
+            {
+                _foundNonZero = true;
+            }
+        }
+
+        if(!_foundNonZero)
+        {
+            disabledImage.SetActive(true);
+        }
+        else
+        {
+            disabledImage.SetActive(false);
+        }
+
+
         if (_displayTexts)
         {
             for (int i = 0; i < _infos.Length; i++)

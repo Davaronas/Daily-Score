@@ -39,6 +39,8 @@ public class PieChart : MonoBehaviour
     [SerializeField] private Transform elementHolder = null;
     [SerializeField] private GameObject elementPrefab = null;
 
+    [SerializeField] private GameObject disabledImage = null;
+
     private RectTransform rectTransform;
     private float max = 0;
     private float sum = 0;
@@ -52,7 +54,7 @@ public class PieChart : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
 
-
+        disabledImage.SetActive(false);
 
         
       
@@ -119,7 +121,15 @@ public class PieChart : MonoBehaviour
             }
         }
 
-        if (_allZero) { return; }
+        if (_allZero)
+        {
+            disabledImage.SetActive(true);
+            return;
+        }
+        else
+        {
+            disabledImage.SetActive(false);
+        }
 
         float _fill = 0;
         for (int j = 0; j < _infos.Length; j++)
