@@ -856,8 +856,6 @@ public class StatisticCalculator2 : MonoBehaviour
         List<PieChartInfo> PiteMind = new List<PieChartInfo>();
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
-
-
             float sziauram = 0;
             for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
             {
@@ -882,8 +880,6 @@ public class StatisticCalculator2 : MonoBehaviour
         List<PieChartInfo> RewindDay = new List<PieChartInfo>();
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
-
-
             for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
             {
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date == Today.AddDays(rewindtimes)) //Itt lehet a kutya

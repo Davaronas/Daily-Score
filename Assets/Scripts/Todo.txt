@@ -112,7 +112,10 @@ calculate deleted goals daily scores ?
 
 statcalc cleanup
 
+08:00 
+nagyikon pikto, kisikon daily score
 
+bónusz, streak bug ?
 
 
 

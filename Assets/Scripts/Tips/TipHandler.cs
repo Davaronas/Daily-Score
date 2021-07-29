@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 public class TipHandler : MonoBehaviour
@@ -8,6 +11,7 @@ public class TipHandler : MonoBehaviour
    {
         public string header;
         public string content;
+       
 
         public Tip (string _h,string _c)
         {
@@ -16,22 +20,36 @@ public class TipHandler : MonoBehaviour
         }
    }
 
+    [System.Serializable]
     public struct TipSaveData
     {
         public int id;
         public bool isSaved;
-
+        public string lastShown;
    
-        public TipSaveData(int _id, bool _isSaved)
+        public TipSaveData(int _id, bool _isSaved, string _lastShown)
         {
             id = _id;
             isSaved = _isSaved;
+            lastShown = _lastShown;
+            print(_id + " " + _lastShown);
+        }
+
+        public DateTime GetLastShownDate()
+        {
+            return  Convert.ToDateTime(lastShown);
         }
     }
 
+    private Dictionary<TipSaveData, Tip> currentTips = new Dictionary<TipSaveData, Tip>();
+    private TipManager tipManager = null;
+    private int maxId = 0;
+    private int firstTipId = 0;
+    private int secondTipId = 0;
+
     private void CreateTip(int _id, string _h, string _c, bool _isSaved)
     {
-        currentTips.Add(new TipSaveData(_id, _isSaved), new Tip(_h, _c));
+        currentTips.Add(new TipSaveData(_id, _isSaved, DateTime.MinValue.ToString()), new Tip(_h, _c));
     }
 
     private void SetTipSaved()
@@ -39,11 +57,27 @@ public class TipHandler : MonoBehaviour
 
     }
 
-    private Dictionary<TipSaveData, Tip> currentTips = new Dictionary<TipSaveData, Tip>();
+    private TipSaveData[] ExtractTipSavedDatas()
+    {
+        List<TipSaveData> _savedTips = new List<TipSaveData>();
+        foreach(KeyValuePair<TipSaveData,Tip> _tip in currentTips)
+        {
+            _savedTips.Add(_tip.Key);
+           // print(_tip.Key.lastShown);
+        }
+
+
+        return _savedTips.ToArray();
+    }
+
 
     private void Awake()
     {
         AppManager.OnLanguageChanged += Initialize;
+        tipManager = FindObjectOfType<TipManager>();
+
+
+
     }
 
     private void OnDestroy()
@@ -52,16 +86,167 @@ public class TipHandler : MonoBehaviour
     }
 
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            PlayerPrefs.SetInt("firstTipId", -1);
+            PlayerPrefs.SetInt("secondTipId", -1);
+        }
+    }
+
     private void Start()
     {
 
+        if (AppManager.lastLogin.Date != DateTime.Now.Date)
+        {
+            PlayerPrefs.SetInt("firstTipId", -1);
+            PlayerPrefs.SetInt("secondTipId", -1);
+        }
         Initialize(AppManager.currentLanguage);
-        LoadSavedTips();
-       
+    }
+
+   
+    private void LoadMainTip()
+    {
+        firstTipId = PlayerPrefs.GetInt("firstTipId", -1);
+        print("First player prefs: " + firstTipId);
+
+        // find oldest first (DateTIme.minvalue)
+
+        if (AppManager.lastLogin.Date == DateTime.Now.Date)
+        {
+            if (firstTipId != -1)
+            {
+                foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+                {
+                    if (_tip.Key.id == firstTipId)
+                    {
+                        tipManager.LoadDailyTip(_tip.Key.id, _tip.Value.header, _tip.Value.content);
+                        currentTips.Remove(_tip.Key);
+                        KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                            (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                        currentTips.Add(_mod.Key, _mod.Value);
+                        PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
+                        print("Set first already picked earlier: " + _tip.Key.id);
+                        return;
+                    }
+                }
+            }
+        }
+
+        LoadRandomTip();
+    }
+
+    private void LoadRandomTip()
+    {
+        firstTipId = UnityEngine.Random.Range(0, maxId + 1);
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if(_tip.Key.GetLastShownDate() == DateTime.MinValue)
+            {
+                tipManager.LoadDailyTip(_tip.Key.id, _tip.Value.header, _tip.Value.content);
+                currentTips.Remove(_tip.Key);
+                KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                    (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                currentTips.Add(_mod.Key, _mod.Value);
+                print(currentTips[_mod.Key].content);
+                PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
+                print("Set first: " + _tip.Key.id);
+                return;
+            }
+
+            if (_tip.Key.id == firstTipId)
+            {
+                tipManager.LoadDailyTip(_tip.Key.id, _tip.Value.header, _tip.Value.content);
+                currentTips.Remove(_tip.Key);
+                KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                    (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                currentTips.Add(_mod.Key, _mod.Value);
+                PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
+                print("Set first: " + _tip.Key.id);
+                return;
+            }
+        }
+    }
+
+    public int AskForSecondTip(out string _h, out string _c)
+    {
+
+        secondTipId = PlayerPrefs.GetInt("secondTipId", -1);
+        print("Second player prefs: " + secondTipId);
+        _h = "";
+        _c = "";
+
+        if (AppManager.lastLogin.Date == DateTime.Now.Date)
+        {
+            if (secondTipId != -1)
+            {
+                foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+                {
+                    if(_tip.Key.id == secondTipId)
+                    {
+                        _h = _tip.Value.header;
+                        _c = _tip.Value.content;
+                        currentTips.Remove(_tip.Key);
+                        KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                            (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                        currentTips.Add(_mod.Key, _mod.Value);
+                        print(_tip.Value.content);
+                        PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                        print("Set second already picked earlier: " + _tip.Key.id);
+                        return secondTipId;    
+                    }
+                }
+            }
+        }
+
+        roll:
+        secondTipId = UnityEngine.Random.Range(0, maxId + 1);
+          if (secondTipId == firstTipId) goto roll;
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if (_tip.Key.GetLastShownDate() == DateTime.MinValue)
+            {
+                _h = _tip.Value.header;
+                _c = _tip.Value.content;
+                currentTips.Remove(_tip.Key);
+                KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                    (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                currentTips.Add(_mod.Key, _mod.Value);
+                print(_tip.Value.content);
+                PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                print("Set second: " + _tip.Key.id);
+                return _tip.Key.id;
+            }
+
+            if (_tip.Key.id == secondTipId)
+            {
+                _h = _tip.Value.header;
+                _c = _tip.Value.content;
+                currentTips.Remove(_tip.Key);
+                KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                    (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
+                currentTips.Add(_mod.Key, _mod.Value);
+                print(_tip.Value.content);
+                PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                print("Set second: " + _tip.Key.id);
+                return _tip.Key.id;
+                
+            }
+        }
+
+        SaveTips();
+
+        return -1;
+
     }
 
     private void Initialize(AppManager.Languages _l)
     {
+        currentTips.Clear();
+       
+
         TextAsset textAsset;
         switch (_l)
         {
@@ -78,6 +263,7 @@ public class TipHandler : MonoBehaviour
                 foreach (string _line in _lines_en)
                 {
                     string[] _parts = _line.Split('_');
+                 
                     CreateTip(int.Parse(_parts[0]), _parts[1], _parts[2], false);
                 }
                 break;
@@ -101,10 +287,121 @@ public class TipHandler : MonoBehaviour
 
                 break;
         }
+
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if(_tip.Key.id > maxId)
+            {
+                maxId = _tip.Key.id;
+            }
+        }
+
+        SaveTips();
+
+        LoadSavedTips();
+        LoadMainTip();
     }
 
     private void LoadSavedTips()
     {
+        string path = Path.Combine(Application.persistentDataPath, "tipdata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            fileInfo.IsReadOnly = false;
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+            TipSaveData[] _savedTips = formatter.Deserialize(stream) as TipSaveData[];
 
+            /*
+            foreach (TipSaveData _tsd in _savedTips)
+            {
+                if(_tsd.id > maxId)
+                {
+                    maxId = _tsd.id;
+                    print(maxId);
+                }
+            }
+            */
+
+            SetSavedStateForTips(_savedTips);
+
+            stream.Close();
+            fileInfo.IsReadOnly = true;
+        }
+    }
+
+    private void SetSavedStateForTips(TipSaveData[] _savedTips)
+    {
+        List<KeyValuePair<TipSaveData, Tip>> _remove = new List<KeyValuePair<TipSaveData, Tip>>();
+        List<KeyValuePair<TipSaveData, Tip>> _add = new List<KeyValuePair<TipSaveData, Tip>>();
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            for (int i = 0; i < _savedTips.Length; i++)
+            {
+                if (_tip.Key.id == _savedTips[i].id)
+                {
+                    _remove.Add(_tip);
+                    _add.Add(new KeyValuePair<TipSaveData, Tip>(new TipSaveData(_tip.Key.id, _savedTips[i].isSaved, _tip.Key.lastShown), new Tip(_tip.Value.header, _tip.Value.content)));
+                }
+            }
+        }
+
+        for (int i = 0; i < _remove.Count; i++)
+        {
+            currentTips.Remove(_remove[i].Key);
+        }
+
+        for (int i = 0; i < _add.Count; i++)
+        {
+            currentTips.Add(_add[i].Key, _add[i].Value);
+        }
+
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if(_tip.Key.isSaved == true)
+            {
+                tipManager.AddSavedTip(_tip.Key.id, _tip.Value.header);
+            }
+        }
+    }
+
+    private void TipSaved(int _id)
+    {
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if (_tip.Key.id == _id)
+            {
+               // new KeyValuePair<TipSaveData, Tip>(new TipSaveData(_tip.Key.id,_tip.Key.isSaved), new Tip(_tip.Value.header,_tip.Value.content));
+                currentTips.Remove(_tip.Key);
+                currentTips.Add(new TipSaveData(_tip.Key.id, _tip.Key.isSaved, _tip.Key.lastShown), new Tip(_tip.Value.header, _tip.Value.content));
+            }
+        }
+    }
+
+    private void SaveTips()
+    {
+        string path = Path.Combine(Application.persistentDataPath, "tipdata");
+        if (File.Exists(path))
+        {
+            FileInfo fileInfoIfAlreadyExists = new FileInfo(path);
+            fileInfoIfAlreadyExists.IsReadOnly = false;
+        }
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream stream = new FileStream(path, FileMode.Create);
+        TipSaveData[] _tips = ExtractTipSavedDatas();
+        formatter.Serialize(stream, _tips);
+        stream.Close();
+        FileInfo fileInfo = new FileInfo(path);
+        fileInfo.IsReadOnly = true;
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if(!focus)
+        {
+            SaveTips();
+        }
     }
 }

@@ -1,0 +1,8 @@
+0_FIRST TIP HEADER_First tip content
+1_SECOND TIP HEADER_Second tip content
+2_THIRD TIP HEADER_Third tip content
+3_FOURTH TIP HEADER_Fourth tip content
+4_FIFFTH TIP HEADER_Fifth tip content
+5_SIXTH TIP HEADER_Sixth tip content
+6_SEVENTH TIP HEADER_Seventh tip content
+7_EIGHT TIP HEADER_Eight  tip content

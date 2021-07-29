@@ -1513,10 +1513,12 @@ public class AppManager : MonoBehaviour
         {
             GoalActivityCheck(goalManager.GetExistingGoals());
             lastLogin = DateTime.Now;
+            PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
         else
         {
             SaveGoalData();
+            lastLogin = DateTime.Now;
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
     }

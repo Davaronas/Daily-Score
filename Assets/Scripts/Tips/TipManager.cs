@@ -27,7 +27,7 @@ public class TipManager : MonoBehaviour
 
     private List<SavedTip> savedTips = new List<SavedTip>();
     private float tipPrefab_Y_Size = 0;
-    private TipMain tipMain;
+    private TipHandler tipHandler;
 
     private int allowedCount;
 
@@ -36,7 +36,7 @@ public class TipManager : MonoBehaviour
     private void Awake()
     {
         tipPrefab_Y_Size = tipPrefab.GetComponent<RectTransform>().rect.height;
-        tipMain = FindObjectOfType<TipMain>();
+        tipHandler = FindObjectOfType<TipHandler>();
 
         if(AppManager.isGold)
         {
@@ -53,7 +53,20 @@ public class TipManager : MonoBehaviour
 
        
 
-        if(AppManager.lastLogin.Date != DateTime.Now.Date)
+      
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            PlayerPrefs.SetInt("SecondTipUnlocked", 0);
+        }
+    }
+
+    private void Start()
+    {
+        if (AppManager.lastLogin.Date != DateTime.Now.Date)
         {
             secondTipUnlockedToday = 0;
             PlayerPrefs.SetInt("SecondTipUnlocked", 0);
@@ -63,7 +76,7 @@ public class TipManager : MonoBehaviour
             secondTipUnlockedToday = PlayerPrefs.GetInt("SecondTipUnlocked", 0);
         }
 
-        if(secondTipUnlockedToday == 1)
+        if (secondTipUnlockedToday == 1)
         {
             UnlockSecondTip();
         }
@@ -72,13 +85,16 @@ public class TipManager : MonoBehaviour
 
     public void UnlockSecondTip()
     {
+        string _h;
+        string _c;
+        int _id = tipHandler.AskForSecondTip(out _h, out _c);
+        if ( _id != -1)
+        {
+            secondTip.SetData(_id, _h, _c);
+            secondTipOverlay.SetActive(false);
+            PlayerPrefs.GetInt("SecondTipUnlocked", 1);
+        }
 
-
-        secondTip.SetData(tipMain.AskForSecondTip(out string _h, out string _c), _h, _c);
-        secondTipOverlay.SetActive(false);
-        SetSaveButtonState(secondTip.tipId);
-
-        
     }
 
     public void RemoteCall_WatchAdButtonPressed()
@@ -125,8 +141,7 @@ public class TipManager : MonoBehaviour
         ChangeSavedTipAmountText();
         ScrollSizer.AddSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
 
-        SetSaveButtonState(mainTip.tipId);
-        SetSaveButtonState(secondTip.tipId);
+
 
     }
 
@@ -149,8 +164,8 @@ public class TipManager : MonoBehaviour
 
         savedTips.Remove(_tipToDelete);
         Destroy(_tipToDelete.gameObject);
-        tipMain.DeleteTipButtonPressed(_id);
-        SetSaveButtonState(_id);
+  //      tipHandler.RemoveTipSavedState(_tipToDelete.id);
+
         ChangeSavedTipAmountText();
         ScrollSizer.ReduceSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
     }
@@ -158,42 +173,10 @@ public class TipManager : MonoBehaviour
     public void LoadDailyTip(int _id, string _header, string _content)
     {
         mainTip.SetData(_id, _header, _content);
-        SetSaveButtonState(mainTip.tipId);
+
 
 
     }
 
-    public void SetSaveButtonState(int _id)
-    {
-        print(mainTip.GetHeldTipId() + " " + secondTip.GetHeldTipId());
-
-        if (tipMain.Loaded.Contains(_id))
-        {
-            if (mainTip.tipId == _id)
-            {
-                mainTip.SetSaveButtonState(false);
-            }
-
-            if (secondTip.tipId == _id)
-            {
-                secondTip.SetSaveButtonState(false);
-            }
-            print($"Contains id: {_id}");
-        }
-        else
-        {
-            if (mainTip.tipId == _id)
-            {
-                mainTip.SetSaveButtonState(true);
-            }
-
-            if (secondTip.tipId == _id)
-            {
-                secondTip.SetSaveButtonState(true);
-            }
-
-           // print($"Does not contain id: {_id}");
-        }
-        
-    }
+  
 }
