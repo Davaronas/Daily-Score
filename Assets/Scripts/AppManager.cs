@@ -1154,7 +1154,8 @@ public class AppManager : MonoBehaviour
 
             // check each goal if they should be active today
 
-            lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin",DateTime.Now.ToString()));
+            Invoke(nameof(SetLastLoginToNow),Time.deltaTime);
+           
             GoalActivityCheck(_savedGoals);
 
             goalManager.LoadGoals(_savedGoals);
@@ -1189,6 +1190,11 @@ public class AppManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
+    }
+
+    private void SetLastLoginToNow()
+    {
+        lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
     }
 
     private void Update()

@@ -32,7 +32,6 @@ public class TipHandler : MonoBehaviour
             id = _id;
             isSaved = _isSaved;
             lastShown = _lastShown;
-            print(_id + " " + _lastShown);
         }
 
         public DateTime GetLastShownDate()
@@ -52,9 +51,51 @@ public class TipHandler : MonoBehaviour
         currentTips.Add(new TipSaveData(_id, _isSaved, DateTime.MinValue.ToString()), new Tip(_h, _c));
     }
 
-    private void SetTipSaved()
+    public void RemoteCall_SaveFirstTip()
     {
+        SetTipSaved(firstTipId, true);
+        tipManager.BlockFirstTipSaveButton();
+    }
 
+    public void RemoteCall_SaveSecondTip()
+    {
+        SetTipSaved(secondTipId, true);
+        tipManager.BlockSecondTipSaveButton();
+    }
+
+    public void SetTipSaved(int _id, bool _state)
+    {
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if (_tip.Key.id == _id)
+            {
+
+                currentTips.Remove(_tip.Key);
+                KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
+                    (new TipSaveData(_tip.Key.id, _state, _tip.Key.lastShown), new Tip(_tip.Value.header, _tip.Value.content));
+                currentTips.Add(_mod.Key, _mod.Value);
+                if (_state)
+                {
+                    tipManager.AddSavedTip(_tip.Key.id, _tip.Value.header);
+                }
+                return;
+            }
+        }
+
+        SaveTips();
+    }
+
+    public bool IsIdSaved(int _id)
+    {
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if(_tip.Key.id == _id && _tip.Key.isSaved)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private TipSaveData[] ExtractTipSavedDatas()
@@ -63,7 +104,7 @@ public class TipHandler : MonoBehaviour
         foreach(KeyValuePair<TipSaveData,Tip> _tip in currentTips)
         {
             _savedTips.Add(_tip.Key);
-           // print(_tip.Key.lastShown);
+            print(_tip.Key.lastShown + " " + _tip.Key.id);
         }
 
 
@@ -94,6 +135,8 @@ public class TipHandler : MonoBehaviour
             PlayerPrefs.SetInt("secondTipId", -1);
         }
     }
+
+  
 
     private void Start()
     {
@@ -127,6 +170,12 @@ public class TipHandler : MonoBehaviour
                         KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                             (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                         currentTips.Add(_mod.Key, _mod.Value);
+
+                        print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+
+                        print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
+
                         PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
                         print("Set first already picked earlier: " + _tip.Key.id);
                         return;
@@ -150,9 +199,13 @@ public class TipHandler : MonoBehaviour
                 KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                     (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                 currentTips.Add(_mod.Key, _mod.Value);
-                print(currentTips[_mod.Key].content);
+
+
+                print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+                print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
                 PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
-                print("Set first: " + _tip.Key.id);
+                print("Set first equals minvalue: " + _tip.Key.id);
                 return;
             }
 
@@ -163,6 +216,11 @@ public class TipHandler : MonoBehaviour
                 KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                     (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                 currentTips.Add(_mod.Key, _mod.Value);
+
+
+                print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+                print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
                 PlayerPrefs.SetInt("firstTipId", _tip.Key.id);
                 print("Set first: " + _tip.Key.id);
                 return;
@@ -192,7 +250,11 @@ public class TipHandler : MonoBehaviour
                         KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                             (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                         currentTips.Add(_mod.Key, _mod.Value);
-                        print(_tip.Value.content);
+
+
+                        print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+                        print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
                         PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
                         print("Set second already picked earlier: " + _tip.Key.id);
                         return secondTipId;    
@@ -214,9 +276,14 @@ public class TipHandler : MonoBehaviour
                 KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                     (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                 currentTips.Add(_mod.Key, _mod.Value);
-                print(_tip.Value.content);
+
+
+                print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+                print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
+
                 PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
-                print("Set second: " + _tip.Key.id);
+                print("Set second equals minvalue: " + _tip.Key.id);
                 return _tip.Key.id;
             }
 
@@ -228,7 +295,11 @@ public class TipHandler : MonoBehaviour
                 KeyValuePair<TipSaveData, Tip> _mod = new KeyValuePair<TipSaveData, Tip>
                     (new TipSaveData(_tip.Key.id, _tip.Key.isSaved, DateTime.Now.Date.ToString()), new Tip(_tip.Value.header, _tip.Value.content));
                 currentTips.Add(_mod.Key, _mod.Value);
-                print(_tip.Value.content);
+
+
+                print(_tip.Key.lastShown + " changed from" + _tip.Key.id);
+                print(_mod.Key.lastShown + " new last shown " + _mod.Key.id);
+
                 PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
                 print("Set second: " + _tip.Key.id);
                 return _tip.Key.id;
@@ -296,10 +367,17 @@ public class TipHandler : MonoBehaviour
             }
         }
 
-        SaveTips();
 
         LoadSavedTips();
         LoadMainTip();
+
+        if (PlayerPrefs.GetInt("SecondTipUnlocked", 0) == 1)
+        {
+            tipManager.UnlockSecondTip();
+        }
+
+        SaveTips();
+        tipManager.AlreadyContainsTipsCheck();
     }
 
     private void LoadSavedTips()
@@ -342,7 +420,7 @@ public class TipHandler : MonoBehaviour
                 if (_tip.Key.id == _savedTips[i].id)
                 {
                     _remove.Add(_tip);
-                    _add.Add(new KeyValuePair<TipSaveData, Tip>(new TipSaveData(_tip.Key.id, _savedTips[i].isSaved, _tip.Key.lastShown), new Tip(_tip.Value.header, _tip.Value.content)));
+                    _add.Add(new KeyValuePair<TipSaveData, Tip>(new TipSaveData(_tip.Key.id, _savedTips[i].isSaved, _savedTips[i].lastShown), new Tip(_tip.Value.header, _tip.Value.content)));
                 }
             }
         }

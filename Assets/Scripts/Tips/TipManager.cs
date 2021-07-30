@@ -56,6 +56,8 @@ public class TipManager : MonoBehaviour
       
     }
 
+  
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.K))
@@ -66,6 +68,7 @@ public class TipManager : MonoBehaviour
 
     private void Start()
     {
+
         if (AppManager.lastLogin.Date != DateTime.Now.Date)
         {
             secondTipUnlockedToday = 0;
@@ -80,7 +83,6 @@ public class TipManager : MonoBehaviour
         {
             UnlockSecondTip();
         }
-
     }
 
     public void UnlockSecondTip()
@@ -133,6 +135,14 @@ public class TipManager : MonoBehaviour
             return;
         }
 
+        for (int i = 0; i < savedTips.Count; i++)
+        {
+            if(savedTips[i].id == _id)
+            {
+                return;
+            }
+        }
+
         SavedTip _newSavedTip = Instantiate(tipPrefab, transform.position, Quaternion.identity, savedTipsLayoutGroup).GetComponent<SavedTip>();
         if(_newSavedTip == null) { Debug.LogError("Tip prefab doesn't contain SavedTip component"); return; }
 
@@ -145,7 +155,15 @@ public class TipManager : MonoBehaviour
 
     }
 
-    
+    public void BlockFirstTipSaveButton()
+    {
+        mainTip.SetSaveButtonState(false);
+    }
+
+    public void BlockSecondTipSaveButton()
+    {
+        secondTip.SetSaveButtonState(false);
+    }
 
     public void RemoveSavedTip(int _id)
     {
@@ -164,7 +182,8 @@ public class TipManager : MonoBehaviour
 
         savedTips.Remove(_tipToDelete);
         Destroy(_tipToDelete.gameObject);
-  //      tipHandler.RemoveTipSavedState(_tipToDelete.id);
+        tipHandler.SetTipSaved(_tipToDelete.id, false);
+        AlreadyContainsTipsCheck();
 
         ChangeSavedTipAmountText();
         ScrollSizer.ReduceSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
@@ -173,9 +192,28 @@ public class TipManager : MonoBehaviour
     public void LoadDailyTip(int _id, string _header, string _content)
     {
         mainTip.SetData(_id, _header, _content);
+    }
 
 
+    public void AlreadyContainsTipsCheck()
+    {
+        if (tipHandler.IsIdSaved(mainTip.GetHeldTipId()))
+        {
+            mainTip.SetSaveButtonState(false);
+        }
+        else
+        {
+            mainTip.SetSaveButtonState(true);
+        }
 
+        if(tipHandler.IsIdSaved(secondTip.GetHeldTipId()))
+        {
+            secondTip.SetSaveButtonState(false);
+        }
+        else
+        {
+            secondTip.SetSaveButtonState(true);
+        }
     }
 
   
