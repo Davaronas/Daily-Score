@@ -117,6 +117,8 @@ nagyikon pikto, kisikon daily score
 
 bónusz, streak bug ?
 
+tip bug
+
 
 
 

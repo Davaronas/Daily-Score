@@ -128,20 +128,25 @@ public class TipManager : MonoBehaviour
 
     public void AddSavedTip(int _id, string _header)
     {
-        if(savedTips.Count >= allowedCount)
+        for (int i = 0; i < savedTips.Count; i++)
+        {
+            if (savedTips[i].id == _id)
+            {
+                return;
+            }
+        }
+
+
+        /*
+        if (savedTips.Count >= allowedCount)
         {
             // do some animation to the save button to tell the player what's the problem
             AppManager.ErrorHappened(ErrorMessages.SavedTipContainerIsFull());
             return;
         }
+        */
 
-        for (int i = 0; i < savedTips.Count; i++)
-        {
-            if(savedTips[i].id == _id)
-            {
-                return;
-            }
-        }
+    
 
         SavedTip _newSavedTip = Instantiate(tipPrefab, transform.position, Quaternion.identity, savedTipsLayoutGroup).GetComponent<SavedTip>();
         if(_newSavedTip == null) { Debug.LogError("Tip prefab doesn't contain SavedTip component"); return; }

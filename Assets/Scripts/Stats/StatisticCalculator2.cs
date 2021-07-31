@@ -240,7 +240,11 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void TaskDailyCalc()
     {
-        
+        if(goalManager.GetCurrentlySelectedGoal() == null)
+        {
+            return;
+        }
+
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         dailytaskpoint = 0;
         int i = 0;
@@ -259,6 +263,11 @@ public class StatisticCalculator2 : MonoBehaviour
 
     void TaskWeeklyCalc()
     {
+        if (goalManager.GetCurrentlySelectedGoal() == null)
+        {
+            return;
+        }
+
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         float weeklytaskpointav = 0;
         int kcounter = 0;
@@ -515,6 +524,11 @@ public class StatisticCalculator2 : MonoBehaviour
     }
     public void TaskMaskCalc()
     {
+        if (goalManager.GetCurrentlySelectedGoal() == null)
+        {
+            return;
+        }
+
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         int taskmaxfleet = currentselectedGoal.current;
         for (int j = 0; j < currentselectedGoal.dailyScores.Count; j++)
@@ -989,6 +1003,18 @@ public class StatisticCalculator2 : MonoBehaviour
         Invoke(nameof(GoalScoreCalcs), 0.2f);
         RewindWeek(0);
     }
+
+
+    public bool CanRewind()
+    {
+        return true;
+    }
+
+    public bool CanGoForwardInTime()
+    {
+        return true;
+    }
+
 
     private void OnNewDayStartedDuringRuntime()
     {

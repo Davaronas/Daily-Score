@@ -54,7 +54,7 @@ public class PieChart : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
 
 
-        disabledImage.SetActive(false);
+        disabledImage.SetActive(true);
 
         
       
@@ -102,7 +102,13 @@ public class PieChart : MonoBehaviour
 
     public void LoadData(PieChartInfo[] _infos)
     {
-        if(_infos.Length == 0) { return; }
+        print(_infos.Length);
+
+        if(_infos.Length == 0)
+        {
+            disabledImage.SetActive(true);
+            return; 
+        }
 
         int _maxIndex = 0;
         bool _allZero = true;

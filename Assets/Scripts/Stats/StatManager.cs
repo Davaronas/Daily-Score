@@ -54,7 +54,12 @@ public class StatManager : MonoBehaviour
 
     private void UpdateIfDailyIsSelected(TaskData _data)
     {
-        if(pieChart1_dropdown.value == 0)
+        Invoke(nameof(UpdateDailyPieChart), Time.deltaTime);
+    }
+
+    private void UpdateDailyPieChart()
+    {
+        if (pieChart1_dropdown.value == 0)
         {
             statCalculator.GoalPieDaily();
         }

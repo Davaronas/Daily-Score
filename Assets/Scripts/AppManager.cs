@@ -1187,8 +1187,8 @@ public class AppManager : MonoBehaviour
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
 
+        Application.targetFrameRate = -1;
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
     }
 
