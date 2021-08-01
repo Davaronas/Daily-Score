@@ -732,6 +732,10 @@ public class AppManager : MonoBehaviour
     [Space]
    private static Sprite[] symbols;
 
+    [SerializeField] private GameObject goalDeletePanel_backCheck;
+    [SerializeField] private GameObject taskInfoPanel_backCheck;
+    [SerializeField] private GameObject savedTipPanel_backCheck;
+
     public string testTime;
     public string testLastLoginTime;
     // yyyy. mm. dd. 0:00:00
@@ -774,6 +778,8 @@ public class AppManager : MonoBehaviour
    public static event Action<Goal> OnGoalOpened;
 
    public static event Action OnAppLayerChangedToMainMenu;
+
+
 
 
    
@@ -1089,9 +1095,9 @@ public class AppManager : MonoBehaviour
     {
         // awakebe vannak a feliratkozások, ezért csak a startban kapcsoljunk ki mindent
 
+        lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
 
-        
-    
+
         string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
         if (File.Exists(path))
         {
@@ -1166,8 +1172,7 @@ public class AppManager : MonoBehaviour
         }
 
         // in case we cannot reach OnApplicationQuit (crash or dead battery) we set the last login here as well, after we evaluate it earlier
-        lastLogin = DateTime.Now;
-        PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+     
 
 
         introductionPanel.SetActive(false);
@@ -1194,7 +1199,10 @@ public class AppManager : MonoBehaviour
 
     private void SetLastLoginToNow()
     {
-        lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
+       
+
+        lastLogin = DateTime.Now;
+        PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
     private void Update()
@@ -1215,6 +1223,33 @@ public class AppManager : MonoBehaviour
 
     private void HandleBack()
     {
+        // panel checks
+        if(errorPanel.gameObject.activeSelf)
+        {
+            errorPanel.gameObject.SetActive(false);
+            return;
+        }
+
+        if(goalDeletePanel_backCheck.activeSelf)
+        {
+            goalDeletePanel_backCheck.SetActive(false);
+            return;
+        }
+
+        if(savedTipPanel_backCheck.activeSelf)
+        {
+            savedTipPanel_backCheck.SetActive(false);
+            return;
+        }
+
+        if(taskInfoPanel_backCheck.activeSelf)
+        {
+            taskInfoPanel_backCheck.SetActive(false);
+            return;
+        }
+
+
+
         switch (GetAppLayer())
         {
             case 0:

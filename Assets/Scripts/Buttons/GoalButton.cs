@@ -45,7 +45,7 @@ public class GoalButton : BehaviourButton
     {
         if(isHolding && !goalsScrollRectBroadcaster.isBeingDragged)
         {
-            filling += holdSpeed;
+            filling += holdSpeed * Time.deltaTime;
             if(filling >= 1)
             {
                 goalManager.AskToDeleteGoal(goal);

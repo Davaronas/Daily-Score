@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class SavedTip : MonoBehaviour
+public class SavedTip : BehaviourButton
 {
     [HideInInspector] public int id = -1;
     [HideInInspector] public string headerString;
@@ -17,8 +17,16 @@ public class SavedTip : MonoBehaviour
         tipHandler = FindObjectOfType<TipHandler>();
     }
 
-    private void OnDestroy()
+
+    protected override void OnTouch()
     {
+        tipManager.ShowSavedTip(id);
+    }
+
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
         AppManager.OnLanguageChanged -= FetchAppropriateHeader;
     }
 

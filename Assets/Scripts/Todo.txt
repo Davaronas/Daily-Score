@@ -119,7 +119,9 @@ bónusz, streak bug ?
 
 tip bug
 
+loading screen
 
+goal törlés fix idõ
 
 
 

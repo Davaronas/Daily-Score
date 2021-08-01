@@ -20,6 +20,9 @@ public class TipManager : MonoBehaviour
     [SerializeField] private DisplayedTip secondTip;
     [SerializeField] private GameObject secondTipOverlay;
 
+    [SerializeField] private GameObject savedTipPanel;
+    [SerializeField] private DisplayedTip savedTip;
+
 
 
   
@@ -50,7 +53,7 @@ public class TipManager : MonoBehaviour
         ChangeSavedTipAmountText();
 
 
-
+        savedTipPanel.SetActive(false);
        
 
       
@@ -126,6 +129,18 @@ public class TipManager : MonoBehaviour
             savedTipsAmountText.text = "(" + savedTips.Count + " / " + allowedCount + ")";
     }
 
+    public bool IsFull()
+    {
+        if (savedTips.Count >= allowedCount)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void AddSavedTip(int _id, string _header)
     {
         for (int i = 0; i < savedTips.Count; i++)
@@ -137,14 +152,14 @@ public class TipManager : MonoBehaviour
         }
 
 
-        /*
+        
         if (savedTips.Count >= allowedCount)
         {
             // do some animation to the save button to tell the player what's the problem
             AppManager.ErrorHappened(ErrorMessages.SavedTipContainerIsFull());
             return;
         }
-        */
+        
 
     
 
@@ -221,5 +236,20 @@ public class TipManager : MonoBehaviour
         }
     }
 
+    public void ShowSavedTip(int _id)
+    {
+        string _h;
+        string _c;
+        if (tipHandler.FetchHeaderAndContent(_id, out _h, out _c))
+        {
+            savedTipPanel.SetActive(true);
+            savedTip.SetData(_id, _h, _c);
+        }
+    }
+
+    public void RemoteCall_HideSavedTipPanel()
+    {
+        savedTipPanel.SetActive(false);
+    }
   
 }

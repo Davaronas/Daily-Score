@@ -16,17 +16,14 @@ public class RewindTimeHandler : MonoBehaviour
     {
         if(statCalc.CanRewind())
         {
-
+            rewind--;
         }
-
-        rewind--;
     }
 
     public void RemoteCall_GoForward()
     {
-        if(statCalc.CanGoForwardInTime())
-        {
+        if(rewind == 0) { return; }
 
-        }
+        rewind++;
     }
 }

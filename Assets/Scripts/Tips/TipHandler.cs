@@ -53,12 +53,24 @@ public class TipHandler : MonoBehaviour
 
     public void RemoteCall_SaveFirstTip()
     {
+        if(tipManager.IsFull()) 
+        {
+            AppManager.ErrorHappened(ErrorMessages.SavedTipContainerIsFull());
+            return;
+        }
+
         SetTipSaved(firstTipId, true);
         tipManager.BlockFirstTipSaveButton();
     }
 
     public void RemoteCall_SaveSecondTip()
     {
+        if (tipManager.IsFull())
+        {
+            AppManager.ErrorHappened(ErrorMessages.SavedTipContainerIsFull());
+            return;
+        }
+
         SetTipSaved(secondTipId, true);
         tipManager.BlockSecondTipSaveButton();
     }
@@ -112,6 +124,25 @@ public class TipHandler : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool FetchHeaderAndContent (int _id, out string _h, out string _c)
+    {
+        _h = "";
+        _c = "";
+
+        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
+        {
+            if (_tip.Key.id == _id)
+            {
+                _h = _tip.Value.header;
+                _c = _tip.Value.content;
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     private TipSaveData[] ExtractTipSavedDatas()
@@ -444,18 +475,7 @@ public class TipHandler : MonoBehaviour
         }
     }
 
-    private void TipSaved(int _id)
-    {
-        foreach (KeyValuePair<TipSaveData, Tip> _tip in currentTips)
-        {
-            if (_tip.Key.id == _id)
-            {
-               // new KeyValuePair<TipSaveData, Tip>(new TipSaveData(_tip.Key.id,_tip.Key.isSaved), new Tip(_tip.Value.header,_tip.Value.content));
-                currentTips.Remove(_tip.Key);
-                currentTips.Add(new TipSaveData(_tip.Key.id, _tip.Key.isSaved, _tip.Key.lastShown), new Tip(_tip.Value.header, _tip.Value.content));
-            }
-        }
-    }
+   
 
     private void SaveTips()
     {
