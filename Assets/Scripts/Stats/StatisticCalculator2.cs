@@ -1005,15 +1005,12 @@ public class StatisticCalculator2 : MonoBehaviour
     }
 
 
-    public bool CanRewind()
+    public bool CanRewind(int _type, int _rewind)
     {
         return true;
     }
 
-    public bool CanGoForwardInTime()
-    {
-        return true;
-    }
+    
 
 
     private void OnNewDayStartedDuringRuntime()

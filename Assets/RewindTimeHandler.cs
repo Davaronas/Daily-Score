@@ -1,29 +1,104 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RewindTimeHandler : MonoBehaviour
 {
     public int rewind = 0;
     private StatisticCalculator2 statCalc = null;
+    private StatManager statManager = null;
+
+   [SerializeField] private Image rewindButton = null;
+   [SerializeField] private Image forwardButton = null;
 
     private void Awake()
     {
         statCalc = FindObjectOfType<StatisticCalculator2>();
-    }
+        statManager = FindObjectOfType<StatManager>();
 
-    public void RemoteCall_RewindBack()
-    {
-        if(statCalc.CanRewind())
+        forwardButton.color = Color.grey;
+
+        if(!statCalc.CanRewind(0,0))
         {
-            rewind--;
+            rewindButton.color = Color.grey;
         }
     }
 
-    public void RemoteCall_GoForward()
+    public void RewindBack()
     {
-        if(rewind == 0) { return; }
+        if(statCalc.CanRewind(statManager.BarChartValue(),rewind))
+        {
+            
+
+            rewind--;
+            switch(statManager.BarChartValue())
+            {
+                case 0: // week
+
+                    break;
+                case 1: // month
+
+                    break;
+            }
+
+            forwardButton.color = Color.white;
+        }
+        else
+        {
+            rewindButton.color = Color.grey;
+        }
+    }
+
+    public void GoForward()
+    {
+        if(rewind == 0)
+        {
+            return;
+        }
 
         rewind++;
+
+       
+
+
+
+
+        switch (statManager.BarChartValue())
+        {
+            case 0: // week
+
+                break;
+            case 1: // month
+
+                break;
+        }
+
+        
+
+        if (rewind == 0)
+        {
+            forwardButton.color = Color.grey;
+        }
+        else
+        {
+            rewindButton.color = Color.white;
+        }
+    }
+
+    public void ResetButtons()
+    {
+        rewind = 0;
+
+        if (!statCalc.CanRewind(0, 0))
+        {
+            rewindButton.color = Color.grey;
+        }
+        else
+        {
+            rewindButton.color = Color.white;
+        }
+
+        forwardButton.color = Color.grey;
     }
 }

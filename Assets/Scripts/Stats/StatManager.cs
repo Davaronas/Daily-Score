@@ -11,13 +11,15 @@ public class StatManager : MonoBehaviour
 
     private StatisticCalculator2 statCalculator = null;
 
+    private RewindTimeHandler rth = null;
+
     private void Awake()
     {
         statCalculator = FindObjectOfType<StatisticCalculator2>();
         AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
         AppManager.OnLanguageChanged += LoadCharts;
 
-       
+        rth = FindObjectOfType<RewindTimeHandler>();
 
 
         Invoke(nameof(LoadCharts), 0.5f);
@@ -77,6 +79,8 @@ public class StatManager : MonoBehaviour
                 statCalculator.MonthlyGraph();
                 break;
         }
+
+        rth.ResetButtons();
     }
 
     public void RemoteCall_PieChartValueChanged()
@@ -97,6 +101,11 @@ public class StatManager : MonoBehaviour
                 statCalculator.GoalPieMind();
                 break;
         }
+    }
+
+    public int BarChartValue()
+    {
+        return barChart1_dropdown.value;
     }
 
 }

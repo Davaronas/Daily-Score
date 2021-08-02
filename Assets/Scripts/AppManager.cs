@@ -1111,7 +1111,7 @@ public class AppManager : MonoBehaviour
             
             foreach(GoalData _gd in _savedGoals)
             {
-                /*
+                
                 _gd.dailyScores.Clear();
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60)));
@@ -1154,7 +1154,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
                 Debug.Log(DateTime.Today.AddDays(-1));
-                */
+                
             }
             
             stream.Close(); 

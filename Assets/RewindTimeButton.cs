@@ -2,17 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RewindTimeButton : MonoBehaviour
+public class RewindTimeButton : BehaviourButton
 {
-    // Start is called before the first frame update
-    void Start()
+    public bool isRewind = false;
+    [SerializeField] private RewindTimeHandler rth = null;
+
+    protected override void OnTouch()
     {
-        
+        if(isRewind)
+        {
+            rth.RewindBack();
+            print("ANYÁD");
+        }
+        else
+        {
+            rth.GoForward();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnRelease()
     {
-        
+       
     }
 }
