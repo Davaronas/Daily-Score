@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
 
 /// <summary>
-/// StatCalc version 2.7.3
+/// StatCalc version 2.8;
 /// </summary>
 struct DailyScoreStruct
 {
@@ -701,11 +701,28 @@ public class StatisticCalculator2 : MonoBehaviour
 
     }
 
-    public void MonthlyGraph()
+    public void MonthlyGraph(int buttoncounter)
     {
 
         DateTime[] _startAndFinishTime = new DateTime[2];
         List<BarChartInfo> barChartInfosmonth = new List<BarChartInfo>();
+
+
+
+        StatLoad();
+        int rewindtimes;
+        if (buttoncounter == 0)
+        {
+            rewindtimes = 1;
+        }
+        else
+        {
+            rewindtimes = Math.Abs(buttoncounter) + 1;
+        }
+
+
+
+
         int[] monthlyData = new int[30];
         for (int i = 1; i <= 30; i++)
         {
@@ -713,9 +730,9 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                 {
-                  
 
-                    if (GoalDATAS[j].dailyScores[k].GetDateTime() == Today.AddDays(-i))
+
+                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time).Date >= Today.AddDays(rewindtimes + 1 * -30) && (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time).Date >= Today.AddDays(rewindtimes * -30)))
                     {
                         if (i == 1)
                         {
@@ -732,6 +749,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 }
             }
         }
+    
         
 
         
@@ -752,49 +770,7 @@ public class StatisticCalculator2 : MonoBehaviour
         barchart1.LoadData(barChartInfosmonth.ToArray(), false);
         
 
-        /*
-        int[] monthlyData = new int[30];
-        int i = 0;
-        int minusdays = -30;
-        for (int j = 0; j < GoalDATAS.Length; j++)
-        {
-            if (GoalDATAS[j].dailyScores == null)
-            {
-                continue;
-            }
-            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
-            {
-
-                if (minusdays >=0)
-                {
-                    break;
-                }
-                else
-                {
-                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) > Today.AddDays(minusdays))
-                    {
-
-                        monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
-                       // print(i);
-                        i++;
-                        minusdays++;
-                    }
-                }
-            }
-        }
-        barchart1.Clear();
-        if (i >= 1)
-        {
-            for (int l = 0; l < monthlyData.Length; l++)
-            {
-                barChartInfosmonth.Add(new BarChartInfo(monthlyData[l], ""));
-              //  print(l);
-            }
-            barchart1.LoadData(barChartInfosmonth.ToArray(), false);
-        }
-        */
-
-
+        
     }
 
     public void GoalPieDaily()
@@ -912,7 +888,7 @@ public class StatisticCalculator2 : MonoBehaviour
         }
 
     }
-    void RewindWeek(int buttoncounter)
+    public void RewindWeek(int buttoncounter)
     {
         StatLoad();
         List<PieChartInfo> RewindWeek = new List<PieChartInfo>();
@@ -949,12 +925,11 @@ public class StatisticCalculator2 : MonoBehaviour
         }
     }
 
-    void RewindMonth(int buttoncounter)
+    public void RewindMonth(int buttoncounter)
     {
         StatLoad();
         List<PieChartInfo> RewindMonth = new List<PieChartInfo>();
         int rewindtimes;
-        int buttonchecker = 0;
         if (buttoncounter == 0)
         {
             rewindtimes = 1;
@@ -1007,7 +982,33 @@ public class StatisticCalculator2 : MonoBehaviour
 
     public bool CanRewind(int _type, int _rewind)
     {
-        return true;
+        if (_rewind < 0)
+        {
+            for (int i = 0; i < GoalDATAS.Length; i++)
+            {
+                for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
+                {
+                    switch (_type)
+                    {
+                        case 0:
+                            if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind + 1 * -7) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind * -7)))
+                            {
+                               
+                                return true;
+                            }
+                            break;
+                        case 1:
+                            if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind + 1 * -30) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind * -30)))
+                            {
+                                return true;
+                            }
+                            break;
+                    }
+                }
+            }
+            
+        }
+        return false;
     }
 
     
@@ -1035,3 +1036,46 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnGoalDeleted -= OnGoalDeleted;
     }
 }
+/*
+        int[] monthlyData = new int[30];
+        int i = 0;
+        int minusdays = -30;
+        for (int j = 0; j < GoalDATAS.Length; j++)
+        {
+            if (GoalDATAS[j].dailyScores == null)
+            {
+                continue;
+            }
+            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+            {
+
+                if (minusdays >=0)
+                {
+                    break;
+                }
+                else
+                {
+                    if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) > Today.AddDays(minusdays))
+                    {
+
+                        monthlyData[i] += GoalDATAS[j].dailyScores[k].amount;
+                       // print(i);
+                        i++;
+                        minusdays++;
+                    }
+                }
+            }
+        }
+        barchart1.Clear();
+        if (i >= 1)
+        {
+            for (int l = 0; l < monthlyData.Length; l++)
+            {
+                barChartInfosmonth.Add(new BarChartInfo(monthlyData[l], ""));
+              //  print(l);
+            }
+            barchart1.LoadData(barChartInfosmonth.ToArray(), false);
+        }
+        */
+
+

@@ -34,10 +34,10 @@ public class RewindTimeHandler : MonoBehaviour
             rewind--;
             switch(statManager.BarChartValue())
             {
-                case 0: // week
+                case 0: statCalc.RewindWeek(rewind); //week
 
                     break;
-                case 1: // month
+                case 1: statCalc.RewindMonth(rewind); // month
 
                     break;
             }
@@ -66,10 +66,12 @@ public class RewindTimeHandler : MonoBehaviour
 
         switch (statManager.BarChartValue())
         {
-            case 0: // week
+            case 0:
+                statCalc.RewindWeek(rewind); //week
 
                 break;
-            case 1: // month
+            case 1:
+                statCalc.RewindMonth(rewind); // month
 
                 break;
         }
