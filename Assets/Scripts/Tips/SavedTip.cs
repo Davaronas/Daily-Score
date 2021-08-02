@@ -40,7 +40,7 @@ public class SavedTip : BehaviourButton
 
     public void RemoteCall_RemoveSavedTip()
     {
-        tipManager.RemoveSavedTip(id);
+        tipManager.DisplayDeleteTipPanel(id,headerString);
     }
 
     private void FetchAppropriateHeader(AppManager.Languages _l)

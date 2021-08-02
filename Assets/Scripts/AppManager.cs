@@ -735,6 +735,8 @@ public class AppManager : MonoBehaviour
     [SerializeField] private GameObject goalDeletePanel_backCheck;
     [SerializeField] private GameObject taskInfoPanel_backCheck;
     [SerializeField] private GameObject savedTipPanel_backCheck;
+    [Space]
+    [SerializeField] private GameObject askToDeleteTipPanel_backCheck;
 
     public string testTime;
     public string testLastLoginTime;
@@ -810,9 +812,9 @@ public class AppManager : MonoBehaviour
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
         Application.logMessageReceived += ErrorCallback;
-       
 
 
+        lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
         symbols = symbols_e;
     }
 
@@ -1095,7 +1097,7 @@ public class AppManager : MonoBehaviour
     {
         // awakebe vannak a feliratkozások, ezért csak a startban kapcsoljunk ki mindent
 
-        lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
+        
 
 
         string path = Path.Combine(Application.persistentDataPath, "dailyscoredata");
@@ -1245,6 +1247,12 @@ public class AppManager : MonoBehaviour
         if(taskInfoPanel_backCheck.activeSelf)
         {
             taskInfoPanel_backCheck.SetActive(false);
+            return;
+        }
+
+        if(askToDeleteTipPanel_backCheck.activeSelf)
+        {
+            askToDeleteTipPanel_backCheck.SetActive(false);
             return;
         }
 

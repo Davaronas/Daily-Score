@@ -23,6 +23,8 @@ public class TipManager : MonoBehaviour
     [SerializeField] private GameObject savedTipPanel;
     [SerializeField] private DisplayedTip savedTip;
 
+    [SerializeField] private GameObject askToDeleteTipPanel;
+    [SerializeField] private TMP_Text askToDeleteTipText;
 
 
   
@@ -33,6 +35,7 @@ public class TipManager : MonoBehaviour
     private TipHandler tipHandler;
 
     private int allowedCount;
+    private int deleteTipId = -1;
 
    [HideInInspector] public int secondTipUnlockedToday = 0;
 
@@ -54,6 +57,7 @@ public class TipManager : MonoBehaviour
 
 
         savedTipPanel.SetActive(false);
+        askToDeleteTipPanel.SetActive(false);
        
 
       
@@ -185,21 +189,33 @@ public class TipManager : MonoBehaviour
         secondTip.SetSaveButtonState(false);
     }
 
-    public void RemoveSavedTip(int _id)
+    public void DisplayDeleteTipPanel(int _id,string _header)
+    {
+        deleteTipId = _id;
+        askToDeleteTipText.text = _header;
+        askToDeleteTipPanel.SetActive(true);
+    }
+
+    public void RemoteCall_HideDeleteTipPanel()
+    {
+        askToDeleteTipPanel.SetActive(false);
+    }
+
+    public void RemoteCall_RemoveSavedTip()
     {
         SavedTip _tipToDelete = null;
         for(int i = 0; i < savedTips.Count;i++)
         {
-            if(savedTips[i].id == _id)
+            if(savedTips[i].id == deleteTipId)
             {
                 _tipToDelete = savedTips[i];
                 break;
             }
         }
 
-        if (_tipToDelete == null) { Debug.LogError("Tip id could not be found in the savedTips list: " + _id); return; }
+        if (_tipToDelete == null) { Debug.LogError("Tip id could not be found in the savedTips list: " + deleteTipId); return; }
 
-
+        askToDeleteTipPanel.SetActive(false);
         savedTips.Remove(_tipToDelete);
         Destroy(_tipToDelete.gameObject);
         tipHandler.SetTipSaved(_tipToDelete.id, false);
