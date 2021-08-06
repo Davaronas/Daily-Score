@@ -102,7 +102,6 @@ public class PieChart : MonoBehaviour
 
     public void LoadData(PieChartInfo[] _infos)
     {
-        print(_infos.Length);
 
         if(_infos.Length == 0)
         {

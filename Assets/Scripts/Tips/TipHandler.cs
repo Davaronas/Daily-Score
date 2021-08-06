@@ -187,7 +187,9 @@ public class TipHandler : MonoBehaviour
     private void Start()
     {
 
-        if (AppManager.lastLogin.Date != DateTime.Now.Date)
+       
+
+          if (AppManager.lastLogin.Date != DateTime.Now.Date)
         {
             PlayerPrefs.SetInt("firstTipId", -1);
             PlayerPrefs.SetInt("secondTipId", -1);
@@ -359,8 +361,8 @@ public class TipHandler : MonoBehaviour
                     Debug.LogError("There are no tips en");
                 }
 
-                string[] _lines_en = textAsset.ToString().Split('\n');
-                //    print(_lines.Length);
+                string[] _lines_en = textAsset.ToString().Split('*');
+     
 
                 foreach (string _line in _lines_en)
                 {
@@ -376,7 +378,7 @@ public class TipHandler : MonoBehaviour
                     Debug.LogError("There are no tips hu");
                 }
 
-                string[] _lines_hu = textAsset.ToString().Split('\n');
+                string[] _lines_hu = textAsset.ToString().Split('*');
                 //    print(_lines.Length);
 
                 foreach (string _line in _lines_hu)
@@ -402,11 +404,7 @@ public class TipHandler : MonoBehaviour
         LoadSavedTips();
         LoadMainTip();
 
-        if (PlayerPrefs.GetInt("SecondTipUnlocked", 0) == 1)
-        {
-            tipManager.UnlockSecondTip();
-        }
-
+     
         SaveTips();
         tipManager.AlreadyContainsTipsCheck();
     }

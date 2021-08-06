@@ -81,10 +81,12 @@ public class TipManager : MonoBehaviour
             secondTipUnlockedToday = 0;
             PlayerPrefs.SetInt("SecondTipUnlocked", 0);
         }
-        else
-        {
-            secondTipUnlockedToday = PlayerPrefs.GetInt("SecondTipUnlocked", 0);
-        }
+         else
+           {
+               secondTipUnlockedToday = PlayerPrefs.GetInt("SecondTipUnlocked", 0);
+           }
+       
+
 
         if (secondTipUnlockedToday == 1)
         {
@@ -258,8 +260,8 @@ public class TipManager : MonoBehaviour
         string _c;
         if (tipHandler.FetchHeaderAndContent(_id, out _h, out _c))
         {
-            savedTipPanel.SetActive(true);
             savedTip.SetData(_id, _h, _c);
+            savedTipPanel.SetActive(true);
         }
     }
 

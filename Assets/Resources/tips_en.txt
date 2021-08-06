@@ -1,8 +1,15 @@
-0_FIRST TIP HEADER_First tip content
-1_SECOND TIP HEADER_Second tip content
-2_THIRD TIP HEADER_Third tip content
-3_FOURTH TIP HEADER_Fourth tip content
-4_FIFFTH TIP HEADER_Fifth tip content
-5_SIXTH TIP HEADER_Sixth tip content
-6_SEVENTH TIP HEADER_Seventh tip content
-7_EIGHT TIP HEADER_Eight  tip content
+0_FIRST TIP HEADER_First tip content*
+1_Don't know what to watch?_Have you got some freetime but don't know how to spend it?
+We would like to recommend some movies we find worth to watch according to our personal opinion.
+
+1st: Fight Club (PEGI 18) Fight Club is an underground fighting club for men only. Founded by Tyler Durden and The Narrator (the main character of the movie whose name remains unkown), it is a forum where men of all different social standings from all different professions are able to strip off their labels and fight each other as equals. A movie which deals with money, workaholism, leaving the society, being a part of something bigger than you and many more.
+
+2nd: 7 years in Tibet (PEGI 12) A true story of an austrian egocentric selfish mountain climber Heinrich Harrer who got captured in Tibet during WW2 and later became close friends with the 17th Dalai Lama, during the invasion of the country. Through the story we can see Heinrich's inner journey of personal developement as he faces multiple obstacles and dissapointments during the time he spends in Tibet.
+
+3rd: Breaking Bad (PEGI 18) A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine in order to secure his family's future. Breaking Bad is an American neo-Western crime drama television series created and produced by Vince Gilligan. Since its conclusion the show has been lauded by critics as one of the greatest television series of all time.*
+2_THIRD TIP HEADER_Third tip content*
+3_FOURTH TIP HEADER_Fourth tip content*
+4_FIFFTH TIP HEADER_Fifth tip content*
+5_Stoicism_For those of us who live our lives in the real world, there is one branch of philosophy created just for us: Stoicism. It’s a philosophy designed to make us more resilient, happier, more virtuous and more wise and as a result, better people, better parents and better professionals. Stoicism has been a common thread though some of history’s great leaders. It has been practiced by Kings, presidents, artists, writers and entrepreneurs. Marcus Aurelius. Frederick the Great, Montaigne, George Washington, Thomas Jefferson, Adam Smith, John Stuart Mill, Theodore Roosevelt, just to name a few influenced by Stoic philosophy. People's primary concern was to avoid living an unfortunate life. Therefore, they were more likely to order their thoughts, decisions, and behaviors to promote increased life satisfaction. One of the most important things to keep in mind is individuals didn’t automatically assume that they would achieve happiness by attaining money, prestige, and or beautiful things. With great urgency, people wanted to understand how they could have an excellent soul. Stoics i  a nutshell target to become happy through living an excellent life by becoming a good person. „Stop talking about how a good man should act. Be one.” ~Marcus Aurelius*
+6_SEVENTH TIP HEADER_Seventh tip content*
+7_Drinking water_Water is essential to good health. How much water should you drink each day? It's a simple question with no easy answer.  Studies have produced varying recommendations over the years. But your individual water needs depend on many factors, including your health, how active you are and where you live. No single formula fits everyone. But knowing more about your body's need for fluids will help you estimate how much water to drink each day. Water is your body's principal chemical component and makes up about 50% to 70% of your body weight. Your body depends on water to survive. So how much fluid does the average, healthy adult living in a temperate climate need? The U.S. National Academies of Sciences, Engineering, and Medicine determined that an adequate daily fluid intake is: About 15.5 cups (3.7 liters) of fluids a day for men, about 11.5 cups (2.7 liters) of fluids a day for women.

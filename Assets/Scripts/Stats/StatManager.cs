@@ -17,24 +17,43 @@ public class StatManager : MonoBehaviour
     {
         statCalculator = FindObjectOfType<StatisticCalculator2>();
         AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
-        AppManager.OnLanguageChanged += LoadCharts;
+        AppManager.OnLanguageChanged += LanguageCallback;
+        
 
         rth = FindObjectOfType<RewindTimeHandler>();
 
 
-        Invoke(nameof(LoadCharts), 0.5f);
+       
         
+    }
+
+    private void Start()
+    {
+        InvokeLoadCharts();
+    }
+
+    private void InvokeLoadCharts()
+    {
+        Invoke(nameof(LoadCharts), 1f);
+    }
+
+   private void LanguageCallback(AppManager.Languages _l)
+    {
+        InvokeLoadCharts();
     }
 
     private void OnDestroy()
     {
         AppManager.OnTaskValueChanged -= UpdateIfDailyIsSelected;
-        AppManager.OnLanguageChanged -= LoadCharts;
+        AppManager.OnLanguageChanged -= LanguageCallback;
 
     }
 
-    private void LoadCharts(AppManager.Languages _l)
+   
+
+    private void LoadCharts()
     {
+
         barChart1_dropdown.ClearOptions();
         List<string> _optionsBarChart1 = new List<string>();
         _optionsBarChart1.Add(RuntimeTranslator.TranslateWeeklyWord());
@@ -50,6 +69,7 @@ public class StatManager : MonoBehaviour
         pieChart1_dropdown.AddOptions(_optionsPieChart1);
 
         pieChart1_dropdown.value = 1;
+
         barChart1_dropdown.value = 1;
         barChart1_dropdown.value = 0;
     }
@@ -76,7 +96,7 @@ public class StatManager : MonoBehaviour
                 statCalculator.Weeklygraph();
                 break;
             case 1:
-                statCalculator.MonthlyGraph();
+                statCalculator.MonthlyGraph(0);
                 break;
         }
 

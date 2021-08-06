@@ -475,4 +475,19 @@ public static class RuntimeTranslator
         }
     }
 
+    public static string TranslateOverallWord()
+    {
+        switch(AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return "Overall";
+            case AppManager.Languages.Magyar:
+                return "Összes";
+            case AppManager.Languages.Deutsch:
+                return "";
+            default:
+                return "AppManager.Languages doesn't contain this language";
+        }
+    }
+
 }

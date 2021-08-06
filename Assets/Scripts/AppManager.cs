@@ -776,6 +776,7 @@ public class AppManager : MonoBehaviour
     public static event Action<string> OnErrorHappened;
     public static event Action OnNewDayStartedDuringRuntime;
     public static event Action OnGoalDeleted;
+    public static event Action<string> OnBarChartCategorySelected;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -1153,7 +1154,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3)));
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
-                Debug.Log(DateTime.Today.AddDays(-1));
+                //Debug.Log(DateTime.Today.AddDays(-1));
                 
             }
             
@@ -1394,6 +1395,11 @@ public class AppManager : MonoBehaviour
         
     }
 
+    public static void BarChartCategorySelected(string _name)
+    {
+        OnBarChartCategorySelected?.Invoke(_name);
+    }
+
     private void NewTaskAddedCallback()
     {
         SetAppLayer(212);
@@ -1499,8 +1505,6 @@ public class AppManager : MonoBehaviour
             {
                // print(_td.name);
 
-                 if(_td.type == TaskType.Boolean)
-                print(((BooleanTaskData)_td).isDone);
             }
             //  print(_gd.current);
         }

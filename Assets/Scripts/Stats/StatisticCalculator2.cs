@@ -65,6 +65,12 @@ public class StatisticCalculator2 : MonoBehaviour
     [SerializeField] BarChartHolder barchart1;
     [SerializeField] BarChartHolder barchart2;
     /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// 
+
+
+    private string selectedGoalName = "";
+    private string selectedTaskName = "";
+
     private void Awake()
     {
         AppManager.OnTaskValueChanged += OnTaskValueChanged;
@@ -77,6 +83,28 @@ public class StatisticCalculator2 : MonoBehaviour
         Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
 
     }
+
+
+    public void SetSelectedGoalName(string _g)
+    {
+        selectedGoalName = _g;
+        selectedTaskName = "";
+    }
+
+
+    public void SetSelectedTaskName(string _t)
+    {
+        selectedTaskName = _t;
+        selectedGoalName = "";
+    }
+
+    public void EverythingSelected()
+    {
+        selectedGoalName = "";
+        selectedTaskName = "";
+    }
+
+
 
     private void OnGoalDeleted()
     {
@@ -912,7 +940,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes+1 *-7) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date >= Today.AddDays(rewindtimes * -7))) //Itt lehet a kutya
                 {
                     sziauram += GoalDATAS[i].dailyScores[j].amount;
-                    print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
+                   // print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
                 }
             }
             RewindWeek.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));

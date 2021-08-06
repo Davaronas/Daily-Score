@@ -112,7 +112,7 @@ calculate deleted goals daily scores ?
 
 statcalc cleanup
 
-08:00 
+08:00 *
 nagyikon pikto, kisikon daily score
 
 bónusz, streak bug ?
@@ -121,7 +121,7 @@ tip bug
 
 loading screen
 
-goal törlés fix idõ
+goal törlés fix idõ*
 
 
 

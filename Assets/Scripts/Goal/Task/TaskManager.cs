@@ -488,10 +488,14 @@ public class TaskManager : MonoBehaviour
                 _fireTime = _fireTime.AddDays(daysUntilNextDay);
                 _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+
+                string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
+                string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
                 print(_fireTime);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
                     " notification", "Don't forget " + currentlySelectedTask.name + 
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
+                    "! " + _hour + ":" + _minute, _fireTime, 7, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
 
 
@@ -522,10 +526,13 @@ public class TaskManager : MonoBehaviour
                         _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
                         _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
+                        string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
+                        string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
                         print(_fireTime + " " + _fireTime.DayOfWeek);
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                             + " notification", "Don't forget " + currentlySelectedTask.name +
-                            "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
+                            "! " + _hour + ":" + _minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
                     }
                     else
                     {
@@ -535,9 +542,12 @@ public class TaskManager : MonoBehaviour
                         _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
                         _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
+                        string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
+                        string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                            + " notification", "Don't forget " + currentlySelectedTask.name +
-                           "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
+                           "! " + _hour + ":" + _minute, _fireTime, everyThDay, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
                     }
                 }
             }
@@ -679,10 +689,14 @@ public class TaskManager : MonoBehaviour
                 _fireTime = _fireTime.AddDays(daysUntilNextDay);
                 _fireTime = _fireTime.AddHours(_npus[i].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[i].minuteNumber);
+
+                string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
+                string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
                 print(_fireTime);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                     + " notification", "Don't forget " + _data.name + 
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, 7, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
+                    "! " + _hour + ":" + _minute, _fireTime, 7, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
 
 
@@ -705,10 +719,13 @@ public class TaskManager : MonoBehaviour
                 _fireTime = _fireTime.AddHours(_npus[0].hourNumber);
                 _fireTime = _fireTime.AddMinutes(_npus[0].minuteNumber);
 
+                string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
+                string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
                 print(_fireTime + " " + _fireTime.DayOfWeek);
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                     + " notification", "Don't forget " + _data.name +
-                    "! " + _fireTime.Hour + ":" + _fireTime.Minute, _fireTime, everyThDay, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
+                    "! " + _hour + ":" + _minute, _fireTime, everyThDay, _data.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
             }
             
         }
