@@ -7,7 +7,33 @@ public class OpenSelectableCategoriesButton : BehaviourButton
     [SerializeField] private GameObject selectablesPanel = null;
 
 
+    private void Awake()
+    {
+        AppManager.OnBarChartCategorySelected += ChangeStateCallback;
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        AppManager.OnBarChartCategorySelected -= ChangeStateCallback;
+    }
+
     protected override void OnTouch()
+    {
+        ChangeState();
+    }
+
+    private void ChangeStateCallback(string _n)
+    {
+        InvokeChangeState();
+    }
+
+    private void InvokeChangeState()
+    {
+        Invoke(nameof(ChangeState), 0.05f);
+    }
+
+    private void ChangeState()
     {
         selectablesPanel.SetActive(!selectablesPanel.activeSelf);
     }

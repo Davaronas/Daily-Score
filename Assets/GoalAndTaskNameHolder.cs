@@ -16,6 +16,8 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         AppManager.OnLanguageChanged += UpdateGoalAndTaskNames;
         AppManager.OnTaskEdited += UpdateGoalAndTaskNames;
         AppManager.OnNewGoalAdded += UpdateGoalAndTaskNames;
+        AppManager.OnGoalDeleted += UpdateGoalAndTaskNames;
+        AppManager.OnNewTaskAdded += UpdateGoalAndTaskNames;
 
         goalManager = FindObjectOfType<GoalManager>();
     }
@@ -35,6 +37,8 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         AppManager.OnLanguageChanged -= UpdateGoalAndTaskNames;
         AppManager.OnTaskEdited -= UpdateGoalAndTaskNames;
         AppManager.OnNewGoalAdded -= UpdateGoalAndTaskNames;
+        AppManager.OnGoalDeleted -= UpdateGoalAndTaskNames;
+        AppManager.OnNewTaskAdded -= UpdateGoalAndTaskNames;
     }
 
     private void UpdateGoalAndTaskNames(AppManager.Languages _l)
