@@ -93,14 +93,28 @@ public class StatManager : MonoBehaviour
         switch(barChart1_dropdown.value)
         {
             case 0:
-                statCalculator.Weeklygraph();
+                statCalculator.BarChartCalculation(0,0);
                 break;
             case 1:
-                statCalculator.MonthlyGraph(0);
+                statCalculator.BarChartCalculation(0,1);
                 break;
         }
 
         rth.ResetButtons();
+    }
+
+
+    public void RewindChanged(int _rewind)
+    {
+        switch (barChart1_dropdown.value)
+        {
+            case 0:
+                statCalculator.BarChartCalculation(_rewind, 0);
+                break;
+            case 1:
+                statCalculator.BarChartCalculation(_rewind, 1);
+                break;
+        }
     }
 
     public void RemoteCall_PieChartValueChanged()

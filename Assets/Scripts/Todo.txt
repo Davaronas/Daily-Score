@@ -48,6 +48,7 @@ reset task*
 delete goal*
 delet task*
 streak*
+back: close day selector, close info panel, close error panel*
 
 
 remove reset task points from all history*__
@@ -102,7 +103,6 @@ infok, unity fiók, error forditások, task szövegek
 
 interval: at least one interval + error message
 
-back: close day selector, close info panel, close error panel
 
 rezgés törlésnél
 

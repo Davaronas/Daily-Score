@@ -88,7 +88,7 @@ public class TipManager : MonoBehaviour
        
 
 
-        if (secondTipUnlockedToday == 1)
+        if (secondTipUnlockedToday == 1 && !AppManager.isGold)
         {
             UnlockSecondTip();
         }
@@ -103,7 +103,7 @@ public class TipManager : MonoBehaviour
         {
             secondTip.SetData(_id, _h, _c);
             secondTipOverlay.SetActive(false);
-            PlayerPrefs.GetInt("SecondTipUnlocked", 1);
+            PlayerPrefs.SetInt("SecondTipUnlocked", 1);
         }
 
     }

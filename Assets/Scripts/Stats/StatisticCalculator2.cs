@@ -23,6 +23,8 @@ struct DailyScoreStruct
     //Test
 }
 
+public enum StatCalculationFilter {All, Goal, Task}
+
 public class StatisticCalculator2 : MonoBehaviour
 {
      public GoalManager goalManager = null;
@@ -1063,6 +1065,206 @@ public class StatisticCalculator2 : MonoBehaviour
         AppManager.OnGoalOpened -= OnGoalOpened;
         AppManager.OnGoalDeleted -= OnGoalDeleted;
     }
+
+
+
+    // ------------------------------------
+
+
+    public void BarChartCalculation(int _rewind, int _w_Or_m )
+    {
+        StatCalculationFilter _f = StatCalculationFilter.All;
+        if(selectedGoalName == "" && selectedTaskName == "")
+        {
+            _f = StatCalculationFilter.All;
+        }
+        else if(selectedGoalName != "")
+        {
+            _f = StatCalculationFilter.Goal;
+        }
+        else if(selectedTaskName != "")
+        {
+            _f = StatCalculationFilter.Task;
+        }
+
+
+
+        List<BarChartInfo> barChartInfos = new List<BarChartInfo>();
+        int _time = _w_Or_m == 0 ? 7 : 30;
+
+        StatLoad();
+        int[] datas = new int[_time];
+       
+        
+        int counter = 0;
+        int startDay = -1;
+
+        for (int i = 1; i <= _time; i++)
+        {
+            for (int j = 0; j < GoalDATAS.Length; j++)
+            {
+
+                if (_f != StatCalculationFilter.Task)
+                {
+                    // int _sum = 0;
+                    for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+                    {
+                        if (GoalDATAS[j].dailyScores[k].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].dailyScores[k].GetDateTime().Date < Today.AddDays(_rewind * _time))
+                        {
+                            if (_f == StatCalculationFilter.All)
+                            {
+
+                                if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - i))
+                                {
+                                    datas[i] += GoalDATAS[j].dailyScores[k].amount;
+                                    counter++;
+
+                                    if (startDay == -1)
+                                    {
+                                        startDay = (int)GoalDATAS[j].dailyScores[k].GetDateTime().DayOfWeek;
+                                    }
+                                }
+                            }
+                            else if (_f == StatCalculationFilter.Goal)
+                            {
+                                if (GoalDATAS[j].name == selectedGoalName)
+                                {
+                                    if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - i))
+                                    {
+                                        datas[i] += GoalDATAS[j].dailyScores[k].amount;
+                                        counter++;
+
+                                        if (startDay == -1)
+                                        {
+                                            startDay = (int)GoalDATAS[i].dailyScores[k].GetDateTime().DayOfWeek;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int l = 0; l < GoalDATAS[j].modifications.Count; l++)
+                    {
+                        if (GoalDATAS[j].modifications[l].taskName == selectedTaskName)
+                        {
+                            if (GoalDATAS[j].modifications[l].GetDateTime() >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].modifications[l].GetDateTime().Date < Today.AddDays(_rewind * _time))
+                            {
+                                datas[i] += GoalDATAS[j].modifications[l].amount;
+                                counter++;
+
+                                if (startDay == -1)
+                                {
+                                    startDay = (int)GoalDATAS[i].modifications[l].GetDateTime().DayOfWeek;
+                                }
+                            }
+                            
+                        }
+                    }
+                   
+                }
+            }
+        }
+
+
+        if (_w_Or_m == 0)
+        {
+            int _dayCounter = startDay;
+            for (int i = 0; i < 7; i++)
+            {
+                if (_dayCounter == 7)
+                {
+                    _dayCounter = 0;
+                }
+
+                barChartInfos.Add(new BarChartInfo(datas[_dayCounter], ((DayOfWeek)_dayCounter).ToString()));
+                _dayCounter++;
+            }
+
+            barchart1.LoadData(barChartInfos.ToArray(), true);
+        }
+        else
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                if(i == 0)
+                {
+                    barChartInfos.Add(new BarChartInfo(datas[i], Today.AddDays((_rewind - 1) * _time).ToString()));
+                }
+                else if(i == 30)
+                {
+                    barChartInfos.Add(new BarChartInfo(datas[i], Today.AddDays(_rewind * _time).ToString()));
+                }
+                else
+                {
+                    barChartInfos.Add(new BarChartInfo(datas[i], ""));
+                }
+            }
+
+            barchart1.LoadData(barChartInfos.ToArray(), false);
+        }
+
+
+
+       
+
+    }
+
+
+    // BARCHART
+
+    // pressed weekly or monthly:
+    // use 0 as rewind
+
+    //  calculate weekly
+    //      calculate all
+    //      or
+    //      calculate with a certain goal
+    //      or
+    //      calculate with a certain task
+
+
+    // or
+
+
+    //  calculate monthly
+    //      calculate all
+    //      or
+    //      calculate with a certain goal
+    //      or
+    //      calculate with a certain task
+
+
+    // ---------------------
+
+
+    // pressed rewind button:
+    // use rewind button counter
+
+    //  calculate weekly
+    //      calculate all
+    //      or
+    //      calculate with a certain goal
+    //      or
+    //      calculate with a certain task
+
+
+    // or
+
+
+    //  calculate monthly
+    //      calculate all
+    //      or
+    //      calculate with a certain goal
+    //      or
+    //      calculate with a certain task
+
+
+
+
+
 }
 /*
         int[] monthlyData = new int[30];
