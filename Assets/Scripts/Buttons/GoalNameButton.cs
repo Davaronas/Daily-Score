@@ -12,8 +12,12 @@ public class GoalNameButton : BehaviourButton
 
     private StatisticCalculator2 statCalc = null;
 
-    public void Overall()
+     private SubmenuBroadcaster categorySelectorBroadcaster = null;
+
+    public void Overall(SubmenuBroadcaster _smb)
     {
+        categorySelectorBroadcaster = _smb;
+        
         AppManager.OnBarChartCategorySelected += CategorySelectedCallback;
 
         nameText = GetComponent<TMP_Text>();
@@ -27,8 +31,10 @@ public class GoalNameButton : BehaviourButton
     }
 
 
-    public void SetName(string _name)
+    public void SetName(string _name, SubmenuBroadcaster _smb)
     {
+        categorySelectorBroadcaster = _smb;
+
         AppManager.OnBarChartCategorySelected += CategorySelectedCallback;
 
         nameText = GetComponent<TMP_Text>();
@@ -49,16 +55,24 @@ public class GoalNameButton : BehaviourButton
 
     protected override void OnTouch()
     {
-        if (heldName != "")
-        {
-            statCalc.SetSelectedGoalName(heldName);
-        }
-        else
-        {
-            statCalc.EverythingSelected();
-        }
+       
+    }
 
-        AppManager.BarChartCategorySelected(heldName);
+    protected override void OnRelease()
+    {
+        if (!categorySelectorBroadcaster.isBeingDragged)
+        {
+            if (heldName != "")
+            {
+                statCalc.SetSelectedGoalName(heldName);
+            }
+            else
+            {
+                statCalc.EverythingSelected();
+            }
+
+            AppManager.BarChartCategorySelected(heldName);
+        }
     }
 
     private void CategorySelectedCallback(string _name)

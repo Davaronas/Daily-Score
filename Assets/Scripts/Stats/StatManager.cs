@@ -18,6 +18,7 @@ public class StatManager : MonoBehaviour
         statCalculator = FindObjectOfType<StatisticCalculator2>();
         AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
         AppManager.OnLanguageChanged += LanguageCallback;
+        AppManager.OnBarChartCategorySelected += BarChartCategorySelected;
         
 
         rth = FindObjectOfType<RewindTimeHandler>();
@@ -34,7 +35,7 @@ public class StatManager : MonoBehaviour
 
     private void InvokeLoadCharts()
     {
-        Invoke(nameof(LoadCharts), 1f);
+        Invoke(nameof(LoadCharts), 1.5f);
     }
 
    private void LanguageCallback(AppManager.Languages _l)
@@ -46,6 +47,7 @@ public class StatManager : MonoBehaviour
     {
         AppManager.OnTaskValueChanged -= UpdateIfDailyIsSelected;
         AppManager.OnLanguageChanged -= LanguageCallback;
+        AppManager.OnBarChartCategorySelected -= BarChartCategorySelected;
 
     }
 
@@ -71,7 +73,7 @@ public class StatManager : MonoBehaviour
         pieChart1_dropdown.value = 1;
 
         barChart1_dropdown.value = 1;
-        barChart1_dropdown.value = 0;
+       // barChart1_dropdown.value = 0;
     }
 
     private void UpdateIfDailyIsSelected(TaskData _data)
@@ -89,6 +91,7 @@ public class StatManager : MonoBehaviour
 
     public void RemoteCall_BarChartValueChanged()
     {
+        print("Value changed " + barChart1_dropdown.value);
        
         switch(barChart1_dropdown.value)
         {
@@ -103,6 +106,11 @@ public class StatManager : MonoBehaviour
         rth.ResetButtons();
     }
 
+
+    public void BarChartCategorySelected(string _n)
+    {
+        statCalculator.BarChartCalculation(rth.GetCurrentRewind(), barChart1_dropdown.value);
+    }
 
     public void RewindChanged(int _rewind)
     {

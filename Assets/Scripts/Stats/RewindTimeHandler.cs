@@ -31,7 +31,10 @@ public class RewindTimeHandler : MonoBehaviour
         {
             
 
+            
             rewind--;
+            statManager.RewindChanged(rewind);
+            /*
             switch(statManager.BarChartValue())
             {
                 case 0: statCalc.RewindWeek(rewind); //week
@@ -41,6 +44,7 @@ public class RewindTimeHandler : MonoBehaviour
 
                     break;
             }
+            */
 
             forwardButton.color = Color.white;
         }
@@ -58,12 +62,13 @@ public class RewindTimeHandler : MonoBehaviour
         }
 
         rewind++;
-
-       
-
+        statManager.RewindChanged(rewind);
 
 
 
+
+
+        /*
         switch (statManager.BarChartValue())
         {
             case 0:
@@ -75,8 +80,9 @@ public class RewindTimeHandler : MonoBehaviour
 
                 break;
         }
+        */
 
-        
+
 
         if (rewind == 0)
         {
@@ -102,5 +108,10 @@ public class RewindTimeHandler : MonoBehaviour
         }
 
         forwardButton.color = Color.grey;
+    }
+
+    public int GetCurrentRewind()
+    {
+        return rewind;
     }
 }

@@ -12,8 +12,12 @@ public class TaskNameButton : BehaviourButton
 
     private StatisticCalculator2 statCalc = null;
 
-    public void SetName(string _name)
+    private SubmenuBroadcaster categorySelectorBroadcaster = null;
+
+    public void SetName(string _name, SubmenuBroadcaster _smb)
     {
+        categorySelectorBroadcaster = _smb;
+
         AppManager.OnBarChartCategorySelected += CategorySelectedCallback;
 
         nameText = GetComponent<TMP_Text>();
@@ -36,8 +40,16 @@ public class TaskNameButton : BehaviourButton
 
     protected override void OnTouch()
     {
-        statCalc.SetSelectedTaskName(heldName);
-        AppManager.BarChartCategorySelected(heldName);
+       
+    }
+
+    protected override void OnRelease()
+    {
+        if (!categorySelectorBroadcaster.isBeingDragged)
+        {
+            statCalc.SetSelectedTaskName(heldName);
+            AppManager.BarChartCategorySelected(heldName);
+        }
     }
 
     private void CategorySelectedCallback(string _name)

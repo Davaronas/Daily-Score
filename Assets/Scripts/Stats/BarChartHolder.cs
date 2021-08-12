@@ -25,6 +25,7 @@ public class BarChartHolder : MonoBehaviour
     [SerializeField] private TMP_Text maxTime = null;
 
     [SerializeField] private GameObject disabledImage = null;
+    [SerializeField] private TMP_Text selectedNameText = null;
 
     private RectTransform minText_RT = null;
     private RectTransform maxText_RT = null;
@@ -66,10 +67,12 @@ public class BarChartHolder : MonoBehaviour
         if(!_foundNonZero)
         {
             disabledImage.SetActive(true);
+            selectedNameText.enabled = false;
         }
         else
         {
             disabledImage.SetActive(false);
+            selectedNameText.enabled = true;
         }
 
 

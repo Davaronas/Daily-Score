@@ -1152,6 +1152,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5)));
                 _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4)));
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3)));
+                _gd.AddModification(new GoalChange(100, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-3)));
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
                 //Debug.Log(DateTime.Today.AddDays(-1));

@@ -1012,32 +1012,22 @@ public class StatisticCalculator2 : MonoBehaviour
 
     public bool CanRewind(int _type, int _rewind)
     {
-        if (_rewind < 0)
-        {
+        
+            StatLoad();
+            int _time = _type == 0 ? 7 : 30;
+
             for (int i = 0; i < GoalDATAS.Length; i++)
             {
                 for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
                 {
-                    switch (_type)
+                    if (GoalDATAS[i].dailyScores[k].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[i].dailyScores[k].GetDateTime().Date < Today.AddDays(_rewind * _time))
                     {
-                        case 0:
-                            if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind + 1 * -7) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind * -7)))
-                            {
-                               
-                                return true;
-                            }
-                            break;
-                        case 1:
-                            if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind + 1 * -30) && (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(_rewind * -30)))
-                            {
-                                return true;
-                            }
-                            break;
+                        return true;
                     }
                 }
             }
             
-        }
+        
         return false;
     }
 
@@ -1048,6 +1038,8 @@ public class StatisticCalculator2 : MonoBehaviour
     {
 
     }
+
+
     IEnumerator TimeCheck()
     {
         while (true)
@@ -1092,12 +1084,12 @@ public class StatisticCalculator2 : MonoBehaviour
         List<BarChartInfo> barChartInfos = new List<BarChartInfo>();
         int _time = _w_Or_m == 0 ? 7 : 30;
 
-        StatLoad();
         int[] datas = new int[_time];
        
+        StatLoad();
+        barchart1.Clear();
         
         int counter = 0;
-        int startDay = -1;
 
         for (int i = 1; i <= _time; i++)
         {
@@ -1109,35 +1101,29 @@ public class StatisticCalculator2 : MonoBehaviour
                     // int _sum = 0;
                     for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                     {
-                        if (GoalDATAS[j].dailyScores[k].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].dailyScores[k].GetDateTime().Date < Today.AddDays(_rewind * _time))
+                        if (GoalDATAS[j].dailyScores[k].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time ) && GoalDATAS[j].dailyScores[k].GetDateTime().Date < Today.AddDays(_rewind * _time))
                         {
                             if (_f == StatCalculationFilter.All)
                             {
 
-                                if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - i))
+                                if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - (i )))
                                 {
-                                    datas[i] += GoalDATAS[j].dailyScores[k].amount;
+                                    datas[i - 1] += GoalDATAS[j].dailyScores[k].amount;
                                     counter++;
 
-                                    if (startDay == -1)
-                                    {
-                                        startDay = (int)GoalDATAS[j].dailyScores[k].GetDateTime().DayOfWeek;
-                                    }
+                                   
                                 }
                             }
                             else if (_f == StatCalculationFilter.Goal)
                             {
                                 if (GoalDATAS[j].name == selectedGoalName)
                                 {
-                                    if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - i))
+                                    if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - (i  )))
                                     {
-                                        datas[i] += GoalDATAS[j].dailyScores[k].amount;
+                                        datas[i - 1] += GoalDATAS[j].dailyScores[k].amount;
                                         counter++;
 
-                                        if (startDay == -1)
-                                        {
-                                            startDay = (int)GoalDATAS[i].dailyScores[k].GetDateTime().DayOfWeek;
-                                        }
+                                      
                                     }
                                 }
                             }
@@ -1152,12 +1138,13 @@ public class StatisticCalculator2 : MonoBehaviour
                         {
                             if (GoalDATAS[j].modifications[l].GetDateTime() >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].modifications[l].GetDateTime().Date < Today.AddDays(_rewind * _time))
                             {
-                                datas[i] += GoalDATAS[j].modifications[l].amount;
-                                counter++;
-
-                                if (startDay == -1)
+                                if (GoalDATAS[j].modifications[l].GetDateTime() == Today.AddDays((_rewind * _time) - (i )))
                                 {
-                                    startDay = (int)GoalDATAS[i].modifications[l].GetDateTime().DayOfWeek;
+
+                                    datas[i - 1] += GoalDATAS[j].modifications[l].amount;
+                                    counter++;
+
+                                    
                                 }
                             }
                             
@@ -1169,33 +1156,37 @@ public class StatisticCalculator2 : MonoBehaviour
         }
 
 
+
+
         if (_w_Or_m == 0)
         {
-            int _dayCounter = startDay;
-            for (int i = 0; i < 7; i++)
+          
+            for (int i = 6; i > -1; i--)
             {
-                if (_dayCounter == 7)
-                {
-                    _dayCounter = 0;
-                }
-
-                barChartInfos.Add(new BarChartInfo(datas[_dayCounter], ((DayOfWeek)_dayCounter).ToString()));
-                _dayCounter++;
+                barChartInfos.Add(new BarChartInfo(datas[i], (DateTime.Today.AddDays(-i - 1).DayOfWeek).ToString().Substring(0, 3)));
             }
 
             barchart1.LoadData(barChartInfos.ToArray(), true);
         }
         else
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 29; i > -1; i--)
             {
-                if(i == 0)
+                if(i == 29)
                 {
-                    barChartInfos.Add(new BarChartInfo(datas[i], Today.AddDays((_rewind - 1) * _time).ToString()));
+                    DateTime _t = Today.AddDays((_rewind - 1) * _time);
+                    string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                    string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+
+                    barChartInfos.Add(new BarChartInfo(datas[i], _h + _d)); 
                 }
-                else if(i == 30)
+                else if(i == 0)
                 {
-                    barChartInfos.Add(new BarChartInfo(datas[i], Today.AddDays(_rewind * _time).ToString()));
+                    DateTime _t = Today.AddDays(_rewind * _time - 1);
+                    string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                    string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+
+                    barChartInfos.Add(new BarChartInfo(datas[i], _h + _d));
                 }
                 else
                 {
@@ -1205,11 +1196,6 @@ public class StatisticCalculator2 : MonoBehaviour
 
             barchart1.LoadData(barChartInfos.ToArray(), false);
         }
-
-
-
-       
-
     }
 
 
