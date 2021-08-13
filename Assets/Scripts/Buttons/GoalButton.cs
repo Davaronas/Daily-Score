@@ -63,11 +63,11 @@ public class GoalButton : BehaviourButton
 
         if (!Application.isEditor)
         {
-            goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.GetTouch(0).position);
+            goalsScrollRectBroadcaster.FeedClickPosition(Input.GetTouch(0).position);
         }
         else
         {
-            goalsScrollRectBroadcaster.FeedClickPositionFromGoalButton(Input.mousePosition);
+            goalsScrollRectBroadcaster.FeedClickPosition(Input.mousePosition);
         }
     }
 

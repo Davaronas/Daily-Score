@@ -26,6 +26,13 @@ public class BarChartPrefabUtility : MonoBehaviour
         Destroy(dayText.gameObject);
     }
 
+    public void SetProperties(Color _color, float _amount)
+    {
+        image.color = _color;
+        amountText.text = _amount.ToString();
+        Destroy(dayText.gameObject);
+    }
+
     public void SetSize(float _size)
     {
         rectTransform.sizeDelta = new Vector2(rectTransform.rect.x, _size);

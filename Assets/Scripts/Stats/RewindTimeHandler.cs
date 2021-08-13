@@ -27,31 +27,24 @@ public class RewindTimeHandler : MonoBehaviour
 
     public void RewindBack()
     {
-        if(statCalc.CanRewind(statManager.BarChartValue(),rewind))
+        if (statCalc.CanRewind(statManager.BarChartValue(), rewind))
         {
-            
-
-            
             rewind--;
             statManager.RewindChanged(rewind);
-            /*
-            switch(statManager.BarChartValue())
-            {
-                case 0: statCalc.RewindWeek(rewind); //week
+        }
 
-                    break;
-                case 1: statCalc.RewindMonth(rewind); // month
+        forwardButton.color = Color.white;
 
-                    break;
-            }
-            */
-
-            forwardButton.color = Color.white;
+        if (statCalc.CanRewind(statManager.BarChartValue(), rewind))
+        {
+            rewindButton.color = Color.white;
         }
         else
         {
             rewindButton.color = Color.grey;
         }
+
+
     }
 
     public void GoForward()

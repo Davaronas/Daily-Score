@@ -53,9 +53,19 @@ public class GoalNameButton : BehaviourButton
         AppManager.OnBarChartCategorySelected -= CategorySelectedCallback;
     }
 
+
+  
+
     protected override void OnTouch()
     {
-       
+        if (!Application.isEditor)
+        {
+            categorySelectorBroadcaster.FeedClickPosition(Input.GetTouch(0).position);
+        }
+        else
+        {
+            categorySelectorBroadcaster.FeedClickPosition(Input.mousePosition);
+        }
     }
 
     protected override void OnRelease()

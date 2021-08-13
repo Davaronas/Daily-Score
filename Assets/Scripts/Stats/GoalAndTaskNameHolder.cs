@@ -8,6 +8,8 @@ public class GoalAndTaskNameHolder : MonoBehaviour
     [SerializeField] private GameObject goalNamePrefab = null;
     [SerializeField] private GameObject taskNamePrefab = null;
 
+    private RectTransform element_rectTransform = null;
+
     [SerializeField] private SubmenuBroadcaster categorySelectorBroadcaster = null;
 
     [SerializeField] private TMP_Text selectedCategoryNameText = null;
@@ -36,6 +38,8 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         goalManager = FindObjectOfType<GoalManager>();
 
         selectedCategoryNameText.text = RuntimeTranslator.TranslateOverallWord();
+
+        element_rectTransform = goalNamePrefab.GetComponent<RectTransform>();
 
         panel.SetActive(false);
     }
@@ -70,8 +74,7 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         //content.offsetMin = new Vector2(scroll.offsetMin.x, 0);
         //content.offsetMax = new Vector2(scroll.offsetMax.x, 0);
 
-        content.offsetMin = new Vector2(0, 0);
-        content.offsetMax = new Vector2(0, 0);
+       
 
         if (elements.Count > 0)
         {
@@ -102,6 +105,12 @@ public class GoalAndTaskNameHolder : MonoBehaviour
                 elements.Add(_newTaskName);
             }
         }
+
+
+        content.offsetMin = new Vector2(0, scroll.rect.height - (elements.Count * element_rectTransform.rect.height));
+        content.offsetMax = new Vector2(0, 0);
+
+
     }
 
     private void UpdateGoalAndTaskNames()

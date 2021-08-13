@@ -37,11 +37,18 @@ public class TaskNameButton : BehaviourButton
     }
 
 
-
     protected override void OnTouch()
     {
-       
+        if (!Application.isEditor)
+        {
+            categorySelectorBroadcaster.FeedClickPosition(Input.GetTouch(0).position);
+        }
+        else
+        {
+            categorySelectorBroadcaster.FeedClickPosition(Input.mousePosition);
+        }
     }
+
 
     protected override void OnRelease()
     {

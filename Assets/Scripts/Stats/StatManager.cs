@@ -73,7 +73,7 @@ public class StatManager : MonoBehaviour
         pieChart1_dropdown.value = 1;
 
         barChart1_dropdown.value = 1;
-       // barChart1_dropdown.value = 0;
+        barChart1_dropdown.value = 0;
     }
 
     private void UpdateIfDailyIsSelected(TaskData _data)

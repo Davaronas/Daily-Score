@@ -53,7 +53,7 @@ public class BarChartHolder : MonoBehaviour
     }
 
 
-    public void LoadData(BarChartInfo[] _infos, bool _displayTexts)
+    public void LoadData(BarChartInfo[] _infos, bool _useUnderTexts,bool _useAmounts)
     {
         bool _foundNonZero = false;
         for (int i = 0; i < _infos.Length; i++)
@@ -76,12 +76,24 @@ public class BarChartHolder : MonoBehaviour
         }
 
 
-        if (_displayTexts)
+        if (_useUnderTexts)
         {
             for (int i = 0; i < _infos.Length; i++)
             {
                 LoadBar(_infos[i].point, _infos[i].description);
             }
+        }
+        else if(_useAmounts)
+        {
+            for (int i = 0; i < _infos.Length; i++)
+            {
+                LoadBar(_infos[i].point, _infos[i].description, false, true);
+            }
+
+
+
+            minTime.text = _infos[0].description;
+            maxTime.text = _infos[_infos.Length - 1].description;
         }
         else
         {
@@ -89,7 +101,7 @@ public class BarChartHolder : MonoBehaviour
 
             for (int i = 0; i < _infos.Length; i++)
             {
-                LoadBar(_infos[i].point, _infos[i].description,false);
+                LoadBar(_infos[i].point, _infos[i].description,false,false);
             }
 
            
@@ -124,7 +136,7 @@ public class BarChartHolder : MonoBehaviour
     }
    
 
-    private void LoadBar(float _points, string _time, bool _useTexts = true)
+    private void LoadBar(float _points, string _time, bool _useUnderTexts = true, bool _useAmounts = true)
     {
 
         if(_points > max)
@@ -142,9 +154,13 @@ public class BarChartHolder : MonoBehaviour
         BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
         bars.Add(_newBar,_points);
 
-        if (_useTexts)
+        if (_useUnderTexts)
         {
             _newBar.SetProperties(barColor, _points, _time); // set time!
+        }
+        else if(_useAmounts)
+        {
+            _newBar.SetProperties(barColor, _points);
         }
         else
         {

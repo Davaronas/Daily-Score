@@ -10,12 +10,17 @@ public class OpenSelectableCategoriesButton : BehaviourButton
     private void Awake()
     {
         AppManager.OnBarChartCategorySelected += ChangeStateCallback;
+        AppManager.OnSubmenuChangedViaScrolling += Deactivate;
+        AppManager.OnSubmenuButtonPressed += Deactivate;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
+
         AppManager.OnBarChartCategorySelected -= ChangeStateCallback;
+        AppManager.OnSubmenuChangedViaScrolling -= Deactivate;
+        AppManager.OnSubmenuButtonPressed -= Deactivate;
     }
 
     protected override void OnTouch()
@@ -36,6 +41,12 @@ public class OpenSelectableCategoriesButton : BehaviourButton
     private void ChangeState()
     {
         selectablesPanel.SetActive(!selectablesPanel.activeSelf);
+    }
+
+    private void Deactivate(int _i)
+    {
+        if(_i != 2)
+        selectablesPanel.SetActive(false);
     }
 
 }

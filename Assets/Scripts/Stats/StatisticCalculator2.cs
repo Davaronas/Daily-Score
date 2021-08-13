@@ -726,7 +726,7 @@ public class StatisticCalculator2 : MonoBehaviour
             barChartInfos.Add(new BarChartInfo(weeklydata[6], RuntimeTranslator.TranslateDayOfWeek(DayOfWeek.Sunday).Substring(0, 3)));
             */
 
-            barchart1.LoadData(barChartInfos.ToArray(), true);
+          //  barchart1.LoadData(barChartInfos.ToArray(), true);
         }
 
     }
@@ -797,7 +797,7 @@ public class StatisticCalculator2 : MonoBehaviour
             else
             barChartInfosmonth.Add(new BarChartInfo(monthlyData[l], ""));
         }
-        barchart1.LoadData(barChartInfosmonth.ToArray(), false);
+      //  barchart1.LoadData(barChartInfosmonth.ToArray(), false);
         
 
         
@@ -1085,6 +1085,10 @@ public class StatisticCalculator2 : MonoBehaviour
         int _time = _w_Or_m == 0 ? 7 : 30;
 
         int[] datas = new int[_time];
+        for (int i = 0; i < datas.Length; i++)
+        {
+            datas[i] = 0;
+        }
        
         StatLoad();
         barchart1.Clear();
@@ -1136,7 +1140,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     {
                         if (GoalDATAS[j].modifications[l].taskName == selectedTaskName)
                         {
-                            if (GoalDATAS[j].modifications[l].GetDateTime() >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].modifications[l].GetDateTime().Date < Today.AddDays(_rewind * _time))
+                            if (GoalDATAS[j].modifications[l].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].modifications[l].GetDateTime().Date < Today.AddDays(_rewind * _time))
                             {
                                 if (GoalDATAS[j].modifications[l].GetDateTime() == Today.AddDays((_rewind * _time) - (i )))
                                 {
@@ -1160,13 +1164,46 @@ public class StatisticCalculator2 : MonoBehaviour
 
         if (_w_Or_m == 0)
         {
-          
-            for (int i = 6; i > -1; i--)
+
+            if (_rewind == 0)
             {
-                barChartInfos.Add(new BarChartInfo(datas[i], (DateTime.Today.AddDays(-i - 1).DayOfWeek).ToString().Substring(0, 3)));
+                for (int i = 6; i > -1; i--)
+                {
+                    barChartInfos.Add(new BarChartInfo(datas[i], (DateTime.Today.AddDays(-i - 1).DayOfWeek).ToString().Substring(0, 3)));
+                }
+
+                barchart1.LoadData(barChartInfos.ToArray(), true,true);
+            }
+            else
+            {
+                for (int i = 6; i > -1; i--)
+                {
+                    if(i == 6)
+                    {
+                        DateTime _t = Today.AddDays((_rewind - 1) * _time);
+                        string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                        string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+
+                        barChartInfos.Add(new BarChartInfo(datas[i], _h + _d));
+                    }
+                    else if( i == 0)
+                    {
+                        DateTime _t = Today.AddDays(_rewind * _time - 1);
+                        string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                        string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+
+                        barChartInfos.Add(new BarChartInfo(datas[i], _h + _d));
+                    }
+                    else
+                    {
+                        barChartInfos.Add(new BarChartInfo(datas[i], ""));
+                    }
+                }
+
+                barchart1.LoadData(barChartInfos.ToArray(), false,true);
             }
 
-            barchart1.LoadData(barChartInfos.ToArray(), true);
+            
         }
         else
         {
@@ -1194,9 +1231,56 @@ public class StatisticCalculator2 : MonoBehaviour
                 }
             }
 
-            barchart1.LoadData(barChartInfos.ToArray(), false);
+            barchart1.LoadData(barChartInfos.ToArray(), false,false);
         }
     }
+
+
+
+    public void PieChartCalculation(int _rewind, int _type)
+    {
+        switch(_type)
+        {
+            case 0: // daily
+
+                break;
+            case 1: // weekly
+
+                break;
+            case 2: // monthly
+
+                break;
+            case 3: // all time
+
+                break;
+        }
+    }
+
+
+    // PIECHART
+
+    // pressed daily, weekly, monthly or all time
+
+    // calculate daily
+    //      calculate day if exists (check oldest daily score, not previous day)
+    //      if rewind is 0 calculate current scores
+
+    // calculate weekly
+    //      calculate 7 days using rewind
+
+    // calculate monthly
+    //      calculate 30 days using rewind
+
+    // calculate all time
+    //      calculate every daily score
+
+
+
+
+    // ----------------------
+
+
+
 
 
     // BARCHART

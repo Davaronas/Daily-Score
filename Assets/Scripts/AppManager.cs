@@ -1130,6 +1130,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-27)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-26)));
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-25)));
+                _gd.AddModification(new GoalChange(300, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-25)));
                 _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-24)));
                 _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-23)));
                 _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-22)));
@@ -1149,6 +1150,7 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-8)));
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-7)));
                 _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6)));
+                _gd.AddModification(new GoalChange(500, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-6)));
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5)));
                 _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4)));
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3)));
@@ -1196,7 +1198,7 @@ public class AppManager : MonoBehaviour
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
 
-        Application.targetFrameRate = 61;
+        Application.targetFrameRate = 70;
         QualitySettings.vSyncCount = 0;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
     }

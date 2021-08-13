@@ -77,7 +77,7 @@ public class SubmenuBroadcaster : ScrollDragBroadcast, IPointerDownHandler
         submenuScroll.OnBeginDrag(eventData);
     }
 
-    public void FeedClickPositionFromGoalButton(Vector2 _touchPos)
+    public void FeedClickPosition(Vector2 _touchPos)
     {
         mousePosStart_ = _touchPos;
     }
