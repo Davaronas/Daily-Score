@@ -27,8 +27,8 @@ public class Loading : MonoBehaviour
 
         while (!aOp.isDone)
         {
-            percentText.text = Mathf.Round(aOp.progress * 100).ToString() + " %";
-            loadingFill.fillAmount = aOp.progress / 1f;
+            percentText.text =  Mathf.Round(aOp.progress * 100).ToString() + " %";
+            loadingFill.fillAmount = Mathf.Clamp( aOp.progress / 1f, loadingFill.fillAmount,1f);
             yield return new WaitForEndOfFrame();
         }
     }

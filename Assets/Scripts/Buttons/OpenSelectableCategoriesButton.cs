@@ -26,6 +26,8 @@ public class OpenSelectableCategoriesButton : BehaviourButton
     protected override void OnTouch()
     {
         ChangeState();
+
+        SoundManager.PlaySound2();
     }
 
     private void ChangeStateCallback(string _n)

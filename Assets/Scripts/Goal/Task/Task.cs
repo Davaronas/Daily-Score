@@ -330,6 +330,8 @@ public class Task : MonoBehaviour
             SetScoreText(currentPoint);
             taskData.lastChangedValue = DateTime.Now.Date.ToString();
             ModificationHappened(currentPoint, taskData.name);
+
+            SoundManager.PlaySound1();
         }
     }
 

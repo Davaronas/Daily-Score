@@ -52,6 +52,8 @@ public class GoalButton : BehaviourButton
                 filling = 0;
                 isHolding = false;
                 image.color = Color.white;
+
+                SoundManager.PlaySound2();
             }
         }
     }
@@ -69,6 +71,8 @@ public class GoalButton : BehaviourButton
         {
             goalsScrollRectBroadcaster.FeedClickPosition(Input.mousePosition);
         }
+
+        
     }
 
     protected override void OnRelease()

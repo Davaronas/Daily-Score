@@ -142,6 +142,8 @@ public class GoalManager : MonoBehaviour
         currentlySelectedGoal = _goal;
         AppManager.GoalOpened(_goal);
 
+        SoundManager.PlaySound2();
+
     }
 
     
@@ -174,11 +176,15 @@ public class GoalManager : MonoBehaviour
         askToDeleteGoalPanel.SetActive(false);
 
         AppManager.GoalDeleted();
+
+        SoundManager.PlaySound5();
     }
 
     public void RemoteCall_CancelDeleteGoal()
     {
         HideAskToDeleteGoalPanel();
+
+        SoundManager.PlaySound6();
     }
 
 
@@ -214,6 +220,8 @@ public class GoalManager : MonoBehaviour
         ResizeGoalsContent();
 
         AppManager.NewGoalAdded();
+
+        SoundManager.PlaySound4();
     }
 
     public void AssignTaskToCurrentGoal(TaskData _data)

@@ -39,6 +39,8 @@ public class TaskTypeSelectButton : BehaviourButton
                 if(_b != this)
                 _b.GetComponent<Image>().color = Color.white;
             }
+
+            SoundManager.PlaySound2();
         }
     }
 

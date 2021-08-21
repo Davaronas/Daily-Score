@@ -62,6 +62,8 @@ public class SubmenuButton : BehaviourButton
         SubmenuChanged(buttonId);
         submenuScroll.WarpToPosition(buttonId);
         AppManager.SubmenuButtonPressed(buttonId);
+
+        SoundManager.PlaySound2();
     }
 
     public void Selected()

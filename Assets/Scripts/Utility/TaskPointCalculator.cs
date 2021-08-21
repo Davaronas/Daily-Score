@@ -33,6 +33,103 @@ public static class TaskPointCalculator
         }
     }
 
+    public static bool[] GetTargetValuesReached(GoalData _gd)
+    {
+        List<bool> _targetsReached = new List<bool>();
+
+        for (int i = 0; i < _gd.tasks.Count; i++)
+        {
+            if (_gd.tasks[i].type != AppManager.TaskType.Interval)
+            {
+                _targetsReached.Add(IsTargetValueReached(_gd.tasks[i]));
+            }
+        }
+
+        return _targetsReached.ToArray();
+    }
+
+    public static bool IsTargetValueReached(TaskData _data)
+    {
+        switch (_data.type)
+        {
+            case AppManager.TaskType.Maximum:
+                return IsTargetValueReached(_data as MaximumTaskData);
+
+            case AppManager.TaskType.Minimum:
+                return IsTargetValueReached(_data as MinimumTaskData);
+
+            case AppManager.TaskType.Boolean:
+                return IsTargetValueReached(_data as BooleanTaskData);
+
+            case AppManager.TaskType.Optimum:
+                return IsTargetValueReached(_data as OptimumTaskData);
+
+            case AppManager.TaskType.Interval:
+                return IsTargetValueReached(_data as IntervalTaskData);
+
+
+
+            default:
+                Debug.LogError("No datatype has been discovered");
+                return false;
+
+        }
+    }
+
+
+    public static bool IsTargetValueReached(MaximumTaskData _mtd)
+    {
+        if(_mtd.current >= _mtd.targetValue)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool IsTargetValueReached(MinimumTaskData _mtd)
+    {
+        if(_mtd.current < _mtd.targetValue)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool IsTargetValueReached(BooleanTaskData _btd)
+    {
+        if(_btd.isDone)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public static bool IsTargetValueReached(OptimumTaskData _otd)
+    {
+        if(_otd.current == _otd.targetValue)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool IsTargetValueReached(IntervalTaskData _itd)
+    {
+        return false;
+    }
 
 
 

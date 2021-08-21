@@ -56,6 +56,8 @@ public class TaskNameButton : BehaviourButton
         {
             statCalc.SetSelectedTaskName(heldName);
             AppManager.BarChartCategorySelected(heldName);
+
+            SoundManager.PlaySound2();
         }
     }
 

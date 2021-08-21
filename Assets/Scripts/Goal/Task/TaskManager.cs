@@ -317,12 +317,12 @@ public class TaskManager : MonoBehaviour
 
             everyThDayInputField.text = _data.activeEveryThDay.ToString();
         }
-        
 
 
-        
 
 
+
+       // SoundManager.PlaySound2();
       
 
         /*
@@ -564,6 +564,8 @@ public class TaskManager : MonoBehaviour
 
         AppManager.TaskEdited(currentlySelectedTask);
 
+
+        SoundManager.PlaySound1();
     }
 
     public void DisplayTaskTypeText(AppManager.TaskType _taskType)
@@ -741,6 +743,8 @@ public class TaskManager : MonoBehaviour
 
         AppManager.NewTaskAdded();
 
+        SoundManager.PlaySound4();
+
     //    print(_data.name + " " + _data.activeOnDays.Count);
     }
 
@@ -774,7 +778,10 @@ public class TaskManager : MonoBehaviour
               //  print(_day);
                 everyThDayInputField.text = "";
                 everyThDay = 0;
+
+                SoundManager.PlaySound2();
             }
+
         }
         else
         {
@@ -785,6 +792,8 @@ public class TaskManager : MonoBehaviour
                 {
                     notificationHolder.DeleteNotification(_day);
                 }
+
+                SoundManager.PlaySound3();
             }
         }
     }
@@ -861,6 +870,8 @@ public class TaskManager : MonoBehaviour
             }
                 
         }
+
+        SoundManager.PlaySound2();
     }
 
     public void NotificationDaySelected(DayOfWeek _day)
@@ -871,6 +882,8 @@ public class TaskManager : MonoBehaviour
            Destroy(notificationDaySelectorWindow.transform.GetChild(i).gameObject);
         }
         notificationDaySelectorPanel.SetActive(false);
+
+        SoundManager.PlaySound2();
     }
 
     public void NotificationEveryThDaySelected(int _resetDay)
@@ -918,6 +931,7 @@ public class TaskManager : MonoBehaviour
         goalManager.GetCurrentlySelectedGoal().GetGoalData().tasks.Remove(currentlySelectedTask);
 
         AppManager.TaskEdited(currentlySelectedTask);
+        SoundManager.PlaySound5();
     }
 
     public void ResetTask()
@@ -939,7 +953,7 @@ public class TaskManager : MonoBehaviour
             {
                 if (_currentGoal.dailyScores[j].GetDateTime() == _modificationsOfResetTask[k].GetDateTime())
                 {
-                    _currentGoal.dailyScores[j] = new ScorePerDay(_currentGoal.dailyScores[j].amount - _modificationsOfResetTask[k].amount, DateTime.Today);
+                    _currentGoal.dailyScores[j] = new ScorePerDay(_currentGoal.dailyScores[j].amount - _modificationsOfResetTask[k].amount, _currentGoal.dailyScores[j].GetDateTime(),_currentGoal.dailyScores[j].targetsReached);
                 }
             }
         }
@@ -969,6 +983,8 @@ public class TaskManager : MonoBehaviour
 
         AppManager.TaskEdited(currentlySelectedTask);
 
+        SoundManager.PlaySound1();
+
         // remove from daily score where modification task equals current (could also remove those modifications)
     }
 
@@ -983,6 +999,8 @@ public class TaskManager : MonoBehaviour
     public void RemoteCall_HideInfoPanel()
     {
         HideInfoPanel();
+
+        SoundManager.PlaySound3();
     }
 
     private void HideInfoPanel()

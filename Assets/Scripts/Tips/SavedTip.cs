@@ -41,6 +41,8 @@ public class SavedTip : BehaviourButton
     public void RemoteCall_RemoveSavedTip()
     {
         tipManager.DisplayDeleteTipPanel(id,headerString);
+
+        SoundManager.PlaySound2();
     }
 
     private void FetchAppropriateHeader(AppManager.Languages _l)

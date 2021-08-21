@@ -17,6 +17,8 @@ public class LanguageButton : BehaviourButton
 
         AppManager.SetLanguage(language);
 
+        SoundManager.PlaySound2();
+
         // Go to introduction screen
     }
 }

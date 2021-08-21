@@ -66,6 +66,8 @@ public class GoalNameButton : BehaviourButton
         {
             categorySelectorBroadcaster.FeedClickPosition(Input.mousePosition);
         }
+
+
     }
 
     protected override void OnRelease()
@@ -82,6 +84,8 @@ public class GoalNameButton : BehaviourButton
             }
 
             AppManager.BarChartCategorySelected(heldName);
+
+            SoundManager.PlaySound2();
         }
     }
 

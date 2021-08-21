@@ -112,6 +112,8 @@ public class TipManager : MonoBehaviour
     {
         UnlockSecondTip();
         PlayerPrefs.SetInt("SecondTipUnlocked", 1);
+
+        SoundManager.PlaySound2();
     }
 
     public void GoldStatusChanged(bool _state)
@@ -201,6 +203,13 @@ public class TipManager : MonoBehaviour
     public void RemoteCall_HideDeleteTipPanel()
     {
         askToDeleteTipPanel.SetActive(false);
+
+        SoundManager.PlaySound6();
+    }
+
+    public int GetSecondTipId()
+    {
+       return secondTip.GetHeldTipId();
     }
 
     public void RemoteCall_RemoveSavedTip()
@@ -225,6 +234,8 @@ public class TipManager : MonoBehaviour
 
         ChangeSavedTipAmountText();
         ScrollSizer.ReduceSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
+
+        SoundManager.PlaySound5();
     }
 
     public void LoadDailyTip(int _id, string _header, string _content)
@@ -262,12 +273,18 @@ public class TipManager : MonoBehaviour
         {
             savedTip.SetData(_id, _h, _c);
             savedTipPanel.SetActive(true);
+
+            SoundManager.PlaySound2();
         }
+
+
     }
 
     public void RemoteCall_HideSavedTipPanel()
     {
         savedTipPanel.SetActive(false);
+
+        SoundManager.PlaySound3();
     }
   
 }

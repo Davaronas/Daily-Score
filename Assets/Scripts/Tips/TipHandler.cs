@@ -61,6 +61,8 @@ public class TipHandler : MonoBehaviour
 
         SetTipSaved(firstTipId, true);
         tipManager.BlockFirstTipSaveButton();
+
+        SoundManager.PlaySound1();
     }
 
     public void RemoteCall_SaveSecondTip()
@@ -71,8 +73,10 @@ public class TipHandler : MonoBehaviour
             return;
         }
 
-        SetTipSaved(secondTipId, true);
+        SetTipSaved(tipManager.GetSecondTipId(), true);
         tipManager.BlockSecondTipSaveButton();
+
+        SoundManager.PlaySound1();
     }
 
     public void SetTipSaved(int _id, bool _state)
@@ -296,6 +300,7 @@ public class TipHandler : MonoBehaviour
 
 
                         PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                        SaveTips();
                         return secondTipId;    
                     }
                 }
@@ -321,6 +326,7 @@ public class TipHandler : MonoBehaviour
 
 
                 PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                SaveTips();
                 return _tip.Key.id;
             }
 
@@ -335,12 +341,13 @@ public class TipHandler : MonoBehaviour
 
 
                 PlayerPrefs.SetInt("secondTipId", _tip.Key.id);
+                SaveTips();
                 return _tip.Key.id;
                 
             }
         }
 
-        SaveTips();
+       
 
         return -1;
 

@@ -8,10 +8,13 @@ public class StatManager : MonoBehaviour
 
     [SerializeField] private TMP_Dropdown barChart1_dropdown;
     [SerializeField] private TMP_Dropdown pieChart1_dropdown;
+    [SerializeField] private TMP_Dropdown barChartTop3_dropdown;
 
     private StatisticCalculator2 statCalculator = null;
 
-    private RewindTimeHandler rth = null;
+    [SerializeField] private RewindTimeHandler rth_barChart = null;
+    [SerializeField] private RewindTimeHandler rth_pieChart = null;
+    [SerializeField] private RewindTimeHandler rth_barChartTop3 = null;
 
     private void Awake()
     {
@@ -19,13 +22,13 @@ public class StatManager : MonoBehaviour
         AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
         AppManager.OnLanguageChanged += LanguageCallback;
         AppManager.OnBarChartCategorySelected += BarChartCategorySelected;
-        
-
-        rth = FindObjectOfType<RewindTimeHandler>();
 
 
-       
-        
+
+
+
+
+
     }
 
     private void Start()
@@ -38,7 +41,7 @@ public class StatManager : MonoBehaviour
         Invoke(nameof(LoadCharts), 1.5f);
     }
 
-   private void LanguageCallback(AppManager.Languages _l)
+    private void LanguageCallback(AppManager.Languages _l)
     {
         InvokeLoadCharts();
     }
@@ -51,103 +54,141 @@ public class StatManager : MonoBehaviour
 
     }
 
-   
+
 
     private void LoadCharts()
     {
 
         barChart1_dropdown.ClearOptions();
-        List<string> _optionsBarChart1 = new List<string>();
-        _optionsBarChart1.Add(RuntimeTranslator.TranslateWeeklyWord());
-        _optionsBarChart1.Add(RuntimeTranslator.TranslateMonthlyWord());
-        barChart1_dropdown.AddOptions(_optionsBarChart1);
+        List<string> _options_2Type = new List<string>();
+        _options_2Type.Add(RuntimeTranslator.TranslateWeeklyWord());
+        _options_2Type.Add(RuntimeTranslator.TranslateMonthlyWord());
+        barChart1_dropdown.AddOptions(_options_2Type);
 
         pieChart1_dropdown.ClearOptions();
-        List<string> _optionsPieChart1 = new List<string>();
-        _optionsPieChart1.Add(RuntimeTranslator.TranslateDailyWord());
-        _optionsPieChart1.Add(RuntimeTranslator.TranslateWeeklyWord());
-        _optionsPieChart1.Add(RuntimeTranslator.TranslateMonthlyWord());
-        _optionsPieChart1.Add(RuntimeTranslator.TranslateAllTimeWord());
-        pieChart1_dropdown.AddOptions(_optionsPieChart1);
+        List<string> _options_4Type = new List<string>();
+        _options_4Type.Add(RuntimeTranslator.TranslateDailyWord());
+        _options_4Type.Add(RuntimeTranslator.TranslateWeeklyWord());
+        _options_4Type.Add(RuntimeTranslator.TranslateMonthlyWord());
+        _options_4Type.Add(RuntimeTranslator.TranslateAllTimeWord());
+        pieChart1_dropdown.AddOptions(_options_4Type);
+
+
+
+        barChartTop3_dropdown.ClearOptions();
+        List<string> _options_3Type = new List<string>();
+        _options_3Type.Add(RuntimeTranslator.TranslateDailyWord());
+        _options_3Type.Add(RuntimeTranslator.TranslateWeeklyWord());
+        _options_3Type.Add(RuntimeTranslator.TranslateMonthlyWord());
+        barChartTop3_dropdown.AddOptions(_options_3Type);
+
+
 
         pieChart1_dropdown.value = 1;
 
         barChart1_dropdown.value = 1;
         barChart1_dropdown.value = 0;
+
+        barChartTop3_dropdown.value = 1;
     }
 
     private void UpdateIfDailyIsSelected(TaskData _data)
     {
-        Invoke(nameof(UpdateDailyPieChart), Time.deltaTime);
+        Invoke(nameof(UpdateDailyCharts), Time.deltaTime);
     }
 
-    private void UpdateDailyPieChart()
+    private void UpdateDailyCharts()
     {
         if (pieChart1_dropdown.value == 0)
         {
-            statCalculator.GoalPieDaily();
+            statCalculator.PieChartCalculation(rth_pieChart.GetCurrentRewind(), 0);
+        }
+
+        if(barChartTop3_dropdown.value == 0)
+        {
+            statCalculator.Top3BarChartCalculation(0, rth_barChartTop3.GetCurrentRewind());
         }
     }
 
     public void RemoteCall_BarChartValueChanged()
     {
-        print("Value changed " + barChart1_dropdown.value);
-       
-        switch(barChart1_dropdown.value)
-        {
-            case 0:
-                statCalculator.BarChartCalculation(0,0);
-                break;
-            case 1:
-                statCalculator.BarChartCalculation(0,1);
-                break;
-        }
 
-        rth.ResetButtons();
+
+        statCalculator.BarChartCalculation(0, barChart1_dropdown.value);
+
+        rth_barChart.ResetButtons();
     }
 
-
-    public void BarChartCategorySelected(string _n)
-    {
-        statCalculator.BarChartCalculation(rth.GetCurrentRewind(), barChart1_dropdown.value);
-    }
-
-    public void RewindChanged(int _rewind)
-    {
-        switch (barChart1_dropdown.value)
-        {
-            case 0:
-                statCalculator.BarChartCalculation(_rewind, 0);
-                break;
-            case 1:
-                statCalculator.BarChartCalculation(_rewind, 1);
-                break;
-        }
-    }
 
     public void RemoteCall_PieChartValueChanged()
     {
 
-        switch (pieChart1_dropdown.value)
+        if (pieChart1_dropdown.value != 3)
         {
-            case 0:
-                statCalculator.GoalPieDaily();
-                break;
-            case 1:
-                statCalculator.GoalPieWeek();
-                break;
-            case 2:
-                statCalculator.GoalPieMonth();
-                break;
-            case 3:
-                statCalculator.GoalPieMind();
-                break;
+
+            statCalculator.PieChartCalculation(0, pieChart1_dropdown.value);
+
+            rth_pieChart.ResetButtons();
+        }
+        else
+        {
+            statCalculator.PieChartCalculation(0, pieChart1_dropdown.value);
+            rth_pieChart.DisableButtons();
+        }
+
+    }
+
+    public void RemoteCall_BarChartTop3ValueChanged()
+    {
+        if (barChartTop3_dropdown.value != 3)
+        {
+            statCalculator.Top3BarChartCalculation(barChartTop3_dropdown.value, 0);
+            rth_barChartTop3.ResetButtons();
+        }
+        else
+        {
+            statCalculator.Top3BarChartCalculation(barChartTop3_dropdown.value, 0);
+            rth_barChartTop3.DisableButtons();
         }
     }
+
+
+
+    public void BarChartCategorySelected(string _n)
+    {
+        statCalculator.BarChartCalculation(rth_barChart.GetCurrentRewind(), barChart1_dropdown.value);
+    }
+
+    public void RewindChangedBarChart(int _rewind)
+    {
+        statCalculator.BarChartCalculation(_rewind, barChart1_dropdown.value);
+    }
+
+    public void RewindChangedPieChart(int _rewind)
+    {
+        statCalculator.PieChartCalculation(_rewind, pieChart1_dropdown.value);
+    }
+
+    public void RewindChangedBarChartTop3(int _rewind)
+    {
+        statCalculator.Top3BarChartCalculation(barChartTop3_dropdown.value, _rewind);
+    }
+
+   
 
     public int BarChartValue()
     {
         return barChart1_dropdown.value;
+    }
+
+    public int BarChartTop3Value()
+    {
+        return barChartTop3_dropdown.value;
+    }
+
+    public int PieChartValue()
+    {
+        return pieChart1_dropdown.value;
     }
 
 }

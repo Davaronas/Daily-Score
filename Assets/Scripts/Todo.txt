@@ -69,6 +69,7 @@ leave toggle or switch to interaction handler ?
 
 
 
+goal törlés fix idõ*
 
 
 
@@ -121,8 +122,15 @@ tip bug
 
 loading screen
 
-goal törlés fix idõ*
 
+oszlopdiagram mai napot is számolja
 
+tört számot lehessen beirni
 
+top 3 weekly monthly összeadott*
 
+7 napos csúszóátlag
+
+settings: hang, takarékos mód, nightmode
+
+other mértékegység beirható

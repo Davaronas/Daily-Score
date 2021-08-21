@@ -162,9 +162,9 @@ public class GoalData
 
     }
 
-    public void AddDailyScore(int _amount, DateTime _time)
+    public void AddDailyScore(int _amount, DateTime _time, bool[] _targetReached)
     {
-        dailyScores.Add(new ScorePerDay(_amount, _time));
+        dailyScores.Add(new ScorePerDay(_amount, _time, _targetReached));
     }
 
     public bool TaskExists(string _task)
@@ -223,15 +223,17 @@ public struct GoalChange
 [System.Serializable]
 public struct ScorePerDay
 {
-    public ScorePerDay(int _amount,  DateTime _time)
+    public ScorePerDay(int _amount,  DateTime _time, bool[] _targetReached)
     {
         amount = _amount;
         time = _time.ToString();
+        targetsReached = _targetReached;
     }
 
 
     public int amount;
     public string time;
+    public bool[] targetsReached;
 
     public DateTime GetDateTime()
     {
@@ -978,7 +980,7 @@ public class AppManager : MonoBehaviour
         {
           //  if(_goaldatas[i].current > 0)
             {
-                _goaldatas[i].AddDailyScore(_goaldatas[i].current,lastLogin.Date);
+                _goaldatas[i].AddDailyScore(_goaldatas[i].current,lastLogin.Date, TaskPointCalculator.GetTargetValuesReached(_goaldatas[i]));
                 _goaldatas[i].current = 0;
 
 
@@ -1115,48 +1117,48 @@ public class AppManager : MonoBehaviour
                 
                 _gd.dailyScores.Clear();
                 // print(_gd.current);
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60)));
-                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40)));
-                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-39)));
-                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-38)));
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-37)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-36)));
-                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-34)));
-                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-32)));
-                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-31)));
-                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-30)));
-                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-29)));
-                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-28)));
-                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-27)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-26)));
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-25)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60),new bool[] { false,true,true,true,false}));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-39), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-38), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-37), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-36), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-34), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-32), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-31), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-30), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-29), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-28), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-27), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-26), new bool[] { false, false, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-25), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(300, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-25)));
-                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-24)));
-                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-23)));
-                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-22)));
-                _gd.dailyScores.Add(new ScorePerDay(550, DateTime.Today.AddDays(-21)));
-                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-20)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-19)));
-                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-18)));
-                _gd.dailyScores.Add(new ScorePerDay(50, DateTime.Today.AddDays(-17)));
-                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-16)));
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-15)));
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-14)));
-                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-13)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-12)));
-                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-11)));
-                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500,2000), DateTime.Today.AddDays(-10)));
-                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-9)));
-                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-8)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-7)));
-                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6)));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-24), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-23), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(500, DateTime.Today.AddDays(-22), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(550, DateTime.Today.AddDays(-21), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-20), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-19), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-18), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(50, DateTime.Today.AddDays(-17), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-16), new bool[] { false, true, true, false, false }));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-15), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-14), new bool[] { false, true, true, false, false }));
+                _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-13), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-12), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-11), new bool[] { false, true, true, false, false }));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500,2000), DateTime.Today.AddDays(-10), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(100, DateTime.Today.AddDays(-9), new bool[] { false, true, true, false, false }));
+                _gd.dailyScores.Add(new ScorePerDay(400, DateTime.Today.AddDays(-8), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-7), new bool[] { false, false, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(500, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-6)));
-                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5)));
-                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4)));
-                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3)));
+                _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(100, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-3)));
-                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2)));
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1)));
+                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
                 
             }
@@ -1198,7 +1200,7 @@ public class AppManager : MonoBehaviour
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
 
-        Application.targetFrameRate = 70;
+        Application.targetFrameRate = 999;
         QualitySettings.vSyncCount = 0;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
     }
@@ -1229,10 +1231,13 @@ public class AppManager : MonoBehaviour
 
     private void HandleBack()
     {
+        SoundManager.PlaySound3();
+
         // panel checks
-        if(errorPanel.gameObject.activeSelf)
+        if (errorPanel.gameObject.activeSelf)
         {
             errorPanel.gameObject.SetActive(false);
+            
             return;
         }
 
@@ -1458,16 +1463,22 @@ public class AppManager : MonoBehaviour
     public void RemoteCall_GoToCreateGoalMenu()
     {
         SetAppLayer(211);
+
+        SoundManager.PlaySound2();
     }
 
     public void RemoteCall_GoToGoalMenu()
     {
         SetAppLayer(212);
+
+        SoundManager.PlaySound2();
     }
 
     public void RemoteCall_GoToCreateTaskMenu()
     { 
         SetAppLayer(2121);
+
+        SoundManager.PlaySound2();
     }
 
     public void RemoteCall_GoToMainMenu()
@@ -1479,12 +1490,13 @@ public class AppManager : MonoBehaviour
     {
         SetAppLayer(3);
 
-       
+        SoundManager.PlaySound2();
     }
 
     public void RemoteCall_TurnOffErrorPanel()
     {
         errorPanel.gameObject.SetActive(false);
+        SoundManager.PlaySound3();
     }
 
    
