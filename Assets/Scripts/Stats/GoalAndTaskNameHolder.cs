@@ -5,6 +5,7 @@ using TMPro;
 
 public class GoalAndTaskNameHolder : MonoBehaviour
 {
+    [SerializeField] private CategorySelectableBarCharts chartType;
     [SerializeField] private GameObject goalNamePrefab = null;
     [SerializeField] private GameObject taskNamePrefab = null;
 
@@ -52,8 +53,6 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         {
             UpdateGoalAndTaskNames();
         }
-
-       
     }
 
     private void OnDestroy()
@@ -87,7 +86,7 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         }
 
         GameObject _overallOption = Instantiate(goalNamePrefab, transform.position, Quaternion.identity, transform);
-        _overallOption.GetComponent<GoalNameButton>().Overall(categorySelectorBroadcaster);
+        _overallOption.GetComponent<GoalNameButton>().Overall(categorySelectorBroadcaster, chartType);
         elements.Add(_overallOption);
 
         GoalData[] _goalDatas = goalManager.GetExistingGoals();
@@ -95,13 +94,13 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         for (int i = 0; i < _goalDatas.Length; i++)
         {
             GameObject _newGoalName = Instantiate(goalNamePrefab, transform.position, Quaternion.identity, transform);
-            _newGoalName.GetComponent<GoalNameButton>().SetName(_goalDatas[i].name,categorySelectorBroadcaster);
+            _newGoalName.GetComponent<GoalNameButton>().SetName(_goalDatas[i].name,categorySelectorBroadcaster, chartType);
             elements.Add(_newGoalName);
 
             for (int j = 0; j < _goalDatas[i].tasks.Count; j++)
             {
                 GameObject _newTaskName = Instantiate(taskNamePrefab, transform.position, Quaternion.identity, transform);
-                _newTaskName.GetComponent<TaskNameButton>().SetName(_goalDatas[i].tasks[j].name,categorySelectorBroadcaster);
+                _newTaskName.GetComponent<TaskNameButton>().SetName(_goalDatas[i].tasks[j].name,categorySelectorBroadcaster, chartType);
                 elements.Add(_newTaskName);
             }
         }
@@ -118,17 +117,20 @@ public class GoalAndTaskNameHolder : MonoBehaviour
         UpdateGoalAndTaskNames(AppManager.currentLanguage);
     }
 
-    private void UpdateName(string _n)
+    private void UpdateName(string _n, CategorySelectableBarCharts _c)
     {
-        if (_n == "")
+        if (_c == chartType)
         {
-            selectedCategoryNameText.text = RuntimeTranslator.TranslateOverallWord();
-            overallSelected = true;
-        }
-        else
-        {
-            selectedCategoryNameText.text = _n;
-            overallSelected = false;
+            if (_n == "")
+            {
+                selectedCategoryNameText.text = RuntimeTranslator.TranslateOverallWord();
+                overallSelected = true;
+            }
+            else
+            {
+                selectedCategoryNameText.text = _n;
+                overallSelected = false;
+            }
         }
     }
 

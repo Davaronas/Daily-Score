@@ -279,7 +279,6 @@ public class TaskManager : MonoBehaviour
                     if (dayToggles[i].GetDay() == (DayOfWeek)_data.activeOnDays[j])
                     {
                         dayToggles[i].TurnOn();
-                        print((DayOfWeek)_data.activeOnDays[j]);
                         //  selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[j]);
                         break;
                     }
@@ -379,7 +378,8 @@ public class TaskManager : MonoBehaviour
                 ((MaximumTaskData)currentlySelectedTask).targetValue = _new_mxtd.targetValue;
                 ((MaximumTaskData)currentlySelectedTask).overachievePercentBonus = _new_mxtd.overachievePercentBonus;
                 ((MaximumTaskData)currentlySelectedTask).metric = _new_mxtd.metric;
-                ((MaximumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_mxtd.streakStartsAfterDays;
+                ((MaximumTaskData)currentlySelectedTask).customMetricName = _new_mxtd.customMetricName;
+                 ((MaximumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_mxtd.streakStartsAfterDays;
                 ((MaximumTaskData)currentlySelectedTask).current = 0;
 
 
@@ -396,6 +396,7 @@ public class TaskManager : MonoBehaviour
                 ((MinimumTaskData)currentlySelectedTask).underTargetValuePercentBonus = _new_mntd.underTargetValuePercentBonus;
                 ((MinimumTaskData)currentlySelectedTask).streakStartsAfterDays = _new_mntd.streakStartsAfterDays;
                 ((MinimumTaskData)currentlySelectedTask).metric = _new_mntd.metric;
+                ((MinimumTaskData)currentlySelectedTask).customMetricName = _new_mntd.customMetricName;
                 ((MinimumTaskData)currentlySelectedTask).current = 0;
                 break;
             case AppManager.TaskType.Boolean:
@@ -410,7 +411,8 @@ public class TaskManager : MonoBehaviour
                 OptimumTaskData _new_otd = taskTypeComponents.GetData(currentlySelectedTask.type) as OptimumTaskData;
                 if (_new_otd == null) { return; }
                 ((OptimumTaskData)currentlySelectedTask).metric = _new_otd.metric;
-                ((OptimumTaskData)currentlySelectedTask).pointsForOptimum = _new_otd.pointsForOptimum;
+                ((OptimumTaskData)currentlySelectedTask).customMetricName = _new_otd.customMetricName;
+               ((OptimumTaskData)currentlySelectedTask).pointsForOptimum = _new_otd.pointsForOptimum;
                 ((OptimumTaskData)currentlySelectedTask).pointsLostPerOneDifference = _new_otd.pointsLostPerOneDifference;
                 ((OptimumTaskData)currentlySelectedTask).targetValue = _new_otd.targetValue;
                 ((OptimumTaskData)currentlySelectedTask).current = 0;
@@ -424,6 +426,7 @@ public class TaskManager : MonoBehaviour
                 ((IntervalTaskData)currentlySelectedTask).intervals = _new_itd.intervals;
                 ((IntervalTaskData)currentlySelectedTask).current = 0;
                 ((IntervalTaskData)currentlySelectedTask).metric = _new_itd.metric;
+                ((IntervalTaskData)currentlySelectedTask).customMetricName = _new_itd.customMetricName;
                 break;
         }
 
@@ -655,6 +658,9 @@ public class TaskManager : MonoBehaviour
         if (_data == null) { return; } // error message is inside GetData() function
 
         if (selectedActiveDays.Count == 0 && everyThDay == 0) { AppManager.ErrorHappened(ErrorMessages.DaysNotSelected_CreateTaskPanel()); return; }
+
+        if (goalManager.IsNameAlreadyTaken(enteredName))
+        { AppManager.ErrorHappened(ErrorMessages.NameIsTaken()); return; }
 
 
 

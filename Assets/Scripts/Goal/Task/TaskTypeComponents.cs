@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
 
 [System.Serializable]
 public class MaximumComponents
@@ -15,7 +16,7 @@ public class MaximumComponents
     public TMP_InputField overachieveBonusPercent_InputField;
     public Toggle streak_Toggle;
     public TMP_InputField streakStartsAfterDays_InputField;
-
+    
     
      
 
@@ -145,6 +146,10 @@ public class TaskTypeComponents : MonoBehaviour
     private List<Toggle> toggles = new List<Toggle>();
 
     private IntervalHolder intervalHolder;
+    [Space]
+    private string customMetric = "Custom";
+    [SerializeField] private GameObject customMetricPanel = null;
+    [SerializeField] private TMP_InputField customMetricInputField = null;
 
 
     public Action<string> MetricUpdateNeeded;
@@ -163,7 +168,25 @@ public class TaskTypeComponents : MonoBehaviour
         AddArrayToList(toggles, optimumComponents.GetToggles());
 
         intervalHolder = FindObjectOfType<IntervalHolder>();
+
+        customMetricPanel.SetActive(false);
     }
+
+
+    public void RemoteCall_CustomMetricEditEnded()
+    {
+        customMetric = customMetricInputField.text;
+        customMetricPanel.SetActive(false);
+        MetricUpdateNeeded?.Invoke(customMetric);
+
+    }
+
+    public string GetCustomMetricName()
+    {
+        return customMetric;
+    }
+
+
 
     public string GetTargetValue()
     {
@@ -218,6 +241,9 @@ public class TaskTypeComponents : MonoBehaviour
 
         createTaskScrollRect.verticalNormalizedPosition = 1;
 
+        customMetricInputField.text = "";
+        customMetric = "";
+
     }
 
     private void AddArrayToList(List<TMP_InputField> _list, TMP_InputField[] _array)
@@ -242,6 +268,11 @@ public class TaskTypeComponents : MonoBehaviour
         maxComponents.targetValue_InputField.text = _mtd.targetValue.ToString();
         maxComponents.pointsPerOneMetric_InputField.text = _mtd.pointsGainedPerOne.ToString();
 
+        if(_mtd.metric == AppManager.TaskMetricType.Other)
+        {
+            customMetricInputField.text = _mtd.customMetricName;
+        }
+
         if(_mtd.overachievePercentBonus > 0)
         {
             maxComponents.overachieveBonus_Toggle.isOn = true;
@@ -261,7 +292,12 @@ public class TaskTypeComponents : MonoBehaviour
         minComponents.targetValue_InputField.text = _mtd.targetValue.ToString();
         minComponents.pointsForStayingUnderLimit_InputField.text = _mtd.pointsForStayingUnderTargetValue.ToString();
         minComponents.pointsLostPerOneMetric_InputField.text = _mtd.pointsLostPerOne.ToString();
-        
+
+
+        if (_mtd.metric == AppManager.TaskMetricType.Other)
+        {
+            customMetricInputField.text = _mtd.customMetricName;
+        }
 
         if (_mtd.underTargetValuePercentBonus > 0)
         {
@@ -296,7 +332,12 @@ public class TaskTypeComponents : MonoBehaviour
         optimumComponents.pointsForOptimumValue_InputField.text = _otd.pointsForOptimum.ToString();
         optimumComponents.pointsLostPerOneMetricDifference_InputField.text = _otd.pointsLostPerOneDifference.ToString();
 
-        if(_otd.streakStartsAfterDays > 0)
+        if (_otd.metric == AppManager.TaskMetricType.Other)
+        {
+            customMetricInputField.text = _otd.customMetricName;
+        }
+
+        if (_otd.streakStartsAfterDays > 0)
         {
             optimumComponents.streak_Toggle.isOn = true;
             optimumComponents.streakStartsAfterDays_InputField.text = _otd.streakStartsAfterDays.ToString();
@@ -305,6 +346,11 @@ public class TaskTypeComponents : MonoBehaviour
 
     public void EditMode_SetIntervalDataComponents(IntervalTaskData _itd)
     {
+        if (_itd.metric == AppManager.TaskMetricType.Other)
+        {
+            customMetricInputField.text = _itd.customMetricName;
+        }
+
         EditMode_AddIntervals(_itd.intervals);
     }
     
@@ -404,6 +450,12 @@ public class TaskTypeComponents : MonoBehaviour
             _bonusPercent,
             _streakStartsAfterDays);
 
+        if(_maximumTaskData.metric == AppManager.TaskMetricType.Other)
+        {
+            _maximumTaskData.customMetricName = customMetric;
+        }
+        
+
         return _maximumTaskData;
     }
 
@@ -465,6 +517,11 @@ public class TaskTypeComponents : MonoBehaviour
             int.Parse(minComponents.pointsLostPerOneMetric_InputField.text),
             _bonusPercent,
             _streakStartsAfterDays);
+
+        if (_minimumTaskData.metric == AppManager.TaskMetricType.Other)
+        {
+            _minimumTaskData.customMetricName = customMetric;
+        }
 
         return _minimumTaskData;
     }
@@ -542,6 +599,11 @@ public class TaskTypeComponents : MonoBehaviour
             (AppManager.TaskMetricType)optimumComponents.metric_Dropdown.value,
             _streakStartsAfterDays);
 
+        if (_optimumTaskData.metric == AppManager.TaskMetricType.Other)
+        {
+            _optimumTaskData.customMetricName = customMetric;
+        }
+
         return _optimumTaskData;
     }
 
@@ -570,6 +632,11 @@ public class TaskTypeComponents : MonoBehaviour
         IntervalTaskData _intervalTaskData = new IntervalTaskData("EMPTY",
             _intervals.ToArray(),
             (AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
+
+        if (_intervalTaskData.metric == AppManager.TaskMetricType.Other)
+        {
+            _intervalTaskData.customMetricName = customMetric;
+        }
 
         return _intervalTaskData;
     }
@@ -630,17 +697,46 @@ public class TaskTypeComponents : MonoBehaviour
 
     public void RemoteCall_IntervalMetricDropdownChanged()
     {
-        for(int i = 0; i < intervalComponents.intervalSummaries.Count;i++)
+        if (intervalComponents.metric_Dropdown.value == (int)AppManager.TaskMetricType.Other)
         {
-            intervalComponents.intervalSummaries[i].UpdateMetric((AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
+            for (int i = 0; i < intervalComponents.intervalSummaries.Count; i++)
+            {
+                intervalComponents.intervalSummaries[i].UpdateMetric(customMetric);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < intervalComponents.intervalSummaries.Count; i++)
+            {
+                intervalComponents.intervalSummaries[i].UpdateMetric((AppManager.TaskMetricType)intervalComponents.metric_Dropdown.value);
+            }
         }
 
         MetricUpdateNeeded?.Invoke(GetIntervalMetric());
+
+        if (intervalComponents.metric_Dropdown.value == (int)AppManager.TaskMetricType.Other)
+        {
+            customMetricPanel.SetActive(true);
+            customMetricInputField.OnSelect(new BaseEventData(EventSystem.current));
+        }
     }
 
     public void RemoteCall_NonIntervalMetricDropdownChanged()
     {
-        MetricUpdateNeeded?.Invoke(GetNonIntervalMetric());
+        if (maxComponents.metric_Dropdown.value == (int)AppManager.TaskMetricType.Other)
+        {
+            MetricUpdateNeeded?.Invoke(customMetric);
+        }
+        else
+        {
+            MetricUpdateNeeded?.Invoke(GetNonIntervalMetric());
+        }
+
+        if (maxComponents.metric_Dropdown.value == (int)AppManager.TaskMetricType.Other)
+        {
+            customMetricPanel.SetActive(true);
+            customMetricInputField.OnSelect(new BaseEventData(EventSystem.current));
+        }
     }
 
     public void RemoteCall_TargetValueChanged()
@@ -693,5 +789,7 @@ public class TaskTypeComponents : MonoBehaviour
 
         return true;
     }
+
+   
     
 }

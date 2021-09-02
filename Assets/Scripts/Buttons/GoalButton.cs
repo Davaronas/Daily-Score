@@ -54,6 +54,8 @@ public class GoalButton : BehaviourButton
                 image.color = Color.white;
 
                 SoundManager.PlaySound2();
+
+                Handheld.Vibrate();
             }
         }
     }

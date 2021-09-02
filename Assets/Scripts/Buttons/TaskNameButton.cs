@@ -5,23 +5,26 @@ using TMPro;
 using UnityEngine.UI;
 
 public class TaskNameButton : BehaviourButton
-{ 
+{
+    [SerializeField] private CategorySelectableBarCharts chartType;
+
     [HideInInspector] public string heldName = "";
     private TMP_Text nameText = null;
-    private Image selectedBackground = null;
+    [SerializeField] private Image selectedBackground = null;
 
     private StatisticCalculator2 statCalc = null;
 
     private SubmenuBroadcaster categorySelectorBroadcaster = null;
 
-    public void SetName(string _name, SubmenuBroadcaster _smb)
+    public void SetName(string _name, SubmenuBroadcaster _smb, CategorySelectableBarCharts _category)
     {
         categorySelectorBroadcaster = _smb;
+
+        chartType = _category;
 
         AppManager.OnBarChartCategorySelected += CategorySelectedCallback;
 
         nameText = GetComponent<TMP_Text>();
-        selectedBackground = GetComponentInChildren<Image>();
         statCalc = FindObjectOfType<StatisticCalculator2>();
 
         selectedBackground.enabled = false;
@@ -54,22 +57,33 @@ public class TaskNameButton : BehaviourButton
     {
         if (!categorySelectorBroadcaster.isBeingDragged)
         {
-            statCalc.SetSelectedTaskName(heldName);
-            AppManager.BarChartCategorySelected(heldName);
+            if (chartType == CategorySelectableBarCharts.BarChart1)
+            {
+                statCalc.SetSelectedTaskName_BarChart1(heldName);
+            }
+            else if(chartType == CategorySelectableBarCharts.RollingAverage)
+            {
+                statCalc.SetSelectedTaskName_RollingAverage(heldName);
+            }
+            AppManager.BarChartCategorySelected(heldName, chartType);
 
             SoundManager.PlaySound2();
         }
     }
 
-    private void CategorySelectedCallback(string _name)
+    private void CategorySelectedCallback(string _name, CategorySelectableBarCharts _chart)
     {
-        if(heldName == _name)
+
+        if (_chart == chartType)
         {
-            selectedBackground.enabled = true;
-        }
-        else
-        {
-            selectedBackground.enabled = false;
+            if (heldName == _name)
+            {
+                selectedBackground.enabled = true;
+            }
+            else
+            {
+                selectedBackground.enabled = false;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@
 
 __ - need testing
 * - done
+? - not sure if needed
 
 Scrolling goals content through goals as well*
 Create tasks*
@@ -49,9 +50,15 @@ delete goal*
 delet task*
 streak*
 back: close day selector, close info panel, close error panel*
-
-
+two names shouldn't be the same*
 remove reset task points from all history*__
+goal törlés fix idõ*
+goal and task name length 25 character*
+show goals and tasks separately on bar chart*
+rezgés törlésnél*
+tip bug*
+
+
 
 
 Setting up sprites
@@ -69,7 +76,6 @@ leave toggle or switch to interaction handler ?
 
 
 
-goal törlés fix idõ*
 
 
 
@@ -84,9 +90,7 @@ click on highscores will turn to other types of highscores
 daily score on top
 
 
-goal and task name length 25 character
 
-show goals and tasks separately on bar chart
 
 
 number restrictions on task values?
@@ -95,7 +99,6 @@ notification icons
 
 
 
-two names shouldn't be the same
 notificaton don't fire when task is already done ?
 second tip only unlock when video is succesfully watched
 
@@ -105,7 +108,6 @@ infok, unity fiók, error forditások, task szövegek
 interval: at least one interval + error message
 
 
-rezgés törlésnél
 
 ongoal delete: save goals, calculate stats
 
@@ -118,7 +120,6 @@ nagyikon pikto, kisikon daily score
 
 bónusz, streak bug ?
 
-tip bug
 
 loading screen
 
@@ -129,8 +130,43 @@ tört számot lehessen beirni
 
 top 3 weekly monthly összeadott*
 
-7 napos csúszóátlag
+7 napos csúszóátlag*
 
 settings: hang, takarékos mód, nightmode
 
 other mértékegység beirható
+
+Line2DRenderer ha pixelesek a vonalak
+
+chart descriptions
+
+interval kész ha bármilyekbe benne van
+
+üres nap 0 pont*
+
+rest day rest day kiirva diagramba függõlegesen
+
+task inaktív ha rest day
+
+day names update on language change on charts*
+
+
+NEXT BUILD
+--------------
+power saving 30 fps vagy 60 fps target, ha lent van a battery szól*
+
+audio*
+nyelv*
+tip bug*
+tört szám*
+mai nap számolás diagramoknál : bcoverall,
+other kiirható*
+
++ a végén a design
+--------------
+
+bools are already done when you start -> fix
+
+reset, rest day, nightmode, notifications
+
+task selected on charts should calculate today

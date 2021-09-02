@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
 public class Task : MonoBehaviour
 {
@@ -153,7 +154,14 @@ public class Task : MonoBehaviour
         currentValueInputField.gameObject.SetActive(true);
         targetValueText.gameObject.SetActive(true);
 
-          targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        if (_mtd.metric != AppManager.TaskMetricType.Other)
+        {
+            targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        }
+        else
+        {
+            targetValueText.text = "/" + _mtd.targetValue + " " + _mtd.customMetricName;
+        }
 
       
 
@@ -181,7 +189,14 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(true);
 
 
-        targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        if (_mtd.metric != AppManager.TaskMetricType.Other)
+        {
+            targetValueText.text = "/" + _mtd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_mtd.metric);
+        }
+        else
+        {
+            targetValueText.text = "/" + _mtd.targetValue + " " + _mtd.customMetricName;
+        }
 
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
@@ -231,7 +246,14 @@ public class Task : MonoBehaviour
         targetValueText.gameObject.SetActive(true);
 
 
-        targetValueText.text = "/" + _otd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_otd.metric);
+        if (_otd.metric != AppManager.TaskMetricType.Other)
+        {
+            targetValueText.text = "/" + _otd.targetValue + " " + RuntimeTranslator.TranslateTaskMetricType(_otd.metric);
+        }
+        else
+        {
+            targetValueText.text = "/" + _otd.targetValue + " " + _otd.customMetricName;
+        }
 
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
@@ -262,20 +284,69 @@ public class Task : MonoBehaviour
     }
 
 
+    public void RemoteCall_CheckEnteredCharacter()
+    {
+        if (taskData == null || !allowValueChange) { return; }
+
+        if (currentValueInputField.text.Length >0)
+        {
+
+            int _index = currentValueInputField.text.Length - 1;
+            char _last = currentValueInputField.text[_index];
+
+            char[] _cArray = currentValueInputField.text.ToCharArray();
+            int _commas = 0;
+            for (int i = 0; i < _cArray.Length; i++)
+            {
+                if (i == 0)
+                {
+                    if (_cArray[0] == '.' || _cArray[i] == ',')
+                    {
+                        currentValueInputField.text = "";
+                        currentValueInputField.OnDeselect(new BaseEventData(EventSystem.current));
+                        AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                        break;
+                    }
+                }
+
+                if(_cArray[i] == '.' || _cArray[i] == ',')
+                {
+                    _commas++;
+                    if(_commas > 1)
+                    {
+                        currentValueInputField.text = "";
+                        currentValueInputField.OnDeselect(new BaseEventData(EventSystem.current));
+                        AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                        break;
+                    }
+                }
+            }
+          //  int _commaCount = currentValueInputField.text.T
+            
+            print(_last);
+            if(!char.IsDigit(_last) && _last != '.' && _last != ',')
+            {
+                  currentValueInputField.text = currentValueInputField.text.Remove(_index, 1);
+            }
+        }
+    }
+
     public void RemoteCall_TaskEdited()
     {
         
         if(taskData == null || !allowValueChange) { return; } // For some reason this runs earlier than FeedData, investigate further
 
         bool _hasDifference = false;
-        int _parse = 0;
+        string _stringToParse = currentValueInputField.text;
+        _stringToParse = _stringToParse.Replace(".", ",");
+        float _parse = 0;
 
         switch (taskData.type)
         {
             case AppManager.TaskType.Maximum:
                 if (currentValueInputField.text != "")
                 {
-                    _parse = int.Parse(currentValueInputField.text);
+                    _parse = float.Parse(_stringToParse);
                     if (mxtd.current != _parse) { _hasDifference = true; }
                     mxtd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mxtd);
@@ -285,7 +356,7 @@ public class Task : MonoBehaviour
             case AppManager.TaskType.Minimum:
                 if (currentValueInputField.text != "")
                 {
-                    _parse = int.Parse(currentValueInputField.text);
+                    _parse = float.Parse(_stringToParse);
                     if (mntd.current != _parse) { _hasDifference = true; }
                     mntd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mntd);
@@ -296,12 +367,11 @@ public class Task : MonoBehaviour
                 _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
-                print("BOOL FIRED");
                 break;
             case AppManager.TaskType.Optimum:
                 if (currentValueInputField.text != "")
                 {
-                    _parse = int.Parse(currentValueInputField.text);
+                    _parse = float.Parse(_stringToParse);
                     if (otd.current != _parse) { _hasDifference = true; }
                     otd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(otd);
@@ -311,7 +381,7 @@ public class Task : MonoBehaviour
             case AppManager.TaskType.Interval:
                 if (currentValueInputField.text != "")
                 {
-                    _parse = int.Parse(currentValueInputField.text);
+                    _parse = float.Parse(_stringToParse);
                     if (itd.current != _parse) { _hasDifference = true; }
                     itd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(itd);

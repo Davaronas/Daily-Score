@@ -208,6 +208,9 @@ public class GoalManager : MonoBehaviour
         if (!isSpriteSelected)
         { AppManager.ErrorHappened(ErrorMessages.SymbolNotSelected_CreateGoalPanel()); return; }
 
+        if(IsNameAlreadyTaken(enteredName))
+        { AppManager.ErrorHappened(ErrorMessages.NameIsTaken()); return; }    
+
 
         Goal _newGoal =
         Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
@@ -327,6 +330,30 @@ public class GoalManager : MonoBehaviour
             }
         }
         return _gd;
+    }
+
+    public bool IsNameAlreadyTaken(string _name)
+    {
+        GoalData[] _gds = GetExistingGoals();
+
+
+        for (int i = 0; i < _gds.Length; i++)
+        {
+            if(_gds[i].name == _name)
+            {
+                return true;
+            }
+
+            for (int j = 0; j < _gds[i].tasks.Count; j++)
+            {
+                if(_gds[i].tasks[j].name == _name)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
    
 }

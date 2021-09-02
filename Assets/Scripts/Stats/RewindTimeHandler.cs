@@ -25,7 +25,7 @@ public class RewindTimeHandler : MonoBehaviour
 
         if (rc == RewindableCharts.OverallBarChart)
         {
-            if (!statCalc.CanRewindBarChart(0, 0))
+            if (!statCalc.CanRewindBarChartTop3(0, 0))
             {
                 rewindButton.color = Color.grey;
             }
@@ -47,18 +47,19 @@ public class RewindTimeHandler : MonoBehaviour
     {
         if (rc == RewindableCharts.OverallBarChart)
         {
-            if (statCalc.CanRewindBarChart(statManager.BarChartValue(), rewind))
+            if (statCalc.CanRewindBarChartOverall(statManager.BarChartValue(), rewind))
             {
                 rewind--;
                 statManager.RewindChangedBarChart(rewind);
                 forwardButton.color = Color.white;
+                print(statManager.BarChartValue());
 
                 SoundManager.PlaySound3();
             }
 
 
 
-            if (statCalc.CanRewindBarChart(statManager.BarChartValue(), rewind))
+            if (statCalc.CanRewindBarChartOverall(statManager.BarChartValue(), rewind))
             {
                 rewindButton.color = Color.white;
             }
@@ -100,7 +101,7 @@ public class RewindTimeHandler : MonoBehaviour
         {
             if (statManager.BarChartTop3Value() != 3)
             {
-                if (statCalc.CanRewindBarChart(statManager.BarChartTop3Value(), rewind))
+                if (statCalc.CanRewindBarChartTop3(statManager.BarChartTop3Value(), rewind))
                 {
                     rewind--;
                     statManager.RewindChangedBarChartTop3(rewind);
@@ -109,7 +110,7 @@ public class RewindTimeHandler : MonoBehaviour
                     SoundManager.PlaySound3();
                 }
 
-                if (statCalc.CanRewindBarChart(statManager.BarChartTop3Value(), rewind))
+                if (statCalc.CanRewindBarChartTop3(statManager.BarChartTop3Value(), rewind))
                 {
                     rewindButton.color = Color.white;
                 }
@@ -168,7 +169,7 @@ public class RewindTimeHandler : MonoBehaviour
 
         if (rc == RewindableCharts.OverallBarChart || rc == RewindableCharts.Top3BarChart)
         {
-            if (!statCalc.CanRewindBarChart(0, 0))
+            if (!statCalc.CanRewindBarChartTop3(0, 0))
             {
                 rewindButton.color = Color.grey;
             }

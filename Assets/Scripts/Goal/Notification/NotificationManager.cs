@@ -207,6 +207,7 @@ public class NotificationManager : MonoBehaviour
         notification.Text = _text;
         notification.FireTime = _fireTime;
         notification.SmallIcon = "icon_" + _spriteId;
+        notification.LargeIcon = "iconl_" + _spriteId;
         
 
         NotificationData notificationData = new NotificationData();
@@ -234,8 +235,9 @@ public class NotificationManager : MonoBehaviour
         notification.Text = _data.text;
         notification.FireTime = Convert.ToDateTime(_data.fireTime).AddDays(_data.resetIntervalDays);
         notification.SmallIcon = "icon_" + _data.spriteId;
+        notification.LargeIcon = "iconl_" + _data.spriteId;
 
-     
+
 
         _data.id = AndroidNotificationCenter.SendNotification(notification, "dailyscore_id");
 

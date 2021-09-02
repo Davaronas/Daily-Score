@@ -30,7 +30,7 @@ public class OpenSelectableCategoriesButton : BehaviourButton
         SoundManager.PlaySound2();
     }
 
-    private void ChangeStateCallback(string _n)
+    private void ChangeStateCallback(string _n, CategorySelectableBarCharts _c)
     {
         InvokeChangeState();
     }

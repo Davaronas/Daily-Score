@@ -11,6 +11,7 @@ public class BarChartPrefabUtility : MonoBehaviour
     [SerializeField] private TMP_Text amountText;
     [SerializeField] private TMP_Text dayText;
     [SerializeField] private Image picto;
+    [SerializeField] private RectTransform endPoint;
 
 
     public void SetProperties(Color _color, float _amount, string _when)
@@ -60,5 +61,39 @@ public class BarChartPrefabUtility : MonoBehaviour
     public void SetSize(float _size)
     {
         rectTransform.sizeDelta = new Vector2(rectTransform.rect.x, _size);
+    }
+
+    public Vector2 GetEndPoint()
+    {
+        if(IsValidPosition(endPoint.position))
+        {
+            return endPoint.position;
+
+        }
+        else
+        {
+            return new Vector2(0, 0);
+        }
+       
+    }
+
+    private bool IsValidPosition(Vector3 _pos)
+    {
+        if (float.IsNaN(_pos.x))
+        {
+            return false;
+        }
+
+        if (float.IsNaN(_pos.y))
+        {
+            return false;
+        }
+
+        if (float.IsNaN(_pos.z))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

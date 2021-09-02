@@ -35,7 +35,7 @@ public class SingleColorPicker : BehaviourButton
         }
 
         rectTransform = GetComponent<RectTransform>();
-        originalSize = rectTransform.sizeDelta;
+       
 
         // four corner gradient?
 
@@ -55,6 +55,12 @@ public class SingleColorPicker : BehaviourButton
                 col[0] = image.color;
             }
         }
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+        originalSize = rectTransform.sizeDelta;
     }
 
     protected override void OnDestroy()
@@ -78,7 +84,12 @@ public class SingleColorPicker : BehaviourButton
             goalManager.SetSelectedColor(col);
         }
 
+
+        SoundManager.PlaySound2();
+
         AppManager.GoalColorPicked(this);
+
+        
     }
 
     private void OnColorPicked(SingleColorPicker _scp)

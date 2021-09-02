@@ -153,7 +153,7 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(MaximumTaskData _mtd)
     {
-        int _amount;
+        float _amount;
         if (_mtd.current > _mtd.targetValue && _mtd.overachievePercentBonus > 0)
         {
             _amount = Mathf.RoundToInt(_mtd.current * _mtd.pointsGainedPerOne * (1 + ((float)_mtd.overachievePercentBonus / 100)));
@@ -195,7 +195,7 @@ public static class TaskPointCalculator
             }
         }
 
-        return _amount;
+        return Mathf.FloorToInt(_amount);
     }
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd, out float _floatCurrent)
@@ -228,7 +228,7 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd)
     {
-        int _amount;
+        float _amount;
         if (_mtd.current == _mtd.targetValue)
         {
             _amount = _mtd.pointsForStayingUnderTargetValue;
@@ -281,7 +281,7 @@ public static class TaskPointCalculator
             }
         }
 
-        return _amount;
+        return Mathf.FloorToInt(_amount);
     }
 
     public static int GetPointsFromCurrentValue(BooleanTaskData _btd)
@@ -329,7 +329,7 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(OptimumTaskData _otd)
     {
-        int _amount = 0;
+        float _amount = 0;
 
         if(_otd.current == _otd.targetValue)
         {
@@ -372,7 +372,7 @@ public static class TaskPointCalculator
             }
         }
 
-        return _amount;
+        return Mathf.FloorToInt(_amount);
     }
 
     public static int GetPointsFromCurrentValue(IntervalTaskData _itd)

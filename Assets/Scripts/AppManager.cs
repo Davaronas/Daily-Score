@@ -293,8 +293,9 @@ public class MaximumTaskData : TaskData
     }
 
     public int targetValue;
-    public int current;
+    public float current;
     public AppManager.TaskMetricType metric;
+    public string customMetricName;
     public int pointsGainedPerOne;
     public int overachievePercentBonus;
     public int streakStartsAfterDays;
@@ -320,8 +321,9 @@ public class MinimumTaskData : TaskData
     }
 
     public AppManager.TaskMetricType metric;
+    public string customMetricName;
     public int targetValue;
-    public int current;
+    public float current;
     public int pointsForStayingUnderTargetValue;
     public int pointsLostPerOne;
     public int underTargetValuePercentBonus;
@@ -365,8 +367,9 @@ public class OptimumTaskData : TaskData
     }
 
     public int targetValue;
-    public int current;
+    public float current;
     public AppManager.TaskMetricType metric;
+    public string customMetricName;
     public int pointsForOptimum;
     public int pointsLostPerOneDifference;
     public int streakStartsAfterDays;
@@ -383,8 +386,9 @@ public class IntervalTaskData : TaskData
         intervals = _intervals;
     }
 
-    public int current;
+    public float current;
     public AppManager.TaskMetricType metric;
+    public string customMetricName;
     public Interval[] intervals;
 }
 
@@ -653,7 +657,27 @@ public static string DaysNotSelected_CreateTaskPanel()
         }
     }
 
-    
+    public static string NameIsTaken()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return English.NameIsTaken;
+
+            case AppManager.Languages.Magyar:
+                return Magyar.NameIsTaken;
+
+            case AppManager.Languages.Deutsch:
+                return Deutsch.NameIsTaken;
+
+
+            default:
+                return "";
+
+        }
+    }
+
+
 
     public static class English
     {
@@ -726,6 +750,7 @@ public class AppManager : MonoBehaviour
    [SerializeField] private GameObject createTaskPanel;
    [SerializeField] private GameObject settingsPanel;
     [SerializeField] private ErrorWindow errorPanel;
+    [SerializeField] private GameObject askUserToTurnOnPowerSavingModePanel;
    [Space]
    [Space]
    [SerializeField] private Sprite[] symbols_e;
@@ -744,7 +769,7 @@ public class AppManager : MonoBehaviour
     public string testLastLoginTime;
     // yyyy. mm. dd. 0:00:00
 
-
+   
 
     private static GoalManager goalManager = null;
    private TaskManager taskManager = null;
@@ -758,10 +783,13 @@ public class AppManager : MonoBehaviour
 
     public static bool isNightModeOn = false;
     public static bool isGold = false;
+    public static bool isPowerSavingModeOn = false;
+
+    public static bool askedUserAboutPowerSavingMode = false;
 
 
 
-   public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Calorie, Other, ENUM_END };
+    public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Calorie, Other, ENUM_END };
 
    // all static events should be here
 
@@ -778,7 +806,8 @@ public class AppManager : MonoBehaviour
     public static event Action<string> OnErrorHappened;
     public static event Action OnNewDayStartedDuringRuntime;
     public static event Action OnGoalDeleted;
-    public static event Action<string> OnBarChartCategorySelected;
+    public static event Action<string, CategorySelectableBarCharts> OnBarChartCategorySelected;
+    public static event Action onPowerSavingModeChanged;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -819,6 +848,19 @@ public class AppManager : MonoBehaviour
 
         lastLogin = Convert.ToDateTime(PlayerPrefs.GetString("lastLogin", DateTime.Now.ToString()));
         symbols = symbols_e;
+
+        switch(PlayerPrefs.GetInt("PowerSaving",0))
+        {
+            case 0:
+                isPowerSavingModeOn = false;
+                Application.targetFrameRate = 9999;
+                break;
+
+            case 1:
+                isPowerSavingModeOn = true;
+                Application.targetFrameRate = 60;
+                break;
+        }
     }
 
     private void OnDestroy()
@@ -1086,12 +1128,12 @@ public class AppManager : MonoBehaviour
 
                 // add 0 points for each missed day
 
-                /*
+                
                 for(int o = 1; o < (_today - lastLogin).Days;o++)
                 {
-                    _goaldatas[i].AddDailyScore(0, lastLogin.AddDays(o));
+                    _goaldatas[i].AddDailyScore(0, lastLogin.AddDays(o), TaskPointCalculator.GetTargetValuesReached(_goaldatas[i]));
                 }
-                */
+                
             }
         }
     }
@@ -1116,6 +1158,7 @@ public class AppManager : MonoBehaviour
             {
                 
                 _gd.dailyScores.Clear();
+                /*
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60),new bool[] { false,true,true,true,false}));
                 _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40), new bool[] { false, true, true, true, false }));
@@ -1157,9 +1200,12 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4), new bool[] { false, true, true, true, false }));
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(100, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-3)));
-                _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
+                */
+              // _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
+                
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
+                
                 
             }
             
@@ -1190,6 +1236,7 @@ public class AppManager : MonoBehaviour
         createTaskPanel.SetActive(false);
         settingsPanel.SetActive(false);
         errorPanel.gameObject.SetActive(false);
+        askUserToTurnOnPowerSavingModePanel.SetActive(false);
 
 
         // set language if already saved one
@@ -1199,8 +1246,8 @@ public class AppManager : MonoBehaviour
 
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
+        StartCoroutine(CheckBatteryStatus());
 
-        Application.targetFrameRate = 999;
         QualitySettings.vSyncCount = 0;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
     }
@@ -1211,6 +1258,36 @@ public class AppManager : MonoBehaviour
 
         lastLogin = DateTime.Now;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+    }
+
+    public static void SetPowerSavingMode(bool _state)
+    {
+        if(_state)
+        {
+            isPowerSavingModeOn = true;
+            PlayerPrefs.SetInt("PowerSaving", 1);
+            Application.targetFrameRate = 60;
+        }
+        else
+        {
+            isPowerSavingModeOn = false;
+            PlayerPrefs.SetInt("PowerSaving", 0);
+            Application.targetFrameRate = 9999;
+        }
+
+        PowerSavingModeChanged();
+
+        SoundManager.PlaySound2();
+    }
+
+    public static void PowerSavingModeChanged()
+    {
+        onPowerSavingModeChanged?.Invoke();
+    }
+
+    public static void RemoteCall_SetPowerSavingMode(bool _state)
+    {
+        SetPowerSavingMode(_state);
     }
 
     private void Update()
@@ -1265,6 +1342,11 @@ public class AppManager : MonoBehaviour
             return;
         }
 
+        if(askUserToTurnOnPowerSavingModePanel.activeSelf)
+        {
+            askUserToTurnOnPowerSavingModePanel.SetActive(false);
+            return;
+        }
 
 
         switch (GetAppLayer())
@@ -1325,6 +1407,7 @@ public class AppManager : MonoBehaviour
     public static void ErrorHappened(string _error)
     {
         OnErrorHappened?.Invoke(_error);
+        Handheld.Vibrate();
     }
 
     public void OnErrorHappenedCallback(string _error)
@@ -1403,9 +1486,9 @@ public class AppManager : MonoBehaviour
         
     }
 
-    public static void BarChartCategorySelected(string _name)
+    public static void BarChartCategorySelected(string _name, CategorySelectableBarCharts _chart)
     {
-        OnBarChartCategorySelected?.Invoke(_name);
+        OnBarChartCategorySelected?.Invoke(_name, _chart);
     }
 
     private void NewTaskAddedCallback()
@@ -1631,4 +1714,43 @@ public class AppManager : MonoBehaviour
         }
     }
 
+
+
+    IEnumerator CheckBatteryStatus()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(30);
+
+            if (!isPowerSavingModeOn)
+            {
+                if (SystemInfo.batteryLevel <= 0.25f)
+                {
+                    if (!askedUserAboutPowerSavingMode)
+                    {
+                        if (!askUserToTurnOnPowerSavingModePanel.activeSelf)
+                        {
+                            Show_AskUserToTurnOnPowerSavingModeOn_Panel();
+                            askedUserAboutPowerSavingMode = true;
+                        }
+
+
+                    }
+                }
+            }
+        }
+    }
+
+    public void RemoteCall_Close_AskUserToTurnOnPowerSavingModeOn_Panel()
+    {
+        askUserToTurnOnPowerSavingModePanel.SetActive(false);
+
+        SoundManager.PlaySound2();
+    }
+
+
+    private void Show_AskUserToTurnOnPowerSavingModeOn_Panel()
+    {
+        askUserToTurnOnPowerSavingModePanel.SetActive(true);
+    }
 }

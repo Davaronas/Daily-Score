@@ -11,7 +11,7 @@ public class DayToggle : MonoBehaviour
 
     private TaskManager taskManager;
 
-    private bool ignoreSendMessage = false;
+   // private bool ignoreSendMessage = false;
 
     private void Awake()
     {
@@ -20,20 +20,20 @@ public class DayToggle : MonoBehaviour
 
     public void RemoteCall_SetDay()
     {
-        if (!ignoreSendMessage)
+       // if (!ignoreSendMessage)
         {
             taskManager.SetActiveDays(day, toggle.isOn);
         }
-        else
+     //   else
         {
-            ignoreSendMessage = false;
+         //   print("Blocked");
+         //   ignoreSendMessage = false;
         }
     }
 
     public void TurnOff()
     {
         toggle.isOn = false;
-        ignoreSendMessage = true;
     }
 
     public void TurnOn()
@@ -45,4 +45,12 @@ public class DayToggle : MonoBehaviour
     {
         return day;
     }
+
+    private void OnDisable()
+    {
+       // ignoreSendMessage = true;
+    }
+
+ 
 }
+

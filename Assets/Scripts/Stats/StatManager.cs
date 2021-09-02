@@ -10,21 +10,27 @@ public class StatManager : MonoBehaviour
     [SerializeField] private TMP_Dropdown pieChart1_dropdown;
     [SerializeField] private TMP_Dropdown barChartTop3_dropdown;
 
+
     private StatisticCalculator2 statCalculator = null;
 
     [SerializeField] private RewindTimeHandler rth_barChart = null;
     [SerializeField] private RewindTimeHandler rth_pieChart = null;
     [SerializeField] private RewindTimeHandler rth_barChartTop3 = null;
 
+    private ActivityRate activityRateChart = null;
+    private TargetValuesReached targetValuesReachedChart = null;
+
+
     private void Awake()
     {
         statCalculator = FindObjectOfType<StatisticCalculator2>();
-        AppManager.OnTaskValueChanged += UpdateIfDailyIsSelected;
+        AppManager.OnTaskValueChanged += UpdateChartsInvoke;
         AppManager.OnLanguageChanged += LanguageCallback;
         AppManager.OnBarChartCategorySelected += BarChartCategorySelected;
 
 
-
+        activityRateChart = FindObjectOfType<ActivityRate>();
+        targetValuesReachedChart = FindObjectOfType<TargetValuesReached>();
 
 
 
@@ -48,7 +54,7 @@ public class StatManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        AppManager.OnTaskValueChanged -= UpdateIfDailyIsSelected;
+        AppManager.OnTaskValueChanged -= UpdateChartsInvoke;
         AppManager.OnLanguageChanged -= LanguageCallback;
         AppManager.OnBarChartCategorySelected -= BarChartCategorySelected;
 
@@ -92,22 +98,19 @@ public class StatManager : MonoBehaviour
         barChartTop3_dropdown.value = 1;
     }
 
-    private void UpdateIfDailyIsSelected(TaskData _data)
+    private void UpdateChartsInvoke(TaskData _data)
     {
-        Invoke(nameof(UpdateDailyCharts), Time.deltaTime);
+        Invoke(nameof(UpdateCharts), Time.deltaTime);
     }
 
-    private void UpdateDailyCharts()
+    private void UpdateCharts()
     {
-        if (pieChart1_dropdown.value == 0)
-        {
-            statCalculator.PieChartCalculation(rth_pieChart.GetCurrentRewind(), 0);
-        }
-
-        if(barChartTop3_dropdown.value == 0)
-        {
-            statCalculator.Top3BarChartCalculation(0, rth_barChartTop3.GetCurrentRewind());
-        }
+        statCalculator.BarChartCalculation(rth_barChart.rewind, barChart1_dropdown.value);
+        statCalculator.PieChartCalculation(rth_pieChart.rewind, pieChart1_dropdown.value);
+        statCalculator.Top3BarChartCalculation(barChartTop3_dropdown.value, rth_barChartTop3.rewind);
+        activityRateChart.CalculateActivityRate();
+        targetValuesReachedChart.CalculateTargetValuesReached();
+        statCalculator.RollingAverageBarChartCalculation();
     }
 
     public void RemoteCall_BarChartValueChanged()
@@ -154,9 +157,16 @@ public class StatManager : MonoBehaviour
 
 
 
-    public void BarChartCategorySelected(string _n)
+    public void BarChartCategorySelected(string _n, CategorySelectableBarCharts _c)
     {
-        statCalculator.BarChartCalculation(rth_barChart.GetCurrentRewind(), barChart1_dropdown.value);
+        if (_c == CategorySelectableBarCharts.BarChart1)
+        {
+            statCalculator.BarChartCalculation(rth_barChart.GetCurrentRewind(), barChart1_dropdown.value);
+        }
+        else if(_c == CategorySelectableBarCharts.RollingAverage)
+        {
+            statCalculator.RollingAverageBarChartCalculation();
+        }
     }
 
     public void RewindChangedBarChart(int _rewind)

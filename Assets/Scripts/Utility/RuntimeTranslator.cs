@@ -78,7 +78,7 @@ public static class RuntimeTranslator
                     return AppManager.TaskMetricType.Minutes.ToString();
                     
                 case AppManager.TaskMetricType.Other:
-                    return ""; // AppManager.TaskMetricType.Other.ToString();
+                    return  AppManager.TaskMetricType.Other.ToString();
 
                 case AppManager.TaskMetricType.Mile:
                     return AppManager.TaskMetricType.Mile.ToString();
@@ -185,7 +185,7 @@ public static class RuntimeTranslator
                     return "Perc";
 
                 case AppManager.TaskMetricType.Other:
-                    return "";//"Egyéb";
+                    return "Egyéb";
 
                 case AppManager.TaskMetricType.Mile:
                     return "Mérföld";
@@ -296,7 +296,7 @@ public static class RuntimeTranslator
                     return "Minute";
 
                 case AppManager.TaskMetricType.Other:
-                    return "";//"Andere";
+                    return "Andere";
 
                 case AppManager.TaskMetricType.Mile:
                     return "Meile";

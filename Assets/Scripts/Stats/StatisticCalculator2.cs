@@ -1,12 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
 using TMPro;
-using System.IO;
-using System.Threading.Tasks;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Linq;
+using UnityEngine;
 
 /// <summary>
 /// StatCalc version 2.8;
@@ -90,13 +86,17 @@ public class StatisticCalculator2 : MonoBehaviour
     /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     [SerializeField] private BarChartHolder barchart1;
     [SerializeField] private BarChartHolder barChartTop3;
+    [SerializeField] private BarChartHolder barChartRollingAverage;
 
     /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// 
 
 
-    private string selectedGoalName = "";
-    private string selectedTaskName = "";
+    private string selectedGoalName_BarChart1 = "";
+    private string selectedTaskName_BarChart1 = "";
+
+    private string selectedGoalName_RollingAverage = "";
+    private string selectedTaskName_RollingAverage = "";
 
     private void Awake()
     {
@@ -112,23 +112,44 @@ public class StatisticCalculator2 : MonoBehaviour
     }
 
 
-    public void SetSelectedGoalName(string _g)
+    public void SetSelectedGoalName_BarChart1(string _g)
     {
-        selectedGoalName = _g;
-        selectedTaskName = "";
+        selectedGoalName_BarChart1 = _g;
+        selectedTaskName_BarChart1 = "";
     }
 
 
-    public void SetSelectedTaskName(string _t)
+    public void SetSelectedTaskName_BarChart1(string _t)
     {
-        selectedTaskName = _t;
-        selectedGoalName = "";
+        selectedTaskName_BarChart1 = _t;
+        selectedGoalName_BarChart1 = "";
     }
 
-    public void EverythingSelected()
+    public void EverythingSelected_BarChart1()
     {
-        selectedGoalName = "";
-        selectedTaskName = "";
+        selectedGoalName_BarChart1 = "";
+        selectedTaskName_BarChart1 = "";
+    }
+
+
+
+    public void SetSelectedGoalName_RollingAverage(string _g)
+    {
+        selectedGoalName_RollingAverage = _g;
+        selectedTaskName_RollingAverage = "";
+    }
+
+
+    public void SetSelectedTaskName_RollingAverage(string _t)
+    {
+        selectedTaskName_RollingAverage = _t;
+        selectedGoalName_RollingAverage = "";
+    }
+
+    public void EverythingSelected_RollingAverage()
+    {
+        selectedGoalName_RollingAverage = "";
+        selectedTaskName_RollingAverage = "";
     }
 
 
@@ -339,31 +360,31 @@ public class StatisticCalculator2 : MonoBehaviour
                 {
                     case DayOfWeek.Monday:
                         weeklydata[0] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week0");
+                     //   print("Week0");
                         break;
                     case DayOfWeek.Tuesday:
                         weeklydata[1] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week1");
+                     //   print("Week1");
                         break;
                     case DayOfWeek.Wednesday:
                         weeklydata[2] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week2");
+                    //    print("Week2");
                         break;
                     case DayOfWeek.Thursday:
                         weeklydata[3] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week3");
+                     //   print("Week3");
                         break;
                     case DayOfWeek.Friday:
                         weeklydata[4] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week4");
+                      //  print("Week4");
                         break;
                     case DayOfWeek.Saturday:
                         weeklydata[5] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week5");
+                      //  print("Week5");
                         break;
                     case DayOfWeek.Sunday:
                         weeklydata[6] += currentselectedGoal.dailyScores[k].amount;
-                        print("Week6");
+                      //  print("Week6");
                         break;
                 }
             }
@@ -1034,8 +1055,55 @@ public class StatisticCalculator2 : MonoBehaviour
         RewindWeek(0);
     }
 
+    public bool CanRewindBarChartOverall(int _type, int _rewind)
+    {
 
-    public bool CanRewindBarChart(int _type, int _rewind)
+        StatLoad();
+
+        int _time = 0;
+        switch (_type)
+        {
+            case 0:
+                _time = 7;
+                break;
+            case 1:
+                _time = 30;
+                break;
+            default:
+
+                return false;
+        }
+
+        DateTime _smallest = Today;
+
+
+
+        for (int i = 0; i < GoalDATAS.Length; i++)
+        {
+            if (GoalDATAS[i].dailyScores.Count > 0)
+            {
+
+                if (GoalDATAS[i].dailyScores[0].GetDateTime().Date < _smallest)
+                {
+                    _smallest = GoalDATAS[i].dailyScores[0].GetDateTime().Date;
+                }
+
+            }
+        }
+
+
+        if (_smallest < Today.AddDays(_rewind * _time))
+        {
+            return true;
+        }
+        else
+            return false;
+
+
+    }
+
+
+    public bool CanRewindBarChartTop3(int _type, int _rewind)
     {
 
         StatLoad();
@@ -1090,7 +1158,6 @@ public class StatisticCalculator2 : MonoBehaviour
 
         int _time = 0;
 
-        print("Type " + _type);
 
         DateTime _smallest = Today;
 
@@ -1185,15 +1252,15 @@ public class StatisticCalculator2 : MonoBehaviour
     public void BarChartCalculation(int _rewind, int _w_Or_m)
     {
         StatCalculationFilter _f = StatCalculationFilter.All;
-        if (selectedGoalName == "" && selectedTaskName == "")
+        if (selectedGoalName_BarChart1 == "" && selectedTaskName_BarChart1 == "")
         {
             _f = StatCalculationFilter.All;
         }
-        else if (selectedGoalName != "")
+        else if (selectedGoalName_BarChart1 != "")
         {
             _f = StatCalculationFilter.Goal;
         }
-        else if (selectedTaskName != "")
+        else if (selectedTaskName_BarChart1 != "")
         {
             _f = StatCalculationFilter.Task;
         }
@@ -1239,7 +1306,7 @@ public class StatisticCalculator2 : MonoBehaviour
                             }
                             else if (_f == StatCalculationFilter.Goal)
                             {
-                                if (GoalDATAS[j].name == selectedGoalName)
+                                if (GoalDATAS[j].name == selectedGoalName_BarChart1)
                                 {
                                     if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - (i)))
                                     {
@@ -1257,7 +1324,7 @@ public class StatisticCalculator2 : MonoBehaviour
                 {
                     for (int l = 0; l < GoalDATAS[j].modifications.Count; l++)
                     {
-                        if (GoalDATAS[j].modifications[l].taskName == selectedTaskName)
+                        if (GoalDATAS[j].modifications[l].taskName == selectedTaskName_BarChart1)
                         {
                             if (GoalDATAS[j].modifications[l].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[j].modifications[l].GetDateTime().Date < Today.AddDays(_rewind * _time))
                             {
@@ -1278,6 +1345,20 @@ public class StatisticCalculator2 : MonoBehaviour
             }
         }
 
+        int _todayPoint = 0;
+        if(_rewind == 0)
+        {
+            for (int i = 0; i <  GoalDATAS.Length; i++)
+            {
+                for (int j = 0; j < GoalDATAS[i].tasks.Count; j++)
+                {
+                    if(GoalDATAS[i].tasks[j].isEditedToday)
+                    {
+                        _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]); 
+                    }
+                }
+            }
+        }
 
 
 
@@ -1288,8 +1369,11 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 for (int i = 6; i > -1; i--)
                 {
-                    barChartInfos.Add(new BarChartInfoText(datas[i], (DateTime.Today.AddDays(-i - 1).DayOfWeek).ToString().Substring(0, 3)));
+                    barChartInfos.Add(new BarChartInfoText(datas[i], RuntimeTranslator.TranslateDayOfWeek((DateTime.Today.AddDays(-i - 1).DayOfWeek)).Substring(0, 3)));
                 }
+
+
+                barChartInfos.Add(new BarChartInfoText(_todayPoint, RuntimeTranslator.TranslateDayOfWeek((DateTime.Today.DayOfWeek)).Substring(0, 3)));
 
                 barchart1.LoadData(barChartInfos.ToArray(), true, true);
             }
@@ -1326,31 +1410,59 @@ public class StatisticCalculator2 : MonoBehaviour
         }
         else
         {
-            for (int i = 29; i > -1; i--)
+
+            if (_rewind == 0)
             {
-                if (i == 29)
+                for (int i = 29; i > -1; i--)
                 {
-                    DateTime _t = Today.AddDays((_rewind - 1) * _time);
-                    string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
-                    string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+                    if (i == 29)
+                    {
+                        DateTime _oneMonthEarlier = Today.AddDays((_rewind - 1) * _time);
+                        string _hm = _oneMonthEarlier.Month.ToString().Length == 1 ? "0" + _oneMonthEarlier.Month + "." : _oneMonthEarlier.Month + ".";
+                        string _dm = _oneMonthEarlier.Day.ToString().Length == 1 ? "0" + _oneMonthEarlier.Day + "." : _oneMonthEarlier.Day + ".";
 
-                    barChartInfos.Add(new BarChartInfoText(datas[i], _h + _d));
+                        barChartInfos.Add(new BarChartInfoText(datas[i], _hm + _dm));
+                    }  
+                    else
+                    {
+                        barChartInfos.Add(new BarChartInfoText(datas[i], ""));
+                    }
                 }
-                else if (i == 0)
-                {
-                    DateTime _t = Today.AddDays(_rewind * _time - 1);
-                    string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
-                    string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+                DateTime _t = Today;
+                string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+                barChartInfos.Add(new BarChartInfoText(_todayPoint, _h + _d));
 
-                    barChartInfos.Add(new BarChartInfoText(datas[i], _h + _d));
-                }
-                else
-                {
-                    barChartInfos.Add(new BarChartInfoText(datas[i], ""));
-                }
+                barchart1.LoadData(barChartInfos.ToArray(), false, false);
             }
+            else
+            {
+                 for (int i = 29; i > -1; i--)
+                {
+                    if (i == 29)
+                    {
+                        DateTime _t = Today.AddDays((_rewind - 1) * _time);
+                        string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                        string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
 
-            barchart1.LoadData(barChartInfos.ToArray(), false, false);
+                        barChartInfos.Add(new BarChartInfoText(datas[i], _h + _d));
+                    }
+                    else if (i == 0)
+                    {
+                        DateTime _t = Today.AddDays(_rewind * _time - 1);
+                        string _h = _t.Month.ToString().Length == 1 ? "0" + _t.Month + "." : _t.Month + ".";
+                        string _d = _t.Day.ToString().Length == 1 ? "0" + _t.Day + "." : _t.Day + ".";
+
+                        barChartInfos.Add(new BarChartInfoText(datas[i], _h + _d));
+                    }
+                    else
+                    {
+                        barChartInfos.Add(new BarChartInfoText(datas[i], ""));
+                    }
+                }
+
+                barchart1.LoadData(barChartInfos.ToArray(), false, false);
+            }
         }
     }
 
@@ -1448,31 +1560,64 @@ public class StatisticCalculator2 : MonoBehaviour
 
         if (!_skip)
         {
-            for (int i = 0; i < GoalDATAS.Length; i++)
+            if (_type == 0)
             {
-                float _points = 0;
-                for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+                for (int i = 0; i < GoalDATAS.Length; i++)
                 {
-                    if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays(((_rewind - 1) * _time))
-                        && (GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays((_rewind * _time))))
+                    float _points = 0;
+                    for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
                     {
-                        _points += GoalDATAS[i].dailyScores[j].amount;
-                    }
-                }
-
-
-                if (_rewind == 0)
-                {
-                    for (int k = 0; k < GoalDATAS[i].tasks.Count; k++)
-                    {
-                        if (GoalDATAS[i].tasks[k].isEditedToday)
+                        if (GoalDATAS[i].dailyScores[j].GetDateTime().Date == Today.AddDays(_rewind))
                         {
-                            _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]);
+                            _points += GoalDATAS[i].dailyScores[j].amount;
                         }
                     }
-                }
 
-                _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+
+                    if (_rewind == 0)
+                    {
+                        for (int k = 0; k < GoalDATAS[i].tasks.Count; k++)
+                        {
+                            if (GoalDATAS[i].tasks[k].isEditedToday)
+                            {
+                                _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]);
+                            }
+                        }
+                    }
+
+                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                }
+            }
+            else
+            {
+
+
+                for (int i = 0; i < GoalDATAS.Length; i++)
+                {
+                    float _points = 0;
+                    for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
+                    {
+                        if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays(((_rewind - 1) * _time))
+                            && (GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays((_rewind * _time))))
+                        {
+                            _points += GoalDATAS[i].dailyScores[j].amount;
+                        }
+                    }
+
+
+                    if (_rewind == 0)
+                    {
+                        for (int k = 0; k < GoalDATAS[i].tasks.Count; k++)
+                        {
+                            if (GoalDATAS[i].tasks[k].isEditedToday)
+                            {
+                                _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]);
+                            }
+                        }
+                    }
+
+                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                }
             }
         }
 
@@ -1570,7 +1715,6 @@ public class StatisticCalculator2 : MonoBehaviour
                     if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays(_rewind * _time))
                     {
                         _thisGoal.amount += GoalDATAS[i].dailyScores[j].amount;
-                        print(GoalDATAS[i].name + " " + GoalDATAS[i].dailyScores[j].amount);
                     }
                 }
                 _datas.Add(_thisGoal);
@@ -1618,6 +1762,219 @@ public class StatisticCalculator2 : MonoBehaviour
 
     }
 
+
+    public void RollingAverageBarChartCalculation()
+    {
+        StatCalculationFilter _f = StatCalculationFilter.All;
+        if (selectedGoalName_RollingAverage == "" && selectedTaskName_RollingAverage == "")
+        {
+            _f = StatCalculationFilter.All;
+        }
+        else if (selectedGoalName_RollingAverage != "")
+        {
+            _f = StatCalculationFilter.Goal;
+        }
+        else if (selectedTaskName_RollingAverage != "")
+        {
+            _f = StatCalculationFilter.Task;
+        }
+        // name filters
+
+        StatLoad();
+        barChartRollingAverage.Clear();
+
+
+        int[][] _divide = new int[7][];
+        int[][] _weeklyData = new int[7][];
+        for (int i = 0; i < _weeklyData.Length; i++)
+        {
+            _weeklyData[i] = new int[7];
+            _divide[i] = new int[7];
+            for (int o = 0; o < _weeklyData[i].Length; o++)
+            {
+                _weeklyData[i][o] = 0;
+                _divide[i][o] = 0;
+            }
+        }
+
+
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < GoalDATAS.Length; j++)
+            {
+                if (_f != StatCalculationFilter.Task)
+                {
+                    if (_f == StatCalculationFilter.All)
+                    {
+                        if (i == 0)
+                        {
+                            for (int tasks = 0; tasks < GoalDATAS[j].tasks.Count; tasks++)
+                            {
+                                if (GoalDATAS[j].tasks[tasks].isEditedToday)
+                                {
+                                    _weeklyData[0][0] += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[j].tasks[tasks]);
+                                }
+                            }
+
+                            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+                            {
+                                for (int week = 1; week < 7; week++)
+                                {
+                                    if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-week))
+                                    {
+                                        _weeklyData[0][week] += GoalDATAS[j].dailyScores[k].amount;
+                                        _divide[0][week]++; //= 1;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+                            {
+                                for (int week = 0; week < 7; week++)
+                                {
+                                    if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-(week + i)))
+                                    {
+                                        _weeklyData[i][week] += GoalDATAS[j].dailyScores[k].amount;
+                                        _divide[i][week]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if(_f == StatCalculationFilter.Goal)
+                    {
+                        if (i == 0)
+                        {
+                            if (GoalDATAS[j].name == selectedGoalName_RollingAverage)
+                            {
+                                for (int tasks = 0; tasks < GoalDATAS[j].tasks.Count; tasks++)
+                                {
+                                    _weeklyData[0][0] += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[j].tasks[tasks]);
+                                }
+
+                                for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+                                {
+                                    for (int week = 1; week < 7; week++)
+                                    {
+                                        if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-week))
+                                        {
+                                            _weeklyData[0][week] += GoalDATAS[j].dailyScores[k].amount;
+                                            _divide[0][week]++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (GoalDATAS[j].name == selectedGoalName_RollingAverage)
+                            {
+                                for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
+                                {
+                                    for (int week = 0; week < 7; week++)
+                                    {
+                                        if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-(week + i)))
+                                        {
+                                         
+                                            _weeklyData[i][week] += GoalDATAS[j].dailyScores[k].amount;
+                                            _divide[i][week]++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                   
+                }
+                else if (_f == StatCalculationFilter.Task)
+                {
+                    for (int l = 0; l < GoalDATAS[j].modifications.Count; l++)
+                    {
+                        if (GoalDATAS[j].modifications[l].taskName == selectedTaskName_RollingAverage)
+                        {
+                            if (i == 0)
+                            {
+                                for (int tasks = 0; tasks < GoalDATAS[j].tasks.Count; tasks++)
+                                {
+                                    if (GoalDATAS[j].tasks[tasks].name == selectedTaskName_RollingAverage)
+                                    {
+                                        if (GoalDATAS[j].tasks[tasks].isEditedToday)
+                                        {
+                                            _weeklyData[0][0] += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[j].tasks[tasks]);
+                                        }
+                                    }
+                                }
+
+                                for (int week = 1; week < 7; week++)
+                                {
+                                    if (GoalDATAS[j].modifications[l].GetDateTime().Date == Today.AddDays(-(week)))
+                                    {
+                                        _weeklyData[0][week] += GoalDATAS[j].modifications[l].amount;
+                                        _divide[0][week]++;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                for (int week = 0; week < 7; week++)
+                                {
+                                    if (GoalDATAS[j].modifications[l].GetDateTime().Date == Today.AddDays(-(week + i)))
+                                    {
+                                        _weeklyData[i][week] += GoalDATAS[j].modifications[l].amount;
+                                        _divide[i][week]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        
+        }
+
+
+        List<BarChartInfoText> _infos = new List<BarChartInfoText>();
+
+
+        int _sum = 0;
+        int _div = 0;
+        int _week = 0;
+        for (int _weekNumber = _weeklyData.Length - 1; _weekNumber > -1 ; _weekNumber--)
+        {
+            _sum = 0;
+            _div = 0;
+            for (_week = 0; _week < _weeklyData[_weekNumber].Length; _week++)
+            {
+                _sum += _weeklyData[_weekNumber][_week];
+                _div += _divide[_weekNumber][_week];
+               // print(_sum + " " + _div);
+            }
+
+            if(_div == 0)
+            {
+                _sum = 0;
+            }
+            else
+            {
+               // print(_sum + " " + _div + " " + (float)_sum / _div);
+                _sum = Mathf.RoundToInt((float)_sum / _div);
+            }
+
+            if (_sum > 0)
+            {
+                _infos.Add(new BarChartInfoText(_sum, RuntimeTranslator.TranslateDayOfWeek(Today.AddDays(-(_week + _weekNumber)).DayOfWeek).Substring(0, 3)));
+            }
+           
+        }
+
+
+        barChartRollingAverage.LoadData(_infos.ToArray(), true, true);
+        
+
+    }
 
     private Top3BarChartData FindMax(Top3BarChartData[] _datas, out Top3BarChartData _maxNumber)
     {

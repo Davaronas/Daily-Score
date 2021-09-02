@@ -20,12 +20,13 @@ public class ActivityRate : MonoBehaviour
     private void Awake()
     {
         goalManager = FindObjectOfType<GoalManager>();
+        AppManager.OnLanguageChanged += LangCallback;
     }
 
 
     private void Start()
     {
-        Invoke(nameof(CalculateActivityRate), 1f);
+        Invoke(nameof(CalculateActivityRate), 1.5f);
     }
 
     private bool Contains(Activity _a, DateTime _d)
@@ -41,13 +42,23 @@ public class ActivityRate : MonoBehaviour
         return false;
     }
 
-    private void CalculateActivityRate()
+    private void LangCallback(AppManager.Languages _l)
+    {
+        CalculateActivityRate();
+    }
+
+    public void CalculateActivityRate()
     {
         activityRateBarChart.Clear();
 
         GoalData[] _goalDatas = goalManager.GetExistingGoals();
 
         Activity[] _activities = new Activity[7];
+
+        for (int i = 0; i < _activities.Length; i++)
+        {
+            _activities[i].points = 0;
+        }
 
         for (int i = 0; i < _activities.Length; i++)
         {
@@ -60,14 +71,14 @@ public class ActivityRate : MonoBehaviour
                 {
                     for (int j = _goalDatas[k].dailyScores.Count - 1; j > -1; j--)
                     {
-                        if(_goalDatas[k].dailyScores[j].GetDateTime().DayOfWeek == (DayOfWeek)i)
+                        if (_goalDatas[k].dailyScores[j].GetDateTime().DayOfWeek == (DayOfWeek)i)
                         {
-                            if(Contains(_activities[i], _goalDatas[k].dailyScores[j].GetDateTime()))
+                            if (Contains(_activities[i], _goalDatas[k].dailyScores[j].GetDateTime()))
                             {
                                 continue;
                             }
 
-                            if(_activities[i].dates[l] == DateTime.MinValue)
+                            if (_activities[i].dates[l] == DateTime.MinValue)
                             {
                                 _activities[i].dates[l] = _goalDatas[k].dailyScores[j].GetDateTime();
 
@@ -86,7 +97,7 @@ public class ActivityRate : MonoBehaviour
                 {
                     for (int l = _goalDatas[k].dailyScores.Count - 1; l > -1; l--)
                     {
-                        if(_goalDatas[k].dailyScores[l].GetDateTime() == _activities[i].dates[j])
+                        if (_goalDatas[k].dailyScores[l].GetDateTime() == _activities[i].dates[j])
                         {
                             _activities[i].points += _goalDatas[k].dailyScores[l].amount;
                         }
@@ -109,21 +120,36 @@ public class ActivityRate : MonoBehaviour
 
         for (int i = 0; i < _activities.Length; i++)
         {
-
             if (i == 0)
             {
-                _sunday = new BarChartInfoText((float)Math.Round(_activities[i].points / _avg, 2), ((DayOfWeek)i).ToString().Substring(0, 3));
+                _sunday = new BarChartInfoText((float)Math.Round(_activities[i].points / _avg, 2), RuntimeTranslator.TranslateDayOfWeek(((DayOfWeek)i)).Substring(0, 3));
             }
             else
             {
-                _infos.Add(new BarChartInfoText((float)Math.Round(_activities[i].points / _avg, 2), ((DayOfWeek)i).ToString().Substring(0, 3)));
+                _infos.Add(new BarChartInfoText((float)Math.Round(_activities[i].points / _avg, 2), RuntimeTranslator.TranslateDayOfWeek(((DayOfWeek)i)).Substring(0, 3)));
             }
+
         }
 
         _infos.Add(_sunday);
 
 
-        activityRateBarChart.LoadData(_infos.ToArray(), barColors, true, true);
+        int _nonzero = 0;
+        if (_infos.Count > 1)
+        {
+            for (int i = 0; i < _infos.Count; i++)
+            {
+                if(_infos[i].point > 0)
+                {
+                    _nonzero++;
+                }
+            }
+
+            if (_nonzero > 1)
+            {
+                activityRateBarChart.LoadData(_infos.ToArray(), barColors, true, true);
+            }
+        }
 
 
 

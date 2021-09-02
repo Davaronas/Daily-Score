@@ -61,7 +61,7 @@ public class BarChartHolder : MonoBehaviour
         minText_RT = minText.GetComponent<RectTransform>();
         maxText_RT = maxText.GetComponent<RectTransform>();
 
-        disabledImage.SetActive(false);
+        disabledImage.SetActive(true);
 
 
 
@@ -139,8 +139,10 @@ public class BarChartHolder : MonoBehaviour
         bool _foundNonZero = false;
         for (int i = 0; i < _infos.Length; i++)
         {
-            if (_infos[i].point != 0)
+          //  print(_infos[i].point);
+            if (_infos[i].point != 0 && !float.IsNaN(_infos[i].point))
             {
+               
                 _foundNonZero = true;
             }
         }
@@ -287,6 +289,9 @@ public class BarChartHolder : MonoBehaviour
         
 
         BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+
+      
+
         bars.Add(_newBar,_points);
 
         if (_useUnderTexts)
@@ -424,5 +429,18 @@ public class BarChartHolder : MonoBehaviour
 
         maxText_RT.anchoredPosition = new Vector2(-5, holderHeight);
         minText_RT.anchoredPosition = new Vector2(-5, min / max * holderHeight);
+    }
+
+    public Vector2[] GetRollingAverageEndPoints()
+    {
+        List<Vector2> _positions = new List<Vector2>();
+
+        foreach (KeyValuePair<BarChartPrefabUtility, float> _bar in bars)
+        {
+
+            _positions.Add(_bar.Key.GetEndPoint());
+        }
+
+        return _positions.ToArray();
     }
 }

@@ -26,6 +26,12 @@ public class SymbolPicker : BehaviourButton
         AppManager.OnGoalSymbolPicked += OnSymbolPicked;
 
         rectTransform = GetComponent<RectTransform>();
+        
+    }
+
+    protected override void Start()
+    {
+        base.Start();
         originalSize = rectTransform.sizeDelta;
     }
 
@@ -38,6 +44,9 @@ public class SymbolPicker : BehaviourButton
     protected override void OnTouch()
     {
         goalManager.SetSpriteId(spriteId);
+
+        SoundManager.PlaySound2();
+
         AppManager.GoalSymbolPicked(this);
     }
 

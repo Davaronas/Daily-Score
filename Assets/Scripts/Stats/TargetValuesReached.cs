@@ -23,7 +23,7 @@ public class TargetValuesReached : MonoBehaviour
     }
 
 
-    private void CalculateTargetValuesReached()
+    public void CalculateTargetValuesReached()
     {
 
         targetValuesReachedPieChart.Clear();
