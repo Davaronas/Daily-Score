@@ -38,6 +38,14 @@ public class ImageColoring : MonoBehaviour
         UpdateTexture();
     }
 
+    [ContextMenu("Switch colors")]
+    public void SwitchColors()
+    {
+        Color32 _t = color1;
+        color1 = color2;
+        color2 = _t;
+    }
+
     [ContextMenu("UpdateColor")]
     public void UpdateTexture()
     {

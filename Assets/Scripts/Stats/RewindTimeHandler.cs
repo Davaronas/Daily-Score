@@ -17,7 +17,7 @@ public class RewindTimeHandler : MonoBehaviour
     [SerializeField] private RewindableCharts rc;
 
     private Color activeColor = Color.white;
-    private Color inactiveColor = new Color(255, 255, 255,80);
+    private Color32 inactiveColor = new Color32(255, 255, 255,40);
 
     private void Awake()
     {
