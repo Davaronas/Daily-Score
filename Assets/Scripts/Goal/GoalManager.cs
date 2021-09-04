@@ -130,12 +130,14 @@ public class GoalManager : MonoBehaviour
 
         GoalData _goaldata = _goal.GetGoalData();
 
+        /*
         byte[] _rgb = new byte[3];
         _rgb[0] = (byte)Mathf.RoundToInt((_goaldata.color[0].r * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
         _rgb[1] = (byte)Mathf.RoundToInt((_goaldata.color[0].g * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
         _rgb[2] = (byte)Mathf.RoundToInt((_goaldata.color[0].b * (1 - goalMenuPanel_whiteStrengthOnGoalColor) + 255 * (1 + goalMenuPanel_whiteStrengthOnGoalColor)) / 2);
 
         goalMenuPanel.color = new Color32(_rgb[0], _rgb[1], _rgb[2], 255);
+        */
 
         // gradient?
 

@@ -26,13 +26,23 @@ public class SymbolPicker : BehaviourButton
         AppManager.OnGoalSymbolPicked += OnSymbolPicked;
 
         rectTransform = GetComponent<RectTransform>();
-        
+      
     }
 
     protected override void Start()
     {
         base.Start();
-        originalSize = rectTransform.sizeDelta;
+        SaveSize();
+    }
+
+    private void SaveSize()
+    {
+        originalSize = new Vector2(120,120);
+    }
+
+    private void OnEnable()
+    {
+      //  SaveSize();
     }
 
     protected override void OnDestroy()

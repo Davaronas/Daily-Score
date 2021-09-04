@@ -807,7 +807,8 @@ public class AppManager : MonoBehaviour
     public static event Action OnNewDayStartedDuringRuntime;
     public static event Action OnGoalDeleted;
     public static event Action<string, CategorySelectableBarCharts> OnBarChartCategorySelected;
-    public static event Action onPowerSavingModeChanged;
+    public static event Action OnPowerSavingModeChanged;
+    public static event Action OnTaskMenuOpened;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -840,6 +841,7 @@ public class AppManager : MonoBehaviour
         OnErrorHappened += OnErrorHappenedCallback;
         OnTaskEdited += OnTaskEditedCallback;
         OnGoalDeleted += OnGoalDeletedCallback;
+        OnTaskMenuOpened += OnTaskMenuOpenedCallback;
 
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
@@ -873,6 +875,7 @@ public class AppManager : MonoBehaviour
         OnTaskValueChanged -= OnTaskValueChangedCallback;
         Application.logMessageReceived -= ErrorCallback;
         OnGoalDeleted -= OnGoalDeletedCallback;
+        OnTaskMenuOpened -= OnTaskMenuOpenedCallback;
 
         // SaveGoalData();
 
@@ -1157,7 +1160,7 @@ public class AppManager : MonoBehaviour
             foreach(GoalData _gd in _savedGoals)
             {
                 
-                _gd.dailyScores.Clear();
+              //  _gd.dailyScores.Clear();
                 /*
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60),new bool[] { false,true,true,true,false}));
@@ -1203,7 +1206,7 @@ public class AppManager : MonoBehaviour
                 */
               // _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
                 
-                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
+                //_gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
                 
                 
@@ -1282,7 +1285,7 @@ public class AppManager : MonoBehaviour
 
     public static void PowerSavingModeChanged()
     {
-        onPowerSavingModeChanged?.Invoke();
+        OnPowerSavingModeChanged?.Invoke();
     }
 
     public static void RemoteCall_SetPowerSavingMode(bool _state)
@@ -1537,11 +1540,18 @@ public class AppManager : MonoBehaviour
     
 
 
-   
+   public static void TaskMenuOpened()
+   {
+        OnTaskMenuOpened?.Invoke();
+   }
 
 
-
-
+    private void OnTaskMenuOpenedCallback()
+    {
+        SetAppLayer(2121);
+        print("WHY ");
+        SoundManager.PlaySound2();
+    }
 
     public void RemoteCall_GoToCreateGoalMenu()
     {

@@ -7,12 +7,15 @@ using UnityEngine.UI;
 [ExecuteAlways]
 public class ImageColoring : MonoBehaviour
 {
+    public enum GradientType {Vertical, Horizontal, LeftToRightDiagonal, RightToLeftDiagonal}
+
     private Image image = null;
     private Texture2D baseTexture = null;
     private Texture2D cloneTexture = null;
 
     private Sprite originalSprite = null;
 
+    public GradientType gradient = GradientType.Vertical;
     public Color32 color1  = Color.black;
     public Color32 color2 = Color.white;
 
@@ -49,22 +52,25 @@ public class ImageColoring : MonoBehaviour
 
         if (cloneTexture != null)
         {
-            for (int i = 0; i < cloneTexture.width; i++)
+            switch(gradient)
             {
-                for (int j = 0; j < cloneTexture.height; j++)
-                {
-                    Color32 _newColor = Color32.Lerp(color2, color1, (float)j / cloneTexture.height);
-                    Color32 _originalColor = baseTexture.GetPixel(i, j);
-                    if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
-                        cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
-                    else
-                        cloneTexture.SetPixel(i, j, _originalColor);
-                }
+                case GradientType.Vertical:
+                    VerticalColoring();
+                    break;
+                case GradientType.Horizontal:
+                    HorizontalColoring();
+                    break;
+                case GradientType.LeftToRightDiagonal:
+                    LeftToRightColoring();
+                    break;
+                case GradientType.RightToLeftDiagonal:
+                    RightToLeftColoring();
+                    break;
             }
 
             cloneTexture.Apply();
             Rect _rect = new Rect(0, 0, cloneTexture.width, cloneTexture.height);
-            Vector4 _newBorder = new Vector4(0,0,0,0);
+            Vector4 _newBorder = new Vector4(0, 0, 0, 0);
 
             if (overrideAutoBorder)
             {
@@ -76,9 +82,80 @@ public class ImageColoring : MonoBehaviour
             }
 
 
-            image.sprite = Sprite.Create(cloneTexture, _rect, new Vector2(cloneTexture.width/2, cloneTexture.height/2),100,1,SpriteMeshType.FullRect,_newBorder);
+            image.sprite = Sprite.Create(cloneTexture, _rect, new Vector2(cloneTexture.width / 2, cloneTexture.height / 2), 100, 1, SpriteMeshType.FullRect, _newBorder);
         }
-      
+
+    }
+
+    private void VerticalColoring()
+    {
+
+
+        for (int i = 0; i < cloneTexture.width; i++)
+        {
+            for (int j = 0; j < cloneTexture.height; j++)
+            {
+                Color32 _newColor = Color32.Lerp(color2, color1, (float)j / cloneTexture.height);
+                Color32 _originalColor = baseTexture.GetPixel(i, j);
+                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                    cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
+                else
+                    cloneTexture.SetPixel(i, j, _originalColor);
+            }
+        }
+    }
+
+    private void HorizontalColoring()
+    {
+
+
+        for (int i = 0; i < cloneTexture.width; i++)
+        {
+            for (int j = 0; j < cloneTexture.height; j++)
+            {
+                Color32 _newColor = Color32.Lerp(color2, color1, (float)i / cloneTexture.height);
+                Color32 _originalColor = baseTexture.GetPixel(i, j);
+                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                    cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
+                else
+                    cloneTexture.SetPixel(i, j, _originalColor);
+            }
+        }
+    }
+
+    private void RightToLeftColoring()
+    {
+
+        for (int i = 0; i < cloneTexture.width; i++)
+        {
+            for (int j = 0; j < cloneTexture.height; j++)
+            {
+                Color32 _newColor = Color32.Lerp(color2, color1, (((float)j + (float)i) /2) /  cloneTexture.height);
+                Color32 _originalColor = baseTexture.GetPixel(i, j);
+                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                    cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
+                else
+                    cloneTexture.SetPixel(i, j, _originalColor);
+            }
+        }
+    }
+
+    private void LeftToRightColoring()
+    {
+
+
+        for (int i = 0; i < cloneTexture.width; i++)
+        {
+            for (int j = 0; j < cloneTexture.height; j++)
+            {
+                Color32 _newColor = Color32.Lerp(color2, color1,  (((float)j + (float)i) / 2) / cloneTexture.height);
+                Color32 _originalColor = baseTexture.GetPixel(i, j);
+                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                    cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
+                else
+                    cloneTexture.SetPixel(i, j, _originalColor);
+            }
+        }
     }
 
     private bool isCloseToBlack(Color32 _c)

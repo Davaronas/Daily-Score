@@ -15,14 +15,14 @@ public class PowerSaveButton : BehaviourButton
 
         CheckStatus();
 
-        AppManager.onPowerSavingModeChanged += CheckStatus;
+        AppManager.OnPowerSavingModeChanged += CheckStatus;
     }
 
     protected override void OnDestroy()
     {
         base.OnDestroy();
 
-        AppManager.onPowerSavingModeChanged -= CheckStatus;
+        AppManager.OnPowerSavingModeChanged -= CheckStatus;
     }
 
     protected override void OnTouch()

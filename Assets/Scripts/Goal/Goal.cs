@@ -9,6 +9,7 @@ public class Goal : MonoBehaviour
     [SerializeField] private TMP_Text nameText = null;
     [SerializeField] private TMP_Text scoreText = null;
     [SerializeField] private Image imageToApplyColorTo = null;
+    private ImageColoring imageColoring = null;
 
     private ImageColoring gradient = null;
 
@@ -30,6 +31,7 @@ public class Goal : MonoBehaviour
     {
         AppManager.OnTaskValueChanged += TaskChanged;
         goalManager = FindObjectOfType<GoalManager>();
+       
     }
 
     private void OnDestroy()
@@ -61,6 +63,7 @@ public class Goal : MonoBehaviour
         goalName = _goalData.name;
         symbolId = _goalData.spriteId;
 
+        imageColoring = GetComponent<ImageColoring>();
 
         Initialize();
     }
@@ -70,6 +73,10 @@ public class Goal : MonoBehaviour
         nameText.text = goalName;
         scoreText.text = goalData.current + " P";
 
+        nameText.color =(Color32) goalData.color[0];
+        scoreText.color =(Color32) goalData.color[0];
+
+        /*
         switch(goalData.colorType)
         {
             case ColorType.Simple:
@@ -88,8 +95,11 @@ public class Goal : MonoBehaviour
                 Debug.LogError("ColorType enum doesn't contain this element: " + goalData.colorType);
                 break;
         }
+        */
 
-       
+        imageColoring.color1 = goalData.color[0];
+        imageColoring.color2 = goalData.color[1];
+        imageColoring.UpdateTexture();
 
         // set up sprites
     }

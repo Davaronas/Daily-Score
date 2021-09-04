@@ -89,7 +89,7 @@ click on averages will turn to other type of averages
 click on highscores will turn to other types of highscores
 daily score on top
 
-
+scrolling through tasks
 
 
 

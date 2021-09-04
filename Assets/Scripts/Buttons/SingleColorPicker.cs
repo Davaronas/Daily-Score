@@ -60,7 +60,7 @@ public class SingleColorPicker : BehaviourButton
     protected override void Start()
     {
         base.Start();
-        originalSize = rectTransform.sizeDelta;
+        originalSize = new Vector2(120,120);
     }
 
     protected override void OnDestroy()

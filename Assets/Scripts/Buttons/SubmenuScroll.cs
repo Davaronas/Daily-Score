@@ -176,6 +176,13 @@ public class SubmenuScroll : BehaviourButton, IBeginDragHandler, IEndDragHandler
 
    
 
+    public void RemoteCall_WarpToPosition(int _index)
+    {
+       AppManager.SubmenuChangedViaScrolling( WarpToPosition(_index, false));
+
+        SoundManager.PlaySound2();
+    }
+
     public int WarpToPosition(int _submenuId = -1, bool _instantWarp = false)
     {
         if(_submenuId == -1)
