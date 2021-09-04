@@ -22,6 +22,7 @@ public class ImageColoring : MonoBehaviour
     [Space]
     public bool overrideAutoBorder = false;
     public float borderSize = 0;
+    public float alphaCheck = 250f;
 
 
     private float avg_ = 0;
@@ -97,7 +98,7 @@ public class ImageColoring : MonoBehaviour
             {
                 Color32 _newColor = Color32.Lerp(color2, color1, (float)j / cloneTexture.height);
                 Color32 _originalColor = baseTexture.GetPixel(i, j);
-                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                if (!isCloseToBlack(_originalColor) && isAlphaOverThreshold(_originalColor))
                     cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
                 else
                     cloneTexture.SetPixel(i, j, _originalColor);
@@ -115,7 +116,7 @@ public class ImageColoring : MonoBehaviour
             {
                 Color32 _newColor = Color32.Lerp(color2, color1, (float)i / cloneTexture.height);
                 Color32 _originalColor = baseTexture.GetPixel(i, j);
-                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                if (!isCloseToBlack(_originalColor) && isAlphaOverThreshold(_originalColor))
                     cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
                 else
                     cloneTexture.SetPixel(i, j, _originalColor);
@@ -132,7 +133,7 @@ public class ImageColoring : MonoBehaviour
             {
                 Color32 _newColor = Color32.Lerp(color2, color1, (((float)j + (float)i) /2) /  cloneTexture.height);
                 Color32 _originalColor = baseTexture.GetPixel(i, j);
-                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                if (!isCloseToBlack(_originalColor) && isAlphaOverThreshold(_originalColor))
                     cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
                 else
                     cloneTexture.SetPixel(i, j, _originalColor);
@@ -150,7 +151,7 @@ public class ImageColoring : MonoBehaviour
             {
                 Color32 _newColor = Color32.Lerp(color2, color1,  (((float)j + (float)i) / 2) / cloneTexture.height);
                 Color32 _originalColor = baseTexture.GetPixel(i, j);
-                if (!isCloseToBlack(_originalColor) && isFullAlpha(_originalColor))
+                if (!isCloseToBlack(_originalColor) && isAlphaOverThreshold(_originalColor))
                     cloneTexture.SetPixel(i, j, new Color32(_newColor.r, _newColor.g, _newColor.b, _originalColor.a));
                 else
                     cloneTexture.SetPixel(i, j, _originalColor);
@@ -194,9 +195,9 @@ public class ImageColoring : MonoBehaviour
         }
     }
 
-    private bool isFullAlpha(Color32 _c)
+    private bool isAlphaOverThreshold(Color32 _c)
     {
-        if(_c.a >= 250)
+        if(_c.a >= alphaCheck)
         {
             return true;
         }

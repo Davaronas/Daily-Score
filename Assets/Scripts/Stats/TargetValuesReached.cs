@@ -8,8 +8,10 @@ public class TargetValuesReached : MonoBehaviour
     private GoalManager goalManager = null;
     [SerializeField] private PieChart targetValuesReachedPieChart = null;
 
-    [SerializeField] private Color reachedColor = Color.green;
-    [SerializeField] private Color notReachedColor = Color.red;
+    [SerializeField] private Color reachedColor1 = Color.green;
+    [SerializeField] private Color notReachedColor1 = Color.red;
+    [SerializeField] private Color reachedColor2 = Color.green;
+    [SerializeField] private Color notReachedColor2 = Color.red;
 
 
     private void Awake()
@@ -50,8 +52,8 @@ public class TargetValuesReached : MonoBehaviour
             }
         }
 
-        PieChartInfo _reachedInfo = new PieChartInfo(_reached, "", reachedColor);
-        PieChartInfo _notReachedInfo = new PieChartInfo(_notReached, "", notReachedColor);
+        PieChartInfo _reachedInfo = new PieChartInfo(_reached, "", reachedColor1,reachedColor2);
+        PieChartInfo _notReachedInfo = new PieChartInfo(_notReached, "", notReachedColor1,notReachedColor2);
 
         targetValuesReachedPieChart.LoadData(new PieChartInfo[] { _reachedInfo, _notReachedInfo }, "", true);
 

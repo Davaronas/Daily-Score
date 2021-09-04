@@ -855,7 +855,7 @@ public class StatisticCalculator2 : MonoBehaviour
         List<PieChartInfo> PiteNap = new List<PieChartInfo>();
         for (int i = 0; i < GoalDATAS.Length; i++)
         {
-            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            PiteNap.Add(new PieChartInfo(GoalDATAS[i].current, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
         }
         piechart1.Clear();
         if (PiteNap.Count > 0)
@@ -880,7 +880,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-            PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            PiteHete.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -906,7 +906,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     sziauram += GoalDATAS[i].dailyScores[j].amount;
                 }
             }
-            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            PiteHava.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -927,7 +927,7 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 sziauram += GoalDATAS[i].dailyScores[j].amount;
             }
-            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            PiteMind.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -950,7 +950,7 @@ public class StatisticCalculator2 : MonoBehaviour
             {
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date == Today.AddDays(rewindtimes)) //Itt lehet a kutya
                 {
-                    RewindDay.Add(new PieChartInfo(GoalDATAS[i].dailyScores[j].amount, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                    RewindDay.Add(new PieChartInfo(GoalDATAS[i].dailyScores[j].amount, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
                     print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
                 }
             }
@@ -991,7 +991,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     // print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
                 }
             }
-            RewindWeek.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            RewindWeek.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -1027,7 +1027,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     print(Convert.ToDateTime(GoalDATAS[i].dailyScores[j].time).Date);
                 }
             }
-            RewindMonth.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+            RewindMonth.Add(new PieChartInfo(sziauram, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
         }
         piechart1.Clear();
@@ -1500,7 +1500,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         {
                             _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
                         }
-                        _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                        _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
                     }
                     _skip = true;
                 }
@@ -1548,7 +1548,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         }
                     }
 
-                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
 
                 }
 
@@ -1585,7 +1585,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         }
                     }
 
-                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
                 }
             }
             else
@@ -1616,7 +1616,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         }
                     }
 
-                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]));
+                    _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
                 }
             }
         }

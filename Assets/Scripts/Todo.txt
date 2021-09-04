@@ -170,3 +170,5 @@ bools are already done when you start -> fix
 reset, rest day, nightmode, notifications
 
 task selected on charts should calculate today
+
+one symbol / goal

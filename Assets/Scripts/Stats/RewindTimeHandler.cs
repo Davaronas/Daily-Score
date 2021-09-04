@@ -16,18 +16,21 @@ public class RewindTimeHandler : MonoBehaviour
     [SerializeField] private Image forwardButton = null;
     [SerializeField] private RewindableCharts rc;
 
+    private Color activeColor = Color.white;
+    private Color inactiveColor = new Color(255, 255, 255,80);
+
     private void Awake()
     {
         statCalc = FindObjectOfType<StatisticCalculator2>();
         statManager = FindObjectOfType<StatManager>();
 
-        forwardButton.color = Color.grey;
+        forwardButton.color = inactiveColor;
 
         if (rc == RewindableCharts.OverallBarChart)
         {
             if (!statCalc.CanRewindBarChartTop3(0, 0))
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
         }
         else if(rc == RewindableCharts.ContributionPieChart)
@@ -35,7 +38,7 @@ public class RewindTimeHandler : MonoBehaviour
 
             if (!statCalc.CanRewindPieChart(0, 1))
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
 
 
@@ -51,7 +54,7 @@ public class RewindTimeHandler : MonoBehaviour
             {
                 rewind--;
                 statManager.RewindChangedBarChart(rewind);
-                forwardButton.color = Color.white;
+                forwardButton.color = activeColor;
                 print(statManager.BarChartValue());
 
                 SoundManager.PlaySound3();
@@ -61,11 +64,11 @@ public class RewindTimeHandler : MonoBehaviour
 
             if (statCalc.CanRewindBarChartOverall(statManager.BarChartValue(), rewind))
             {
-                rewindButton.color = Color.white;
+                rewindButton.color = activeColor;
             }
             else
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
         }
         else if (rc == RewindableCharts.ContributionPieChart)
@@ -77,7 +80,7 @@ public class RewindTimeHandler : MonoBehaviour
                 {
                     rewind--;
                     statManager.RewindChangedPieChart(rewind);
-                    forwardButton.color = Color.white;
+                    forwardButton.color = activeColor;
 
                     SoundManager.PlaySound3();
                 }
@@ -85,16 +88,16 @@ public class RewindTimeHandler : MonoBehaviour
 
                 if (statCalc.CanRewindPieChart(statManager.PieChartValue(), rewind))
                 {
-                    rewindButton.color = Color.white;
+                    rewindButton.color = activeColor;
                 }
                 else
                 {
-                    rewindButton.color = Color.grey;
+                    rewindButton.color = inactiveColor;
                 }
             }
             else
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
         }
         else if(rc == RewindableCharts.Top3BarChart)
@@ -105,23 +108,23 @@ public class RewindTimeHandler : MonoBehaviour
                 {
                     rewind--;
                     statManager.RewindChangedBarChartTop3(rewind);
-                    forwardButton.color = Color.white;
+                    forwardButton.color = activeColor;
 
                     SoundManager.PlaySound3();
                 }
 
                 if (statCalc.CanRewindBarChartTop3(statManager.BarChartTop3Value(), rewind))
                 {
-                    rewindButton.color = Color.white;
+                    rewindButton.color = activeColor;
                 }
                 else
                 {
-                    rewindButton.color = Color.grey;
+                    rewindButton.color = inactiveColor;
                 }
             }
             else
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
         }
 
@@ -139,11 +142,11 @@ public class RewindTimeHandler : MonoBehaviour
 
         if (rewind == 0)
         {
-            forwardButton.color = Color.grey;
+            forwardButton.color = inactiveColor;
         }
         else
         {
-            rewindButton.color = Color.white;
+            rewindButton.color = activeColor;
         }
 
 
@@ -171,33 +174,33 @@ public class RewindTimeHandler : MonoBehaviour
         {
             if (!statCalc.CanRewindBarChartTop3(0, 0))
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
             else
             {
-                rewindButton.color = Color.white;
+                rewindButton.color = activeColor;
             }
         }
         else if(rc == RewindableCharts.ContributionPieChart)
         {
             if(!statCalc.CanRewindPieChart(0,0))
             {
-                rewindButton.color = Color.grey;
+                rewindButton.color = inactiveColor;
             }
             else
             {
-                rewindButton.color = Color.white;
+                rewindButton.color = activeColor;
             }
         }
         
 
-        forwardButton.color = Color.grey;
+        forwardButton.color = inactiveColor;
     }
 
     public void DisableButtons()
     {
-        rewindButton.color = Color.grey;
-        forwardButton.color = Color.grey;
+        rewindButton.color = inactiveColor;
+        forwardButton.color = inactiveColor;
 
     }
 

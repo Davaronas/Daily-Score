@@ -1160,8 +1160,8 @@ public class AppManager : MonoBehaviour
             foreach(GoalData _gd in _savedGoals)
             {
                 
-              //  _gd.dailyScores.Clear();
-                /*
+                _gd.dailyScores.Clear();
+                
                 // print(_gd.current);
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-60),new bool[] { false,true,true,true,false}));
                 _gd.dailyScores.Add(new ScorePerDay(250, DateTime.Today.AddDays(-40), new bool[] { false, true, true, true, false }));
@@ -1203,10 +1203,10 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4), new bool[] { false, true, true, true, false }));
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(100, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-3)));
-                */
-              // _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
                 
-                //_gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
+               _gd.dailyScores.Add(new ScorePerDay(450, DateTime.Today.AddDays(-2), new bool[] { false, true, true, true, false }));
+                
+                _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
                 
                 

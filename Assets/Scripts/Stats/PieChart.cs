@@ -9,19 +9,22 @@ public struct PieChartInfo
 {
     public float point;
     public string description;
-    public Color32 color;
-    public PieChartInfo(float _pont, string _desc, GoalColor _color)
+    public Color32 color1;
+    public Color32 color2;
+    public PieChartInfo(float _pont, string _desc, GoalColor _color1, GoalColor _color2)
     {
         point = _pont;
         description = _desc;
-        color = _color;
+        color1 = _color1;
+        color2 = _color2;
     }
 
-    public PieChartInfo(float _pont, string _desc, Color _color)
+    public PieChartInfo(float _pont, string _desc, Color _color1, Color _color2)
     {
         point = _pont;
         description = _desc;
-        color = _color;
+        color1 = _color1;
+        color2 = _color2;
     }
 }
 
@@ -70,19 +73,7 @@ public class PieChart : MonoBehaviour
     }
 
 
-    [ContextMenu("Fill test data")]
-    public void TestLoad()
-    {
-    //   rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, rectTransform.sizeDelta.x);
-
-        PieChartInfo[] _test = new PieChartInfo[4];
-        _test[0] = new PieChartInfo(200, "Kacsa", (Color32)Color.red);
-        _test[1] = new PieChartInfo(250, "Kiskacsa", (Color32)Color.blue);
-        _test[2] = new PieChartInfo(180, "Liba", (Color32)Color.green);
-        _test[3] = new PieChartInfo(300, "Gácsér", (Color32)Color.cyan);
-
-        LoadData(_test, "test");
-    }
+   
 
 
 
@@ -161,7 +152,7 @@ public class PieChart : MonoBehaviour
           
 
             Image _pieImage = _newPie.GetComponent<Image>();
-            _pieImage.color = _infos[j].color;
+            _pieImage.color = _infos[j].color1;
             _pieImage.fillAmount = _fill + _infos[j].point / sum;
             _pieImage.transform.SetSiblingIndex(0);
 
@@ -173,7 +164,11 @@ public class PieChart : MonoBehaviour
             {
                 GameObject _newElement = Instantiate(elementPrefab, transform.position, Quaternion.identity, elementHolder);
                 _newElement.GetComponent<TMP_Text>().text = _infos[j].description + " " + Math.Round(_infos[j].point / sum * 100, 1) + "%";
-                _newElement.GetComponentInChildren<Image>().color = _infos[j].color;
+                ImageColoring _ic = _newElement.GetComponentInChildren<ImageColoring>();
+                _ic.color1 = _infos[j].color1;
+                _ic.color2 = _infos[j].color2;
+                _ic.UpdateTexture();
+               
             }
 
             if(j == _maxIndex)
@@ -245,7 +240,7 @@ public class PieChart : MonoBehaviour
 
 
             Image _pieImage = _newPie.GetComponent<Image>();
-            _pieImage.color = _infos[j].color;
+            _pieImage.color = _infos[j].color1;
             _pieImage.fillAmount = _fill + _infos[j].point / sum;
             _pieImage.transform.SetSiblingIndex(0);
 
@@ -260,7 +255,10 @@ public class PieChart : MonoBehaviour
                 {
                     GameObject _newElement = Instantiate(elementPrefab, transform.position, Quaternion.identity, elementHolder);
                     _newElement.GetComponent<TMP_Text>().text = _infos[j].description + " " + Math.Round(_infos[j].point / sum * 100, 1) + "%";
-                    _newElement.GetComponentInChildren<Image>().color = _infos[j].color;
+                    ImageColoring _ic = _newElement.GetComponentInChildren<ImageColoring>();
+                    _ic.color1 = _infos[j].color1;
+                    _ic.color2 = _infos[j].color2;
+                    _ic.UpdateTexture();
                 }
             }
 
