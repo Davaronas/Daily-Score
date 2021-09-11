@@ -147,9 +147,10 @@ public class PieChart : MonoBehaviour
         {
             RectTransform _newPie = Instantiate(piePrefab, transform.position, Quaternion.identity, transform).GetComponent<RectTransform>();
             _newPie.sizeDelta = rectTransform.rect.size;
-        //    _newPie.anchoredPosition.Set()
+            Invoke(nameof(SizeCheck), Time.deltaTime * 3);
+            //    _newPie.anchoredPosition.Set()
 
-          
+
 
             Image _pieImage = _newPie.GetComponent<Image>();
             _pieImage.color = _infos[j].color1;
@@ -235,6 +236,7 @@ public class PieChart : MonoBehaviour
         {
             RectTransform _newPie = Instantiate(piePrefab, transform.position, Quaternion.identity, transform).GetComponent<RectTransform>();
             _newPie.sizeDelta = rectTransform.rect.size;
+            Invoke(nameof(SizeCheck),Time.deltaTime*3);
  
 
 
@@ -277,5 +279,10 @@ public class PieChart : MonoBehaviour
      
     }
 
+
+    private void SizeCheck(RectTransform _newPie)
+    {
+        _newPie.sizeDelta = rectTransform.rect.size;
+    }
 
 }

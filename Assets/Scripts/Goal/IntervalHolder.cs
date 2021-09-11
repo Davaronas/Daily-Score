@@ -84,6 +84,8 @@ public class IntervalHolder : MonoBehaviour
         intervalPrefab_y = intervalPrefab.GetComponent<RectTransform>().sizeDelta.y;
        
             ScrollSizer.AddSize(createTaskScrollContent, intervalPrefab_y);
+
+        SoundManager.PlaySound2();
         
     }
 

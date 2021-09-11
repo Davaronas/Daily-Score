@@ -111,6 +111,8 @@ public class IntervalPrefabUtility : MonoBehaviour
         intervalHolder.IntervalRemoved(this);
         taskTypeComponents.RemoveInterval(this);
         Destroy(gameObject);
+
+        SoundManager.PlaySound6();
     }
 
 

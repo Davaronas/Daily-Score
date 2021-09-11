@@ -95,6 +95,8 @@ public class NotificationPrefabUtility : MonoBehaviour
     public void RemoteCall_DeleteNotification()
     {
         notificationHolder.DeleteNotification(daySelected);
+
+        SoundManager.PlaySound6();
       
     }
 

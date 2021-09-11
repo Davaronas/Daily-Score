@@ -21,6 +21,7 @@ public class GoalManager : MonoBehaviour
     [SerializeField] private Image goalMenuSymbolImage = null;
     [SerializeField] private Image goalMenuPanel = null;
     [SerializeField] private RectTransform goalMenuScrollRectTransform = null;
+    [SerializeField] private GameObject restDayPanel = null;
     [SerializeField] [Range(0f, 1f)] private float goalMenuPanel_whiteStrengthOnGoalColor = 0.5f;
 
     private List<Goal> goals = new List<Goal>();
@@ -50,6 +51,7 @@ public class GoalManager : MonoBehaviour
         taskManager = FindObjectOfType<TaskManager>();
         goalsContentLayoutGroup = goalsScrollContentRectTransform.GetComponent<VerticalLayoutGroup>();
         goalPrefab_Y_Size_ = goalPrefab.GetComponent<RectTransform>().sizeDelta.y;
+        restDayPanel.SetActive(false);
         
     }
 
@@ -122,7 +124,20 @@ public class GoalManager : MonoBehaviour
         }
     }
 
+    public void RestDayActivated()
+    {
+        restDayPanel.SetActive(true);
+    }
 
+    public void Reset()
+    {
+        for (int i = 0; i < goals.Count; i++)
+        {
+            Destroy(goals[i].gameObject);
+        }
+
+        goals.Clear();
+    }
     public void OpenGoalPanel(Goal _goal)
     {
         goalMenuNameField.text = _goal.goalName;

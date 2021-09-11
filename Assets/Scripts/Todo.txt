@@ -171,4 +171,10 @@ reset, rest day, nightmode, notifications
 
 task selected on charts should calculate today
 
-one symbol / goal
+
+
+charts have prefabs there multiple times
+
+activity rate explanation
+
+edit task back: you have unconfirmed changes

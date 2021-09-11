@@ -83,7 +83,7 @@ public class LineDrawer : Graphic
         int i = 0;
         for (i = 0; i < drawPositions.Length; i++)
         {
-           // print("DRAW " + drawPositions[i]);
+            print("DRAW " + drawPositions[i]);
 
             
             if (i != 0)

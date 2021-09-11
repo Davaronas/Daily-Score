@@ -77,7 +77,7 @@ public class ImageColoring : MonoBehaviour
                     break;
             }
 
-            cloneTexture.Apply();
+            cloneTexture.Apply(true);
             Rect _rect = new Rect(0, 0, cloneTexture.width, cloneTexture.height);
             Vector4 _newBorder = new Vector4(0, 0, 0, 0);
 

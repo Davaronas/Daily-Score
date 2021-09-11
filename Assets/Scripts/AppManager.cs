@@ -167,6 +167,11 @@ public class GoalData
         dailyScores.Add(new ScorePerDay(_amount, _time, _targetReached));
     }
 
+    public void AddDailyScore(bool _restDay, DateTime _time)
+    {
+        dailyScores.Add(new ScorePerDay(_restDay, _time));
+    }
+
     public bool TaskExists(string _task)
     {
         for (int i = 0; i < tasks.Count; i++)
@@ -228,12 +233,22 @@ public struct ScorePerDay
         amount = _amount;
         time = _time.ToString();
         targetsReached = _targetReached;
+        isRestDay = false;
+    }
+
+    public ScorePerDay(bool _isRestDay, DateTime _time)
+    {
+        amount = int.MaxValue;
+        time = _time.ToString();
+        targetsReached = new bool[0];
+        isRestDay = _isRestDay;
     }
 
 
     public int amount;
     public string time;
     public bool[] targetsReached;
+    public bool isRestDay;
 
     public DateTime GetDateTime()
     {
@@ -751,6 +766,8 @@ public class AppManager : MonoBehaviour
    [SerializeField] private GameObject settingsPanel;
     [SerializeField] private ErrorWindow errorPanel;
     [SerializeField] private GameObject askUserToTurnOnPowerSavingModePanel;
+    [SerializeField] private GameObject askUserToResetPanel;
+    [SerializeField] private GameObject askUserToStartRestDay;
    [Space]
    [Space]
    [SerializeField] private Sprite[] symbols_e;
@@ -784,6 +801,7 @@ public class AppManager : MonoBehaviour
     public static bool isNightModeOn = false;
     public static bool isGold = false;
     public static bool isPowerSavingModeOn = false;
+    public static bool isRestDayActive = false;
 
     public static bool askedUserAboutPowerSavingMode = false;
 
@@ -863,6 +881,19 @@ public class AppManager : MonoBehaviour
                 Application.targetFrameRate = 60;
                 break;
         }
+
+
+        switch(PlayerPrefs.GetInt("RestDay",0))
+        {
+            case 0:
+                isRestDayActive = false;
+                break;
+            case 1:
+                isRestDayActive = true;
+                break;
+        }
+
+        print(PlayerPrefs.GetInt("RestDay", 0) + " Awake");
     }
 
     private void OnDestroy()
@@ -891,8 +922,8 @@ public class AppManager : MonoBehaviour
     {
         if(type == LogType.Error || type == LogType.Exception)
         {
-            DEBUG_errortext.text = logString + " \n" + stackTrace;
-            DEBUG_error.SetActive(true);
+          //  DEBUG_errortext.text = logString + " \n" + stackTrace;
+          //  DEBUG_error.SetActive(true);
             //Invoke(nameof(DisableError), 0.5f);
         }
     }
@@ -1025,109 +1056,131 @@ public class AppManager : MonoBehaviour
         {
           //  if(_goaldatas[i].current > 0)
             {
-                _goaldatas[i].AddDailyScore(_goaldatas[i].current,lastLogin.Date, TaskPointCalculator.GetTargetValuesReached(_goaldatas[i]));
-                _goaldatas[i].current = 0;
 
-
-                // reset tasks
-                for (int j = 0; j < _goaldatas[i].tasks.Count; j++)
+                if (!isRestDayActive)
                 {
-                    _goaldatas[i].tasks[j].isEditedToday = false;
+                    _goaldatas[i].AddDailyScore(_goaldatas[i].current, lastLogin.Date, TaskPointCalculator.GetTargetValuesReached(_goaldatas[i]));
+                }
+                else
+                {
+                    _goaldatas[i].AddDailyScore(true, lastLogin.Date);
+                }
 
-                    switch(_goaldatas[i].tasks[j].type)
+                    _goaldatas[i].current = 0;
+
+
+                    // reset tasks
+                    for (int j = 0; j < _goaldatas[i].tasks.Count; j++)
                     {
-                        case TaskType.Maximum:
-                            if(((MaximumTaskData)_goaldatas[i].tasks[j]).current >= ((MaximumTaskData)_goaldatas[i].tasks[j]).targetValue)
-                            {
-                                ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
-                            }
-                            else
-                            {
-                                ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
-                            }
+                        _goaldatas[i].tasks[j].isEditedToday = false;
 
-                            ((MaximumTaskData)_goaldatas[i].tasks[j]).current = 0;
-                            break;
-                        case TaskType.Minimum:
-                            if (((MinimumTaskData)_goaldatas[i].tasks[j]).current < ((MinimumTaskData)_goaldatas[i].tasks[j]).targetValue)
-                            {
-                                ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
-                            }
-                            else
-                            {
-                                ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
-                            }
-
-                            ((MinimumTaskData)_goaldatas[i].tasks[j]).current = 0;
-                        break;
-                        case TaskType.Boolean:
-
-                            if(((BooleanTaskData)_goaldatas[i].tasks[j]).isDone)
-                            {
-                                ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
-                            }
-                            else
-                            {
-                                ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
-                            }
-                            ((BooleanTaskData)_goaldatas[i].tasks[j]).isDone = false;
-                            break;
-                        case TaskType.Optimum:
-                            if (((OptimumTaskData)_goaldatas[i].tasks[j]).current == ((OptimumTaskData)_goaldatas[i].tasks[j]).targetValue)
-                            {
-                                ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
-                            }
-                            else
-                            {
-                                ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
-                            }
-
-
-                            ((OptimumTaskData)_goaldatas[i].tasks[j]).current = 0;
-                            break;
-                        case TaskType.Interval:
-                            ((IntervalTaskData)_goaldatas[i].tasks[j]).current = 0;
-                            break;
-                    }
-
-                    _goaldatas[i].tasks[j].isActiveToday = false;
-
-                    // check if tasks should be active today
-                    if (_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.DayOfWeek)
-                    {
-                        for (int k = 0; k < _goaldatas[i].tasks[j].activeOnDays.Count; k++)
+                        switch (_goaldatas[i].tasks[j].type)
                         {
-                            if (_today.DayOfWeek == (DayOfWeek)_goaldatas[i].tasks[j].activeOnDays[k])
+                            case TaskType.Maximum:
+
+                            if (!isRestDayActive)
+                            {
+                                if (((MaximumTaskData)_goaldatas[i].tasks[j]).current >= ((MaximumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                                {
+                                    ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                                }
+                                else
+                                {
+                                    ((MaximumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                                }
+                            }
+
+                                ((MaximumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                                break;
+                            case TaskType.Minimum:
+                            if (!isRestDayActive)
+                            {
+                                if (((MinimumTaskData)_goaldatas[i].tasks[j]).current < ((MinimumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                                {
+                                    ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                                }
+                                else
+                                {
+                                    ((MinimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                                }
+                            }
+
+                                ((MinimumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                                break;
+                            case TaskType.Boolean:
+                            if (!isRestDayActive)
+                            {
+                                if (((BooleanTaskData)_goaldatas[i].tasks[j]).isDone)
+                                {
+                                    ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                                }
+                                else
+                                {
+                                    ((BooleanTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                                }
+                            }
+                                ((BooleanTaskData)_goaldatas[i].tasks[j]).isDone = false;
+                                break;
+                            case TaskType.Optimum:
+                            if (!isRestDayActive)
+                            {
+                                if (((OptimumTaskData)_goaldatas[i].tasks[j]).current == ((OptimumTaskData)_goaldatas[i].tasks[j]).targetValue)
+                                {
+                                    ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row++;
+                                }
+                                else
+                                {
+                                    ((OptimumTaskData)_goaldatas[i].tasks[j]).completedTargetDaysIn_a_Row = 0;
+                                }
+                            }
+
+
+                                ((OptimumTaskData)_goaldatas[i].tasks[j]).current = 0;
+                                break;
+                            case TaskType.Interval:
+                                ((IntervalTaskData)_goaldatas[i].tasks[j]).current = 0;
+                                break;
+                        }
+
+                        _goaldatas[i].tasks[j].isActiveToday = false;
+
+                        // check if tasks should be active today
+                        if (_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.DayOfWeek)
+                        {
+                            for (int k = 0; k < _goaldatas[i].tasks[j].activeOnDays.Count; k++)
+                            {
+                                if (_today.DayOfWeek == (DayOfWeek)_goaldatas[i].tasks[j].activeOnDays[k])
+                                {
+                                    _goaldatas[i].tasks[j].isActiveToday = true;
+                                }
+                            }
+
+                        }
+                        else if (_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.EveryThDay)
+                        {
+
+                            if (Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date == _today) // next date is today
                             {
                                 _goaldatas[i].tasks[j].isActiveToday = true;
                             }
-                        }
-                        
-                    }
-                    else if(_goaldatas[i].tasks[j].beingActiveType == TaskData.ActiveType.EveryThDay)
-                    {
-                        
-                        if(Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date == _today) // next date is today
-                        {
-                            _goaldatas[i].tasks[j].isActiveToday = true;
-                        }
-                        else
-                        {
-                            DateTime _nextThDays = Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date;
-                            while (_nextThDays < _today)
+                            else
                             {
-                                _nextThDays = _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
-                                if (_nextThDays == _today) // one of every th day is today
+                                DateTime _nextThDays = Convert.ToDateTime(_goaldatas[i].tasks[j].nextActiveDay).Date;
+                                while (_nextThDays < _today)
                                 {
-                                    _goaldatas[i].tasks[j].isActiveToday = true;
-                                    _goaldatas[i].tasks[j].nextActiveDay = DateTime.Now.Date.AddDays(_goaldatas[i].tasks[j].activeEveryThDay).ToString();
-                                    break;
+                                    _nextThDays = _nextThDays.AddDays(_goaldatas[i].tasks[j].activeEveryThDay);
+                                    if (_nextThDays == _today) // one of every th day is today
+                                    {
+                                        _goaldatas[i].tasks[j].isActiveToday = true;
+                                        _goaldatas[i].tasks[j].nextActiveDay = DateTime.Now.Date.AddDays(_goaldatas[i].tasks[j].activeEveryThDay).ToString();
+                                        break;
+                                    }
                                 }
+
                             }
-                            
                         }
                     }
-                }
+                
 
                 // add 0 points for each missed day
 
@@ -1200,7 +1253,9 @@ public class AppManager : MonoBehaviour
                 _gd.dailyScores.Add(new ScorePerDay(150, DateTime.Today.AddDays(-6), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(500, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-6)));
                 _gd.dailyScores.Add(new ScorePerDay(200, DateTime.Today.AddDays(-5), new bool[] { false, true, true, true, false }));
-                _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4), new bool[] { false, true, true, true, false }));
+              //  _gd.dailyScores.Add(new ScorePerDay(350, DateTime.Today.AddDays(-4), new bool[] { false, true, true, true, false }));
+                _gd.dailyScores.Add(new ScorePerDay(true, DateTime.Today.AddDays(-4)));
+
                 _gd.dailyScores.Add(new ScorePerDay(UnityEngine.Random.Range(500, 2000), DateTime.Today.AddDays(-3), new bool[] { false, true, true, true, false }));
                 _gd.AddModification(new GoalChange(100, GoalData.ModificationType.ChangeValue, "bool", DateTime.Today.AddDays(-3)));
                 
@@ -1208,6 +1263,7 @@ public class AppManager : MonoBehaviour
                 
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
+                
                 
                 
             }
@@ -1220,6 +1276,22 @@ public class AppManager : MonoBehaviour
             Invoke(nameof(SetLastLoginToNow),Time.deltaTime);
            
             GoalActivityCheck(_savedGoals);
+
+            print(lastLogin + " " + DateTime.Today);
+
+            if(lastLogin != DateTime.Today)
+            {
+                PlayerPrefs.SetInt("RestDay", 0);
+                isRestDayActive = false;
+                print("Not today, set to zero");
+            }
+
+            print(PlayerPrefs.GetInt("RestDay", 0) + " Start");
+
+            if (isRestDayActive)
+            {
+                goalManager.RestDayActivated();
+            }
 
             goalManager.LoadGoals(_savedGoals);
         }
@@ -1240,6 +1312,8 @@ public class AppManager : MonoBehaviour
         settingsPanel.SetActive(false);
         errorPanel.gameObject.SetActive(false);
         askUserToTurnOnPowerSavingModePanel.SetActive(false);
+        askUserToResetPanel.SetActive(false);
+        askUserToStartRestDay.SetActive(false);
 
 
         // set language if already saved one
@@ -1259,7 +1333,7 @@ public class AppManager : MonoBehaviour
     {
        
 
-        lastLogin = DateTime.Now;
+        lastLogin = DateTime.Today;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
@@ -1309,6 +1383,11 @@ public class AppManager : MonoBehaviour
 
     }
 
+    public void RemoteCall_Back()
+    {
+        HandleBack();
+    }
+
     private void HandleBack()
     {
         SoundManager.PlaySound3();
@@ -1348,6 +1427,18 @@ public class AppManager : MonoBehaviour
         if(askUserToTurnOnPowerSavingModePanel.activeSelf)
         {
             askUserToTurnOnPowerSavingModePanel.SetActive(false);
+            return;
+        }
+
+        if(askUserToResetPanel.activeSelf)
+        {
+            askUserToResetPanel.SetActive(false);
+            return;
+        }
+
+        if(askUserToStartRestDay.activeSelf)
+        {
+            askUserToStartRestDay.SetActive(false);
             return;
         }
 
@@ -1540,6 +1631,55 @@ public class AppManager : MonoBehaviour
     
 
 
+    public void RemoteCall_TurnOnRestDay()
+    {
+        isRestDayActive = true;
+        PlayerPrefs.SetInt("RestDay", 1);
+        goalManager.RestDayActivated();
+
+        askUserToStartRestDay.SetActive(false);
+
+        SoundManager.PlaySound5();
+    }
+
+    public void RemoteCall_CloseAskUserToStartRestDayPanel()
+    {
+        askUserToStartRestDay.SetActive(false);
+
+        SoundManager.PlaySound6();
+    }
+
+    public void RemoteCall_AskUserToStartRestDayButtonPressed()
+    {
+        askUserToStartRestDay.SetActive(true);
+
+        SoundManager.PlaySound2();
+    }
+
+    public void RemoteCall_Reset()
+    {
+        goalManager.Reset();
+        askUserToResetPanel.SetActive(false);
+
+        SaveGoalData();
+
+        SoundManager.PlaySound5();
+    }
+
+    public void RemoteCall_CloseAskUserToResetPanel()
+    {
+        askUserToResetPanel.SetActive(false);
+
+        SoundManager.PlaySound6();
+    }
+
+    public void RemoteCall_ResetButtonPressed()
+    {
+        askUserToResetPanel.SetActive(true);
+
+        SoundManager.PlaySound2();
+    }
+
    public static void TaskMenuOpened()
    {
         OnTaskMenuOpened?.Invoke();
@@ -1664,7 +1804,7 @@ public class AppManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGoalData();
-        lastLogin = DateTime.Now.Date;
+        lastLogin = DateTime.Today;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
@@ -1673,13 +1813,13 @@ public class AppManager : MonoBehaviour
         if(focus)
         {
             GoalActivityCheck(goalManager.GetExistingGoals());
-            lastLogin = DateTime.Now;
+            lastLogin = DateTime.Today;
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
         else
         {
             SaveGoalData();
-            lastLogin = DateTime.Now;
+            lastLogin = DateTime.Today;
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
     }

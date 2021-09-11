@@ -11,6 +11,8 @@ public class TaskTypeSelectButton : BehaviourButton
     private CreateTaskPanelBroadcaster broadcasterScroll = null;
     private TaskTypeSelectButton[] taskTypeSelectButtons;
 
+   [SerializeField] private Color selectedColor = new Color(200, 200, 200);
+
     private void Awake()
     {
         taskManager = FindObjectOfType<TaskManager>();
@@ -32,7 +34,7 @@ public class TaskTypeSelectButton : BehaviourButton
             taskManager.DisplayTaskTypeText(taskType);
 
             // TEMPORARY
-            GetComponent<Image>().color = Color.red;
+            GetComponent<Image>().color = selectedColor;
 
             foreach(TaskTypeSelectButton _b in taskTypeSelectButtons)
             {

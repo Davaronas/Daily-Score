@@ -33,6 +33,7 @@ public class BarChartHolder : MonoBehaviour
 {
     [SerializeField] private Color barColor = Color.white;
     [SerializeField] private GameObject barPrefab = null;
+    [SerializeField] private GameObject restDayBarPrefab = null;
     [SerializeField] private TMP_Text minText = null;
     [SerializeField] private TMP_Text maxText = null;
     [SerializeField] private TMP_Text minTime = null;
@@ -276,8 +277,18 @@ public class BarChartHolder : MonoBehaviour
     private void LoadBar(float _points, string _time, bool _useUnderTexts = true, bool _useAmounts = true)
     {
 
+        if(_points > int.MaxValue)
+        {
+            _points = int.MaxValue;
+        }
+
+
+
+
+
         if(_points > max)
         {
+            if(_points != int.MaxValue)
             max = _points;
         }
 
@@ -286,9 +297,15 @@ public class BarChartHolder : MonoBehaviour
             min = _points;
         }
 
-        
-
-        BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        BarChartPrefabUtility _newBar = null;
+        if (_points != int.MaxValue)
+        {
+            _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
+        else
+        {
+            _newBar = Instantiate(restDayBarPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
 
       
 
@@ -311,8 +328,14 @@ public class BarChartHolder : MonoBehaviour
 
         foreach(KeyValuePair<BarChartPrefabUtility,float> _bar in bars)
         {
-
-            _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+            if (_bar.Value != int.MaxValue)
+            {
+                _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+            }
+            else
+            {
+                _bar.Key.SetSize(holderHeight);
+            }
         }
 
         maxText.text = max.ToString();
@@ -332,10 +355,17 @@ public class BarChartHolder : MonoBehaviour
 
     private void LoadBar(float _points, string _time, Color _barColor, bool _useUnderTexts = true, bool _useAmounts = true)
     {
-        
+
+
+        if (_points > int.MaxValue)
+        {
+            _points = int.MaxValue;
+        }
+
 
         if (_points > max)
         {
+            if(_points != int.MaxValue)
             max = _points;
         }
 
@@ -346,7 +376,17 @@ public class BarChartHolder : MonoBehaviour
 
 
 
-        BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        BarChartPrefabUtility _newBar = null;
+        if (_points != int.MaxValue)
+        {
+            _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
+        else
+        {
+            _newBar = Instantiate(restDayBarPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
+
+
         bars.Add(_newBar, _points);
 
         if (_useUnderTexts)
@@ -366,8 +406,15 @@ public class BarChartHolder : MonoBehaviour
 
         foreach (KeyValuePair<BarChartPrefabUtility, float> _bar in bars)
         {
+            if (_bar.Value != int.MaxValue)
+            {
 
-            _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+                _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+            }
+            else
+            {
+                _bar.Key.SetSize(holderHeight);
+            }
         }
 
         maxText.text = max.ToString();
@@ -388,9 +435,17 @@ public class BarChartHolder : MonoBehaviour
     private void LoadBar(float _points, Color _barColor, int _id)
     {
 
+        if (_points > int.MaxValue)
+        {
+            _points = int.MaxValue;
+        }
+
+
+
 
         if (_points > max)
         {
+            if(_points != int.MaxValue)
             max = _points;
         }
 
@@ -401,7 +456,15 @@ public class BarChartHolder : MonoBehaviour
 
 
 
-        BarChartPrefabUtility _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        BarChartPrefabUtility _newBar = null;
+        if (_points != int.MaxValue)
+        {
+            _newBar = Instantiate(barPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
+        else
+        {
+            _newBar = Instantiate(restDayBarPrefab, transform.position, Quaternion.identity, transform).GetComponent<BarChartPrefabUtility>();
+        }
         bars.Add(_newBar, _points);
 
       
@@ -413,7 +476,14 @@ public class BarChartHolder : MonoBehaviour
         foreach (KeyValuePair<BarChartPrefabUtility, float> _bar in bars)
         {
 
-            _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+            if (_bar.Value != int.MaxValue)
+            {
+                _bar.Key.SetSize((_bar.Value / max) * holderHeight);
+            }
+            else
+            {
+                _bar.Key.SetSize(holderHeight);
+            }
         }
 
         maxText.text = max.ToString();

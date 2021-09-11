@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.UI;
 
 public class TipManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class TipManager : MonoBehaviour
 
     [SerializeField] private GameObject askToDeleteTipPanel;
     [SerializeField] private TMP_Text askToDeleteTipText;
+    [SerializeField] private ScrollRect tipMenuScroll;
 
 
   
@@ -179,7 +181,7 @@ public class TipManager : MonoBehaviour
         ChangeSavedTipAmountText();
         ScrollSizer.AddSize(tipSubmenuScrollContent, tipPrefab_Y_Size);
 
-
+        tipMenuScroll.verticalNormalizedPosition = 1;
 
     }
 

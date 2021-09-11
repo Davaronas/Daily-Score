@@ -71,6 +71,8 @@ public class ActivityRate : MonoBehaviour
                 {
                     for (int j = _goalDatas[k].dailyScores.Count - 1; j > -1; j--)
                     {
+                        if (_goalDatas[k].dailyScores[j].isRestDay) { continue; }
+
                         if (_goalDatas[k].dailyScores[j].GetDateTime().DayOfWeek == (DayOfWeek)i)
                         {
                             if (Contains(_activities[i], _goalDatas[k].dailyScores[j].GetDateTime()))
@@ -97,6 +99,8 @@ public class ActivityRate : MonoBehaviour
                 {
                     for (int l = _goalDatas[k].dailyScores.Count - 1; l > -1; l--)
                     {
+                        if (_goalDatas[k].dailyScores[j].isRestDay) { continue; }
+
                         if (_goalDatas[k].dailyScores[l].GetDateTime() == _activities[i].dates[j])
                         {
                             _activities[i].points += _goalDatas[k].dailyScores[l].amount;

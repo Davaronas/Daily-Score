@@ -12,24 +12,45 @@ public class BarChartPrefabUtility : MonoBehaviour
     [SerializeField] private TMP_Text dayText;
     [SerializeField] private Image picto;
     [SerializeField] private RectTransform endPoint;
+    [SerializeField] private bool isRestDayBar = false;
 
 
     public void SetProperties(Color _color, float _amount, string _when)
     {
-        image.color = _color;
-        amountText.text = _amount.ToString();
-        dayText.text = _when.ToString();
+        
+            if (!isRestDayBar)
+                image.color = _color;
 
-        if (picto != null)
-        {
-            Destroy(picto.gameObject);
-        }
+            if (_amount > 0)
+            {
+                if(!isRestDayBar)
+                amountText.text = _amount.ToString();
+            }
+            else
+            {
+                amountText.text = "";
+            }
+            dayText.text = _when.ToString();
+
+            if (picto != null)
+            {
+                Destroy(picto.gameObject);
+            }
+    }
+
+    public void RestDayBar()
+    {
+
     }
 
     public void SetProperties(Color _color)
     {
-        image.color = _color;
-        Destroy(amountText.gameObject);
+        if (!isRestDayBar)
+            image.color = _color;
+
+        if (!isRestDayBar)
+            Destroy(amountText.gameObject);
+
         Destroy(dayText.gameObject);
         if (picto != null)
         {
@@ -39,8 +60,19 @@ public class BarChartPrefabUtility : MonoBehaviour
 
     public void SetProperties(Color _color, float _amount)
     {
-        image.color = _color;
-        amountText.text = _amount.ToString();
+        if (!isRestDayBar)
+            image.color = _color;
+
+        if (_amount > 0)
+        {
+            if (!isRestDayBar)
+                amountText.text = _amount.ToString();
+        }
+        else
+        {
+            if (!isRestDayBar)
+                amountText.text = "";
+        }
         Destroy(dayText.gameObject);
         if (picto != null)
         {
@@ -50,9 +82,20 @@ public class BarChartPrefabUtility : MonoBehaviour
 
     public void SetProperties(float _amount, Color32 _color, int _pictoId)
     {
-        amountText.text = _amount.ToString();
-     //   print(_color);
-        image.color = _color;
+        if (_amount > 0)
+        {
+            if (!isRestDayBar)
+                amountText.text = _amount.ToString();
+        }
+        else
+        {
+            if (!isRestDayBar)
+                amountText.text = "";
+        }
+        //   print(_color);
+        if (!isRestDayBar)
+            image.color = _color;
+
         picto.sprite = AppManager.GetSpriteFromId(_pictoId);
         Destroy(dayText.gameObject);
     }

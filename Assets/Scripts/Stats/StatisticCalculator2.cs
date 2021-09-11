@@ -235,6 +235,7 @@ public class StatisticCalculator2 : MonoBehaviour
         {
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
             {
+                if (GoalDATAS[i].dailyScores[k].isRestDay) { continue; }
 
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7))
                 {
@@ -300,8 +301,11 @@ public class StatisticCalculator2 : MonoBehaviour
             }
             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
             {
+                if (GoalDATAS[j].dailyScores[k].isRestDay) { continue; }
+
                 if (Convert.ToDateTime(GoalDATAS[j].dailyScores[k].time) >= Today.AddDays(-30))
                 {
+
                     daycountermonth++;
                     monthlyfleet += GoalDATAS[j].dailyScores[k].amount;
                 }
@@ -351,6 +355,7 @@ public class StatisticCalculator2 : MonoBehaviour
         int[] weeklydata = new int[7];
         for (int k = 0; k < currentselectedGoal.dailyScores.Count; k++)
         {
+            if (currentselectedGoal.dailyScores[k].isRestDay) { continue; }
 
             if (Convert.ToDateTime(currentselectedGoal.dailyScores[k].time).Date >= Today.AddDays(-7))
             {
@@ -434,6 +439,8 @@ public class StatisticCalculator2 : MonoBehaviour
         {
             for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
             {
+                if (GoalDATAS[i].dailyScores[j].isRestDay) { continue; }
+
                 _allTimeAverage += GoalDATAS[i].dailyScores[j].amount;
                 _allTimeFound++;
 
@@ -630,6 +637,8 @@ public class StatisticCalculator2 : MonoBehaviour
             // int _sum = 0;
             for (int k = 0; k < GoalDATAS[i].dailyScores.Count; k++)
             {
+                if (GoalDATAS[i].dailyScores[k].isRestDay) { continue; }
+
                 if (Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date >= Today.AddDays(-7) && Convert.ToDateTime(GoalDATAS[i].dailyScores[k].time).Date < Today)
                 {
                     //_sum += GoalDATAS[i].dailyScores[k].amount;
@@ -1567,6 +1576,8 @@ public class StatisticCalculator2 : MonoBehaviour
                     float _points = 0;
                     for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
                     {
+                        if (GoalDATAS[i].dailyScores[j].isRestDay) { continue; }
+
                         if (GoalDATAS[i].dailyScores[j].GetDateTime().Date == Today.AddDays(_rewind))
                         {
                             _points += GoalDATAS[i].dailyScores[j].amount;
@@ -1597,6 +1608,8 @@ public class StatisticCalculator2 : MonoBehaviour
                     float _points = 0;
                     for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
                     {
+                        if (GoalDATAS[i].dailyScores[j].isRestDay) { continue; }
+
                         if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays(((_rewind - 1) * _time))
                             && (GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays((_rewind * _time))))
                         {
@@ -1678,6 +1691,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     _skip = true;
                     for (int i = 0; i < GoalDATAS.Length; i++)
                     {
+
                         Top3BarChartData _thisGoal = new Top3BarChartData(0, GoalDATAS[i].spriteId, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]);
 
                         for (int j = 0; j < GoalDATAS[i].tasks.Count; j++)
@@ -1712,6 +1726,8 @@ public class StatisticCalculator2 : MonoBehaviour
                 Top3BarChartData _thisGoal = new Top3BarChartData(0, GoalDATAS[i].spriteId, GoalDATAS[i].color[0] + GoalDATAS[i].color[1]);
                 for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
                 {
+                    if (GoalDATAS[i].dailyScores[j].isRestDay) { continue; }
+
                     if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays((_rewind - 1) * _time) && GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays(_rewind * _time))
                     {
                         _thisGoal.amount += GoalDATAS[i].dailyScores[j].amount;
@@ -1818,6 +1834,8 @@ public class StatisticCalculator2 : MonoBehaviour
 
                             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                             {
+                                if (GoalDATAS[j].dailyScores[k].isRestDay) { continue; }
+
                                 for (int week = 1; week < 7; week++)
                                 {
                                     if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-week))
@@ -1832,6 +1850,8 @@ public class StatisticCalculator2 : MonoBehaviour
                         {
                             for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                             {
+                                if (GoalDATAS[j].dailyScores[k].isRestDay) { continue; }
+
                                 for (int week = 0; week < 7; week++)
                                 {
                                     if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-(week + i)))
@@ -1856,6 +1876,8 @@ public class StatisticCalculator2 : MonoBehaviour
 
                                 for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                                 {
+                                    if (GoalDATAS[j].dailyScores[k].isRestDay) { continue; }
+
                                     for (int week = 1; week < 7; week++)
                                     {
                                         if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-week))
@@ -1873,6 +1895,8 @@ public class StatisticCalculator2 : MonoBehaviour
                             {
                                 for (int k = 0; k < GoalDATAS[j].dailyScores.Count; k++)
                                 {
+                                    if (GoalDATAS[j].dailyScores[k].isRestDay) { continue; }
+
                                     for (int week = 0; week < 7; week++)
                                     {
                                         if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays(-(week + i)))

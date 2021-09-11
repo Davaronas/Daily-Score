@@ -33,16 +33,19 @@ public static class TaskPointCalculator
         }
     }
 
+
+
     public static bool[] GetTargetValuesReached(GoalData _gd)
     {
         List<bool> _targetsReached = new List<bool>();
 
         for (int i = 0; i < _gd.tasks.Count; i++)
         {
-            if (_gd.tasks[i].type != AppManager.TaskType.Interval)
+            if (_gd.tasks[i].isActiveToday)
             {
                 _targetsReached.Add(IsTargetValueReached(_gd.tasks[i]));
             }
+            
         }
 
         return _targetsReached.ToArray();
@@ -128,6 +131,13 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(IntervalTaskData _itd)
     {
+        for (int i = 0; i < _itd.intervals.Length; i++)
+        {
+            if(_itd.current >= _itd.intervals[i].from && _itd.current <= _itd.intervals[i].to)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -389,4 +399,40 @@ public static class TaskPointCalculator
 
         return 0;
     }
+
+
+    public static int GetStarAmountFromPercent(float _p)
+    {
+        _p *= 100;
+        Debug.Log(_p);
+
+        if (_p < 21 && _p > 0)
+        {
+            return 1;
+        }
+        else if (_p < 41 && _p > 20)
+        {
+            return 2;
+        }
+        else if (_p < 61 && _p > 40)
+        {
+            return 3;
+        }
+        else if (_p < 81 && _p > 60)
+        {
+            return 4;
+        }
+        else if (_p > 80)
+        {
+            return 5;
+        }
+        else
+            return 0;
+
+
+       
+    }
+
+
+
 }

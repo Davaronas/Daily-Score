@@ -842,6 +842,8 @@ public class TaskManager : MonoBehaviour
             return;
         }
 
+        
+
         bool _foundSelectable = false;
         if (selectedActiveDays.Count > 0)
         {

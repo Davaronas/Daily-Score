@@ -354,4 +354,8 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
+    public NotificationData[] GetNotifcationDatas()
+    {
+        return notifications.ToArray();
+    }
 }

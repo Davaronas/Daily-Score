@@ -490,4 +490,34 @@ public static class RuntimeTranslator
         }
     }
 
+    public static string TranslateEveryWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return "Every";
+            case AppManager.Languages.Magyar:
+                return "Minden";
+            case AppManager.Languages.Deutsch:
+                return "";
+            default:
+                return "AppManager.Languages doesn't contain this language";
+        }
+    }
+
+    public static string TranslateDayWord()
+    {
+        switch (AppManager.currentLanguage)
+        {
+            case AppManager.Languages.English:
+                return "day";
+            case AppManager.Languages.Magyar:
+                return "nap";
+            case AppManager.Languages.Deutsch:
+                return "";
+            default:
+                return "AppManager.Languages doesn't contain this language";
+        }
+    }
+
 }
