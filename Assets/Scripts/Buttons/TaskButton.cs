@@ -37,8 +37,7 @@ public class TaskButton : BehaviourButton
     private void CheckIfDragging()
     {
 
-        print(goalPanelScroll.allowOpenTask);
-        if (goalPanelScroll.allowOpenTask)
+        if (goalPanelScroll.allowInteraction)
         {
             AppManager.TaskMenuOpened();
             taskManager.EditTask(task.GetTaskData());

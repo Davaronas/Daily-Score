@@ -6,6 +6,7 @@ using TMPro;
 public class SettingsLanguageButton : BehaviourButton
 {
     [SerializeField] private AppManager.Languages language;
+    [SerializeField] private GoalPanelScroll settingsPanelScroll = null;
     private TMP_Text text;
 
     private void Awake()
@@ -34,11 +35,30 @@ public class SettingsLanguageButton : BehaviourButton
 
     protected override void OnTouch()
     {
-        base.OnTouch();
+        if (!Application.isEditor)
+        {
+            settingsPanelScroll.FeedClickPosition(Input.GetTouch(0).position);
+        }
+        else
+        {
+            settingsPanelScroll.FeedClickPosition(Input.mousePosition);
+        }
+    }
 
+    protected override void OnRelease()
+{
+    Invoke(nameof(CheckIfDragging), Time.deltaTime);
+}
+
+private void CheckIfDragging()
+{
+
+    if (settingsPanelScroll.allowInteraction)
+    {
         AppManager.SetLanguage(language);
 
         SoundManager.PlaySound2();
     }
+}
 
 }

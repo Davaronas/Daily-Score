@@ -8,6 +8,7 @@ using System;
 public class TaskManager : MonoBehaviour
 {
     [SerializeField] private RectTransform tasksScrollContentRectTransform = null;
+    [SerializeField] private ScrollRect taskMenuScroll = null;
     [SerializeField] private GameObject taskPrefab = null;
     [Space]
     [SerializeField] private TMP_Dropdown valueMetricDropdown = null;
@@ -99,6 +100,7 @@ public class TaskManager : MonoBehaviour
 
     private void OnDisable()
     {
+
         enteredName = "";
         taskNameField.text = "";
         DestroyTasks();
@@ -184,7 +186,7 @@ public class TaskManager : MonoBehaviour
 
     public void EditTask(TaskData _data)
     {
-        print("Edit task");
+        print(_data.name + " " + _data.type);
 
         currentlySelectedTask = _data;
 
@@ -290,7 +292,6 @@ public class TaskManager : MonoBehaviour
 
                 NotificationManager.NotificationData _nd;
 
-                print(_data.notificationAttachedActiveDay[k] + " found");
 
                 if (NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[k], _data.name, out _nd))
                 {
@@ -342,6 +343,166 @@ public class TaskManager : MonoBehaviour
         // switch _data.activeOnDays with selected actice days
     }
 
+    public void EditTaskFromSettingsNotification(TaskData _data)
+    {
+        OnDisable();
+
+        taskMenuScroll.verticalNormalizedPosition = 0;
+
+        currentlySelectedTask = _data;
+
+        taskNameText_EditMode.text = _data.name;
+        taskTypeText_EditMode.text = RuntimeTranslator.TranslateTaskType(_data.type);
+
+        taskNameText_EditMode.gameObject.SetActive(true);
+        taskTypeInfoText_EditMode.gameObject.SetActive(true);
+        taskTypeText_EditMode.gameObject.SetActive(true);
+        confirmChangesButton_EditMode.SetActive(true);
+        deleteTaskButton_EditMode.SetActive(true);
+        resetTaskButton_EditMode.SetActive(true);
+
+        taskNameField_GO.SetActive(false);
+        taskTypeButtons.SetActive(false);
+        createNewTaskButton.SetActive(false);
+
+
+
+        /*
+        for (int i = 0; i < _data.activeOnDays.Count; i++)
+        {
+            selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[i]);
+        }
+        */
+
+        everyThDay = _data.activeEveryThDay;
+
+
+        TaskNameUpdateNeeded?.Invoke(_data.name);
+
+        // show task data type texts
+        switch (_data.type)
+        {
+            case AppManager.TaskType.Maximum:
+                taskTypeComponents.EditMode_SetMaxDataComponents(_data as MaximumTaskData);
+                maximumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
+                break;
+            case AppManager.TaskType.Minimum:
+                taskTypeComponents.EditMode_SetMinDataComponents(_data as MinimumTaskData);
+                minimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
+                break;
+            case AppManager.TaskType.Boolean:
+                taskTypeComponents.EditMode_SetBoolDataComponents(_data as BooleanTaskData);
+                booleanTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
+                break;
+            case AppManager.TaskType.Optimum:
+                taskTypeComponents.EditMode_SetOptimumDataComponents(_data as OptimumTaskData);
+                optimumTexts.SetActive(true);
+                targetValueTexts.SetActive(true);
+                intervalMeasureTexts.SetActive(false);
+
+                TargetValueUpdateNeeded?.Invoke(taskTypeComponents.GetTargetValue());
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetNonIntervalMetric());
+                break;
+            case AppManager.TaskType.Interval:
+                taskTypeComponents.EditMode_SetIntervalDataComponents(_data as IntervalTaskData);
+                intervalTexts.SetActive(true);
+                targetValueTexts.SetActive(false);
+                intervalMeasureTexts.SetActive(true);
+
+                MetricUpdateNeeded?.Invoke(taskTypeComponents.GetIntervalMetric());
+                break;
+        }
+
+
+        // turn on active day toggles / every th day input field
+
+
+        if (_data.activeOnDays.Count > 0)
+        {
+
+            for (int i = 0; i < dayToggles.Length; i++)
+            {
+                for (int j = 0; j < _data.activeOnDays.Count; j++)
+                {
+                    if (dayToggles[i].GetDay() == (DayOfWeek)_data.activeOnDays[j])
+                    {
+                        dayToggles[i].TurnOn();
+                        //  selectedActiveDays.Add((DayOfWeek)_data.activeOnDays[j]);
+                        break;
+                    }
+                }
+            }
+
+            for (int k = 0; k < _data.notificationAttachedActiveDay.Count; k++)
+            {
+
+                NotificationManager.NotificationData _nd;
+
+
+                if (NotificationManager.GetNotificationData((DayOfWeek)_data.notificationAttachedActiveDay[k], _data.name, out _nd))
+                {
+                    NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[k]);
+                    _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
+                }
+
+            }
+
+
+        }
+        else
+        {
+
+            NotificationManager.NotificationData _nd;
+
+            if (NotificationManager.GetNotificationData_NoDayCheck(_data.name, out _nd))
+            {
+                NotificationPrefabUtility _npu = notificationHolder.CreateNewNotification((DayOfWeek)_data.notificationAttachedActiveDay[0]);
+                _npu.SetDayPlusIntervalDays((DayOfWeek)_data.notificationAttachedActiveDay[0], _nd.resetIntervalDays);
+                _npu.SetHourAndMinute(Convert.ToDateTime(_nd.fireTime).Hour, Convert.ToDateTime(_nd.fireTime).Minute);
+            }
+
+            everyThDayInputField.text = _data.activeEveryThDay.ToString();
+        }
+
+
+
+
+
+        // SoundManager.PlaySound2();
+
+
+        /*
+        foreach (DayOfWeek _day in selectedActiveDays)
+        {
+            print(_day);
+        }
+        */
+
+
+        // display notifications attached to this task
+
+
+        // feed task type components and day holders or everyThDay input field
+        // notifications
+
+
+        // switch _data.activeOnDays with selected actice days
+    }
 
 
     public void RemoteCall_ConfirmEditChanges()

@@ -302,6 +302,11 @@ public class GoalManager : MonoBehaviour
         return true;
     }
 
+
+    public void ClearCurrentlySelectedGoal()
+    {
+        currentlySelectedGoal = null;
+    }
     public Goal GetCurrentlySelectedGoal()
     {
         return currentlySelectedGoal;
@@ -347,6 +352,41 @@ public class GoalManager : MonoBehaviour
             }
         }
         return _gd;
+    }
+
+    public bool SearchTaskByName(string _name)
+    {
+        for (int i = 0; i < goals.Count; i++)
+        {
+            for (int j = 0; j < goals[i].GetGoalData().tasks.Count; j++)
+            {
+                if (goals[i].GetGoalData().tasks[j].name == _name)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool SearchTaskByName(string _name, out TaskData _td)
+    {
+        _td = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            for (int j = 0; j < goals[i].GetGoalData().tasks.Count; j++)
+            {
+                if(goals[i].GetGoalData().tasks[j].name == _name)
+                {
+                    _td = goals[i].GetGoalData().tasks[j];
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public bool IsNameAlreadyTaken(string _name)

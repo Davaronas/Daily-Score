@@ -178,3 +178,8 @@ charts have prefabs there multiple times
 activity rate explanation
 
 edit task back: you have unconfirmed changes
+
+delete notifications that their tasks do not exist any longer
+Rest day button just click if already rest day is active
+
+notifications randomly deleted

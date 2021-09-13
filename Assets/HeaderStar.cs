@@ -23,12 +23,12 @@ public class HeaderStar : MonoBehaviour
 
     private void OnDisable()
     {
-        Invoke(nameof(ResetStar), Time.deltaTime);
+        Invoke(nameof(ResetStar), Time.deltaTime * 2);
     }
 
     private void OnEnable()
     {
-        Invoke(nameof(ResetStar), Time.deltaTime);
+        Invoke(nameof(ResetStar), Time.deltaTime * 2);
     }
 
     private void ResetStar()

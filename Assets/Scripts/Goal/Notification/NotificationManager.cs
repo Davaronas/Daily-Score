@@ -110,13 +110,29 @@ public class NotificationManager : MonoBehaviour
                     ClearNotification(notifications[i].id);
                     SendNotificationWithAddingResetTime(_replace);
                 }
+
+                
+
             }
         }
 
         CreateChannel();
+        Invoke(nameof(CheckNotValidNotifications), 1f);
     }
 
-    public static bool GetNotificationData(int _id, out NotificationData _data)
+
+    private void CheckNotValidNotifications()
+    {
+        for (int i = 0; i < notifications.Count; i++)
+        {
+            if (!goalManager.SearchTaskByName(notifications[i].ownerTask))
+            {
+                ClearNotification(notifications[i].id);
+            }
+        }
+    }
+
+        public static bool GetNotificationData(int _id, out NotificationData _data)
     {
 
         for (int i = 0; i < notifications.Count; i++)

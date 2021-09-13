@@ -7,7 +7,7 @@ public class PowerSaveButton : BehaviourButton
     [SerializeField] private bool isOn = false;
     [SerializeField] private GameObject thisLine = null;
     [SerializeField] private GameObject otherLine = null;
-
+    [SerializeField] private GoalPanelScroll settingsPanelScroll = null;
 
 
     private void Awake()
@@ -25,13 +25,40 @@ public class PowerSaveButton : BehaviourButton
         AppManager.OnPowerSavingModeChanged -= CheckStatus;
     }
 
+   
+
+
+
     protected override void OnTouch()
     {
-        AppManager.SetPowerSavingMode(isOn);
-        
-
-        SoundManager.PlaySound2();
+        if (!Application.isEditor)
+        {
+            settingsPanelScroll.FeedClickPosition(Input.GetTouch(0).position);
+        }
+        else
+        {
+            settingsPanelScroll.FeedClickPosition(Input.mousePosition);
+        }
     }
+
+    protected override void OnRelease()
+    {
+        Invoke(nameof(CheckIfDragging), Time.deltaTime);
+    }
+
+    private void CheckIfDragging()
+    {
+
+        if (settingsPanelScroll.allowInteraction)
+        {
+            AppManager.SetPowerSavingMode(isOn);
+
+
+            SoundManager.PlaySound2();
+        }
+    }
+
+
 
     private void CheckStatus()
     {

@@ -277,7 +277,8 @@ public class BarChartHolder : MonoBehaviour
     private void LoadBar(float _points, string _time, bool _useUnderTexts = true, bool _useAmounts = true)
     {
 
-        if(_points > int.MaxValue)
+
+        if (_points > int.MaxValue)
         {
             _points = int.MaxValue;
         }
@@ -434,7 +435,6 @@ public class BarChartHolder : MonoBehaviour
 
     private void LoadBar(float _points, Color _barColor, int _id)
     {
-
         if (_points > int.MaxValue)
         {
             _points = int.MaxValue;

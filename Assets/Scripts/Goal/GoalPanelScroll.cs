@@ -10,11 +10,11 @@ public class GoalPanelScroll : ScrollDragBroadcast
 
     [SerializeField] private float thresholdDistance = 3f;
 
-   [HideInInspector] public bool allowOpenTask = true;
+   [HideInInspector] public bool allowInteraction = true;
 
     private void Start()
     {
-        allowOpenTask = true;
+        allowInteraction = true;
     }
 
     public override void OnDrag(PointerEventData eventData)
@@ -33,11 +33,11 @@ public class GoalPanelScroll : ScrollDragBroadcast
 
         if ((mousePosStart_ - mousePosStartDrag_).magnitude < thresholdDistance)
         {
-            allowOpenTask = true;
+            allowInteraction = true;
         }
         else
         {
-            allowOpenTask = false;
+            allowInteraction = false;
         }
     }
 
@@ -45,7 +45,7 @@ public class GoalPanelScroll : ScrollDragBroadcast
     {
         base.OnEndDrag(eventData);
 
-        allowOpenTask = true;
+        allowInteraction = true;
     }
 
     public void FeedClickPosition(Vector2 _touchPos)

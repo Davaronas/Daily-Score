@@ -156,14 +156,14 @@ public class StatisticCalculator2 : MonoBehaviour
 
     private void OnGoalDeleted()
     {
-        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
-        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime * 3);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime * 3);
     }
 
     private void OnGoalOpened(Goal _td)
     {
-        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
-        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime * 3);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime * 3);
     }
     private void OnTaskValueChanged(TaskData _td)
     {
@@ -175,8 +175,8 @@ public class StatisticCalculator2 : MonoBehaviour
 
         // Csak futás közben érzékeli a változtatásokat, a program inditáskor ez nem fut le
 
-        Invoke(nameof(GoalScoreCalcs), Time.deltaTime);
-        Invoke(nameof(TaskGoalCalc), Time.deltaTime);
+        Invoke(nameof(GoalScoreCalcs), Time.deltaTime * 2);
+        Invoke(nameof(TaskGoalCalc), Time.deltaTime * 2);
 
 
     }
@@ -614,11 +614,11 @@ public class StatisticCalculator2 : MonoBehaviour
 
         GoalData currentselectedGoal = goalManager.GetCurrentlySelectedGoal().GetGoalData();
         int taskmaxfleet = currentselectedGoal.current;
-        for (int j = 0; j < currentselectedGoal.dailyScores.Count; j++)
+        for (int j = 0; j < currentselectedGoal.modifications.Count; j++)
         {
-            if (taskmaxfleet < currentselectedGoal.dailyScores[j].amount)
+            if (taskmaxfleet < currentselectedGoal.modifications[j].amount)
             {
-                taskmaxfleet = currentselectedGoal.dailyScores[j].amount;
+                taskmaxfleet = currentselectedGoal.modifications[j].amount;
             }
         }
 
@@ -1307,7 +1307,15 @@ public class StatisticCalculator2 : MonoBehaviour
 
                                 if (GoalDATAS[j].dailyScores[k].GetDateTime().Date == Today.AddDays((_rewind * _time) - (i)))
                                 {
-                                    datas[i - 1] += GoalDATAS[j].dailyScores[k].amount;
+                                    if(GoalDATAS[j].dailyScores[k].isRestDay)
+                                    {
+                                        datas[i - 1] = int.MaxValue;
+                                    }
+                                    else
+                                    {
+                                        datas[i - 1] += GoalDATAS[j].dailyScores[k].amount;
+                                    }
+                                   
                                     counter++;
 
 
@@ -1363,7 +1371,17 @@ public class StatisticCalculator2 : MonoBehaviour
                 {
                     if(GoalDATAS[i].tasks[j].isEditedToday)
                     {
-                        _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]); 
+                        if (_f == StatCalculationFilter.Task)
+                        {
+                            if (GoalDATAS[i].tasks[j].name == selectedTaskName_BarChart1)
+                            {
+                                _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                            }
+                        }
+                        else
+                        {
+                            _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                        }
                     }
                 }
             }

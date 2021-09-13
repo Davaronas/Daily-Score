@@ -892,8 +892,6 @@ public class AppManager : MonoBehaviour
                 isRestDayActive = true;
                 break;
         }
-
-        print(PlayerPrefs.GetInt("RestDay", 0) + " Awake");
     }
 
     private void OnDestroy()
@@ -1014,6 +1012,12 @@ public class AppManager : MonoBehaviour
 
         if(_layer == 212)
         {
+            if(goalManager.GetCurrentlySelectedGoal() == null)
+            {
+                SetAppLayer(3);
+                return;
+            }
+
            taskManager.DisplayTasks(goalManager.GetCurrentlySelectedGoal().GetTasks());
 
             mainMenuPanel.SetActive(false);
@@ -1037,6 +1041,8 @@ public class AppManager : MonoBehaviour
         {
             mainMenuPanel.SetActive(false);
             settingsPanel.SetActive(true);
+            goalPanel.SetActive(false);
+            createTaskPanel.SetActive(false);
 
             return;
         }
@@ -1279,6 +1285,8 @@ public class AppManager : MonoBehaviour
 
             print(lastLogin + " " + DateTime.Today);
 
+
+
             if(lastLogin != DateTime.Today)
             {
                 PlayerPrefs.SetInt("RestDay", 0);
@@ -1286,7 +1294,6 @@ public class AppManager : MonoBehaviour
                 print("Not today, set to zero");
             }
 
-            print(PlayerPrefs.GetInt("RestDay", 0) + " Start");
 
             if (isRestDayActive)
             {
@@ -1369,6 +1376,12 @@ public class AppManager : MonoBehaviour
 
     private void Update()
     {
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            PlayerPrefs.DeleteAll();
+        }
+
 
         if (!Application.isEditor)
         {
@@ -1649,7 +1662,7 @@ public class AppManager : MonoBehaviour
         SoundManager.PlaySound6();
     }
 
-    public void RemoteCall_AskUserToStartRestDayButtonPressed()
+    public void AskUserToStartRestDayButtonPressed()
     {
         askUserToStartRestDay.SetActive(true);
 
@@ -1673,7 +1686,7 @@ public class AppManager : MonoBehaviour
         SoundManager.PlaySound6();
     }
 
-    public void RemoteCall_ResetButtonPressed()
+    public void ResetButtonPressed()
     {
         askUserToResetPanel.SetActive(true);
 
@@ -1689,7 +1702,6 @@ public class AppManager : MonoBehaviour
     private void OnTaskMenuOpenedCallback()
     {
         SetAppLayer(2121);
-        print("WHY ");
         SoundManager.PlaySound2();
     }
 
@@ -1751,8 +1763,11 @@ public class AppManager : MonoBehaviour
           //  print(_gd.name);
             foreach(TaskData _td in _gd.tasks)
             {
-               // print(_td.name);
-
+                // print(_td.name);
+                for (int i = 0; i < _td.notificationAttachedActiveDay.Count; i++)
+                {
+                }
+              
             }
             //  print(_gd.current);
         }

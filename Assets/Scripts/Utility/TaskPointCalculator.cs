@@ -404,7 +404,6 @@ public static class TaskPointCalculator
     public static int GetStarAmountFromPercent(float _p)
     {
         _p *= 100;
-        Debug.Log(_p);
 
         if (_p < 21 && _p > 0)
         {

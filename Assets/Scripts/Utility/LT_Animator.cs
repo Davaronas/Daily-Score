@@ -38,5 +38,13 @@ public static class LT_Animator
 
     }
 
+    public static LTDescr Move(RectTransform _what, Vector2 _from, Vector2 _to, float _speed)
+    {
+        _what.position = _from;
+        LTDescr _desc = LeanTween.move(_what.gameObject, _to, _speed);
+
+        return _desc;
+    }
+
     
 }

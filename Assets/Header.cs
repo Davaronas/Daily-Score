@@ -77,8 +77,14 @@ public class Header : MonoBehaviour
             }
         }
 
-
-        return (float)_true / (_true +_false);
+        if (_true + _false == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return (float)_true / (_true + _false);
+        }
     }
 
     private void SetHeaderParts(float _p)
