@@ -9,23 +9,39 @@ public class LoadingScreenIcon : MonoBehaviour
     [SerializeField] private float speed = 1f;
     [SerializeField] private Vector2 startSize;
     [SerializeField] private Vector2 endSize;
+
+    private Loading loading = null;
     
 
 
     // Start is called before the first frame update
     void Start()
     {
-        RectTransform _rt = GetComponent<RectTransform>();
-        LT_Animator.Move(_rt, startPos.position, transform.position, speed);
-        LT_Animator.ColorTransition(_rt, Color.white, speed);
-
-        _rt.sizeDelta = startSize;
-        LT_Animator.SizeTransition(_rt, endSize, speed);
+        loading = FindObjectOfType<Loading>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void StartAnimation()
+    {
+        RectTransform _rt = GetComponent<RectTransform>();
+        _rt.sizeDelta = startSize;
+        LT_Animator.Move(_rt, startPos.position, transform.position, speed);
+        LT_Animator.ColorTransition(_rt, Color.white, speed);
+
+        
+        LTDescr _desc = LT_Animator.SizeTransition(_rt, endSize, speed);
+       
+
+        Invoke(nameof(AllowSceneActivation), _desc.time);
+    }    
+
+    private void AllowSceneActivation()
+    {
+        loading.AllowSceneActivation();
     }
 }
