@@ -6,11 +6,14 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 public class NotificationManager : MonoBehaviour
 {
 
    private GoalManager goalManager = null;
     private TaskManager taskManager = null;
+
+    private NotificationManagerIOS nmIOS = null;
 
     [System.Serializable]
     public struct NotificationData
@@ -75,13 +78,14 @@ public class NotificationManager : MonoBehaviour
     {
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
+        
     }
 
     private void Start()
     {
 
-        
 
+#if UNITY_ANDROID
         string path = Path.Combine(Application.persistentDataPath, "notificationdata");
         if (File.Exists(path))
         {
@@ -100,9 +104,6 @@ public class NotificationManager : MonoBehaviour
 
                 NotificationStatus _status = AndroidNotificationCenter.CheckScheduledNotificationStatus(notifications[i].id);
 
-
-
-
                 if (_status == NotificationStatus.Delivered)
                 {
                   //  if(notifications[i].ownerTask) // find if owner exists
@@ -111,13 +112,20 @@ public class NotificationManager : MonoBehaviour
                     SendNotificationWithAddingResetTime(_replace);
                 }
 
-                
+
 
             }
         }
 
         CreateChannel();
         Invoke(nameof(CheckNotValidNotifications), 1f);
+#endif
+
+
+
+#if UNITY_IOS
+         
+#endif
     }
 
 
@@ -132,7 +140,9 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
-        public static bool GetNotificationData(int _id, out NotificationData _data)
+
+
+    public static bool GetNotificationData(int _id, out NotificationData _data)
     {
 
         for (int i = 0; i < notifications.Count; i++)
@@ -149,7 +159,7 @@ public class NotificationManager : MonoBehaviour
 
     public static bool GetNotificationData(DayOfWeek _day,string _task, out NotificationData _data)
     {
-
+#if UNITY_ANDROID
         for (int i = 0; i < notifications.Count; i++)
         {
             if (Convert.ToDateTime(notifications[i].fireTime).DayOfWeek == _day && notifications[i].ownerTask == _task)
@@ -158,9 +168,30 @@ public class NotificationManager : MonoBehaviour
                 return true;
             }
         }
+
+      
+
         _data = new NotificationData();
         return false;
+#endif
+
+
+
+
+#if UNITY_IOS
+  if (NotificationManagerIOS.GetNotificationData(_day, _task, out NotificationManagerIOS.NotificationDataIOS _dataIOS))
+        {
+            _data = (NotificationData)_dataIOS;
+            return true;
+        }
+        else
+        {
+            _data = new NotificationData();
+            return false;
+        }
+#endif
     }
+
 
 
 
@@ -181,6 +212,8 @@ public class NotificationManager : MonoBehaviour
 
     public static bool GetNotificationData_NoDayCheck(string _owner, out NotificationData _data)
     {
+
+#if UNITY_ANDROID
         for (int i = 0; i < notifications.Count; i++)
         {
             if (notifications[i].ownerTask == _owner)
@@ -192,6 +225,22 @@ public class NotificationManager : MonoBehaviour
 
         _data = new NotificationData();
         return false;
+#endif
+
+
+
+#if UNITY_IOS
+   if (NotificationManagerIOS.GetNotificationData_NoDayCheck(_owner, out NotificationManagerIOS.NotificationDataIOS _dataIOS))
+        {
+            _data = (NotificationData)_dataIOS;
+            return true;
+        }
+        else
+        {
+            _data = new NotificationData();
+            return false;
+        }
+#endif
     }
 
 
@@ -213,7 +262,12 @@ public class NotificationManager : MonoBehaviour
 
     public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner, string _spriteId)
     {
-        if(_fireTime < DateTime.Now )
+        
+
+
+
+#if UNITY_ANDROID
+        if (_fireTime < DateTime.Now )
         {
             _fireTime = _fireTime.AddDays(_resetDays);
         }
@@ -241,11 +295,21 @@ public class NotificationManager : MonoBehaviour
 
 
         SaveNotificationData();
+#endif
+
+
+
+#if UNITY_IOS
+        
+        NotificationManagerIOS.SendNotification(_title, _text, _fireTime, _resetDays, _owner, _spriteId);
+
+#endif
 
     }
 
     public static void SendNotificationWithAddingResetTime(NotificationData _data)
     {
+#if UNITY_ANDROID
         AndroidNotification notification = new AndroidNotification();
         notification.Title = _data.title;
         notification.Text = _data.text;
@@ -256,11 +320,19 @@ public class NotificationManager : MonoBehaviour
 
 
         _data.id = AndroidNotificationCenter.SendNotification(notification, "dailyscore_id");
+        _data.fireTime = notification.FireTime.ToString();
 
 
 
 
         SaveNotificationData();
+#endif
+
+
+
+#if UNITY_IOS
+         
+#endif
 
     }
 
