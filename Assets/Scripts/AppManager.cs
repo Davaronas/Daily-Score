@@ -992,12 +992,13 @@ public class AppManager : MonoBehaviour
         if(_layer == 2)
         {
             introductionPanel.SetActive(false);
+            languagePanel.SetActive(false);
             createGoalPanel.SetActive(false);
             goalPanel.SetActive(false);
             settingsPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
-            
 
+            print("main menu");
             AppLayerChangedToMainMenu();
             return;
         }
@@ -1327,6 +1328,18 @@ public class AppManager : MonoBehaviour
 
         // decide starting page
 
+        if(PlayerPrefs.GetInt("FirstLogin",0) == 0)
+        {
+            SetAppLayer(0);
+        }
+        else
+        {
+            SetAppLayer(2);
+            SetLanguage((Languages)PlayerPrefs.GetInt("Language", 0));
+        }
+
+        PlayerPrefs.SetInt("FirstLogin", 1);
+
 
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
@@ -1406,50 +1419,50 @@ public class AppManager : MonoBehaviour
         SoundManager.PlaySound3();
 
         // panel checks
-        if (errorPanel.gameObject.activeSelf)
+        if (errorPanel.gameObject.activeInHierarchy)
         {
             errorPanel.gameObject.SetActive(false);
             
             return;
         }
 
-        if(goalDeletePanel_backCheck.activeSelf)
+        if(goalDeletePanel_backCheck.activeInHierarchy)
         {
             goalDeletePanel_backCheck.SetActive(false);
             return;
         }
 
-        if(savedTipPanel_backCheck.activeSelf)
+        if(savedTipPanel_backCheck.activeInHierarchy)
         {
             savedTipPanel_backCheck.SetActive(false);
             return;
         }
 
-        if(taskInfoPanel_backCheck.activeSelf)
+        if(taskInfoPanel_backCheck.activeInHierarchy)
         {
             taskInfoPanel_backCheck.SetActive(false);
             return;
         }
 
-        if(askToDeleteTipPanel_backCheck.activeSelf)
+        if(askToDeleteTipPanel_backCheck.activeInHierarchy)
         {
             askToDeleteTipPanel_backCheck.SetActive(false);
             return;
         }
 
-        if(askUserToTurnOnPowerSavingModePanel.activeSelf)
+        if(askUserToTurnOnPowerSavingModePanel.activeInHierarchy)
         {
             askUserToTurnOnPowerSavingModePanel.SetActive(false);
             return;
         }
 
-        if(askUserToResetPanel.activeSelf)
+        if(askUserToResetPanel.activeInHierarchy)
         {
             askUserToResetPanel.SetActive(false);
             return;
         }
 
-        if(askUserToStartRestDay.activeSelf)
+        if(askUserToStartRestDay.activeInHierarchy)
         {
             askUserToStartRestDay.SetActive(false);
             return;
@@ -1460,24 +1473,31 @@ public class AppManager : MonoBehaviour
         {
             case 0:
                 Application.Quit();
+                print("0");
                 break;
             case 1:
                 SetAppLayer(0);
+                print("1");
                 break;
             case 2:
                 Application.Quit();
+                print("2");
                 break;
             case 211:
                 SetAppLayer(2);
+                print("211");
                 break;
             case 212:
                 SetAppLayer(2);
+                print("212");
                 break;
             case 2121:
                 SetAppLayer(212);
+                print("2121");
                 break;
             case 3:
                 SetAppLayer(2);
+                print("3");
                 break;
         }
     }
@@ -1491,7 +1511,7 @@ public class AppManager : MonoBehaviour
             return;
         }
 
-
+        PlayerPrefs.SetInt("Language", (int)_language);
 
        
         currentLanguage = _language;
