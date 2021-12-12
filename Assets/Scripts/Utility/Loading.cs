@@ -40,6 +40,7 @@ public class Loading : MonoBehaviour
             if(aOp.progress >= 0.9f)
             {
                 lsi.StartAnimation();
+                percentText.text = "Loading...  " + Mathf.Round(aOp.progress * 100 + 10).ToString() + " %";
             }
         }
 

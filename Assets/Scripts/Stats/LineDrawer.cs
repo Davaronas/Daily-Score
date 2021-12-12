@@ -148,29 +148,30 @@ public class LineDrawer : Graphic
 
             }
 
-       
-           
 
+            for (int j = 0; j < circles.Count; j++)
+            {
+                circles[j].transform.position = drawPositions[j];
+                if (!RectTransformUtility.RectangleContainsScreenPoint(mainMenuMask, drawPositions[i]))
+                {
+                    vh.Clear();
+                    return;
+                }
+            }
 
             _lastPos = drawPositions[i];
             if (i != 0)
             {
-              
+               
+
                 vh.AddTriangle((((i - 1) * 4) + 1), (((i - 1) * 4) + 1) - 1, (((i - 1) * 4) + 1) + 1);
                 vh.AddTriangle((((i - 1) * 4) + 1), (((i - 1) * 4) + 1) + 2, (((i - 1) * 4) + 1) + 1);
             }
 
 
-
-            for (int j = 0; j < circles.Count; j++)
-            {
-                    circles[j].transform.position = drawPositions[j];
-                if(!RectTransformUtility.RectangleContainsScreenPoint(mainMenuMask, drawPositions[i]))
-                {
-                    vh.Clear();
-                    break;
-                }
-            }
+            
+           
+            
         }
 
      
@@ -179,6 +180,6 @@ public class LineDrawer : Graphic
     }
 
 
-  
+   
 
 }

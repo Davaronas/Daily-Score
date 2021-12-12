@@ -4,10 +4,13 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+
+#if UNITY_IOS
 using Unity.Notifications.iOS;
+#endif
 
 
-
+#if UNITY_IOS
 public class NotificationManagerIOS : MonoBehaviour
 
 {
@@ -278,3 +281,4 @@ public class NotificationManagerIOS : MonoBehaviour
     }
     */
 }
+#endif

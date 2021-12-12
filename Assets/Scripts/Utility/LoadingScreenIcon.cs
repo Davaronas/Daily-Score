@@ -11,6 +11,7 @@ public class LoadingScreenIcon : MonoBehaviour
     [SerializeField] private Vector2 endSize;
 
     private Loading loading = null;
+    private bool started = false;
     
 
 
@@ -28,6 +29,9 @@ public class LoadingScreenIcon : MonoBehaviour
 
     public void StartAnimation()
     {
+        if (started) { return; }
+        started = true;
+
         RectTransform _rt = GetComponent<RectTransform>();
         _rt.sizeDelta = startSize;
         LT_Animator.Move(_rt, startPos.position, transform.position, speed);

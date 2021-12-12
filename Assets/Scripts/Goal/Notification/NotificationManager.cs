@@ -12,8 +12,9 @@ public class NotificationManager : MonoBehaviour
 
    private GoalManager goalManager = null;
     private TaskManager taskManager = null;
-
+    #if UNITY_IOS
     private NotificationManagerIOS nmIOS = null;
+#endif
 
     [System.Serializable]
     public struct NotificationData
@@ -352,11 +353,12 @@ public class NotificationManager : MonoBehaviour
             {
                 AndroidNotificationCenter.CancelNotification(_id);
                 notifications.Remove(notifications[i]);
+                SaveNotificationData();
                 break;
             }
         }
 
-        SaveNotificationData();
+        
         
             Debug.LogError($"Id does not exist in the notification center: {_id}");
         
