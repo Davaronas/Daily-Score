@@ -26,7 +26,7 @@ public class DeleteTaskButton : BehaviourButton
     {
         if(isFilling)
         {
-            imageToFill.fillAmount += fillSpeed;
+            imageToFill.fillAmount += fillSpeed * Time.deltaTime;
 
             if(imageToFill.fillAmount >= 1)
             {

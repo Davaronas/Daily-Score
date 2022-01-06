@@ -393,6 +393,7 @@ public class Task : MonoBehaviour
             case AppManager.TaskType.Boolean:
                 _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
+                taskData.isEditedToday = true;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
                 break;
             case AppManager.TaskType.Optimum:

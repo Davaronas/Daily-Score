@@ -108,7 +108,7 @@ public static class TaskPointCalculator
             return false;
         }
 
-        if (_mtd.current < _mtd.targetValue)
+        if (_mtd.current <= _mtd.targetValue)
         {
             return true;
         }
