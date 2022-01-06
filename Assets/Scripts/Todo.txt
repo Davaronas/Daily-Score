@@ -1,4 +1,4 @@
-
+t: TextMeshProUGUI
 
 
 __ - need testing
@@ -57,100 +57,41 @@ goal and task name length 25 character*
 show goals and tasks separately on bar chart*
 rezgés törlésnél*
 tip bug*
-
-
-
-
-Setting up sprites
-
-Multi color image
-
-
-
-
-leave toggle or switch to interaction handler ?
-
-
-
-
-
-
-
-
-
-
-don't show day selection and notification selection before type selected
-
-
-
-
-
-click on averages will turn to other type of averages
-click on highscores will turn to other types of highscores
+settings: hang, takarékos mód, *
+Setting up sprites*
+Multi color image*
+leave toggle or switch to interaction handler ?*
+click on averages will turn to other type of averages*
+click on highscores will turn to other types of highscores*
 daily score on top
-
 scrolling through tasks
-
-
-
 number restrictions on task values?
-
-notification icons
-
-
-
+notification icons*
 notificaton don't fire when task is already done ?
 second tip only unlock when video is succesfully watched
-
 holnapra:
 infok, unity fiók, error forditások, task szövegek
-
 interval: at least one interval + error message
-
-
-
 ongoal delete: save goals, calculate stats
-
 calculate deleted goals daily scores ?
-
 statcalc cleanup
-
 08:00 *
 nagyikon pikto, kisikon daily score
-
 bónusz, streak bug ?
-
-
-loading screen
-
-
+loading screen*
 oszlopdiagram mai napot is számolja
-
 tört számot lehessen beirni
-
 top 3 weekly monthly összeadott*
-
 7 napos csúszóátlag*
-
-settings: hang, takarékos mód, nightmode
-
-other mértékegység beirható
-
+nightmode
+other mértékegység beirható*
 Line2DRenderer ha pixelesek a vonalak
-
 chart descriptions
-
-interval kész ha bármilyekbe benne van
-
+interval kész ha bármilyekbe benne van*
 üres nap 0 pont*
-
-rest day rest day kiirva diagramba függõlegesen
-
-task inaktív ha rest day
-
+rest day rest day kiirva diagramba függõlegesen*
+task inaktív ha rest day*
 day names update on language change on charts*
-
-
 NEXT BUILD
 --------------
 power saving 30 fps vagy 60 fps target, ha lent van a battery szól*
@@ -167,19 +108,21 @@ other kiirható*
 
 bools are already done when you start -> fix
 
-reset, rest day, nightmode, notifications
+reset, rest day, nightmode, notifications*
 
 task selected on charts should calculate today
 
 
 
-charts have prefabs there multiple times
+charts have prefabs there multiple times?
 
 activity rate explanation
 
 edit task back: you have unconfirmed changes
 
-delete notifications that their tasks do not exist any longer
-Rest day button just click if already rest day is active
+delete notifications that their tasks do not exist any longer*
+delete notifications that their goals do not exist any longer
+Rest day button just click if already rest day is active*
 
-notifications randomly deleted
+notifications randomly deleted*
+settings menu dynamic size (notifications)*

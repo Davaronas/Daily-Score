@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class SettingsNotificationHandler : MonoBehaviour
 {
 
 
     [SerializeField] private GameObject notificationPrefab = null;
+    [SerializeField] private RectTransform settingsScroll = null;
     private List<SettingsNotificationPrefabUtility> notifications = new List<SettingsNotificationPrefabUtility>();
     private NotificationManager notificationManager = null;
 
     private GoalManager goalManager = null;
     private TaskManager taskManager = null;
+
+    private float size_y = 0;
 
 
     private void Awake()
@@ -20,20 +24,24 @@ public class SettingsNotificationHandler : MonoBehaviour
         notificationManager = FindObjectOfType<NotificationManager>();
         goalManager = FindObjectOfType<GoalManager>();
         taskManager = FindObjectOfType<TaskManager>();
+        size_y = settingsScroll.rect.size.y;
 
         AppManager.OnNewTaskAdded += UpdateTextCallback;
         AppManager.OnTaskEdited += UpdateTextCallback;
+        AppManager.OnGoalDeleted += UpdateTextCallback;
     }
 
     private void Start()
     {
        Invoke(nameof(UpdateTextCallback),Time.deltaTime*2);
+        
     }
 
     private void OnDestroy()
     {
         AppManager.OnNewTaskAdded -= UpdateTextCallback;
         AppManager.OnTaskEdited -= UpdateTextCallback;
+        AppManager.OnGoalDeleted -= UpdateTextCallback;
     }
 
     private void UpdateTextCallback(AppManager.Languages _l)
@@ -72,6 +80,8 @@ public class SettingsNotificationHandler : MonoBehaviour
 
             notifications.Add(_snpu);
         }
+
+        ScrollSizer.ResizeUsingBase(settingsScroll,size_y, notificationPrefab.GetComponent<RectTransform>().rect.size.y, notifications.Count);
     }
 
 

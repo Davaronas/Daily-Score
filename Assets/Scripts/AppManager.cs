@@ -883,6 +883,8 @@ public class AppManager : MonoBehaviour
         }
 
 
+     //   PlayerPrefs.SetInt("RestDay", 0);
+
         switch(PlayerPrefs.GetInt("RestDay",0))
         {
             case 0:
@@ -998,7 +1000,6 @@ public class AppManager : MonoBehaviour
             settingsPanel.SetActive(false);
             mainMenuPanel.SetActive(true);
 
-            print("main menu");
             AppLayerChangedToMainMenu();
             return;
         }
@@ -1284,8 +1285,6 @@ public class AppManager : MonoBehaviour
            
             GoalActivityCheck(_savedGoals);
 
-            print(lastLogin + " " + DateTime.Today);
-
 
 
             if(lastLogin != DateTime.Today)
@@ -1473,31 +1472,24 @@ public class AppManager : MonoBehaviour
         {
             case 0:
                 Application.Quit();
-                print("0");
                 break;
             case 1:
                 SetAppLayer(0);
-                print("1");
                 break;
             case 2:
                 Application.Quit();
-                print("2");
                 break;
             case 211:
                 SetAppLayer(2);
-                print("211");
                 break;
             case 212:
                 SetAppLayer(2);
-                print("212");
                 break;
             case 2121:
                 SetAppLayer(212);
-                print("2121");
                 break;
             case 3:
                 SetAppLayer(2);
-                print("3");
                 break;
         }
     }

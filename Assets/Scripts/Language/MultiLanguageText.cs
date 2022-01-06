@@ -56,7 +56,10 @@ public class MultiLanguageText : MonoBehaviour
         // ha az Awake hamarabb futna le mint LanguageChanged
         if(text != null)
         {
-            text.text = textToDisplay;
+            text.text =  textToDisplay;
+            
+       //     text.ForceMeshUpdate();
+            //text.SetText(textToDisplay);
         }
     }
 

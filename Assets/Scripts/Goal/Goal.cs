@@ -41,7 +41,7 @@ public class Goal : MonoBehaviour
 
     private void TaskChanged(TaskData _td)
     {
-        if(goalManager.SearchGoalByName(_td.owner) == goalData)
+        if(goalManager.SearchGoalDataByName(_td.owner) == goalData)
         {
             goalData.current = GetPoints();
             scoreText.text = goalData.current + " p";
@@ -73,8 +73,8 @@ public class Goal : MonoBehaviour
         nameText.text = goalName;
         scoreText.text = goalData.current + " P";
 
-        nameText.color =(Color32) goalData.color[0];
-        scoreText.color =(Color32) goalData.color[0];
+       // nameText.color =(Color32) goalData.color[0];
+      //  scoreText.color =(Color32) goalData.color[0];
 
         /*
         switch(goalData.colorType)

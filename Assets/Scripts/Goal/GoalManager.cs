@@ -186,11 +186,18 @@ public class GoalManager : MonoBehaviour
 
     public void RemoteCall_DeleteGoal()
     {
+        foreach (TaskData _data in goalToDelete.GetTasks())
+        {
+            NotificationManager.DeleteNotificationAttachedToTask(_data.name);
+        }
+
         deletedGoals.Add(goalToDelete.GetGoalData());
         goalToDelete.GetGoalData().isDeleted = true;
         goals.Remove(goalToDelete);
         Destroy(goalToDelete.gameObject);
         askToDeleteGoalPanel.SetActive(false);
+
+        
 
         AppManager.GoalDeleted();
 
@@ -241,6 +248,19 @@ public class GoalManager : MonoBehaviour
 
         AppManager.NewGoalAdded();
 
+        SoundManager.PlaySound4();
+    }
+
+
+    public void AddGoal(GoalData _goalData)
+    {
+        Goal _newGoal =
+        Instantiate(goalPrefab, Vector3.zero, Quaternion.identity, goalsScrollContentRectTransform.transform).GetComponent<Goal>();
+        _newGoal.isPrefab = false;
+        _newGoal.SetData(_goalData);
+        goals.Add(_newGoal);
+        ResizeGoalsContent();
+        AppManager.NewGoalAdded();
         SoundManager.PlaySound4();
     }
 
@@ -312,6 +332,11 @@ public class GoalManager : MonoBehaviour
         return currentlySelectedGoal;
     }
 
+    public void SetCurrentlySelectedGoal(Goal _gd)
+    {
+        currentlySelectedGoal = _gd;
+    }
+
     public bool SearchGoalByName(string _name, out GoalData _gd)
     {
         _gd = null;
@@ -339,7 +364,7 @@ public class GoalManager : MonoBehaviour
         return _colors.ToArray();
     }
 
-    public GoalData SearchGoalByName(string _name)
+    public GoalData SearchGoalDataByName(string _name)
     {
         GoalData _gd;
         _gd = null;
@@ -352,6 +377,21 @@ public class GoalManager : MonoBehaviour
             }
         }
         return _gd;
+    }
+
+    public Goal SearchGoalByName(string _name)
+    {
+        Goal _g;
+        _g = null;
+
+        for (int i = 0; i < goals.Count; i++)
+        {
+            if (goals[i].goalName == _name)
+            {
+                _g = goals[i];
+            }
+        }
+        return _g;
     }
 
     public bool SearchTaskByName(string _name)

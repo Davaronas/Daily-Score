@@ -264,9 +264,6 @@ public class NotificationManager : MonoBehaviour
     public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner, string _spriteId)
     {
         
-
-
-
 #if UNITY_ANDROID
         if (_fireTime < DateTime.Now )
         {
@@ -380,7 +377,28 @@ public class NotificationManager : MonoBehaviour
         SaveNotificationData();
     }
 
-    
+    public static void DeleteNotificationAttachedToTask(string _taskName)
+    {
+        List<NotificationData> _notificationsToDelete = new List<NotificationData>();
+
+        for (int i = 0; i < notifications.Count; i++)
+        {
+
+            if (notifications[i].ownerTask == _taskName)
+            {
+                AndroidNotificationCenter.CancelNotification(notifications[i].id);
+                _notificationsToDelete.Add(notifications[i]);
+            }
+        }
+
+        foreach(NotificationData j in _notificationsToDelete)
+        {
+            notifications.Remove(j);
+        }
+
+
+        SaveNotificationData();
+    }
         
 
 

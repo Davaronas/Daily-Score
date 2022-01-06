@@ -108,7 +108,7 @@ public class Task : MonoBehaviour
     private void SetScoreText(int _cp)
     {
 
-        if (_cp == 0 && !taskData.isEditedToday)
+        if (!taskData.isEditedToday)
         {
             scoreText.text = "-";
         }
@@ -121,7 +121,6 @@ public class Task : MonoBehaviour
                 nextTransition = StartCoroutine(GoBackToNormalSize(_des.time));
             }
             scoreText.text = currentPoint + " p";
-            taskData.isEditedToday = true;
         }
 
     }
@@ -163,9 +162,12 @@ public class Task : MonoBehaviour
             targetValueText.text = "/" + _mtd.targetValue + " " + _mtd.customMetricName;
         }
 
-      
 
-       
+
+        if (taskData.lastChangedValue == "")
+        {
+            taskData.lastChangedValue = DateTime.MinValue.ToString();
+        }
 
 
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
@@ -198,6 +200,11 @@ public class Task : MonoBehaviour
             targetValueText.text = "/" + _mtd.targetValue + " " + _mtd.customMetricName;
         }
 
+        if (taskData.lastChangedValue == "")
+        {
+            taskData.lastChangedValue = DateTime.MinValue.ToString();
+        }
+
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
             currentValueInputField.text = _mtd.current.ToString();
@@ -228,6 +235,11 @@ public class Task : MonoBehaviour
             booleanTaskTypeToggle.isOn = false;
         }
 
+        if(taskData.lastChangedValue == "")
+        {
+            taskData.lastChangedValue = DateTime.MinValue.ToString();
+        }
+
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
             currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(_btd);
@@ -255,6 +267,12 @@ public class Task : MonoBehaviour
             targetValueText.text = "/" + _otd.targetValue + " " + _otd.customMetricName;
         }
 
+
+        if (taskData.lastChangedValue == "")
+        {
+            taskData.lastChangedValue = DateTime.MinValue.ToString();
+        }
+
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
         currentValueInputField.text = _otd.current.ToString();
@@ -272,6 +290,13 @@ public class Task : MonoBehaviour
         itd = _itd;
 
         currentValueInputField.gameObject.SetActive(true);
+
+
+        if (taskData.lastChangedValue == "")
+        {
+            taskData.lastChangedValue = DateTime.MinValue.ToString();
+        }
+
 
         if (Convert.ToDateTime(taskData.lastChangedValue) >= DateTime.Today)
         {
@@ -348,6 +373,7 @@ public class Task : MonoBehaviour
                 {
                     _parse = float.Parse(_stringToParse);
                     if (mxtd.current != _parse) { _hasDifference = true; }
+                    else if(!mxtd.isEditedToday) { _hasDifference = true; }
                     mxtd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mxtd);
                 }
@@ -358,6 +384,7 @@ public class Task : MonoBehaviour
                 {
                     _parse = float.Parse(_stringToParse);
                     if (mntd.current != _parse) { _hasDifference = true; }
+                    else if (!mntd.isEditedToday) { _hasDifference = true; }
                     mntd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mntd);
                 }
@@ -373,6 +400,7 @@ public class Task : MonoBehaviour
                 {
                     _parse = float.Parse(_stringToParse);
                     if (otd.current != _parse) { _hasDifference = true; }
+                    else if (!otd.isEditedToday) { _hasDifference = true; }
                     otd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(otd);
                 }
@@ -383,6 +411,7 @@ public class Task : MonoBehaviour
                 {
                     _parse = float.Parse(_stringToParse);
                     if (itd.current != _parse) { _hasDifference = true; }
+                    else if (!itd.isEditedToday) { _hasDifference = true; }
                     itd.current = _parse;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(itd);
                 }
@@ -397,6 +426,7 @@ public class Task : MonoBehaviour
 
         if (_hasDifference)
         {
+            taskData.isEditedToday = true;
             SetScoreText(currentPoint);
             taskData.lastChangedValue = DateTime.Now.Date.ToString();
             ModificationHappened(currentPoint, taskData.name);

@@ -60,6 +60,7 @@ public class TaskManager : MonoBehaviour
     private int everyThDay = 0;
 
 
+
     private VerticalLayoutGroup tasksContentLayoutGroup = null;
 
     // aid variables
@@ -76,6 +77,7 @@ public class TaskManager : MonoBehaviour
         taskTypeComponents = FindObjectOfType<TaskTypeComponents>();
         taskPrefab_Y_Size_ = taskPrefab.GetComponent<RectTransform>().sizeDelta.y;
         tasksContentLayoutGroup = tasksScrollContentRectTransform.GetComponent<VerticalLayoutGroup>();
+
 
         List<string> _metrics = new List<string>();
         for(int i = 0; i < (int)AppManager.TaskMetricType.ENUM_END ;i++)
@@ -479,6 +481,10 @@ public class TaskManager : MonoBehaviour
             everyThDayInputField.text = _data.activeEveryThDay.ToString();
         }
 
+        if (goalManager.GetCurrentlySelectedGoal() == null)
+        {
+            goalManager.SetCurrentlySelectedGoal(goalManager.SearchGoalByName(currentlySelectedTask.owner));
+        }
 
 
 
@@ -657,6 +663,9 @@ public class TaskManager : MonoBehaviour
                 string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
 
                 print(_fireTime);
+
+               
+
                 NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name + 
                     " notification", "Don't forget " + currentlySelectedTask.name + 
                     "! " + _hour + ":" + _minute, _fireTime, 7, currentlySelectedTask.name, goalManager.GetCurrentlySelectedGoal().GetGoalData().spriteId.ToString());
@@ -693,6 +702,8 @@ public class TaskManager : MonoBehaviour
                         string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
                         string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
 
+                       
+
                         print(_fireTime + " " + _fireTime.DayOfWeek);
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                             + " notification", "Don't forget " + currentlySelectedTask.name +
@@ -708,6 +719,8 @@ public class TaskManager : MonoBehaviour
 
                         string _hour = _fireTime.Hour.ToString().Length == 1 ? "0" + _fireTime.Hour : _fireTime.Hour.ToString();
                         string _minute = _fireTime.Minute.ToString().Length == 1 ? "0" + _fireTime.Minute : _fireTime.Minute.ToString();
+
+                       
 
                         NotificationManager.SendNotification(goalManager.GetCurrentlySelectedGoal().GetGoalData().name
                            + " notification", "Don't forget " + currentlySelectedTask.name +
@@ -1097,6 +1110,7 @@ public class TaskManager : MonoBehaviour
 
     public void DeleteTask()
     {
+        NotificationManager.DeleteNotificationAttachedToTask(currentlySelectedTask.name);
         goalManager.GetCurrentlySelectedGoal().GetGoalData().tasks.Remove(currentlySelectedTask);
 
         AppManager.TaskEdited(currentlySelectedTask);

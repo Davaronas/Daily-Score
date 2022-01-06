@@ -43,7 +43,11 @@ public static class TaskPointCalculator
         {
             if (_gd.tasks[i].isActiveToday)
             {
-                _targetsReached.Add(IsTargetValueReached(_gd.tasks[i]));
+                if (_gd.tasks[i].isEditedToday)
+                {
+                    Debug.Log("Edited today");
+                    _targetsReached.Add(IsTargetValueReached(_gd.tasks[i]));
+                }
             }
             
         }
@@ -82,7 +86,12 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(MaximumTaskData _mtd)
     {
-        if(_mtd.current >= _mtd.targetValue)
+        if (!_mtd.isEditedToday)
+        {
+            return false;
+        }
+
+        if (_mtd.current >= _mtd.targetValue)
         {
             return true;
         }
@@ -94,7 +103,12 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(MinimumTaskData _mtd)
     {
-        if(_mtd.current < _mtd.targetValue)
+        if (!_mtd.isEditedToday)
+        {
+            return false;
+        }
+
+        if (_mtd.current < _mtd.targetValue)
         {
             return true;
         }
@@ -106,7 +120,12 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(BooleanTaskData _btd)
     {
-        if(_btd.isDone)
+        if (!_btd.isEditedToday)
+        {
+            return false;
+        }
+
+        if (_btd.isDone)
         {
             return true;
         }
@@ -119,7 +138,12 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(OptimumTaskData _otd)
     {
-        if(_otd.current == _otd.targetValue)
+        if (!_otd.isEditedToday)
+        {
+            return false;
+        }
+
+        if (_otd.current == _otd.targetValue)
         {
             return true;
         }
@@ -131,6 +155,11 @@ public static class TaskPointCalculator
 
     public static bool IsTargetValueReached(IntervalTaskData _itd)
     {
+        if (!_itd.isEditedToday)
+        {
+            return false;
+        }
+
         for (int i = 0; i < _itd.intervals.Length; i++)
         {
             if(_itd.current >= _itd.intervals[i].from && _itd.current <= _itd.intervals[i].to)
@@ -163,6 +192,8 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(MaximumTaskData _mtd)
     {
+      //  if (!_mtd.isEditedToday) return 0;
+
         float _amount;
         if (_mtd.current > _mtd.targetValue && _mtd.overachievePercentBonus > 0)
         {
@@ -238,6 +269,8 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd)
     {
+        if (!_mtd.isEditedToday) return 0;
+
         float _amount;
         if (_mtd.current == _mtd.targetValue)
         {
@@ -296,7 +329,9 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(BooleanTaskData _btd)
     {
-        if(_btd.isDone)
+        if (!_btd.isEditedToday) return 0;
+
+        if (_btd.isDone)
         {
             int _amount = _btd.pointsGained;
                 if (_btd.completedTargetDaysIn_a_Row > _btd.streakStartsAfterDays)
@@ -339,6 +374,8 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(OptimumTaskData _otd)
     {
+        if (!_otd.isEditedToday) return 0;
+
         float _amount = 0;
 
         if(_otd.current == _otd.targetValue)
@@ -387,7 +424,9 @@ public static class TaskPointCalculator
 
     public static int GetPointsFromCurrentValue(IntervalTaskData _itd)
     {
-        for(int i = 0; i < _itd.intervals.Length; i++)
+        if (!_itd.isEditedToday) return 0;
+
+        for (int i = 0; i < _itd.intervals.Length; i++)
         {
             if(_itd.current >= _itd.intervals[i].from  && _itd.current <= _itd.intervals[i].to)
             {
