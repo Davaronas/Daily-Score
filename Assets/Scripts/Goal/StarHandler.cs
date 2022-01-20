@@ -36,7 +36,7 @@ public class StarHandler : MonoBehaviour
 
         for (int i = 0; i < _amount; i++)
         {
-            print(i + " " + (i - shortenAnimationDelay_) * transitionTime);
+           // print(i + " " + (i - shortenAnimationDelay_) * transitionTime);
 
             if (!stars[i].IsStarActivated())
             {

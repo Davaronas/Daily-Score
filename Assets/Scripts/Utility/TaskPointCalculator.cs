@@ -43,11 +43,7 @@ public static class TaskPointCalculator
         {
             if (_gd.tasks[i].isActiveToday)
             {
-                if (_gd.tasks[i].isEditedToday)
-                {
-                    Debug.Log("Edited today");
                     _targetsReached.Add(IsTargetValueReached(_gd.tasks[i]));
-                }
             }
             
         }

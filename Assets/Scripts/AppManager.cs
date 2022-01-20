@@ -782,7 +782,9 @@ public class AppManager : MonoBehaviour
     [Space]
     [SerializeField] private GameObject askToDeleteTipPanel_backCheck;
 
+    public bool useTestTime = false;
     public string testTime;
+    public bool useTestLastLoginTime = false;
     public string testLastLoginTime;
     // yyyy. mm. dd. 0:00:00
 
@@ -912,8 +914,8 @@ public class AppManager : MonoBehaviour
 
         if (Application.isEditor)
         {
-            lastLogin = DateTime.Now.Date;
-            PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+            print("Set date OnDestroy");
+            SetLastLoginToNow();
         }
 
     }
@@ -1054,7 +1056,14 @@ public class AppManager : MonoBehaviour
 
     private void GoalActivityCheck(GoalData[] _goaldatas)
     {
-        DateTime _today = DateTime.Now.Date;    // Convert.ToDateTime(testTime);          //
+        DateTime _today = useTestTime ? Convert.ToDateTime(testTime) : DateTime.Now.Date;
+        
+        if(useTestLastLoginTime)
+        {
+            lastLogin = Convert.ToDateTime(testLastLoginTime);
+        }
+
+        print(lastLogin.Date + " " + _today);
 
         if (lastLogin.Date == _today) { return; } // still the same day, we don't need to reset
 

@@ -19,6 +19,7 @@ public class Header : MonoBehaviour
         AppManager.OnTaskEdited += TaskValueChangedCallback;
        // AppManager.OnLanguageChanged += TaskValueChangedCallback;
         AppManager.OnGoalDeleted += TaskValueChangedCallback;
+        AppManager.OnNewGoalAdded += TaskValueChangedCallback;
         goalManager = FindObjectOfType<GoalManager>();
     }
 
@@ -39,7 +40,8 @@ public class Header : MonoBehaviour
         AppManager.OnGoalDeleted -= TaskValueChangedCallback;
         AppManager.OnNewTaskAdded -= TaskValueChangedCallback;
         AppManager.OnTaskEdited -= TaskValueChangedCallback;
-       // AppManager.OnLanguageChanged -= TaskValueChangedCallback;
+        AppManager.OnNewGoalAdded -= TaskValueChangedCallback;
+        // AppManager.OnLanguageChanged -= TaskValueChangedCallback;
     }
 
     private void TaskValueChangedCallback(TaskData _td)

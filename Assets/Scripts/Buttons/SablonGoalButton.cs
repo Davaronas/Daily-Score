@@ -61,7 +61,6 @@ public class SablonGoalButton : BehaviourButton
     private void CheckGoalVisibility()
     {
         goals_ = goalManager.GetExistingGoals();
-        print(goals_.Length + " Length");
 
         if (sgt != null)
         {
@@ -86,7 +85,6 @@ public class SablonGoalButton : BehaviourButton
 
             if (goals_[i].name == goalName)
             {
-                print("DISABLE");
                 gameObject.SetActive(false);
                 return;
             }
@@ -98,7 +96,7 @@ public class SablonGoalButton : BehaviourButton
     private void CheckGoalVisibility(AppManager.Languages _l)
     {
         goals_ = goalManager.GetExistingGoals();
-        print(goals_.Length + " Length");
+       // print(goals_.Length + " Length");
 
         if (sgt != null)
         {
@@ -123,7 +121,6 @@ public class SablonGoalButton : BehaviourButton
 
             if (goals_[i].name == goalName)
             {
-                print("DISABLE");
                 gameObject.SetActive(false);
                 return;
             }
