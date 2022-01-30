@@ -137,6 +137,14 @@ betû árnyék
 cancel button kékebb ha aktív
 buy button opacity lejjebb ha nem aktív
 
+bonus percent task*
+goal kerekítés*
+goal szöveg szín színátmenet átlagszíne*
+notification every th day: nap + . day*
+szövegdoboz : % bónusz*
+every th day notification delete should reset selected days * ?
+settings + X ne legyen görgehtetõ csak az alatta lévõk*
+introduction X white*
 
 
 
@@ -146,34 +154,40 @@ mélykék lila türkíz
 diploma - futó
 fa
 
-goal szöveg szín színátmenet átlagszíne
-goal kerekítés
-
-bonus percent task
-szövegdoboz : % bónusz
 
 
-notification every th day: nap + . day
 
-every th day notification delete should reset selected days 
+stats-tól lefele görgethetõ csak + Tips ugyanaz*
+tip doboz vonal alatt görgethetõ csak, header vonal ne mozduljon*
+pie chart oversize bug on start* ?
+sablon goal not dissapear but change color*
+overall diagram mai nem pontos, individual goals napi összes taskot számolja*
+rolling average szaggatott vonal ismétlõdés nem jó*
 
 every th day not active on creation day after restarting the program
 
-pie chart oversize bug on start
-settings + X ne legyen görgehtetõ csak az alatta lévõk
-
-sablon goal box kerekítés javitása + körvonal 40% opacity
 
 
-image coloring: if black add two colors together
-introduction X white
+todays task completed bar size absolute value isntead of realitve
+
 
 TAsk bug
+
+
+your daily score 0 csak sablon nem mûködik ???
+elsõ beirás nem mindig mûködik: task minimum
+
+százalék számolás stats negatív számok
+
+
 
 
 
 -----
 
+image coloring horizontal coloring fucked (tips box)
+sablon goal box kerekítés javitása* + körvonal 40% opacity
+image coloring: if black add two colors together
 todays task completed bar: image fill system -> use size
 notification nap perc görgetés beírás helyett
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class SablonGoalButton : BehaviourButton
 {
@@ -11,6 +12,12 @@ public class SablonGoalButton : BehaviourButton
     [SerializeField] private string goalName = "Default";
     [SerializeField] private Color32 goalColor1 = Color.blue;
     [SerializeField] private Color32 goalColor2 = Color.blue;
+    [Space]
+    [SerializeField] private Color32 inactiveColor;
+    [SerializeField] private Color32 inactiveTextColor;
+
+
+    [Space]
     [SerializeField] private int goalSpriteId = 0;
     [Space]
     [SerializeField] private List<MaximumTaskData> maxTaskDatas = new List<MaximumTaskData>();
@@ -22,20 +29,25 @@ public class SablonGoalButton : BehaviourButton
     private List<TaskData> tasks = new List<TaskData>();
 
     private TMP_Text sablonGoalText = null;
+    private Image sablonGoalImage = null;
     private GoalManager goalManager = null;
 
     private GoalData[] goals_ = null;
 
     private SablonGoalTranslation sgt = null;
 
+    private bool canCreate = true;
+
     protected override void Start()
     {
         base.Start();
         sablonGoalText = GetComponentInChildren<TMP_Text>();
+        sablonGoalImage = GetComponent<Image>();
 
        
         
         sablonGoalText.text = goalName;
+       
 
         goalManager = FindObjectOfType<GoalManager>();
         sgt = GetComponent<SablonGoalTranslation>();
@@ -85,12 +97,16 @@ public class SablonGoalButton : BehaviourButton
 
             if (goals_[i].name == goalName)
             {
-                gameObject.SetActive(false);
+                sablonGoalText.color = inactiveTextColor;
+                sablonGoalImage.color = inactiveColor;
+                canCreate = false;
                 return;
             }
         }
 
-        gameObject.SetActive(true);
+        sablonGoalImage.color = Color.white;
+        sablonGoalText.color = Color.white;
+        canCreate = true;
     }
 
     private void CheckGoalVisibility(AppManager.Languages _l)
@@ -121,12 +137,16 @@ public class SablonGoalButton : BehaviourButton
 
             if (goals_[i].name == goalName)
             {
-                gameObject.SetActive(false);
+                sablonGoalText.color = inactiveTextColor;
+                sablonGoalImage.color = inactiveColor;
+                canCreate = false;
                 return;
             }
         }
 
-        gameObject.SetActive(true);
+        sablonGoalImage.color = Color.white;
+        sablonGoalText.color = Color.white;
+        canCreate = true;
     }
 
 
@@ -158,6 +178,8 @@ public class SablonGoalButton : BehaviourButton
 
         if (createGoalPanelScroll.allowInteraction)
         {
+            if (!canCreate) { return; }
+
             GoalColor[] _goalColors = new GoalColor[2];
             _goalColors[0] = goalColor1;
             _goalColors[1] = goalColor2;

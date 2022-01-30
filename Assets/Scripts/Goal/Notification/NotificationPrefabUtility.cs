@@ -29,12 +29,16 @@ public class NotificationPrefabUtility : MonoBehaviour
 
     public void SetSelectedDay(int _day)
     {
-        dayText.text = RuntimeTranslator.TranslateDayOfWeek(DateTime.Today.DayOfWeek) + " + " + _day;
+        daySelected = DateTime.Today.DayOfWeek;
+        dayText.text = 
+            RuntimeTranslator.TranslateDayOfWeek(DateTime.Today.DayOfWeek) + "\n + " + RuntimeTranslator.TranslateEveryWord() + " " + _day + ". " + RuntimeTranslator.TranslateDayWord();
     }
 
     public void SetDayPlusIntervalDays(DayOfWeek _day, int _reset)
     {
-        dayText.text = RuntimeTranslator.TranslateDayOfWeek(_day) + " + " + _reset;
+        daySelected = _day;
+        dayText.text = 
+            RuntimeTranslator.TranslateDayOfWeek(_day) + "\n + " + RuntimeTranslator.TranslateEveryWord() +" " + _reset +". " + RuntimeTranslator.TranslateDayWord();
     }
 
 

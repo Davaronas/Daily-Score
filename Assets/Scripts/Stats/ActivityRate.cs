@@ -153,6 +153,8 @@ public class ActivityRate : MonoBehaviour
             {
                 print("AR info point: " + _infos[i].point);
 
+                if(_infos[i].point == float.NaN) { continue; }
+
                 if(_infos[i].point > 0)
                 {
                     _nonzero++;

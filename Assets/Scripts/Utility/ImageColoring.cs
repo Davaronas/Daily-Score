@@ -21,7 +21,14 @@ public class ImageColoring : MonoBehaviour
 
     [Space]
     public bool overrideAutoBorder = false;
-    public float borderSize = 0;
+    [Space]
+    public float L = 0;
+    public float R = 0;
+    public float T = 0;
+    public float B = 0;
+
+
+    [Space]
     public float alphaCheck = 250f;
 
 
@@ -83,7 +90,7 @@ public class ImageColoring : MonoBehaviour
 
             if (overrideAutoBorder)
             {
-                _newBorder = new Vector4(borderSize, borderSize, borderSize, borderSize);
+                _newBorder = new Vector4(L, R, T, B);
             }
             else
             {

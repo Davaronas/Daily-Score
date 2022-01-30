@@ -57,6 +57,8 @@ public class PieChart : MonoBehaviour
     private float sum = 0;
 
     private List<Pie> pies = new List<Pie>();
+
+    private Vector2 pieChartSize;
     
 
 
@@ -73,8 +75,11 @@ public class PieChart : MonoBehaviour
     }
 
 
-   
 
+    private void Start()
+    {
+        pieChartSize = rectTransform.rect.size;
+    }
 
 
 
@@ -146,8 +151,8 @@ public class PieChart : MonoBehaviour
         for (int j = 0; j < _infos.Length; j++)
         {
             RectTransform _newPie = Instantiate(piePrefab, transform.position, Quaternion.identity, transform).GetComponent<RectTransform>();
-            _newPie.sizeDelta = rectTransform.rect.size;
-            Invoke(nameof(SizeCheck), Time.deltaTime * 3);
+            _newPie.sizeDelta = pieChartSize;
+         //   StartCoroutine(SizeCheck(_newPie));
             //    _newPie.anchoredPosition.Set()
 
 
@@ -235,8 +240,10 @@ public class PieChart : MonoBehaviour
         for (int j = 0; j < _infos.Length; j++)
         {
             RectTransform _newPie = Instantiate(piePrefab, transform.position, Quaternion.identity, transform).GetComponent<RectTransform>();
-            _newPie.sizeDelta = rectTransform.rect.size;
-            Invoke(nameof(SizeCheck),Time.deltaTime*3);
+            print(rectTransform.rect.size + "Size");
+            _newPie.sizeDelta = pieChartSize;
+            
+          //  StartCoroutine(SizeCheck(_newPie));
  
 
 
@@ -280,9 +287,13 @@ public class PieChart : MonoBehaviour
     }
 
 
-    private void SizeCheck(RectTransform _newPie)
+    IEnumerator SizeCheck(RectTransform _newPie)
     {
+        yield return new WaitForSeconds(1f);
+
+        if(_newPie != null)
         _newPie.sizeDelta = rectTransform.rect.size;
+        
     }
 
 }

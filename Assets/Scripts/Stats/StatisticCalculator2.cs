@@ -1378,9 +1378,17 @@ public class StatisticCalculator2 : MonoBehaviour
                                 _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
                             }
                         }
+                        else if(_f == StatCalculationFilter.Goal)
+                        {
+                            if (GoalDATAS[i].name == selectedGoalName_BarChart1)
+                            {
+                                _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                            }
+                        }
                         else
                         {
-                            _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                                _todayPoint += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                            
                         }
                     }
                 }

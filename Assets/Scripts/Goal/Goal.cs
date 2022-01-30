@@ -73,8 +73,13 @@ public class Goal : MonoBehaviour
         nameText.text = goalName;
         scoreText.text = goalData.current + " P";
 
-       // nameText.color =(Color32) goalData.color[0];
-      //  scoreText.color =(Color32) goalData.color[0];
+        Color32 _mix = new Color32((byte)((goalData.color[0].r + goalData.color[1].r) / 2),
+            (byte)((goalData.color[0].g + goalData.color[1].g) / 2),
+            (byte)((goalData.color[0].b + goalData.color[1].b) / 2),
+            (byte)((goalData.color[0].a + goalData.color[1].a) / 2));
+
+        nameText.color = _mix ;
+        scoreText.color = _mix;
 
         /*
         switch(goalData.colorType)
