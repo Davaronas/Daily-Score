@@ -18,7 +18,7 @@ public class PixelPerUnitAdjuster : MonoBehaviour
         image = GetComponent<Image>();
         if (image.type == Image.Type.Tiled)
         {
-            image.pixelsPerUnitMultiplier = 128 / image.GetComponent<RectTransform>().rect.width;
+            image.pixelsPerUnitMultiplier = 64 / image.GetComponent<RectTransform>().rect.width;
         }
     }
 

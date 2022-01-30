@@ -914,7 +914,6 @@ public class AppManager : MonoBehaviour
 
         if (Application.isEditor)
         {
-            print("Set date OnDestroy");
             SetLastLoginToNow();
         }
 
@@ -1300,7 +1299,6 @@ public class AppManager : MonoBehaviour
             {
                 PlayerPrefs.SetInt("RestDay", 0);
                 isRestDayActive = false;
-                print("Not today, set to zero");
             }
 
 
@@ -1698,6 +1696,13 @@ public class AppManager : MonoBehaviour
         SaveGoalData();
 
         SoundManager.PlaySound5();
+    }
+
+    public void RemoteCall_QuitApp()
+    {
+        SoundManager.PlaySound3();
+
+        Application.Quit();
     }
 
     public void RemoteCall_CloseAskUserToResetPanel()

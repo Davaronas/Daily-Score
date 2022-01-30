@@ -23,10 +23,15 @@ public class ActivityRate : MonoBehaviour
         AppManager.OnLanguageChanged += LangCallback;
     }
 
+    private void OnDestroy()
+    {
+        AppManager.OnLanguageChanged -= LangCallback;
+    }
+
 
     private void Start()
     {
-        Invoke(nameof(CalculateActivityRate), 1.5f);
+        Invoke(nameof(CalculateActivityRate), 2f);
     }
 
     private bool Contains(Activity _a, DateTime _d)
@@ -45,6 +50,7 @@ public class ActivityRate : MonoBehaviour
     private void LangCallback(AppManager.Languages _l)
     {
         CalculateActivityRate();
+        print("AR");
     }
 
     public void CalculateActivityRate()
@@ -99,7 +105,7 @@ public class ActivityRate : MonoBehaviour
                 {
                     for (int l = _goalDatas[k].dailyScores.Count - 1; l > -1; l--)
                     {
-                        if (_goalDatas[k].dailyScores[j].isRestDay) { continue; }
+                        if (_goalDatas[k].dailyScores[l].isRestDay) { continue; }
 
                         if (_goalDatas[k].dailyScores[l].GetDateTime() == _activities[i].dates[j])
                         {
@@ -138,11 +144,15 @@ public class ActivityRate : MonoBehaviour
         _infos.Add(_sunday);
 
 
+
         int _nonzero = 0;
         if (_infos.Count > 1)
         {
+
             for (int i = 0; i < _infos.Count; i++)
             {
+                print("AR info point: " + _infos[i].point);
+
                 if(_infos[i].point > 0)
                 {
                     _nonzero++;
@@ -151,6 +161,7 @@ public class ActivityRate : MonoBehaviour
 
             if (_nonzero > 1)
             {
+
                 activityRateBarChart.LoadData(_infos.ToArray(), barColors, true, true);
             }
         }

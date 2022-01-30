@@ -126,3 +126,55 @@ Rest day button just click if already rest day is active*
 
 notifications randomly deleted*
 settings menu dynamic size (notifications)*
+
+rolling average line overwritten by other line*
+montserat medium -> regular*
+activity rate not enough data*
+target values reached switch order *
+Cancel buy button*
+
+betû árnyék
+cancel button kékebb ha aktív
+buy button opacity lejjebb ha nem aktív
+
+
+
+
+új cél: több szín
+sárga kék élénkzöld narancs
+mélykék lila türkíz
+diploma - futó
+fa
+
+goal szöveg szín színátmenet átlagszíne
+goal kerekítés
+
+bonus percent task
+szövegdoboz : % bónusz
+
+
+notification every th day: nap + . day
+
+every th day notification delete should reset selected days 
+
+every th day not active on creation day after restarting the program
+
+pie chart oversize bug on start
+settings + X ne legyen görgehtetõ csak az alatta lévõk
+
+sablon goal box kerekítés javitása + körvonal 40% opacity
+
+
+image coloring: if black add two colors together
+introduction X white
+
+TAsk bug
+
+
+
+-----
+
+todays task completed bar: image fill system -> use size
+notification nap perc görgetés beírás helyett
+
+-----
