@@ -240,7 +240,6 @@ public class PieChart : MonoBehaviour
         for (int j = 0; j < _infos.Length; j++)
         {
             RectTransform _newPie = Instantiate(piePrefab, transform.position, Quaternion.identity, transform).GetComponent<RectTransform>();
-            print(rectTransform.rect.size + "Size");
             _newPie.sizeDelta = pieChartSize;
             
           //  StartCoroutine(SizeCheck(_newPie));

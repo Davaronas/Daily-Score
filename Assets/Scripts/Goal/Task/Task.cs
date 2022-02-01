@@ -348,7 +348,6 @@ public class Task : MonoBehaviour
             }
           //  int _commaCount = currentValueInputField.text.T
             
-            print(_last);
             if(!char.IsDigit(_last) && _last != '.' && _last != ',')
             {
                   currentValueInputField.text = currentValueInputField.text.Remove(_index, 1);
@@ -361,59 +360,68 @@ public class Task : MonoBehaviour
         
         if(taskData == null || !allowValueChange) { return; } // For some reason this runs earlier than FeedData, investigate further
 
-        bool _hasDifference = false;
+       // bool _hasDifference = false;
         string _stringToParse = currentValueInputField.text;
         _stringToParse = _stringToParse.Replace(".", ",");
         float _parse = 0;
 
+        
+
+
+
         switch (taskData.type)
         {
             case AppManager.TaskType.Maximum:
-                if (currentValueInputField.text != "")
+                if (!string.IsNullOrWhiteSpace(_stringToParse))
                 {
                     _parse = float.Parse(_stringToParse);
-                    if (mxtd.current != _parse) { _hasDifference = true; }
-                    else if(!mxtd.isEditedToday) { _hasDifference = true; }
+                  //  if (mxtd.current != _parse) { _hasDifference = true; }
+                   // else if(!mxtd.isEditedToday) { _hasDifference = true; }
                     mxtd.current = _parse;
+                    taskData.isEditedToday = true;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mxtd);
                 }
                
                 break;
             case AppManager.TaskType.Minimum:
-                if (currentValueInputField.text != "")
+                if (!string.IsNullOrWhiteSpace(_stringToParse))
                 {
                     _parse = float.Parse(_stringToParse);
-                    if (mntd.current != _parse) { _hasDifference = true; }
-                    else if (!mntd.isEditedToday) { _hasDifference = true; }
+                 //   if (mntd.current != _parse) { _hasDifference = true; }
+                  //  else if (!mntd.isEditedToday) { _hasDifference = true; }
                     mntd.current = _parse;
+                    taskData.isEditedToday = true;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(mntd);
+                    print("CUrrent point mntd: " + TaskPointCalculator.GetPointsFromCurrentValue(mntd));
                 }
                 
                 break;
             case AppManager.TaskType.Boolean:
-                _hasDifference = true;
+              //  _hasDifference = true;
                 btd.isDone = booleanTaskTypeToggle.isOn;
                 taskData.isEditedToday = true;
                 currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(btd);
                 break;
             case AppManager.TaskType.Optimum:
-                if (currentValueInputField.text != "")
+                if (!string.IsNullOrWhiteSpace(_stringToParse))
                 {
                     _parse = float.Parse(_stringToParse);
-                    if (otd.current != _parse) { _hasDifference = true; }
-                    else if (!otd.isEditedToday) { _hasDifference = true; }
+               //     if (otd.current != _parse) { _hasDifference = true; }
+                //    else if (!otd.isEditedToday) { _hasDifference = true; }
                     otd.current = _parse;
+                    taskData.isEditedToday = true;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(otd);
                 }
                 
                 break;
             case AppManager.TaskType.Interval:
-                if (currentValueInputField.text != "")
+                if (!string.IsNullOrWhiteSpace(_stringToParse))
                 {
                     _parse = float.Parse(_stringToParse);
-                    if (itd.current != _parse) { _hasDifference = true; }
-                    else if (!itd.isEditedToday) { _hasDifference = true; }
+               //     if (itd.current != _parse) { _hasDifference = true; }
+                //    else if (!itd.isEditedToday) { _hasDifference = true; }
                     itd.current = _parse;
+                    taskData.isEditedToday = true;
                     currentPoint = TaskPointCalculator.GetPointsFromCurrentValue(itd);
                 }
                 
@@ -425,9 +433,8 @@ public class Task : MonoBehaviour
 
         }
 
-        if (_hasDifference)
+      //  if (_hasDifference)
         {
-            taskData.isEditedToday = true;
             SetScoreText(currentPoint);
             taskData.lastChangedValue = DateTime.Now.Date.ToString();
             ModificationHappened(currentPoint, taskData.name);

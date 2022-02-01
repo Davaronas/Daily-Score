@@ -321,7 +321,7 @@ public class TaskManager : MonoBehaviour
         }
 
 
-
+    
 
 
        // SoundManager.PlaySound2();
@@ -344,6 +344,9 @@ public class TaskManager : MonoBehaviour
 
         // switch _data.activeOnDays with selected actice days
     }
+
+
+  
 
     public void EditTaskFromSettingsNotification(TaskData _data)
     {
@@ -510,6 +513,14 @@ public class TaskManager : MonoBehaviour
         // switch _data.activeOnDays with selected actice days
     }
 
+
+    public void RemoteCall_SelectEveryDay()
+    {
+        for (int i = 0; i < dayToggles.Length; i++)
+        {
+            dayToggles[i].TurnOn();
+        }
+    }
 
     public void RemoteCall_ConfirmEditChanges()
     {

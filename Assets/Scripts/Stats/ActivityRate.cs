@@ -151,7 +151,6 @@ public class ActivityRate : MonoBehaviour
 
             for (int i = 0; i < _infos.Count; i++)
             {
-                print("AR info point: " + _infos[i].point);
 
                 if(_infos[i].point == float.NaN) { continue; }
 

@@ -27,6 +27,9 @@ public class StatManager : MonoBehaviour
         AppManager.OnTaskValueChanged += UpdateChartsInvoke;
         AppManager.OnLanguageChanged += LanguageCallback;
         AppManager.OnBarChartCategorySelected += BarChartCategorySelected;
+        AppManager.OnTaskValueChanged += UpdateChartsInvoke;
+        AppManager.OnGoalDeleted += UpdateChartsInvoke;
+        AppManager.OnNewGoalAdded += UpdateChartsInvoke;
 
 
         activityRateChart = FindObjectOfType<ActivityRate>();
@@ -57,6 +60,9 @@ public class StatManager : MonoBehaviour
         AppManager.OnTaskValueChanged -= UpdateChartsInvoke;
         AppManager.OnLanguageChanged -= LanguageCallback;
         AppManager.OnBarChartCategorySelected -= BarChartCategorySelected;
+        AppManager.OnTaskValueChanged -= UpdateChartsInvoke;
+        AppManager.OnGoalDeleted -= UpdateChartsInvoke;
+        AppManager.OnNewGoalAdded -= UpdateChartsInvoke;
 
     }
 
@@ -98,9 +104,14 @@ public class StatManager : MonoBehaviour
         barChartTop3_dropdown.value = 1;
     }
 
+    private void UpdateChartsInvoke()
+    {
+        Invoke(nameof(UpdateCharts), Time.deltaTime*2);
+    }
+
     private void UpdateChartsInvoke(TaskData _data)
     {
-        Invoke(nameof(UpdateCharts), Time.deltaTime);
+        Invoke(nameof(UpdateCharts), Time.deltaTime*2);
     }
 
     private void UpdateCharts()

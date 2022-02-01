@@ -256,6 +256,7 @@ public static class TaskPointCalculator
         else
         {
            _floatCurrent = _mtd.pointsForStayingUnderTargetValue - ((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
+            
         }
 
       
@@ -286,6 +287,7 @@ public static class TaskPointCalculator
         else
         {
             _amount = _mtd.pointsForStayingUnderTargetValue - ((_mtd.current - _mtd.targetValue) * _mtd.pointsLostPerOne);
+           // Debug.Log("Min over the target value: " + _amount);
         }
 
         if (_amount > 0)
@@ -315,6 +317,7 @@ public static class TaskPointCalculator
                             ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
                             (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
                             0, AppManager.MAXSTREAKMULTIPLIER));
+                        
                         break;
                 }
             }

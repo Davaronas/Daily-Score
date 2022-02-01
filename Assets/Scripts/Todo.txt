@@ -165,10 +165,10 @@ overall diagram mai nem pontos, individual goals napi összes taskot számolja*
 rolling average szaggatott vonal ismétlõdés nem jó*
 
 every th day not active on creation day after restarting the program
+todays task completed bar size absolute value isntead of realitve*
 
 
 
-todays task completed bar size absolute value isntead of realitve
 
 
 TAsk bug

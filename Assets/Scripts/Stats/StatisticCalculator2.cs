@@ -1533,7 +1533,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         float _points = 0;
                         for (int j = 0; j < GoalDATAS[i].tasks.Count; j++)
                         {
-                            _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]);
+                            _points += Mathf.Clamp(TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[j]),0,float.MaxValue);
                         }
                         _goalPoints.Add(new PieChartInfo(_points, GoalDATAS[i].name, GoalDATAS[i].color[0] , GoalDATAS[i].color[1]));
                     }
@@ -1569,7 +1569,7 @@ public class StatisticCalculator2 : MonoBehaviour
                     float _points = 0;
                     for (int j = 0; j < GoalDATAS[i].dailyScores.Count; j++)
                     {
-                        _points += GoalDATAS[i].dailyScores[j].amount;
+                        _points += Mathf.Clamp(GoalDATAS[i].dailyScores[j].amount, 0, float.MaxValue);
                     }
 
                     if (_rewind == 0)
@@ -1578,7 +1578,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         {
                             if (GoalDATAS[i].tasks[k].isEditedToday)
                             {
-                                _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]);
+                                _points += Mathf.Clamp(TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]), 0, float.MaxValue);
                             }
                         }
                     }
@@ -1606,7 +1606,7 @@ public class StatisticCalculator2 : MonoBehaviour
 
                         if (GoalDATAS[i].dailyScores[j].GetDateTime().Date == Today.AddDays(_rewind))
                         {
-                            _points += GoalDATAS[i].dailyScores[j].amount;
+                            _points += Mathf.Clamp(GoalDATAS[i].dailyScores[j].amount,0,float.MaxValue);
                         }
                     }
 
@@ -1617,7 +1617,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         {
                             if (GoalDATAS[i].tasks[k].isEditedToday)
                             {
-                                _points += TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]);
+                                _points += Mathf.Clamp(TaskPointCalculator.GetPointsFromCurrentValue(GoalDATAS[i].tasks[k]), 0, float.MaxValue);
                             }
                         }
                     }
@@ -1639,7 +1639,7 @@ public class StatisticCalculator2 : MonoBehaviour
                         if (GoalDATAS[i].dailyScores[j].GetDateTime().Date >= Today.AddDays(((_rewind - 1) * _time))
                             && (GoalDATAS[i].dailyScores[j].GetDateTime().Date < Today.AddDays((_rewind * _time))))
                         {
-                            _points += GoalDATAS[i].dailyScores[j].amount;
+                            _points += Mathf.Clamp(GoalDATAS[i].dailyScores[j].amount, 0, float.MaxValue);
                         }
                     }
 
