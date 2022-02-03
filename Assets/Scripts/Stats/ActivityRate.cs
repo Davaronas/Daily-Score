@@ -50,7 +50,6 @@ public class ActivityRate : MonoBehaviour
     private void LangCallback(AppManager.Languages _l)
     {
         CalculateActivityRate();
-        print("AR");
     }
 
     public void CalculateActivityRate()

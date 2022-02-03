@@ -6,6 +6,7 @@ using TMPro;
 //[ExecuteInEditMode]
 public class DEBUG_SWITCH_FONTASSET : MonoBehaviour
 {
+    /*
 
     TMP_Text t;
 
@@ -14,6 +15,7 @@ public class DEBUG_SWITCH_FONTASSET : MonoBehaviour
 
     void Update()
     {
+        
         if(t == null)
         {
             t = GetComponent<TMP_Text>();
@@ -26,7 +28,9 @@ public class DEBUG_SWITCH_FONTASSET : MonoBehaviour
                 t.font = regular;
             }
         }
+
     }
+  */
 
    
 }

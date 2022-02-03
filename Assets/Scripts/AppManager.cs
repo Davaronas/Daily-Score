@@ -1228,7 +1228,7 @@ public class AppManager : MonoBehaviour
             
             foreach(GoalData _gd in _savedGoals)
             {
-                
+                /*
                 _gd.dailyScores.Clear();
                 
                 // print(_gd.current);
@@ -1279,7 +1279,7 @@ public class AppManager : MonoBehaviour
                 
                 _gd.dailyScores.Add(new ScorePerDay(300, DateTime.Today.AddDays(-1), new bool[] { false, true, true, true, false }));
                 //Debug.Log(DateTime.Today.AddDays(-1));
-                
+                */
                 
                 
             }
@@ -1289,18 +1289,22 @@ public class AppManager : MonoBehaviour
 
             // check each goal if they should be active today
 
+            GoalActivityCheck(_savedGoals);
             Invoke(nameof(SetLastLoginToNow),Time.deltaTime);
            
-            GoalActivityCheck(_savedGoals);
 
 
 
-            if(lastLogin != DateTime.Today)
+            if(lastLogin != DateTime.Today.Date)
             {
                 PlayerPrefs.SetInt("RestDay", 0);
                 isRestDayActive = false;
             }
 
+            if(PlayerPrefs.GetInt("RestDay",0) == 1)
+            {
+                isRestDayActive = true;
+            }
 
             if (isRestDayActive)
             {
@@ -1845,7 +1849,7 @@ public class AppManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         SaveGoalData();
-        lastLogin = DateTime.Today;
+        lastLogin = DateTime.Today.Date;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
     }
 
@@ -1854,13 +1858,13 @@ public class AppManager : MonoBehaviour
         if(focus)
         {
             GoalActivityCheck(goalManager.GetExistingGoals());
-            lastLogin = DateTime.Today;
+            lastLogin = DateTime.Today.Date;
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
         else
         {
             SaveGoalData();
-            lastLogin = DateTime.Today;
+            lastLogin = DateTime.Today.Date;
             PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
         }
     }

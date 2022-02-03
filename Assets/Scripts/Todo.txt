@@ -180,7 +180,7 @@ elsõ beirás nem mindig mûködik: task minimum
 százalék számolás stats negatív számok
 
 
-
+TASK STREAK TaskTypeComponents elfogadás
 
 
 -----

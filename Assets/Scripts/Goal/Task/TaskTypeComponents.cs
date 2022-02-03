@@ -395,12 +395,21 @@ public class TaskTypeComponents : MonoBehaviour
     private MaximumTaskData GetMaxDataFromComponents()
     {
 
+        print("GET max data");
+
         int _bonusPercent;
         if (maxComponents.overachieveBonus_Toggle.isOn)
         {
             if (isValid(maxComponents.overachieveBonusPercent_InputField))
             {
                 _bonusPercent = int.Parse(maxComponents.overachieveBonusPercent_InputField.text);
+
+                if (_bonusPercent < 1)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    maxComponents.overachieveBonusPercent_InputField.text = "";
+                    return null;
+                }
             }
             else
             {
@@ -416,10 +425,13 @@ public class TaskTypeComponents : MonoBehaviour
         int _streakStartsAfterDays;
         if(maxComponents.streak_Toggle.isOn)
         {
+            print("max streak toggle is on");
             if (isValid(maxComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(maxComponents.streakStartsAfterDays_InputField.text);
-                if (_streakStartsAfterDays == 0)
+                print("max streak toggle is valid " + _streakStartsAfterDays);
+                
+                if (_streakStartsAfterDays < 0) // this should never happen, you cannot type - in the input field
                 {
                     AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
                     return null;
@@ -433,7 +445,8 @@ public class TaskTypeComponents : MonoBehaviour
         }
         else
         {
-            _streakStartsAfterDays = 0;
+            print("max streak toggle is not on");
+            _streakStartsAfterDays = -1;
         }
 
         if(!isValid( maxComponents.targetValue_InputField)  || !isValid(maxComponents.pointsPerOneMetric_InputField))
@@ -469,6 +482,13 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(minComponents.stayingUnderLimitBonusPercent_InputField))
             {
                 _bonusPercent = int.Parse(minComponents.stayingUnderLimitBonusPercent_InputField.text);
+
+                if(_bonusPercent < 1)
+                {
+                    AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
+                    minComponents.stayingUnderLimitBonusPercent_InputField.text = "";
+                    return null;
+                }
             }
             else
             {
@@ -487,7 +507,7 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(minComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(minComponents.streakStartsAfterDays_InputField.text);
-                if(_streakStartsAfterDays == 0)
+                if(_streakStartsAfterDays < 0) // this should never happen, you cannot type - in the input field
                 {
                     AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
                     return null;
@@ -501,7 +521,7 @@ public class TaskTypeComponents : MonoBehaviour
         }
         else
         {
-            _streakStartsAfterDays = 0;
+            _streakStartsAfterDays = -1;
         }
 
         if(!isValid(minComponents.targetValue_InputField) || !isValid(minComponents.pointsForStayingUnderLimit_InputField) || !isValid(minComponents.pointsLostPerOneMetric_InputField))
@@ -534,7 +554,7 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(boolComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(boolComponents.streakStartsAfterDays_InputField.text);
-                if (_streakStartsAfterDays == 0)
+                if (_streakStartsAfterDays < 0) // this should never happen, you cannot type - in the input field
                 {
                     AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
                     return null;
@@ -548,8 +568,9 @@ public class TaskTypeComponents : MonoBehaviour
         }
         else
         {
-            _streakStartsAfterDays = 0;
+            _streakStartsAfterDays = -1;
         }
+
         if (!isValid(boolComponents.pointsGained_InputField)) 
         {
             AppManager.ErrorHappened(ErrorMessages.TaskTypeInputFieldEmpty_CreateTaskTPanel());
@@ -569,7 +590,7 @@ public class TaskTypeComponents : MonoBehaviour
             if (isValid(optimumComponents.streakStartsAfterDays_InputField))
             {
                 _streakStartsAfterDays = int.Parse(optimumComponents.streakStartsAfterDays_InputField.text);
-                if (_streakStartsAfterDays == 0)
+                if (_streakStartsAfterDays < 0) // this should never happen, you cannot type - in the input field
                 {
                     AppManager.ErrorHappened(ErrorMessages.EnterRealisticNumbers());
                     return null;
@@ -583,7 +604,7 @@ public class TaskTypeComponents : MonoBehaviour
         }
         else
         {
-            _streakStartsAfterDays = 0;
+            _streakStartsAfterDays = -1;
         }
 
         if(!isValid(optimumComponents.targetValue_InputField) || !isValid(optimumComponents.pointsForOptimumValue_InputField) || !isValid(optimumComponents.pointsLostPerOneMetricDifference_InputField))

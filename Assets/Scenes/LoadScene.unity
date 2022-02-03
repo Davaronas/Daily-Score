@@ -163,8 +163,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Loading 0 %
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 952cc5f0154a508409e4af7f53a47486, type: 2}
-  m_sharedMaterial: {fileID: 5833988544847412287, guid: 952cc5f0154a508409e4af7f53a47486, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fdd4e40111091264584a541b3ea80285, type: 2}
+  m_sharedMaterial: {fileID: -3514624313709160189, guid: fdd4e40111091264584a541b3ea80285, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -188,13 +188,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.25
-  m_fontSizeBase: 30
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 70
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -860,7 +860,10 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4289137258
   overrideAutoBorder: 0
-  borderSize: 0
+  L: 0
+  R: 0
+  T: 0
+  B: 0
   alphaCheck: 250
 --- !u!1 &1742764948
 GameObject:

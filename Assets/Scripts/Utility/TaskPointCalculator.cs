@@ -200,34 +200,40 @@ public static class TaskPointCalculator
             _amount = _mtd.current * _mtd.pointsGainedPerOne;
         }
 
-        if (_amount > 0)
+        if (_mtd.streakStartsAfterDays > -1)
         {
-            if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
+
+            if (_amount > 0)
             {
-                switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
+
+
+                if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
                 {
-                    case 1:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
-                        break;
-                    case 2:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 3:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 4:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
-                        break;
-                    case 5:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
-                        break;
-                    default:
-                        _amount =  Mathf.RoundToInt
-                            (_amount * Mathf.Clamp
-                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER + 
-                            (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5)* AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
-                            0,AppManager.MAXSTREAKMULTIPLIER));
-                        break;
+                    switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
+                    {
+                        case 1:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                            break;
+                        case 2:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 3:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 4:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                            break;
+                        case 5:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                            break;
+                        default:
+                            _amount = Mathf.RoundToInt
+                                (_amount * Mathf.Clamp
+                                ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                                (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                                0, AppManager.MAXSTREAKMULTIPLIER));
+                            break;
+                    }
                 }
             }
         }
@@ -235,6 +241,7 @@ public static class TaskPointCalculator
         return Mathf.FloorToInt(_amount);
     }
 
+    /*
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd, out float _floatCurrent)
     {
 
@@ -263,6 +270,7 @@ public static class TaskPointCalculator
 
         return Mathf.RoundToInt(_floatCurrent);
     }
+    */
 
     public static int GetPointsFromCurrentValue(MinimumTaskData _mtd)
     {
@@ -290,52 +298,14 @@ public static class TaskPointCalculator
            // Debug.Log("Min over the target value: " + _amount);
         }
 
-        if (_amount > 0)
+
+        if (_mtd.streakStartsAfterDays > -1)
         {
-            if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
+            if (_amount > 0)
             {
-                switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
+                if (_mtd.completedTargetDaysIn_a_Row > _mtd.streakStartsAfterDays)
                 {
-                    case 1:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
-                        break;
-                    case 2:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 3:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 4:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
-                        break;
-                    case 5:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
-                        break;
-                    default:
-                        _amount = Mathf.RoundToInt
-                            (_amount * Mathf.Clamp
-                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
-                            (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
-                            0, AppManager.MAXSTREAKMULTIPLIER));
-                        
-                        break;
-                }
-            }
-        }
-
-        return Mathf.FloorToInt(_amount);
-    }
-
-    public static int GetPointsFromCurrentValue(BooleanTaskData _btd)
-    {
-        if (!_btd.isEditedToday) return 0;
-
-        if (_btd.isDone)
-        {
-            int _amount = _btd.pointsGained;
-                if (_btd.completedTargetDaysIn_a_Row > _btd.streakStartsAfterDays)
-                {
-                    switch (_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays)
+                    switch (_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays)
                     {
                         case 1:
                             _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
@@ -356,11 +326,59 @@ public static class TaskPointCalculator
                             _amount = Mathf.RoundToInt
                                 (_amount * Mathf.Clamp
                                 ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
-                                (((_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                                (((_mtd.completedTargetDaysIn_a_Row - _mtd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
                                 0, AppManager.MAXSTREAKMULTIPLIER));
+
                             break;
                     }
                 }
+            }
+        }
+
+        return Mathf.FloorToInt(_amount);
+    }
+
+    public static int GetPointsFromCurrentValue(BooleanTaskData _btd)
+    {
+        if (!_btd.isEditedToday) return 0;
+
+        if (_btd.isDone)
+        {
+            int _amount = _btd.pointsGained;
+
+        if (_btd.streakStartsAfterDays > -1)
+        {
+                
+
+            if (_btd.completedTargetDaysIn_a_Row > _btd.streakStartsAfterDays)
+            {
+                switch (_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays)
+                {
+                    case 1:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                        break;
+                    case 2:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 3:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                        break;
+                    case 4:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                        break;
+                    case 5:
+                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                        break;
+                    default:
+                        _amount = Mathf.RoundToInt
+                            (_amount * Mathf.Clamp
+                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                            (((_btd.completedTargetDaysIn_a_Row - _btd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                            0, AppManager.MAXSTREAKMULTIPLIER));
+                        break;
+                }
+            }
+        }
             
 
             return _amount;
@@ -386,34 +404,37 @@ public static class TaskPointCalculator
             _amount = _otd.pointsForOptimum - ( Mathf.Abs(_otd.current - _otd.targetValue) * _otd.pointsLostPerOneDifference);
         }
 
-        if (_amount > 0)
+        if (_otd.streakStartsAfterDays > -1)
         {
-            if (_otd.completedTargetDaysIn_a_Row > _otd.streakStartsAfterDays)
+            if (_amount > 0)
             {
-                switch (_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays)
+                if (_otd.completedTargetDaysIn_a_Row > _otd.streakStartsAfterDays)
                 {
-                    case 1:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
-                        break;
-                    case 2:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 3:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
-                        break;
-                    case 4:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
-                        break;
-                    case 5:
-                        _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
-                        break;
-                    default:
-                        _amount = Mathf.RoundToInt
-                            (_amount * Mathf.Clamp
-                            ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
-                            (((_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
-                            0, AppManager.MAXSTREAKMULTIPLIER));
-                        break;
+                    switch (_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays)
+                    {
+                        case 1:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIRSTDAYSTREAKMULTIPLIER);
+                            break;
+                        case 2:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.SECONDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 3:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.THIRDDAYSTREAKMULTIPLIER);
+                            break;
+                        case 4:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FOURTHDAYSTREAKMULTIPLIER);
+                            break;
+                        case 5:
+                            _amount = Mathf.RoundToInt(_amount * AppManager.FIFTHDAYSTREAKMULTIPLIER);
+                            break;
+                        default:
+                            _amount = Mathf.RoundToInt
+                                (_amount * Mathf.Clamp
+                                ((AppManager.FIFTHDAYSTREAKMULTIPLIER +
+                                (((_otd.completedTargetDaysIn_a_Row - _otd.streakStartsAfterDays) - 5) * AppManager.MORETHANFIVEDAYSTREAKMULTIPLIERADD)),
+                                0, AppManager.MAXSTREAKMULTIPLIER));
+                            break;
+                    }
                 }
             }
         }
