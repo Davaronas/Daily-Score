@@ -115,6 +115,8 @@ public class GoalNameButton : BehaviourButton
     {
         if (chartType == _chart)
         {
+            if(selectedBackground == null) { return; } // sometimes this reports missing reference, investigate further
+
             if (heldName == _name)
             {
                 selectedBackground.enabled = true;

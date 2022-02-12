@@ -86,8 +86,8 @@ public static class RuntimeTranslator
                 case AppManager.TaskMetricType.Pound:
                     return AppManager.TaskMetricType.Pound.ToString();
 
-                case AppManager.TaskMetricType.Calorie:
-                    return AppManager.TaskMetricType.Calorie.ToString();
+                case AppManager.TaskMetricType.Calories:
+                    return AppManager.TaskMetricType.Calories.ToString();
 
                 default:
                     Debug.LogError($"AppManager.TaskMetricType doesn't contain this type: {_type}");
@@ -193,7 +193,7 @@ public static class RuntimeTranslator
                 case AppManager.TaskMetricType.Pound:
                     return "Font";
 
-                case AppManager.TaskMetricType.Calorie:
+                case AppManager.TaskMetricType.Calories:
                     return "Kalória";
 
                 default:
@@ -205,7 +205,7 @@ public static class RuntimeTranslator
 
         public static string TranslatePointsWord()
         {
-            return "Pontok";
+            return "Pont";
         }
 
         public static string TranslateIntervalWord()
@@ -304,7 +304,7 @@ public static class RuntimeTranslator
                 case AppManager.TaskMetricType.Pound:
                     return "Pfund";
 
-                case AppManager.TaskMetricType.Calorie:
+                case AppManager.TaskMetricType.Calories:
                     return "Kalorie";
 
 

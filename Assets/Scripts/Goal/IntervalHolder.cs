@@ -94,7 +94,19 @@ public class IntervalHolder : MonoBehaviour
        
             GameObject _newIntervalSummary = Instantiate(intervalSummaryPrefab, transform.position, Quaternion.identity, transform);
         IntervalSummaryPrefabUtility _newIspu = _newIntervalSummary.GetComponent<IntervalSummaryPrefabUtility>();
-        _newIspu.FillOutTexts(int.Parse(_ipu.from.text), int.Parse(_ipu.to.text),taskTypeComponents.GetIntervalMetricType() ,int.Parse(_ipu.amount.text));
+
+        AppManager.TaskMetricType _m = taskTypeComponents.GetIntervalMetricType();
+        if (_m == AppManager.TaskMetricType.Other)
+        {
+            _newIspu.FillOutTexts(int.Parse(_ipu.from.text), int.Parse(_ipu.to.text), taskTypeComponents.GetCustomMetricName(), int.Parse(_ipu.amount.text));
+        }
+        else
+        {
+            _newIspu.FillOutTexts(int.Parse(_ipu.from.text), int.Parse(_ipu.to.text), taskTypeComponents.GetIntervalMetricType(), int.Parse(_ipu.amount.text));
+        }
+
+       
+
             _ipu.SetIntervalSummaryInstance(_newIspu);
             taskTypeComponents.AddIntervalSummary(_newIspu);
 

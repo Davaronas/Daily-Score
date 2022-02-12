@@ -90,7 +90,7 @@ public class TipManager : MonoBehaviour
        
 
 
-        if (secondTipUnlockedToday == 1 && !AppManager.isGold)
+        if (secondTipUnlockedToday == 1 || AppManager.isGold)
         {
             UnlockSecondTip();
         }

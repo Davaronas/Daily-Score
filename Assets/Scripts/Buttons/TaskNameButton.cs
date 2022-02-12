@@ -76,6 +76,8 @@ public class TaskNameButton : BehaviourButton
 
         if (_chart == chartType)
         {
+            if (selectedBackground == null) { return; } // sometimes this reports missing reference, investigate further
+
             if (heldName == _name)
             {
                 selectedBackground.enabled = true;

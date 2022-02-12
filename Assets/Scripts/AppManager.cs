@@ -809,7 +809,7 @@ public class AppManager : MonoBehaviour
 
 
 
-    public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Calorie, Other, ENUM_END };
+    public enum TaskMetricType {Pieces, Minutes, Kilometres, Mile, Grams, Pound, Calories, Other, ENUM_END };
 
    // all static events should be here
 
@@ -1062,7 +1062,7 @@ public class AppManager : MonoBehaviour
             lastLogin = Convert.ToDateTime(testLastLoginTime);
         }
 
-        print(lastLogin.Date + " " + _today);
+     //   print(lastLogin.Date + " " + _today);
 
         if (lastLogin.Date == _today) { return; } // still the same day, we don't need to reset
 
@@ -1848,9 +1848,11 @@ public class AppManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+
         SaveGoalData();
         lastLogin = DateTime.Today.Date;
         PlayerPrefs.SetString("lastLogin", lastLogin.ToString());
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
     }
 
     private void OnApplicationFocus(bool focus)
@@ -1919,7 +1921,7 @@ public class AppManager : MonoBehaviour
 
             if (!isPowerSavingModeOn)
             {
-                if (SystemInfo.batteryLevel <= 0.25f)
+                if (SystemInfo.batteryLevel <= 0.2f)
                 {
                     if (!askedUserAboutPowerSavingMode)
                     {

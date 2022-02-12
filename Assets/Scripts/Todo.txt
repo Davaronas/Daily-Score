@@ -12,7 +12,7 @@ Switching submenu with goal scroll not changing button*
 UIGradient -> ImageColoring*
 Scale goal scroll and task scroll depending on how many goals/tasks are there*
 Create task -> check if int.Parse texts are valid*
-Scroll dragging jiggle bug (should decide which way the user wanted to scroll based on mouse positions ?)* {Solved by using SubmenuScroll ondrag instead of ontouch}
+Scroll dragging jiggle bug (should decide which way the user wanted to scroll based on mouse positions ?)* {Solved by using SubmenuScroll ondrag instead of ontouch}*
 Interval task type check for overlap*
 Update ispu interval*
 Update metric interval*
@@ -64,7 +64,7 @@ leave toggle or switch to interaction handler ?*
 click on averages will turn to other type of averages*
 click on highscores will turn to other types of highscores*
 daily score on top
-scrolling through tasks
+scrolling through tasks*
 number restrictions on task values?
 notification icons*
 notificaton don't fire when task is already done ?
@@ -79,14 +79,14 @@ statcalc cleanup
 nagyikon pikto, kisikon daily score
 bónusz, streak bug ?
 loading screen*
-oszlopdiagram mai napot is számolja
-tört számot lehessen beirni
+oszlopdiagram mai napot is számolja*
+tört számot lehessen beirni?
 top 3 weekly monthly összeadott*
 7 napos csúszóátlag*
 nightmode
 other mértékegység beirható*
 Line2DRenderer ha pixelesek a vonalak
-chart descriptions
+chart descriptions*
 interval kész ha bármilyekbe benne van*
 üres nap 0 pont*
 rest day rest day kiirva diagramba függõlegesen*
@@ -106,11 +106,11 @@ other kiirható*
 + a végén a design
 --------------
 
-bools are already done when you start -> fix
+bools are already done when you start -> fix*
 
 reset, rest day, nightmode, notifications*
 
-task selected on charts should calculate today
+task selected on charts should calculate today*
 
 
 
@@ -166,22 +166,45 @@ rolling average szaggatott vonal ismétlõdés nem jó*
 
 every th day not active on creation day after restarting the program
 todays task completed bar size absolute value isntead of realitve*
+goal doboz vastagabb körvonal*
+your daily score 0 csak sablon nem mûködik ???*
+elsõ beirás nem mindig mûködik: task minimum*
+százalék számolás stats negatív számok*
+TASK STREAK TaskTypeComponents elfogadás*
+custom mértékegység magyar forditás sablon goal*
+task doboz nagyobb felbontás*
+interval túl közel*
+25 -> 20 % töltöttség energiatakarék kérdés*
+
+
+
+task típus info gomb telefon sötétedésnél ne zárja be az ablakot (screen timeouttal megoldva)*
+interval  custom metric kiirása summary*
+task típus info cím szöveg külön*
 
 
 
 
 
-TAsk bug
 
 
-your daily score 0 csak sablon nem mûködik ???
-elsõ beirás nem mindig mûködik: task minimum
-
-százalék számolás stats negatív számok
 
 
-TASK STREAK TaskTypeComponents elfogadás
 
+activate stars if animation was cut off after returning
+
+
+goal doboz kicsit szebb legyen
+
+csillag animáció bugos
+
+
+
+
+alacsony töltöttségnél gyakran kéri ?
+
+
+tip rossz tipp kerül mentésre, újra belépésnél a helyes tipp lesz a mentettek között
 
 -----
 
@@ -192,3 +215,24 @@ todays task completed bar: image fill system -> use size
 notification nap perc görgetés beírás helyett
 
 -----
+
+
+GOLD:
+|
+Tárolható tippek 5 -> 20
+Stats menü több stat kioldva
+goal színek kioldva
+goal szimbólumok kioldva
+optimum interval task típus kioldva
+második tipp egybõl kioldva, nem kell videót nézni
+|
+
+
+
+Ablakok:
+
+Tip törlés
+Goal törlés
+Hiba üzenet
+Custom mértékegység beirás
+Energiatakrékos mód kérés

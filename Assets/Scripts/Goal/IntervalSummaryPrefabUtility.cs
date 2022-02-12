@@ -26,6 +26,8 @@ public class IntervalSummaryPrefabUtility : MonoBehaviour
         rightSideText.text = points + " " + RuntimeTranslator.TranslatePointsWord();
     }
 
+   
+
     public void UpdateNumbers(int _from, int _to, int _points)
     {
         from = _from;
@@ -36,6 +38,7 @@ public class IntervalSummaryPrefabUtility : MonoBehaviour
         rightSideText.text = points + " " + RuntimeTranslator.TranslatePointsWord();
     }
 
+
     public void UpdateMetric(AppManager.TaskMetricType _metric)
     {
         metric = _metric;
@@ -43,6 +46,9 @@ public class IntervalSummaryPrefabUtility : MonoBehaviour
         leftSideText.text = from + " - " + to + " " + RuntimeTranslator.TranslateTaskMetricType(metric) + ":";
         rightSideText.text = points + " " + RuntimeTranslator.TranslatePointsWord();
     }
+
+
+  
 
 
 
@@ -54,6 +60,7 @@ public class IntervalSummaryPrefabUtility : MonoBehaviour
         from = _from;
         to = _to;
         customMetric = _metric;
+        metric = AppManager.TaskMetricType.Other;
         points = _points;
 
         leftSideText.text = from + " - " + to + " " + customMetric + ":";

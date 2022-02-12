@@ -8,6 +8,8 @@ public class InfoButton : BehaviourButton
 {
     [TextArea]
     public string[] languages = new string[(int)AppManager.Languages.ENUM_END];
+
+    public string[] headers = new string[(int)AppManager.Languages.ENUM_END];
     private TaskManager taskManager = null;
 
     private void Awake()
@@ -19,19 +21,21 @@ public class InfoButton : BehaviourButton
 
     protected override void OnTouch()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
             switch (AppManager.currentLanguage)
             {
                 case AppManager.Languages.English:
-                taskManager.ShowInfoPanel(languages[0]);
+                taskManager.ShowInfoPanel(headers[0],languages[0]);
                     break;
                 case AppManager.Languages.Magyar:
-                taskManager.ShowInfoPanel(languages[1]);
+                taskManager.ShowInfoPanel(headers[1],languages[1]);
                 break;
                 case AppManager.Languages.Deutsch:
-                taskManager.ShowInfoPanel(languages[2]);
+                taskManager.ShowInfoPanel(headers[2],languages[2]);
                 break;
                 default:
-                taskManager.ShowInfoPanel("");
+                taskManager.ShowInfoPanel("","");
                 break;
             }
     }

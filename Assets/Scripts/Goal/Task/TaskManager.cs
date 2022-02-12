@@ -42,6 +42,7 @@ public class TaskManager : MonoBehaviour
     [Space]
     [SerializeField] private GameObject infoPanel = null;
     [SerializeField] private TMP_Text infoPanelText = null;
+    [SerializeField] private TMP_Text infoPanelHeader = null;
     private bool taskTypeSelected = false;
 
     private string enteredName = "default";
@@ -1184,14 +1185,16 @@ public class TaskManager : MonoBehaviour
 
 
 
-    public void ShowInfoPanel(string _text)
+    public void ShowInfoPanel(string _header ,string _text)
     {
+        infoPanelHeader.text = _header;
         infoPanelText.text = _text;
         infoPanel.SetActive(true);
     }
 
     public void RemoteCall_HideInfoPanel()
     {
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
         HideInfoPanel();
 
         SoundManager.PlaySound3();

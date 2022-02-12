@@ -218,6 +218,7 @@ public class SablonGoalButton : BehaviourButton
                 if (sgt != null)
                 {
 
+
                     switch(AppManager.currentLanguage)
                     {
                         case AppManager.Languages.English:
@@ -227,6 +228,8 @@ public class SablonGoalButton : BehaviourButton
                             _td.name = sgt.hungarianTaskNames[taskLanguageIterator];
                             break;
                     }
+
+                  
 
                     taskLanguageIterator++;
                 }
@@ -250,9 +253,60 @@ public class SablonGoalButton : BehaviourButton
                     _td.isActiveToday = true;
                 }
                 
-
-
                 _newGoalData.tasks.Add(_td);
+            }
+
+            if(sgt != null)
+            {
+                foreach (SablonGoalTranslation.UnitOfMeasureTranslation _t in sgt.unitOfMeasureTranslations)
+                {
+                    switch (AppManager.currentLanguage)
+                    {
+                        case AppManager.Languages.English:
+                            switch(tasks[_t.taskId].type)
+                            {
+                                case AppManager.TaskType.Maximum:
+                                    ((MaximumTaskData)tasks[_t.taskId]).customMetricName = _t.en_Translation;
+                                    break;
+                                case AppManager.TaskType.Minimum:
+                                    ((MinimumTaskData)tasks[_t.taskId]).customMetricName = _t.en_Translation;
+                                    break;
+                                case AppManager.TaskType.Boolean:
+                                    Debug.LogError("Boolean task type doesn't contain a metric");
+                                    break;
+                                case AppManager.TaskType.Optimum:
+                                   ((OptimumTaskData)tasks[_t.taskId]).customMetricName = _t.en_Translation;
+                                    break;
+                                case AppManager.TaskType.Interval:
+                                    ((IntervalTaskData)tasks[_t.taskId]).customMetricName = _t.en_Translation;
+                                    break;
+
+                            }
+                           
+                                break;
+                        case AppManager.Languages.Magyar:
+                            switch (tasks[_t.taskId].type)
+                            {
+                                case AppManager.TaskType.Maximum:
+                                    ((MaximumTaskData)tasks[_t.taskId]).customMetricName = _t.hun_Translation;
+                                    break;
+                                case AppManager.TaskType.Minimum:
+                                    ((MinimumTaskData)tasks[_t.taskId]).customMetricName = _t.hun_Translation;
+                                    break;
+                                case AppManager.TaskType.Boolean:
+                                    Debug.LogError("Boolean task type doesn't contain a metric");
+                                    break;
+                                case AppManager.TaskType.Optimum:
+                                    ((OptimumTaskData)tasks[_t.taskId]).customMetricName = _t.hun_Translation;
+                                    break;
+                                case AppManager.TaskType.Interval:
+                                    ((IntervalTaskData)tasks[_t.taskId]).customMetricName = _t.hun_Translation;
+                                    break;
+
+                            }
+                            break;
+                    }
+                }
             }
 
             goalManager.AddGoal(_newGoalData);
