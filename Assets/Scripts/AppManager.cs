@@ -721,7 +721,7 @@ public static string DaysNotSelected_CreateTaskPanel()
         public const string DaysNotSelected_CreateTaskPanel = "Kérjük adja meg mely napokon szeretné, hogy a feladat aktív legyen!";
         public const string TaskTypeNotSelected_CreateTaskPanel = "Kérjük adja meg a pontszámítás módját!";
         public const string TaskTypeInputFieldEmpty_CreateTaskTPanel = "Egy vagy több kötelezõ kitöltendõ rész üres!";
-        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "Egy vagy több intervallum tartalmazza ugyanazokat az értékeket. Kérjük gyõzõdjön meg róla, hogy az intervallumok nem fedik túl egymást!";
+        public const string IntervalTaskTypeOverlap_CreateTaskPanel = "Egy vagy több intervallum tartalmazza ugyanazokat az értékeket. Kérjük gyõzõdjön meg róla, hogy az intervallumok nem fedik egymást!";
         public const string NewDayStarted = "Új nap kezdõdött!";
         public const string SavedTipContainerIsFull = "Nincs több hely a mentett tippek számára. Ha szeretne további tippeket menteni, gondolja meg, hogy Gold fiókra vált!";
         public const string EverySelectedDayHasNotifications = "Minden kiválasztott naphoz tartozik már értesítés";
