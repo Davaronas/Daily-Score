@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
-using UnityEngine.UI;
+
 
 public class TipManager : MonoBehaviour
 {
@@ -94,6 +94,13 @@ public class TipManager : MonoBehaviour
         {
             UnlockSecondTip();
         }
+
+        Reward_Ad.OnTipVideoSuccesfullyWatched += AdvertisementWatched;
+    }
+
+    private void OnDestroy()
+    {
+        Reward_Ad.OnTipVideoSuccesfullyWatched -= AdvertisementWatched;
     }
 
     public void UnlockSecondTip()
@@ -110,12 +117,12 @@ public class TipManager : MonoBehaviour
 
     }
 
-    public void RemoteCall_WatchAdButtonPressed()
+    public void AdvertisementWatched()
     {
         UnlockSecondTip();
         PlayerPrefs.SetInt("SecondTipUnlocked", 1);
 
-        SoundManager.PlaySound2();
+        //SoundManager.PlaySound2();
     }
 
     public void GoldStatusChanged(bool _state)

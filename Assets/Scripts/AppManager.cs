@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-     
+
+
 
 
 #region Goal related data types
@@ -829,6 +830,7 @@ public class AppManager : MonoBehaviour
     public static event Action<string, CategorySelectableBarCharts> OnBarChartCategorySelected;
     public static event Action OnPowerSavingModeChanged;
     public static event Action OnTaskMenuOpened;
+    public static event Action OnAppReset;
 
    public static event Action<Goal> OnGoalOpened;
 
@@ -837,7 +839,9 @@ public class AppManager : MonoBehaviour
 
 
 
-   
+    private BannerAd ads = null;
+    private bool canShowAd = false;
+    private Coroutine showAdCor = null;
 
 
 
@@ -977,6 +981,15 @@ public class AppManager : MonoBehaviour
 
     private void SetAppLayer(int _layer)
     {
+        if(!isGold && canShowAd)
+        {
+            // ads.LoadBanner();
+            ads.ShowVideo();
+            canShowAd = false;
+            StartCoroutine(StartAdTimer());
+
+        }
+
         if(_layer == 0)
         {
             introductionPanel.SetActive(false);
@@ -1334,6 +1347,8 @@ public class AppManager : MonoBehaviour
         askUserToStartRestDay.SetActive(false);
 
 
+        ads = FindObjectOfType<BannerAd>();
+
         // set language if already saved one
 
         // decide starting page
@@ -1354,6 +1369,7 @@ public class AppManager : MonoBehaviour
         StartCoroutine(TimeChecker());
         StartCoroutine(Save());
         StartCoroutine(CheckBatteryStatus());
+     showAdCor =  StartCoroutine(StartAdTimer());
 
         QualitySettings.vSyncCount = 0;
       //  FindObjectOfType<Canvas>().pixelPerfect = false;
@@ -1696,6 +1712,8 @@ public class AppManager : MonoBehaviour
     {
         goalManager.Reset();
         askUserToResetPanel.SetActive(false);
+        NotificationManager.ClearAllNotifications();
+        OnAppReset?.Invoke();
 
         SaveGoalData();
 
@@ -1938,6 +1956,16 @@ public class AppManager : MonoBehaviour
         }
     }
 
+    IEnumerator StartAdTimer()
+    {
+             yield return new WaitForSeconds(310);
+            print(isGold + " Is Gold");
+            if(!isGold) 
+            {
+                canShowAd = true;
+            }
+    }
+
     public void RemoteCall_Close_AskUserToTurnOnPowerSavingModeOn_Panel()
     {
         askUserToTurnOnPowerSavingModePanel.SetActive(false);
@@ -1949,5 +1977,10 @@ public class AppManager : MonoBehaviour
     private void Show_AskUserToTurnOnPowerSavingModeOn_Panel()
     {
         askUserToTurnOnPowerSavingModePanel.SetActive(true);
+    }
+
+    public void SetGoldState(bool _state)
+    {
+        isGold = _state;
     }
 }

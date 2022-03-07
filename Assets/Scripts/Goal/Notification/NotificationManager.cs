@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_ANDROID
 using Unity.Notifications.Android;
+#endif
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+#if UNITY_IOS
+using Unity.Notifications.iOS;
+#endif
 
 public class NotificationManager : MonoBehaviour
 {
 
    private GoalManager goalManager = null;
     private TaskManager taskManager = null;
-    #if UNITY_IOS
+#if UNITY_IOS
     private NotificationManagerIOS nmIOS = null;
 #endif
 
@@ -65,7 +70,13 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
+
+#if UNITY_ANDROID
     public static List<NotificationData> notifications = new List<NotificationData>();
+#endif
+
+
+
 
 
     //public static event AndroidNotificationCenter.NotificationReceivedCallback OnNotificationReceived;
@@ -124,14 +135,15 @@ public class NotificationManager : MonoBehaviour
 
 
 
-#if UNITY_IOS
-         
-#endif
+
     }
 
 
+   
+
     private void CheckNotValidNotifications()
     {
+#if UNITY_ANDROID
         for (int i = 0; i < notifications.Count; i++)
         {
             if (!goalManager.SearchTaskByName(notifications[i].ownerTask))
@@ -139,12 +151,14 @@ public class NotificationManager : MonoBehaviour
                 ClearNotification(notifications[i].id);
             }
         }
+#endif
     }
 
 
 
     public static bool GetNotificationData(int _id, out NotificationData _data)
     {
+#if UNITY_ANDROID
 
         for (int i = 0; i < notifications.Count; i++)
         {
@@ -154,6 +168,10 @@ public class NotificationManager : MonoBehaviour
                 return true;
             }
         }
+        _data = new NotificationData();
+        return false;
+#endif
+
         _data = new NotificationData();
         return false;
     }
@@ -180,6 +198,7 @@ public class NotificationManager : MonoBehaviour
 
 
 #if UNITY_IOS
+        /*
   if (NotificationManagerIOS.GetNotificationData(_day, _task, out NotificationManagerIOS.NotificationDataIOS _dataIOS))
         {
             _data = (NotificationData)_dataIOS;
@@ -190,6 +209,9 @@ public class NotificationManager : MonoBehaviour
             _data = new NotificationData();
             return false;
         }
+  */
+        _data = new NotificationData();
+        return false;
 #endif
     }
 
@@ -198,6 +220,7 @@ public class NotificationManager : MonoBehaviour
 
     public static bool GetNotificationData(string _owner, DayOfWeek _day, out NotificationData _data)
     {
+#if UNITY_ANDROID
         for (int i = 0; i < notifications.Count; i++)
         {
             if(notifications[i].ownerTask == _owner && Convert.ToDateTime(notifications[i].fireTime).DayOfWeek == _day)
@@ -209,6 +232,13 @@ public class NotificationManager : MonoBehaviour
 
         _data = new NotificationData();
         return false;
+#endif
+
+#if UNITY_IOS
+
+        _data = new NotificationData();
+        return false;
+#endif
     }
 
     public static bool GetNotificationData_NoDayCheck(string _owner, out NotificationData _data)
@@ -231,6 +261,8 @@ public class NotificationManager : MonoBehaviour
 
 
 #if UNITY_IOS
+
+        /*
    if (NotificationManagerIOS.GetNotificationData_NoDayCheck(_owner, out NotificationManagerIOS.NotificationDataIOS _dataIOS))
         {
             _data = (NotificationData)_dataIOS;
@@ -241,12 +273,17 @@ public class NotificationManager : MonoBehaviour
             _data = new NotificationData();
             return false;
         }
+        */
+
+        _data = new NotificationData();
+        return false;
 #endif
     }
 
 
     public static void CreateChannel()
     {
+#if UNITY_ANDROID
         AndroidNotificationChannel channel = AndroidNotificationCenter.GetNotificationChannel("dailyscore_id");
 
         if (channel.Id != "dailyscore_id")
@@ -259,6 +296,7 @@ public class NotificationManager : MonoBehaviour
 
             AndroidNotificationCenter.RegisterNotificationChannel(channel);
         }
+#endif
     }
 
     public static void SendNotification(string _title, string _text, DateTime _fireTime, int _resetDays, string _owner, string _spriteId)
@@ -299,7 +337,7 @@ public class NotificationManager : MonoBehaviour
 
 #if UNITY_IOS
         
-        NotificationManagerIOS.SendNotification(_title, _text, _fireTime, _resetDays, _owner, _spriteId);
+     //   NotificationManagerIOS.SendNotification(_title, _text, _fireTime, _resetDays, _owner, _spriteId);
 
 #endif
 
@@ -329,7 +367,10 @@ public class NotificationManager : MonoBehaviour
 
 
 #if UNITY_IOS
-         
+
+
+
+      //  NotificationManagerIOS.SendNotificationWithAddingResetTime(new NotificationManagerIOS.NotificationDataIOS());
 #endif
 
     }
@@ -337,12 +378,16 @@ public class NotificationManager : MonoBehaviour
     public static void ClearAllNotifications()
     {
         AndroidNotificationCenter.CancelAllNotifications();
+        notifications.Clear();
+        SaveNotificationData();
     }
 
 
 
     public static void ClearNotification(int _id)
     {
+
+#if UNITY_ANDROID
 
         for (int i = 0; i < notifications.Count; i++)
         {
@@ -358,12 +403,14 @@ public class NotificationManager : MonoBehaviour
         
         
             Debug.LogError($"Id does not exist in the notification center: {_id}");
+#endif
         
     }
 
     public static void DeleteNotification(NotificationData _data)
     {
 
+#if UNITY_ANDROID
         for (int i = 0; i < notifications.Count; i++)
         {
             if(notifications[i] == _data)
@@ -374,11 +421,14 @@ public class NotificationManager : MonoBehaviour
             }
         }
 
+
         SaveNotificationData();
+#endif
     }
 
     public static void DeleteNotificationAttachedToTask(string _taskName)
     {
+#if UNITY_ANDROID
         List<NotificationData> _notificationsToDelete = new List<NotificationData>();
 
         for (int i = 0; i < notifications.Count; i++)
@@ -398,6 +448,7 @@ public class NotificationManager : MonoBehaviour
 
 
         SaveNotificationData();
+#endif
     }
         
 
@@ -405,6 +456,7 @@ public class NotificationManager : MonoBehaviour
 
     private static void SaveNotificationData()
     {
+#if UNITY_ANDROID
         string path = Path.Combine(Application.persistentDataPath, "notificationdata");
         if (File.Exists(path))
         {
@@ -418,6 +470,7 @@ public class NotificationManager : MonoBehaviour
         stream.Close();
         FileInfo fileInfo = new FileInfo(path);
         fileInfo.IsReadOnly = true;
+#endif
     }
 
 
@@ -427,6 +480,7 @@ public class NotificationManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+#if UNITY_ANDROID
         if (notifications == null) { return; }
 
         for (int i = 0; i < notifications.Count; i++)
@@ -440,10 +494,12 @@ public class NotificationManager : MonoBehaviour
                 SendNotificationWithAddingResetTime(_replace);
             }
         }
+#endif
     }
 
     private void OnApplicationFocus(bool focus)
     {
+#if UNITY_ANDROID
         if(focus)
         {
             if(notifications == null) { return; }
@@ -460,10 +516,16 @@ public class NotificationManager : MonoBehaviour
                 }
             }
         }
+#endif
     }
 
     public NotificationData[] GetNotifcationDatas()
     {
+#if UNITY_ANDROID
         return notifications.ToArray();
+#endif
+#if UNITY_IOS
+        return new NotificationData[0];
+#endif
     }
 }

@@ -199,12 +199,14 @@ goal doboz kicsit szebb legyen
 csillag animáció bugos
 
 
-
+5 percenként ad menü váltás eseménynél
 
 alacsony töltöttségnél gyakran kéri ?
 
 
 tip rossz tipp kerül mentésre, újra belépésnél a helyes tipp lesz a mentettek között
+
+Reset: Notificationok törlése, a settings menübõl is
 
 -----
 

@@ -29,6 +29,7 @@ public class SettingsNotificationHandler : MonoBehaviour
         AppManager.OnNewTaskAdded += UpdateTextCallback;
         AppManager.OnTaskEdited += UpdateTextCallback;
         AppManager.OnGoalDeleted += UpdateTextCallback;
+        AppManager.OnAppReset += UpdateTextCallback;
     }
 
     private void Start()
@@ -42,6 +43,7 @@ public class SettingsNotificationHandler : MonoBehaviour
         AppManager.OnNewTaskAdded -= UpdateTextCallback;
         AppManager.OnTaskEdited -= UpdateTextCallback;
         AppManager.OnGoalDeleted -= UpdateTextCallback;
+        AppManager.OnAppReset -= UpdateTextCallback;
     }
 
     private void UpdateTextCallback(AppManager.Languages _l)

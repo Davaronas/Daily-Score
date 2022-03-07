@@ -90,6 +90,8 @@ public class NotificationManagerIOS : MonoBehaviour
     void Start()
     {
 #if UNITY_IOS
+        StartCoroutine(RequestAuthorization());
+
         string path = Path.Combine(Application.persistentDataPath, "notificationdata_ios");
         if (File.Exists(path))
         {
@@ -113,6 +115,25 @@ public class NotificationManagerIOS : MonoBehaviour
 
         Invoke(nameof(CheckNotValidNotifications), 1f);
 #endif
+    }
+
+    IEnumerator RequestAuthorization()
+    {
+        var authorizationOption = AuthorizationOption.Alert | AuthorizationOption.Badge;
+        using (var req = new AuthorizationRequest(authorizationOption, true))
+        {
+            while (!req.IsFinished)
+            {
+                yield return null;
+            };
+
+            string res = "\n RequestAuthorization:";
+            res += "\n finished: " + req.IsFinished;
+            res += "\n granted :  " + req.Granted;
+            res += "\n error:  " + req.Error;
+            res += "\n deviceToken:  " + req.DeviceToken;
+            Debug.Log(res);
+        }
     }
 
     private void CheckNotValidNotifications()
@@ -235,7 +256,7 @@ public class NotificationManagerIOS : MonoBehaviour
     }
 
 
-    /*
+    
     public static void SendNotificationWithAddingResetTime(NotificationDataIOS _data)
     {
 
@@ -279,6 +300,6 @@ public class NotificationManagerIOS : MonoBehaviour
 
         SaveNotificationData();
     }
-    */
+    
 }
 #endif

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using System;
 
 public class Reward_Ad : MonoBehaviour, IUnityAdsListener
 {
@@ -10,9 +11,12 @@ public class Reward_Ad : MonoBehaviour, IUnityAdsListener
     string mySurfacingId = "Rewarded_iOS";
 #else
     string gameId = "4205265";
+   // 4226553
     string mySurfacingId = "Rewarded_Android";
 #endif
     bool TestMode = true;
+
+    public static Action OnTipVideoSuccesfullyWatched;
 
     void Start()
     {
@@ -26,6 +30,21 @@ public class Reward_Ad : MonoBehaviour, IUnityAdsListener
         if (Advertisement.IsReady(mySurfacingId))
         {
             Advertisement.Show(mySurfacingId);
+            
+        }
+        else
+        {
+            Debug.Log("Rewarded video is not ready at the moment! Please try again later!");
+        }
+    }
+
+    public void ShowAdvertisementVideo()
+    {
+        if (Advertisement.IsReady(mySurfacingId))
+        {
+            //  Advertisement.Show(mySurfacingId);
+            print("Banner");
+            Advertisement.Banner.Load();
         }
         else
         {
@@ -35,8 +54,12 @@ public class Reward_Ad : MonoBehaviour, IUnityAdsListener
 
     // Implement IUnityAdsListener interface methods:
     public void OnUnityAdsDidFinish (string surfacingId, ShowResult showResult) {
+
+        if(surfacingId != "Rewarded_Android") { return; }
+
         // Define conditional logic for each ad completion status:
         if (showResult == ShowResult.Finished) {
+            OnTipVideoSuccesfullyWatched?.Invoke();
             // Reward the user for watching the ad to completion.
         } else if (showResult == ShowResult.Skipped) {
             // Do not reward the user for skipping the ad.
